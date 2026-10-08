@@ -1,0 +1,223 @@
+import { memo, useEffect, useMemo, useRef } from "react";
+
+import { Button, Slider } from "@heroui/react";
+import {
+  RiExpandDiagonalLine,
+  RiPauseCircleFill,
+  RiPlayCircleFill,
+  RiSkipBackFill,
+  RiSkipForwardFill,
+} from "@remixicon/react";
+import clx from "classnames";
+import { useShallow } from "zustand/react/shallow";
+
+import { getPlayModeList } from "@/common/constants/audio";
+import { createBroadcastChannel, toggleMiniMode } from "@/common/utils/mini-player";
+import Image from "@/components/image";
+import { usePlayProgress } from "@/store/play-progress";
+
+import { usePlayState } from "./play-state";
+import { useStyle } from "./use-style";
+
+const PlayModeList = getPlayModeList(16);
+
+const CoverView = memo(() => {
+  const cover = usePlayState(s => s.cover);
+  if (!cover) return null;
+  return (
+    <div className="relative h-full w-[100px] flex-shrink-0">
+      <Image
+        removeWrapper
+        radius="none"
+        src={cover}
+        width={100}
+        height="100%"
+        params="672w_378h_1c.avif"
+        loading="eager"
+        decoding="async"
+        style={{ transform: "translateZ(0)", backfaceVisibility: "hidden", willChange: "transform", contain: "paint" }}
+      />
+      <div className="from-background pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l to-transparent" />
+    </div>
+  );
+});
+
+const MiniPlayer = () => {
+  const { isSingle, isPlaying, title, duration, playMode } = usePlayState(
+    useShallow(state => ({
+      isSingle: state.isSingle,
+      isPlaying: state.isPlaying,
+      title: state.title,
+      duration: state.duration,
+      playMode: state.playMode,
+    })),
+  );
+  const currentTime = usePlayProgress(s => s.currentTime);
+  const setCurrentTime = usePlayProgress(s => s.setCurrentTime);
+  const updatePlayState = usePlayState(state => state.update);
+  const bcRef = useRef<BroadcastChannel>(null);
+
+  const postMessage = (type: string, state?: any) => {
+    if (!bcRef.current) return;
+    bcRef.current.postMessage({
+      from: "mini",
+      data: {
+        type,
+        state,
+      },
+      ts: Date.now(),
+    });
+  };
+
+  useStyle();
+
+  const playModeIcon = useMemo(() => {
+    return PlayModeList.find(item => item.value === playMode)?.icon;
+  }, [playMode]);
+
+  useEffect(() => {
+    bcRef.current = createBroadcastChannel();
+    postMessage("init");
+
+    bcRef.current.onmessage = ev => {
+      const { from, state } = ev.data || {};
+      if (from !== "main" || !state) return;
+
+      updatePlayState(state);
+      if (typeof state.currentTime === "number") {
+        setCurrentTime(state.currentTime);
+      }
+    };
+
+    return () => {
+      if (!bcRef.current) return;
+      bcRef.current.close();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSeek = (v: number) => {
+    postMessage("seek", { currentTime: v });
+  };
+
+  const togglePlayMode = () => {
+    postMessage("togglePlayMode");
+  };
+
+  const prev = () => {
+    postMessage("prev");
+  };
+
+  const togglePlay = () => {
+    postMessage("togglePlay");
+  };
+
+  const next = () => {
+    postMessage("next");
+  };
+
+  // duration 未知时给 Slider 一个安全的兜底值，避免 HeroUI 使用默认 maxValue 导致比例错误
+  const maxDuration = duration && Number.isFinite(duration) && duration > 0 ? duration : 100;
+
+  return (
+    <div className="window-drag flex h-screen w-screen flex-col overflow-hidden rounded-[var(--window-radius)] select-none">
+      <div className="flex h-full items-center">
+        <CoverView />
+        <div className="flex min-w-0 flex-1 flex-col space-y-1 px-2">
+          <div className="flex min-w-0 flex-col">
+            {title ? (
+              <span className="truncate text-center text-sm font-medium">{title}</span>
+            ) : (
+              <span className="text-default-500 text-center text-sm">暂无播放内容</span>
+            )}
+          </div>
+          <div className="window-no-drag mt-1 flex items-center">
+            <Slider
+              aria-label="播放进度"
+              minValue={0}
+              maxValue={maxDuration}
+              value={Math.min(currentTime, maxDuration)}
+              onChange={v => {
+                handleSeek(v as number);
+              }}
+              isDisabled={!title}
+              size="sm"
+              className="flex-1"
+              classNames={{
+                trackWrapper: "group",
+                track: "h-[4px] cursor-pointer rounded-full",
+                thumb: clx("w-3 h-3 after:h-2 after:bg-primary opacity-0", {
+                  "group-hover:opacity-100": Boolean(title),
+                }),
+              }}
+            />
+          </div>
+          <div className="flex items-center justify-between space-x-1">
+            <Button
+              isIconOnly
+              size="sm"
+              variant="light"
+              disableAnimation
+              onPress={togglePlayMode}
+              className="hover:text-primary window-no-drag"
+              aria-label="播放模式"
+            >
+              {playModeIcon}
+            </Button>
+            <div className="flex items-center space-x-1">
+              <Button
+                isDisabled={!title || isSingle}
+                isIconOnly
+                size="sm"
+                variant="light"
+                disableAnimation
+                onPress={prev}
+                className="hover:text-primary window-no-drag"
+              >
+                <RiSkipBackFill size={18} />
+              </Button>
+              <Button
+                isDisabled={!title}
+                isIconOnly
+                size="sm"
+                variant="light"
+                disableAnimation
+                onPress={() => {
+                  togglePlay();
+                }}
+                className="hover:text-primary window-no-drag"
+              >
+                {isPlaying ? <RiPauseCircleFill size={28} /> : <RiPlayCircleFill size={28} />}
+              </Button>
+              <Button
+                isDisabled={!title || isSingle}
+                isIconOnly
+                size="sm"
+                variant="light"
+                disableAnimation
+                onPress={() => {
+                  next();
+                }}
+                className="hover:text-primary window-no-drag"
+              >
+                <RiSkipForwardFill size={18} />
+              </Button>
+            </div>
+            <Button
+              isIconOnly
+              size="sm"
+              variant="light"
+              disableAnimation
+              onPress={toggleMiniMode}
+              className="hover:text-primary window-no-drag"
+            >
+              <RiExpandDiagonalLine size={16} />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MiniPlayer;

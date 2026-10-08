@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN" class="bg-background text-foreground">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="NWBP - desktop music application based on bilibili api" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NWBP</title>
+  </head>
+  <body class="bg-background text-foreground">
+    <div id="root"></div>
+    <!--
+      液态玻璃的"折射"滤镜：用湍流噪声驱动位移贴图，把面板背后的内容轻微扭曲。
+      这是"液态玻璃"和普通毛玻璃最本质的区别 ——
+      毛玻璃只是把背景糊掉（奶白一片），液态玻璃是让背景透过并被玻璃弯折。
+      backdrop-filter: url(#glass-refraction) 在 Chromium 里可用（已在 Electron 38 验证）。
+    -->
+    <svg aria-hidden="true" focusable="false" width="0" height="0" style="position: absolute; pointer-events: none">
+      <defs>
+        <filter id="glass-refraction" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.012 0.016" numOctaves="2" seed="11" result="noise" />
+          <feGaussianBlur in="noise" stdDeviation="1.6" result="softNoise" />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="softNoise"
+            scale="34"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </defs>
+    </svg>
+  </body>
+</html>

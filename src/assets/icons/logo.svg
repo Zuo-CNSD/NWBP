@@ -1,0 +1,7 @@
+<svg width="192" height="154" viewBox="0 0 192 154" xmlns="http://www.w3.org/2000/svg">
+<rect x="51" y="141" width="90" height="13" rx="6.5" fill="currentColor"/>
+<path d="M92 32.3 L124 23.6 L124 48.3 L92 56.3 Z" fill="currentColor"/>
+<rect x="92" y="33" width="7" height="63" fill="currentColor"/>
+<ellipse cx="83.5" cy="90.5" rx="16" ry="13.4" transform="rotate(-27 83.5 90.5)" fill="currentColor"/>
+<rect x="6" y="6" width="180" height="116" rx="9" fill="none" stroke="currentColor" stroke-width="12"/>
+</svg>

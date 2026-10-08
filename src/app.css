@@ -1,0 +1,882 @@
+@import 'tailwindcss';
+
+@plugin './hero.ts';
+@plugin "@tailwindcss/typography";
+
+@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  h1 {
+    font-size: var(--text-2xl);
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+  }
+}
+
+@utility window-drag {
+  app-region: drag;
+}
+
+@utility window-no-drag {
+  app-region: no-drag;
+}
+
+:root {
+  text-autospace: normal;
+
+  /* 圆角兜底值，实际值由 Theme 组件按用户设置写入 :root 内联样式 */
+  --app-radius: 14px;
+  --app-radius-small: 9px;
+  --app-radius-large: 16px;
+
+  /*
+   * 窗口四个角的圆角。
+   * 窗口是 transparent 的，macOS 不会替无边框透明窗圆角，所以由 body / .app-shell 自己画。
+   * 这个值同样由 Theme 组件按「设置 → 圆角」写入（= 基准值 × 16/12），
+   * 这里只是首屏水合完成前的兜底（对应默认基准 12）。
+   */
+  --window-radius: 16px;
+}
+
+/*
+ * html / body 始终透明。
+ * 窗口创建时就是 transparent 的（electron/main.ts），所以底色和圆角统一在这里画。
+ *
+ * 圆角放在 body 上而不是 .app-shell：HeroUI 的 Modal / Popover / Toast 是
+ * 通过 portal 挂到 body 上的，只有让 body 带圆角裁剪，弹层背景也不会糊住窗口圆角。
+ */
+html,
+body {
+  background-color: transparent !important;
+}
+
+body {
+  border-radius: var(--window-radius);
+  overflow: hidden;
+}
+
+.app-shell {
+  background-color: hsl(var(--heroui-background));
+  border-radius: var(--window-radius);
+  overflow: hidden;
+}
+
+/* 最大化时保留圆角（与 macOS 原生窗口一致），全屏时收掉，否则四角会露出桌面 */
+html.window-fullscreen body,
+html.window-fullscreen .app-shell {
+  border-radius: 0;
+}
+
+/*
+ * 桌面歌词窗：整窗必须**真透明**。
+ * --------------------------------------------------------------------------
+ * 桌面歌词窗和其它路由一样被包在 Theme 的 .app-shell 里，而 .app-shell 自带
+ * 一层不透明底色，还会渲染 .glass-wallpaper 那张彩色底衬 —— 这两层在别的页面
+ * 是"背景"，在这个窗里就是把桌面糊住的元凶。
+ * 只把歌词自己那层底板去掉是不够的，必须连它们一起清掉。
+ * 标记由 src/pages/desktop-lyrics/index.tsx 在模块作用域加上（早于首次绘制）。
+ */
+html.desktop-lyrics-window .app-shell {
+  background-color: transparent !important;
+}
+
+html.desktop-lyrics-window .glass-wallpaper,
+html.desktop-lyrics-window .glass-image {
+  display: none !important;
+}
+
+/* 「透明背景」：不铺底色，桌面直接透过来 */
+html.window-transparent .app-shell {
+  background-color: transparent;
+}
+
+/*
+ * 桌面内容通常很花，透明模式下把玻璃面板加厚一点，保证文字可读。
+ * 注意：liquid-glass 这个类就挂在 <html> 上，所以这里必须用
+ * `html.window-transparent.liquid-glass`（同一个元素上的两个类），
+ * 写成 `html.window-transparent .liquid-glass` 会要求它是 html 的后代，永远匹配不上。
+ */
+html.window-transparent.liquid-glass .bg-content1 {
+  background-color: hsl(var(--heroui-content1) / var(--glass-alpha-t1));
+}
+
+html.window-transparent.liquid-glass .bg-content2 {
+  background-color: hsl(var(--heroui-content2) / var(--glass-alpha-t2));
+}
+
+html.window-transparent.liquid-glass .glass-panel {
+  background-color: hsl(var(--heroui-content1) / var(--glass-alpha-t2));
+}
+
+html.window-transparent.liquid-glass.liquid-glass-dark .bg-content1 {
+  background-color: hsl(var(--heroui-content1) / var(--glass-alpha-t1));
+}
+
+html.window-transparent.liquid-glass.liquid-glass-dark .bg-content2 {
+  background-color: hsl(var(--heroui-content2) / var(--glass-alpha-t2));
+}
+
+html.window-transparent.liquid-glass.liquid-glass-dark .glass-panel {
+  background-color: hsl(var(--heroui-content1) / var(--glass-alpha-t2));
+}
+
+/* 透明模式下不需要彩色底衬 */
+html.window-transparent .glass-wallpaper {
+  display: none;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.suggest_high_light,.keyword {
+  font-style: normal;
+  color: #F54180;
+}
+
+.os-scrollbar {
+  --os-size: 12px;
+  --os-handle-border-radius: 999px;
+  --os-handle-bg: hsl(var(--heroui-default-300) / 85%);
+  --os-handle-bg-hover: hsl(var(--heroui-default-400) / 100%);
+  --os-handle-bg-active: hsl(var(--heroui-default-500) / 100%);
+
+  padding: 0;
+}
+
+/* 滚动条把手留出一点上下边距，视觉上更接近胶囊形 */
+.os-scrollbar-vertical .os-scrollbar-handle {
+  margin-block: 4px;
+}
+
+.os-scrollbar-horizontal .os-scrollbar-handle {
+  margin-inline: 4px;
+}
+
+/* 让所有可交互元素的圆角变化更顺滑一些 */
+.os-scrollbar-handle,
+[data-slot='cursor'] {
+  transition:
+    background-color 150ms ease,
+    border-radius 200ms ease;
+}
+
+/* ==========================================================================
+   液态玻璃外观（Liquid Glass）
+   --------------------------------------------------------------------------
+   HeroUI 的面板最终都落到 .bg-content1 / .bg-content2 / .bg-content3 这些
+   Tailwind 工具类上，编译结果是 `hsl(var(--heroui-content1) / 1)`。
+   所以透明度和毛玻璃都在这里按类名统一覆盖，变量本身保持"纯通道值"，
+   这样 HeroUI 主题、`bg-content1/30` 这类透明度修饰符都还能正常工作。
+   ========================================================================== */
+
+:root {
+  --glass-blur: 8px;
+  --glass-saturate: 150%;
+  --glass-brightness: 1.04;
+  --glass-contrast: 1.02;
+  --glass-rim: 0 0% 100% / 0.9;
+  --glass-specular: 0 0% 100% / 1;
+  --glass-hairline: 230 25% 35% / 0.14;
+  --glass-shadow: 240 24% 42% / 0.26;
+  /* 这些兜底值会被 glass.ts 按「玻璃透明度」设置覆盖 */
+  --glass-alpha-1: 0.3;
+  --glass-alpha-2: 0.26;
+  --glass-alpha-3: 0.2;
+  --glass-alpha-subtle: 0.16;
+  --glass-alpha-soft: 0.24;
+  --glass-alpha-strong: 0.32;
+  --glass-alpha-overlay: 0.3;
+  --glass-alpha-t1: 0.5;
+  --glass-alpha-t2: 0.44;
+  --glass-tint-a: 142 72% 58%;
+  --glass-tint-b: 188 80% 62%;
+  --glass-tint-c: 94 70% 60%;
+}
+
+/*
+ * 透过玻璃看到的东西：轻微模糊 + 高饱和 + 提亮。
+ * 顺序有讲究 —— 折射(位移)放在模糊之后，
+ * 这样噪波扭曲的是一张已经柔和的图，看起来像玻璃的厚薄不匀，而不是画面噪点。
+ */
+:root {
+  /*
+   * 三档 backdrop-filter：
+   * - lite   ：只有模糊+调色。给数量可能很多的普通卡片用，
+   *            位移滤镜虽然好看，但几十个元素同时跑 SVG 滤镜会拖性能。
+   * - 默认    ：模糊 + 折射。给侧栏/内容区/播放栏这类大块表面用。
+   * - strong：更厚的模糊 + 折射。给弹层用，避免和后面的内容糊在一起分不清层次。
+   */
+  --glass-backdrop-lite: blur(var(--glass-blur)) saturate(var(--glass-saturate))
+    brightness(var(--glass-brightness)) contrast(var(--glass-contrast));
+  --glass-backdrop: url(#glass-refraction) var(--glass-backdrop-lite);
+  --glass-backdrop-strong: url(#glass-refraction) blur(calc(var(--glass-blur) + 7px))
+    saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast));
+}
+
+/* 壁纸：几团缓慢流动的色雾，玻璃面板在上面才"有东西可折射" */
+.glass-wallpaper {
+  display: none;
+}
+
+.liquid-glass .glass-wallpaper {
+  display: block;
+  position: absolute;
+  inset: -22%;
+  z-index: -1;
+  pointer-events: none;
+  /*
+   * 玻璃能不能"看出来"取决于背后有没有层次：
+   * 所以这里刻意用较小、较浓、带明确边界的光斑，
+   * 而不是一整片平滑渐变——平滑渐变被模糊后和原来长得一样。
+   */
+  background:
+    radial-gradient(22% 20% at 14% 18%, hsl(var(--glass-tint-a) / 1), transparent 62%),
+    radial-gradient(18% 18% at 42% 8%, hsl(var(--glass-tint-b) / 0.95), transparent 60%),
+    radial-gradient(20% 22% at 86% 22%, hsl(var(--glass-tint-b) / 0.9), transparent 62%),
+    radial-gradient(26% 24% at 68% 62%, hsl(var(--glass-tint-c) / 0.9), transparent 64%),
+    radial-gradient(24% 26% at 30% 74%, hsl(var(--glass-tint-a) / 0.88), transparent 64%),
+    radial-gradient(20% 20% at 92% 84%, hsl(var(--glass-tint-c) / 0.88), transparent 62%),
+    radial-gradient(16% 16% at 54% 40%, hsl(var(--glass-tint-b) / 0.75), transparent 60%);
+  filter: blur(30px) saturate(170%);
+  will-change: transform;
+  animation: glass-drift 34s ease-in-out infinite alternate;
+}
+
+.liquid-glass .glass-wallpaper::after {
+  /* 只压很薄一层中性底色：既保住文字可读性，又让彩色底色透出来 */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    155deg,
+    hsl(var(--heroui-background) / 0.3),
+    hsl(var(--heroui-background) / 0.06) 42%,
+    hsl(var(--heroui-background) / 0.36)
+  );
+}
+
+.liquid-glass.liquid-glass-dark .glass-wallpaper {
+  opacity: 0.9;
+}
+
+.liquid-glass.liquid-glass-dark .glass-wallpaper::after {
+  /*
+   * 中间那档原本只有 0.34 —— 窗口中部几乎等于没压，
+   * 深色模式下白字落在那里就只剩四点几比一，灰色说明文字直接糊掉。
+   */
+  background: linear-gradient(
+    155deg,
+    hsl(var(--heroui-background) / 0.78),
+    hsl(var(--heroui-background) / 0.56) 45%,
+    hsl(var(--heroui-background) / 0.84)
+  );
+}
+
+@keyframes glass-drift {
+  0% {
+    transform: translate3d(-2%, -1.5%, 0) scale(1.04) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(2.5%, 1.5%, 0) scale(1.1) rotate(4deg);
+  }
+  100% {
+    transform: translate3d(-1%, 2.5%, 0) scale(1.06) rotate(-3deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-glass .glass-wallpaper {
+    animation: none;
+  }
+}
+
+/* 玻璃模式下让 html/body 透出底衬（index.html 上带着 bg-background） */
+.liquid-glass,
+.liquid-glass body {
+  background-color: transparent !important;
+}
+
+/* ---- 自定义背景图 ---- */
+.glass-image {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(var(--background-blur, 0px));
+  /* 模糊会让边缘露出底色，稍微放大一点把边补上 */
+  transform: scale(calc(1 + var(--background-blur, 0px) / 900));
+  will-change: transform;
+}
+
+/* 压暗遮罩，保证前景文字可读 */
+.glass-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: hsl(0 0% 0% / var(--background-dim, 0.25));
+}
+
+/*
+ * 深色 + 液态玻璃时，背景图会**透进面板里**，它的明暗直接决定文字对比度 ——
+ * 而用户选的图完全不可控（一张浅色照片就能把白字糊掉）。
+ * 所以这里给压暗值兜一个下限：用户设得比它轻就按它来。
+ * 只对深色生效 —— 浅色模式文字是深的，把背景压暗反而更糟。
+ */
+html.dark.liquid-glass .glass-image::after {
+  background: hsl(0 0% 0% / max(var(--background-dim, 0.25), 0.5));
+}
+
+/*
+ * 玻璃模式下的滑块要额外照顾。
+ *
+ * 轨道原本是 `bg-default-300/50`（半透明深灰）：放在实心暗面板上勉强看得见，
+ * 但玻璃面板背后是**会变的背景** —— 实测「玻璃透明度 = 100」时，
+ * 轨道与周围面板只有 1.3:1，滑块基本等于消失了。
+ *
+ * 改成「亮芯 + 暗边」：亮芯在深色背景上跳出来，暗边在浅色背景上兜底，
+ * 不影响正常实心模式下已经够用的观感（那种情况下亮芯一样看得见）。
+ */
+html.liquid-glass [data-slot='track'] {
+  background-color: hsl(var(--heroui-foreground) / 0.45);
+  box-shadow: 0 0 0 1px hsl(var(--heroui-background) / 0.5);
+}
+
+/* 滑块（圆点）本身是主色，落在浅色背景上容易糊，补一圈暗边 */
+html.liquid-glass [data-slot='thumb'] {
+  box-shadow: 0 0 0 1.5px hsl(var(--heroui-background) / 0.55);
+}
+
+/* ---- 核心：给 HeroUI 面板换上半透明背板 + 毛玻璃 + 玻璃厚度感 ---- */
+.liquid-glass .bg-content1 {
+  background-color: hsl(var(--heroui-content1) / var(--glass-alpha-1));
+}
+
+.liquid-glass .bg-content2 {
+  background-color: hsl(var(--heroui-content2) / var(--glass-alpha-2));
+}
+
+.liquid-glass .bg-content3 {
+  background-color: hsl(var(--heroui-content3) / var(--glass-alpha-3));
+}
+
+.liquid-glass .bg-default-50 {
+  background-color: hsl(var(--heroui-default-50) / var(--glass-alpha-subtle));
+}
+
+.liquid-glass .bg-default-100 {
+  background-color: hsl(var(--heroui-default-100) / var(--glass-alpha-soft));
+}
+
+.liquid-glass .bg-default-200 {
+  background-color: hsl(var(--heroui-default-200) / var(--glass-alpha-strong));
+}
+
+.liquid-glass .bg-overlay {
+  background-color: hsl(var(--heroui-overlay) / var(--glass-alpha-overlay));
+}
+
+.liquid-glass .bg-content1,
+.liquid-glass .bg-content2,
+.liquid-glass .bg-content3 {
+  -webkit-backdrop-filter: var(--glass-backdrop-lite);
+  backdrop-filter: var(--glass-backdrop-lite);
+  /* 外圈亮边 + 顶部高光 + 底部暗边 = 玻璃的"厚度" */
+  box-shadow:
+    inset 0 0 0 1px hsl(var(--glass-rim)),
+    inset 0 1px 0 0 hsl(var(--glass-specular)),
+    inset 0 -1px 0 0 hsl(var(--glass-shadow) / 0.55);
+}
+
+/*
+ * 玻璃厚度感：边缘一圈向内渐隐的高光。
+ * 液态玻璃的"镜面反射"主要在边缘最亮、中间几乎透明，
+ * 所以用环形渐变模拟折射边缘，而不是整块加白。
+ *
+ * 只加在自己控制的分区面板上：.bg-content1 可能落在 absolute/fixed 的元素上
+ * （例如顶栏搜索的下拉），强行套 ::before 会把它撑成相对定位而跑位。
+ */
+.liquid-glass .glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(180deg, hsl(0 0% 100% / 0.5) 0%, hsl(0 0% 100% / 0) 14%),
+    linear-gradient(0deg, hsl(0 0% 100% / 0.24) 0%, hsl(0 0% 100% / 0) 12%),
+    radial-gradient(140% 120% at 12% -10%, hsl(0 0% 100% / 0.34), hsl(0 0% 100% / 0) 46%);
+}
+
+.liquid-glass.liquid-glass-dark .glass-panel::before {
+  background:
+    linear-gradient(180deg, hsl(0 0% 100% / 0.24) 0%, hsl(0 0% 100% / 0) 14%),
+    linear-gradient(0deg, hsl(0 0% 100% / 0.1) 0%, hsl(0 0% 100% / 0) 12%),
+    radial-gradient(140% 120% at 12% -10%, hsl(0 0% 100% / 0.16), hsl(0 0% 100% / 0) 46%);
+}
+
+/* 主面板（卡片 / 弹窗内容）：极淡的斜向反光 + 外投影，营造玻璃厚度 */
+.liquid-glass .bg-content1 {
+  background-image: linear-gradient(135deg, hsl(0 0% 100% / 0.12), hsl(0 0% 100% / 0) 52%);
+  box-shadow:
+    inset 0 0 0 1px hsl(var(--glass-rim)),
+    inset 0 1px 0 0 hsl(var(--glass-specular)),
+    /* 上缘往内的柔光，替代"整块刷白" */
+    inset 0 26px 40px -34px hsl(0 0% 100% / 0.9),
+    /* 外圈再补一条极细的暗描边：纯白边在浅色背景上是看不见的 */
+    0 0 0 0.5px hsl(var(--glass-hairline)),
+    0 20px 48px -24px hsl(var(--glass-shadow)),
+    0 6px 20px -14px hsl(var(--glass-shadow));
+}
+
+.liquid-glass.liquid-glass-dark .bg-content1 {
+  background-image: linear-gradient(135deg, hsl(0 0% 100% / 0.07), hsl(0 0% 100% / 0) 52%);
+}
+
+/* 弹层用更厚的玻璃 */
+.liquid-glass [role='dialog'],
+.liquid-glass [role='menu'],
+.liquid-glass [role='tooltip'],
+.liquid-glass [role='listbox'] {
+  -webkit-backdrop-filter: var(--glass-backdrop-strong);
+  backdrop-filter: var(--glass-backdrop-strong);
+}
+
+/*
+ * Popover / Dropdown 的外壳（role=dialog + bg-transparent）自己不画面板：
+ * 它只是给内容层定位，背景透明、没有圆角。
+ * 它一旦也跑 backdrop-filter，厚磨砂就会在圆角面板的四个角外面
+ * 漏出一块方形的磨砂 —— 看起来就是「圆角没生效」。
+ * 所以外壳只负责定位，磨砂交给里面真正有底色的面板层。
+ */
+.liquid-glass [role='dialog'].bg-transparent {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.liquid-glass [role='dialog'].bg-transparent [data-slot='content'] {
+  -webkit-backdrop-filter: var(--glass-backdrop-strong);
+  backdrop-filter: var(--glass-backdrop-strong);
+}
+
+/* 整块应用面板（侧栏 + 内容区 + 播放栏都在它里面） */
+.liquid-glass .glass-panel {
+  position: relative;
+}
+
+/*
+ * 「滚动时玻璃闪烁」的根因修复
+ * --------------------------------------------------------------------------
+ * 原本 .glass-panel 自己带 backdrop-filter，而滚动列表
+ * （页面内容、侧栏收藏夹）又是它的子节点。Chromium 每次滚动都要重新采样
+ * 一遍 backdrop，于是磨砂层跟着内容一起抖 —— 表现就是滚动时玻璃闪烁。
+ *
+ * 现在把「磨砂」单独拆成一个绝对定位的兄弟层 .glass-fill：
+ * 它不含任何滚动内容，位置和尺寸都不变，浏览器可以把这块磨砂结果缓存下来，
+ * 滚动时不必逐帧重算。
+ * isolation / contain 用来把重绘范围限制在这一层里。
+ */
+.glass-fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  isolation: isolate;
+  contain: paint;
+}
+
+.liquid-glass .glass-fill {
+  background-color: hsl(var(--heroui-content1) / var(--glass-alpha-2));
+  /* 极淡的主色染色：让玻璃是"有色的玻璃"而不是一块白塑料 */
+  background-image: linear-gradient(160deg, hsl(var(--heroui-primary) / 0.09), hsl(var(--heroui-primary) / 0) 62%);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  backdrop-filter: var(--glass-backdrop);
+}
+
+.liquid-glass .glass-panel {
+  box-shadow:
+    inset 0 0 0 1px hsl(var(--glass-rim)),
+    inset 0 1px 0 0 hsl(var(--glass-specular)),
+    0 0 0 0.5px hsl(var(--glass-hairline)),
+    0 18px 44px -26px hsl(var(--glass-shadow));
+}
+
+/*
+ * 侧栏 / 内容区里包内容的这一层要抬到磨砂层之上。
+ * （绝对定位的 .glass-fill 会盖住同层里未定位的内容，必须显式给 z-index）
+ */
+.glass-content {
+  position: relative;
+  z-index: 1;
+}
+
+/*
+ * 滚动时暂停底衬的漂移动画。
+ * 底衬一直在做 transform 动画时，所有磨砂层每帧都要重新采样它；
+ * 滚动期间再叠加一次重绘就容易抖。漂移动画本身 34s 一圈、极不明显，
+ * 滚动时冻结它视觉上几乎无感，但能明显减轻滚动时的绘制压力。
+ */
+html.is-scrolling .glass-wallpaper {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-wallpaper {
+    animation: none;
+  }
+
+  /* 系统开了「减弱动态效果」就直接不盖这一层 */
+  .page-switch {
+    display: none;
+  }
+}
+
+/* 滚动条也做成玻璃质感 */
+.liquid-glass .os-scrollbar {
+  --os-handle-bg: hsl(0 0% 100% / 0.5);
+  --os-handle-bg-hover: hsl(0 0% 100% / 0.68);
+  --os-handle-bg-active: hsl(0 0% 100% / 0.82);
+}
+
+.liquid-glass.liquid-glass-dark .os-scrollbar {
+  --os-handle-bg: hsl(0 0% 100% / 0.22);
+  --os-handle-bg-hover: hsl(0 0% 100% / 0.34);
+  --os-handle-bg-active: hsl(0 0% 100% / 0.46);
+}
+
+
+/* ------------------------------------------------------ 切换页面的加载反馈 */
+
+/*
+ * 换页时盖一层极短的遮蔽 + 顶部扫过一条主色线。
+ *
+ * 挂载点是 `Layout` 里的 `.glass-content` —— 它本来就是 `position: relative; z-index: 1`，
+ * 所以这里只需要 `inset: 0`：**不改动任何现有布局**，也不会变成页面里那些
+ * `position: absolute` 元素新的包含块（那是给内容区容器加 relative 才会有的风险）。
+ *
+ * 覆盖范围是「侧栏 + 导航栏 + 内容区」。播放栏在 `.glass-content` 外面（`relative z-50`），
+ * 不会被盖住 —— 换页时音乐还在播的感觉不会被切断。
+ *
+ * 时间压在 300ms 上下：目的是把「内容硬切」磨一下，不是让人等一个动画。
+ * 也因此**不做成设置项**（见 src/components/page-transition）。
+ */
+.page-switch {
+  position: absolute;
+  inset: 0;
+  /* 只在 .glass-content 这个 stacking context 内有效，盖不到播放栏，更盖不到弹层 */
+  z-index: 9999;
+  pointer-events: none;
+  background-color: hsl(var(--heroui-background) / 0.4);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  animation: page-switch-veil 220ms ease-out forwards;
+}
+
+@keyframes page-switch-veil {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/*
+ * 顶部那条线：从左往右长满。
+ * 渐变右边留一点透明度，长到头的那一瞬才不会像被硬切掉。
+ */
+.page-switch-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--heroui-primary)) 0%,
+    hsl(var(--heroui-primary)) 74%,
+    hsl(var(--heroui-primary) / 0.12) 100%
+  );
+  box-shadow: 0 0 8px hsl(var(--heroui-primary) / 0.45);
+  animation: page-switch-line 320ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+@keyframes page-switch-line {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.4;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------------------------ 桌面歌词 */
+
+/*
+ * 换行时的淡入 + 上浮。
+ * 用在桌面歌词窗：每次当前行变化，整块内容会带 key 重挂一次，触发这条动画。
+ * 时间压到 280ms —— 歌词切换很频繁，动画一长就会"追不上"下一句。
+ */
+@keyframes lyric-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.3em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lyric-line-in {
+  animation: lyric-line-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lyric-line-in {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ app 打开动画 */
+
+/*
+ * 启动时盖住整窗的开场画面。
+ *
+ * 注意它是**从一开始就盖着**的（哪怕还没决定播什么）—— 设置是异步水合回来的，
+ * 水合前就只盖一层和界面同色的底，用户看不出来；
+ * 等水合完再决定是往上放图标/视频，还是直接把盖子撤掉。
+ * 反过来做（先露出界面、动画再盖上）会闪一下，很难看。
+ */
+.app-launch-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: hsl(var(--heroui-background));
+  color: hsl(var(--heroui-foreground));
+}
+
+/* 淡出时长要和组件里的 LEAVE_MS(300) 对齐 */
+.app-launch-overlay--leaving {
+  pointer-events: none;
+  animation: app-launch-leave 300ms ease-in both;
+}
+
+/* 自定义视频：铺满窗口（cover 会裁掉多余部分，但开场画面要的就是铺满） */
+.app-launch-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.app-launch-mark {
+  width: 132px;
+  height: auto;
+  flex: none;
+}
+
+.app-launch-mark--logo {
+  animation: app-launch-mark-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.app-launch-mark--pulse {
+  animation: app-launch-mark-pulse 1200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.app-launch-ring {
+  position: absolute;
+  width: 124px;
+  height: 124px;
+  border: 2px solid currentColor;
+  border-radius: 9999px;
+  opacity: 0;
+  animation: app-launch-ring 1200ms ease-out both;
+}
+
+.app-launch-hint {
+  position: absolute;
+  right: 0;
+  bottom: 16px;
+  left: 0;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0;
+  /* 延迟一点出现：一开始就写「跳过」会抢开场动画的注意力 */
+  animation: app-launch-hint-in 500ms ease-out 700ms both;
+}
+
+@keyframes app-launch-leave {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes app-launch-mark-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.86);
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 呼吸一下再放大淡出 */
+@keyframes app-launch-mark-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  50% {
+    transform: scale(0.97);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.36);
+  }
+}
+
+@keyframes app-launch-ring {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.7);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.2);
+  }
+}
+
+@keyframes app-launch-hint-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.42;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-launch-mark--logo,
+  .app-launch-mark--pulse,
+  .app-launch-ring,
+  .app-launch-hint {
+    animation: none;
+  }
+
+  .app-launch-hint {
+    opacity: 0.42;
+  }
+}
+
+/* ---------------------------------------------------------------- 主页进入动画 */
+
+/*
+ * 主页的问候语 / 时间 / 下方卡片在进入时依次浮现。
+ * 只做「位移 + 淡入」，时长压得比开场动画短 —— 主页是高频页面，
+ * 动画一长就会变成每次回来都要等它演完。
+ */
+.home-reveal {
+  animation: home-reveal 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes home-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-reveal {
+    animation: none;
+  }
+}
+
+/*
+ * 主页文字统一「白字 + 黑边」。
+ *
+ * 主页是唯一一块**文字直接压在底衬（壁纸 / 自定义背景图）上**的页面，
+ * 底衬的明暗完全不可控，所以不能靠主题的前景色 —— 白字管亮背景、黑边管暗背景，
+ * 两头都成立（和桌面歌词、玻璃模式下的滑块轨道是同一套思路）。
+ *
+ * 用 text-shadow 描边而不是 -webkit-text-stroke：后者是**居中描边**，
+ * 会把白色笔画本身吃掉一圈，小字号尤其明显；text-shadow 的边完全长在字外。
+ */
+.home-outlined {
+  color: #fff;
+  text-shadow:
+    0 0 1px rgb(0 0 0 / 0.95),
+    0 0 4px rgb(0 0 0 / 0.55),
+    1px 0 0 rgb(0 0 0 / 0.9),
+    -1px 0 0 rgb(0 0 0 / 0.9),
+    0 1px 0 rgb(0 0 0 / 0.9),
+    0 -1px 0 rgb(0 0 0 / 0.9),
+    1px 1px 0 rgb(0 0 0 / 0.85),
+    -1px 1px 0 rgb(0 0 0 / 0.85),
+    1px -1px 0 rgb(0 0 0 / 0.85),
+    -1px -1px 0 rgb(0 0 0 / 0.85);
+}
+
+/* 11–12px 的小字要轻一点：同样的描边宽度会把笔画之间的空隙填掉，糊成一团 */
+.home-outlined-sm {
+  color: #fff;
+  text-shadow:
+    0 0 2px rgb(0 0 0 / 0.85),
+    0 0 5px rgb(0 0 0 / 0.45),
+    1px 1px 0 rgb(0 0 0 / 0.8),
+    -1px -1px 0 rgb(0 0 0 / 0.8),
+    1px -1px 0 rgb(0 0 0 / 0.8),
+    -1px 1px 0 rgb(0 0 0 / 0.8);
+}
