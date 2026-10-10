@@ -12,7 +12,14 @@ import Later from "./pages/later";
 import LocalMusicPage from "./pages/local-music";
 import MiniPlayer from "./pages/mini-player";
 import MusicRecommend from "./pages/music-recommend";
+import NeteaseAlbumDetail from "./pages/netease/album-detail";
+import NeteaseAlbums from "./pages/netease/albums";
+import NeteaseHot from "./pages/netease/hot";
+import NeteaseLiked from "./pages/netease/liked";
+import NeteasePlaylistDetail from "./pages/netease/playlist-detail";
+import NeteasePlaylists from "./pages/netease/playlists";
 import NotFound from "./pages/not-found";
+import PlayHistory from "./pages/play-history";
 import Search from "./pages/search";
 import Settings from "./pages/settings";
 import UserProfile from "./pages/user-profile";
@@ -39,6 +46,11 @@ const routes: RouteObject[] = [
       {
         path: "history",
         element: <History />,
+      },
+      {
+        // 本地播放历史（主页「最近播放」的全部）；和上面 `/history`（B 站站内观看历史）是两码事
+        path: "play-history",
+        element: <PlayHistory />,
       },
       {
         path: "follow",
@@ -75,6 +87,31 @@ const routes: RouteObject[] = [
       {
         path: "empty",
         element: <EmptyPage />,
+      },
+      /* ---- 网易云 ---- */
+      {
+        path: "netease/liked",
+        element: <NeteaseLiked />,
+      },
+      {
+        path: "netease/playlists",
+        element: <NeteasePlaylists />,
+      },
+      {
+        path: "netease/albums",
+        element: <NeteaseAlbums />,
+      },
+      {
+        path: "netease/hot",
+        element: <NeteaseHot />,
+      },
+      {
+        path: "netease/playlist/:id",
+        element: <NeteasePlaylistDetail />,
+      },
+      {
+        path: "netease/album/:id",
+        element: <NeteaseAlbumDetail />,
       },
     ],
   },

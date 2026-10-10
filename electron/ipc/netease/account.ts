@@ -42,10 +42,24 @@ export const clearNeteaseAccount = () => {
   return getNeteaseAccount();
 };
 
-/** 「我喜欢的音乐」歌单 id 缓存，避免每次收藏都重新拉一遍歌单列表 */
-let likedPlaylistIdCache: number | null = null;
+/**
+ * 「我喜欢的音乐」歌单 id 的缓存。
+ *
+ * ⚠️ **必须和 uid 绑在一起**：不同账号的「我喜欢的音乐」是两个**不同的歌单 id**。
+ * 只存一个 `number` 的话，换账号之后这里还是上一个账号的歌单 ——
+ * 表现就是「登录了别的账号，我喜欢的音乐和每首歌前面那颗星星还是上一个账号的」。
+ * 绑上 uid 之后，uid 一变缓存自动失效，不需要每个登录/登出入口都记得来清一遍。
+ */
+let likedPlaylistIdCache: { uid: number; id: number } | null = null;
 
-export const getCachedLikedPlaylistId = () => likedPlaylistIdCache;
+/** 读缓存。账号对不上、或压根没登录，都当作没有缓存 */
+export const getCachedLikedPlaylistId = () => {
+  const uid = neteaseAccountStore.get("uid");
+  if (typeof uid !== "number" || uid <= 0) return null;
+  return likedPlaylistIdCache?.uid === uid ? likedPlaylistIdCache.id : null;
+};
+
 export const setCachedLikedPlaylistId = (id: number | null) => {
-  likedPlaylistIdCache = id;
+  const uid = neteaseAccountStore.get("uid");
+  likedPlaylistIdCache = id && typeof uid === "number" && uid > 0 ? { uid, id } : null;
 };

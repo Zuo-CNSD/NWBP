@@ -12,6 +12,7 @@ import PlayListDrawer from "@/components/music-playlist-drawer";
 import PageTransition from "@/components/page-transition";
 import VideoPagesDownloadSelectModal from "@/components/video-pages-download-select-modal";
 import PlayBar from "@/layout/playbar";
+import { useNetease } from "@/store/netease";
 import { useSettings } from "@/store/settings";
 import { useUser } from "@/store/user";
 
@@ -22,10 +23,13 @@ import SideNav from "./side";
 const Layout = () => {
   const playbarSpectrum = useSettings(state => state.playbarSpectrum);
   const updateUser = useUser(state => state.updateUser);
+  const refreshNeteaseAccount = useNetease(state => state.refresh);
   const location = useLocation();
 
   useEffect(() => {
     updateUser();
+    // 侧栏「网易云」分组要按登录态显示，所以启动时也问一次
+    void refreshNeteaseAccount();
   }, []);
 
   return (

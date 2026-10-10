@@ -8,7 +8,7 @@ import moment from "moment";
 
 import Image from "@/components/image";
 import { getWebDynamicFeedAll, type WebDynamicItem } from "@/service/web-dynamic";
-import { searchWebInterfaceHistory, type HistoryListItem } from "@/service/web-interface-history-search";
+import { type PlayHistoryItem, toPlayItem, usePlayHistory } from "@/store/play-history";
 import { usePlayList } from "@/store/play-list";
 import { useUser } from "@/store/user";
 
@@ -18,15 +18,17 @@ import { useUser } from "@/store/user";
  * 结构就两块：上半部分是「问候语 + 当前时间」（进入时逐块浮现），
  * 下面一排是「最近播放（最多 2 条）+ 最新动态（最多 1 条）」。
  *
- * 两处取舍：
+ * 三处取舍：
  *
- * 1. **进页面才拉数据，不做缓存。** 最近播放和最新动态都是"时效性"内容，
- *    缓存反而会让用户看到过期的东西；代价是每次回主页多两个请求，
- *    但也只有回主页时才发，和「历史记录」页每次进都拉是同一套行为。
+ * 1. **最近播放读的是本地播放记录**（`usePlayHistory`），不是 B 站的站内观看历史 ——
+ *    后者只记在 B 站网页上看过什么，播放器里播的歌、网易云的歌、本地文件都不进去。
+ *    本地记录在 localStorage 里，同步就能读到，所以这块没有加载态。
  *
- * 2. **两个接口各拉各的、失败各自退化。** 动态接口挂了不该让最近播放也空着，
- *    所以分成两个独立的 async 块，且都不往界面上抛错误 ——
- *    主页是门面，不该因为某个接口失败就变成一块报错板。
+ * 2. **最新动态进页面才拉，不做缓存。** 它是"时效性"内容，缓存反而会让用户看到过期的东西；
+ *    代价是每次回主页多一个请求，但也只有回主页时才发。
+ *
+ * 3. **接口挂了不往界面上抛错误**，退化成"暂时没有新动态" —— 主页是门面，
+ *    不该因为某个接口失败就变成一块报错板。
  */
 const GREETING_BOUNDS: Array<[number, string]> = [
   [5, "夜深了"],
@@ -41,16 +43,16 @@ const greetingOf = (hour: number) => GREETING_BOUNDS.find(([end]) => hour < end)
 
 const pad = (value: number) => String(value).padStart(2, "0");
 
-/** 封面缩略图：B 站的图可以带 `@宽_高_裁剪.格式` 后缀，省流量也更清晰 */
+/** 封面缩略图：B 站的图可以带 `@宽_高_裁剪.格式` 后缀；其它来源 `Image` 会自己跳过 */
 const THUMB_PARAMS = "160w_160h_1c.webp";
 
 const Home = () => {
   const navigate = useNavigate();
   const isLogin = useUser(state => state.user?.isLogin);
+  /** 本地播放记录，最新的在最前 */
+  const history = usePlayHistory(state => state.items);
 
   const [now, setNow] = useState(() => new Date());
-  /** null = 还在加载；[] = 没有最近播放 */
-  const [recent, setRecent] = useState<HistoryListItem[] | null>(null);
   /** undefined = 还在加载；null = 没有动态 */
   const [dynamicItem, setDynamicItem] = useState<WebDynamicItem | null | undefined>(undefined);
 
@@ -62,24 +64,11 @@ const Home = () => {
 
   useEffect(() => {
     if (!isLogin) {
-      setRecent([]);
       setDynamicItem(null);
       return;
     }
 
     let alive = true;
-
-    void (async () => {
-      try {
-        const res = await searchWebInterfaceHistory({ pn: 1 });
-        const list = res.code === 0 ? (res.data?.list ?? []) : [];
-        // 直接取历史最顶上的两条 —— 不做「能不能播」的过滤：
-        // 用户要的是「我最近看过什么」，剧集/专栏也该照实显示（只是点了不播）
-        if (alive) setRecent(list.slice(0, 2));
-      } catch {
-        if (alive) setRecent([]);
-      }
-    })();
 
     void (async () => {
       try {
@@ -95,21 +84,12 @@ const Home = () => {
     };
   }, [isLogin]);
 
-  /** 能不能播：剧集（pgc）点不出播放器，没有 bvid 的也播不了 */
-  const canPlay = (item: HistoryListItem) => Boolean(item.history?.bvid) && item.history?.business !== "pgc";
+  const recent = history.slice(0, 2);
 
-  const playHistory = (item: HistoryListItem) => {
-    const { bvid } = item.history ?? {};
-    if (!canPlay(item) || !bvid) return;
-
-    void usePlayList.getState().play({
-      type: "mv",
-      bvid,
-      title: item.title,
-      cover: item.cover,
-      ownerName: item.author_name,
-      ownerMid: item.author_mid,
-    });
+  const playHistory = (item: PlayHistoryItem) => {
+    const playItem = toPlayItem(item);
+    if (!playItem) return;
+    void usePlayList.getState().play(playItem);
   };
 
   const author = dynamicItem?.modules?.module_author;
@@ -141,26 +121,21 @@ const Home = () => {
             <button
               type="button"
               className="home-outlined-sm flex items-center gap-0.5 text-xs transition-opacity hover:opacity-70"
-              onClick={() => void navigate("/history")}
+              onClick={() => void navigate("/play-history")}
             >
               全部
               <RiArrowRightSLine size={14} />
             </button>
           </header>
 
-          {recent === null ? (
-            <>
-              <Skeleton className="rounded-large h-[64px]" />
-              <Skeleton className="rounded-large h-[64px]" />
-            </>
-          ) : recent.length === 0 ? (
+          {recent.length === 0 ? (
             <div className="home-outlined-sm rounded-large border-default-200/40 flex h-[64px] items-center justify-center border border-dashed text-sm">
-              {isLogin ? "还没有播放记录" : "登录后显示最近播放"}
+              还没有播放记录
             </div>
           ) : (
             recent.map(item => (
               <button
-                key={`${item.history.oid}-${item.view_at}`}
+                key={item.key}
                 type="button"
                 onClick={() => playHistory(item)}
                 className="group bg-content1/60 hover:bg-content2/70 rounded-large flex items-center gap-3 p-2 text-left transition-colors"
@@ -173,16 +148,14 @@ const Home = () => {
                 />
                 <div className="min-w-0 flex-1">
                   <div className="home-outlined truncate text-sm font-medium">{item.title}</div>
-                  {item.author_name ? (
-                    <div className="home-outlined-sm mt-0.5 truncate text-xs">{item.author_name}</div>
+                  {item.ownerName ? (
+                    <div className="home-outlined-sm mt-0.5 truncate text-xs">{item.ownerName}</div>
                   ) : null}
                 </div>
-                {canPlay(item) ? (
-                  <RiPlayFill
-                    size={18}
-                    className="mr-1 flex-none text-white opacity-0 transition-opacity group-hover:opacity-100"
-                  />
-                ) : null}
+                <RiPlayFill
+                  size={18}
+                  className="mr-1 flex-none text-white opacity-0 transition-opacity group-hover:opacity-100"
+                />
               </button>
             ))
           )}

@@ -22,6 +22,8 @@ interface Props {
   type: "audio" | "mv";
   bvid?: string;
   sid?: number;
+  /** 网易云歌曲 id（音源为网易云时用来判「正在播放」） */
+  neteaseId?: number;
   cover?: string;
   upName?: string;
   upMid?: number;
@@ -40,6 +42,7 @@ const MusicListItem = ({
   type,
   bvid,
   sid,
+  neteaseId,
   cover,
   upName,
   upMid,
@@ -56,7 +59,7 @@ const MusicListItem = ({
   const playId = usePlayList(state => state.playId);
   const list = usePlayList(state => state.list);
   const playItem = list.find(item => item.id === playId);
-  const isPlay = isSame(playItem, { type, bvid, sid });
+  const isPlay = isSame(playItem, { type, bvid, sid, neteaseId });
   const displayMode = useSettings(state => state.displayMode);
   const isCompact = displayMode === "compact";
 

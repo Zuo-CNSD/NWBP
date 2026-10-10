@@ -1,9 +1,10 @@
 import React from "react";
 import { type Control, Controller } from "react-hook-form";
 
-import { DefaultMenuList } from "@/common/constants/menus";
+import { DefaultMenuList, NeteaseMenuList } from "@/common/constants/menus";
 import SelectAllCheckboxGroup from "@/components/select-all-checkbox-group";
 import { useFavoritesStore } from "@/store/favorite";
+import { useNetease } from "@/store/netease";
 import { useUser } from "@/store/user";
 
 interface MenuSettingsProps {
@@ -12,6 +13,7 @@ interface MenuSettingsProps {
 
 const MenuSettings: React.FC<MenuSettingsProps> = ({ control }) => {
   const user = useUser(state => state.user);
+  const neteaseLoggedIn = useNetease(state => Boolean(state.account?.loggedIn));
   const createdFavorites = useFavoritesStore(state => state.createdFavorites);
   const collectedFavorites = useFavoritesStore(state => state.collectedFavorites);
 
@@ -44,6 +46,43 @@ const MenuSettings: React.FC<MenuSettingsProps> = ({ control }) => {
                 return (
                   <SelectAllCheckboxGroup
                     groupName="系统默认菜单"
+                    groupKeys={groupKeys}
+                    selectedKeys={selectedKeys}
+                    onSelectionChange={handleSelectionChange}
+                    items={items}
+                  />
+                );
+              }}
+            />
+          </div>
+        </div>
+
+        {/* 网易云分组：和上面那组共用同一个 hiddenMenuKeys，各管各的 key */}
+        <div className="flex w-full items-start space-x-[100px]">
+          <div className="text-medium font-medium">网易云</div>
+          <div className="max-w-[480px]">
+            <Controller
+              control={control}
+              name="hiddenMenuKeys"
+              render={({ field }) => {
+                const groupKeys = NeteaseMenuList.filter(i => i.href).map(i => i.href!);
+                const selectedKeys = groupKeys.filter(k => !field.value.includes(k));
+
+                const handleSelectionChange = (newSelectedKeys: string[]) => {
+                  // 只处理本组的增删，其它分组已隐藏的 key 原样保留
+                  const outsideHidden = field.value.filter(k => !groupKeys.includes(k));
+                  const hiddenInGroup = groupKeys.filter(k => !newSelectedKeys.includes(k));
+                  field.onChange(Array.from(new Set([...outsideHidden, ...hiddenInGroup])));
+                };
+
+                const items = NeteaseMenuList.filter(i => (neteaseLoggedIn ? true : !i.needLogin)).map(item => ({
+                  value: item.href!,
+                  label: item.title,
+                }));
+
+                return (
+                  <SelectAllCheckboxGroup
+                    groupName="网易云"
                     groupKeys={groupKeys}
                     selectedKeys={selectedKeys}
                     onSelectionChange={handleSelectionChange}

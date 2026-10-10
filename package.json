@@ -1,6 +1,6 @@
 {
   "name": "nwbp",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0-beta.2",
   "private": true,
   "engines": {
     "node": "22.17.1"
@@ -8,7 +8,7 @@
   "type": "module",
   "description": "music application based on bilibili api",
   "author": "wood3n",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "GPL-3.0-only",
   "homepage": "https://github.com/wood3n/biu#readme",
   "repository": {
     "type": "git",

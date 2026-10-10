@@ -1,10 +1,10 @@
-NWBP
+<h1 align="center">NWBP</h1>
 
 <p align="center">
-  <b>Beta V 0.1.0</b>
+  <b>Beta 2</b>
 </p>
 <p align="center">
-  一个基于哔哩哔哩公开接口的跨平台桌面音乐播放器 🎧
+  一个基于哔哩哔哩公开接口的跨平台桌面音乐播放器，另集成网易云音乐音源 🎧
 </p>
 <p align="center">
   <b>macOS · Windows · Linux</b>
@@ -14,7 +14,7 @@ NWBP
 </p>
 <p align="center">
   <a href="LICENSE">
-    <img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-orange.svg" alt="License">
+    <img src="https://img.shields.io/badge/license-GPL%20v3.0-blue.svg" alt="License">
   </a>
   <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg" alt="Platform">
   <img src="https://img.shields.io/badge/electron-38-blue.svg" alt="Electron">
@@ -22,7 +22,7 @@ NWBP
 
 ⸻
 
-📸 Preview
+## 📸 Preview
 
 <table>
   <tr>
@@ -39,13 +39,15 @@ NWBP
 
 ⸻
 
-📖 关于 NWBP
+## 📖 关于 NWBP
 
 NWBP 是一个运行于桌面端的跨平台音乐播放器。
 
-它以哔哩哔哩相关公开接口为主要内容来源，在用户登录并授权后，可以访问个人收藏夹、稍后再看、历史记录、关注等内容，并将这些内容作为个人媒体库进行播放。
+它以哔哩哔哩相关公开接口为主要内容来源。在用户登录并授权后，可以访问个人收藏夹、稍后再看、历史记录、关注等内容，并将这些内容作为个人媒体库进行播放。
 
-同时，NWBP 集成了部分网易云音乐相关能力，并提供桌面歌词、视频下载、音频提取、频谱可视化、动态背景以及多种窗口模式等功能。
+同时，NWBP 把网易云音乐接入为**第二套音源**：搜索可以按需切换来源，侧栏另有独立的「网易云」分组（我喜欢的音乐 / 我的歌单 / 我的专辑 / 热门歌单），歌词也支持网易云的逐字时间轴。
+
+此外还提供桌面歌词、视频下载、音频提取、频谱可视化、动态背景以及多种窗口模式等功能。
 
 NWBP 由 wood3n/biu 派生而来，并在上游项目基础上对视觉设计、窗口系统、播放体验、桌面歌词、主页以及整体交互进行了较大规模的重新设计。
 
@@ -53,9 +55,9 @@ NWBP 是非官方第三方项目，与哔哩哔哩没有任何官方关联、授
 
 ⸻
 
-✨ Features
+## ✨ Features
 
-🎵 播放与媒体库
+### 🎵 播放与媒体库
 
 * B 站账号登录
     * 扫码登录
@@ -65,17 +67,23 @@ NWBP 是非官方第三方项目，与哔哩哔哩没有任何官方关联、授
 * 稍后再看
 * 历史记录
 * 我的关注
+* 本地音乐
 * 站内搜索
 * 搜索历史
 * 最近播放
+* 播放历史（本地记录，覆盖 B 站音频 / 视频、网易云曲目与本地文件）
 * 全屏播放器
 * Mini Player
 * 底部播放栏
 * 动态音频频谱
 
-⸻
+### 🔀 音源
 
-🎧 音频
+* 搜索页可在 **B 站 / 网易云** 之间切换，选择会被记住
+* 设置 → 常规设置 → 搜索 → 歌曲音源 里也可以改
+* B 站与网易云**两组菜单并存**，不是二选一：切换音源只影响搜索走哪家
+
+### 🎧 音频
 
 * 根据账号权限获取可用的较高质量音频流
 * 支持高码率音频播放
@@ -85,25 +93,24 @@ NWBP 是非官方第三方项目，与哔哩哔哩没有任何官方关联、授
 
 实际可用的音频质量取决于视频源、账号权限以及平台当前提供的资源。
 
-⸻
+### ☁️ 网易云音乐
 
-☁️ 网易云音乐相关功能
+NWBP 使用 ncm-player 项目的部分实现，为应用提供网易云音乐相关功能。支持：
 
-NWBP 使用 ncm-player 项目的部分实现，为应用提供网易云音乐相关功能。
-
-目前主要用于：
-
-* 网易云音乐相关数据能力
-* 歌词来源
-* 网易云音乐相关播放辅助功能
+* 账号登录（扫码 / 粘贴 Cookie）
+* 单曲搜索
+* 我喜欢的音乐
+* 我的歌单 / 我的专辑
+* 热门歌单
+* 歌单详情 / 专辑详情（长歌单滚动分页加载，不会被截断）
+* 收藏（按音源分流，见下文）
+* 歌词：逐字时间轴 / 翻译 / 罗马音，同时可作为桌面歌词的歌词源
 
 相关代码经过 NWBP 的项目结构与 UI 进行适配。
 
 网易云音乐相关功能并不代表 NWBP 与网易云音乐存在任何官方合作、授权或关联。
 
-⸻
-
-📝 桌面歌词
+### 📝 桌面歌词
 
 NWBP 的桌面歌词功能参考并使用了 Lyrimuse 提供的相关实现。
 
@@ -127,9 +134,7 @@ NWBP 的桌面歌词功能参考并使用了 Lyrimuse 提供的相关实现。
 * 网易云音乐
 * LRCLIB
 
-⸻
-
-🧊 Liquid Glass
+### 🧊 Liquid Glass
 
 NWBP 采用低填充、低模糊的玻璃化视觉设计。
 
@@ -148,9 +153,7 @@ NWBP 采用低填充、低模糊的玻璃化视觉设计。
 
 设计目标不是简单地将界面处理成高模糊的“毛玻璃”，而是在透明度、背景、内容和层次之间保持清晰的视觉关系。
 
-⸻
-
-🎬 启动动画
+### 🎬 启动动画
 
 支持多种应用启动动画：
 
@@ -160,9 +163,7 @@ NWBP 采用低填充、低模糊的玻璃化视觉设计。
 * 呼吸
 * 自定义视频
 
-⸻
-
-🏠 主页
+### 🏠 主页
 
 打开 NWBP 后直接进入主页：
 
@@ -174,11 +175,19 @@ NWBP 采用低填充、低模糊的玻璃化视觉设计。
 
 ⸻
 
-🧩 相比上游的主要改动
+## 🧩 相比上游的主要改动
 
 NWBP 不只是简单修改主题，而是在上游项目的基础上进行了较大范围的 UI 与体验重构。
 
-🎨 品牌与视觉
+### 🔀 音源与曲库
+
+* 新增歌曲音源切换：搜索页可在 B 站 / 网易云之间切换，选择会被记住
+* 侧栏新增「网易云」分组：我喜欢的音乐 / 我的歌单 / 我的专辑 / 热门歌单，与原有的 B 站那组并存
+* 网易云歌单支持滚动分页，上千首的歌单不再只加载前 300 首
+* 新增收藏分流：网易云曲目收藏进网易云的「我喜欢的音乐」，B 站曲目仍进收藏夹
+* 新增本地播放历史：主页「最近播放」+ 独立的播放历史页
+
+### 🎨 品牌与视觉
 
 * 品牌名称改为 NWBP
 * 侧栏采用纯文字品牌设计
@@ -187,7 +196,7 @@ NWBP 不只是简单修改主题，而是在上游项目的基础上进行了较
 * 增加浅色 / 深色主题
 * 增加自定义背景系统
 
-📝 桌面歌词重构
+### 📝 桌面歌词重构
 
 重新设计桌面歌词窗口：
 
@@ -199,7 +208,7 @@ NWBP 不只是简单修改主题，而是在上游项目的基础上进行了较
 * 背景 / 文字独立透明度
 * 可选频谱显示
 
-🏠 新增主页
+### 🏠 新增主页
 
 新增完整主页系统：
 
@@ -208,17 +217,17 @@ NWBP 不只是简单修改主题，而是在上游项目的基础上进行了较
 * 最近播放
 * 最新动态
 
-🎵 播放栏与频谱
+### 🎵 播放栏与频谱
 
 新增播放栏动态音频条。
 
 桌面歌词增加可选频谱条，并与全屏播放器共享同一套频谱模块。
 
-🎬 启动动画
+### 🎬 启动动画
 
 新增应用启动动画系统，并支持自定义视频。
 
-🪟 窗口与托盘
+### 🪟 窗口与托盘
 
 * macOS 补齐托盘图标
 * 关闭主窗口后应用仍可驻留
@@ -226,35 +235,32 @@ NWBP 不只是简单修改主题，而是在上游项目的基础上进行了较
 * 支持独立桌面歌词窗口
 * 支持透明窗口
 
-🛠 其他调整
+### 🛠 其他调整
 
 * 移除自动更新链路
-* 移除 electron-updater
+* 移除 electron-updater（因此**本版没有自动更新**）
 * 修复液态玻璃模式下部分文字与滑块对比度不足的问题
 * 页面切换增加短暂加载反馈
 * 设置页增加开发者署名
 
 ⸻
 
-📦 构建与安装
+## 📦 构建与安装
 
 当前版本暂未提供官方签名安装包。
 
-构建产物位于：
+构建产物位于 `dist/artifacts/`：
 
-dist/artifacts/
-
-支持：
-
-平台	架构 / 格式
-macOS	Apple Silicon / Intel
-Windows	x64 / ARM64
-Linux	Electron Builder 支持的目标架构
+| 平台 | 架构 / 格式 |
+| --- | --- |
+| macOS | Apple Silicon / Intel（`.dmg` + `.zip`） |
+| Windows | x64 / ARM64（NSIS 安装包 + Portable + `.zip`） |
+| Linux | Electron Builder 支持的目标架构 |
 
 Windows 支持：
 
-* NSIS 安装包
-* Portable 免安装版本
+* NSIS 安装包（可选安装目录）
+* Portable 免安装版本（适合 U 盘 / 无管理员权限）
 
 macOS / Windows 同时提供 ZIP 版本。
 
@@ -266,136 +272,144 @@ Windows 如果出现 SmartScreen 提示，请确认来源后选择继续运行�
 
 ⸻
 
-🚀 本地开发
+## 🚀 本地开发
 
-环境要求
+**环境要求**
 
 * Node.js 22.17.1
 * pnpm 10.x
 * Electron 38
 
-项目使用 .nvmrc / package.json 指定 Node.js 版本。
+项目使用 `.nvmrc` / `package.json` 指定 Node.js 版本，`.npmrc` 开启 `engine-strict=true`，因此建议严格使用 Node.js 22.17.1。
 
-.npmrc 开启：
+**安装与启动**
 
-engine-strict=true
-
-因此建议严格使用 Node.js 22.17.1。
-
-安装
-
+```bash
 corepack enable
 pnpm install
-
-开发
-
 pnpm dev
+```
 
-该命令会启动 Rsbuild 开发环境并自动启动 Electron。
-
-⸻
-
-🛠 常用命令
-
-命令	用途
-pnpm dev	启动开发环境
-pnpm build	构建并打包当前平台
-pnpm test	运行 Vitest 测试
-pnpm knip	检查未使用的文件与导出
-npx tsc --noEmit	TypeScript 类型检查
-npx eslint src electron shared plugins tests	ESLint 检查
+`pnpm dev` 会启动 Rsbuild 开发环境并自动启动 Electron。
 
 ⸻
 
-📦 多平台构建
+## 🛠 常用命令
+
+| 命令 | 用途 |
+| --- | --- |
+| `pnpm dev` | 启动开发环境 |
+| `pnpm build` | 构建并打包当前平台 |
+| `pnpm test` | 运行 Vitest 测试 |
+| `pnpm knip` | 检查未使用的文件与导出 |
+| `npx tsc --noEmit` | TypeScript 类型检查 |
+| `npx eslint src electron shared plugins tests` | ESLint 检查 |
+
+⸻
+
+## 📦 多平台构建
 
 默认：
 
+```bash
 pnpm build
+```
 
 只构建当前操作系统。
 
 如果需要一次构建多个平台：
 
+```bash
 NWBP_BUILD_TARGET=mac,win pnpm build
+```
 
-支持：
+支持：`mac` / `win` / `linux`。例如：
 
-mac
-win
-linux
-
-例如：
-
+```bash
 NWBP_BUILD_TARGET=mac,win,linux pnpm build
+```
 
-构建流程开始时会清理 dist。
-
-因此不建议分别执行多次 pnpm build，否则后一次构建可能会删除前一次生成的安装包。
+构建流程开始时会清理 `dist`，因此不建议分别执行多次 `pnpm build`，否则后一次构建可能会删除前一次生成的安装包。
 
 ⸻
 
-🍎 macOS 构建
+## 🍎 macOS 构建
 
 macOS 构建需要完整的 Xcode。
 
-由于项目使用 macOS .icon 格式，Electron Builder 会调用 actool。
+由于项目使用 macOS `.icon` 格式，Electron Builder 会调用 `actool`。建议：
 
-建议：
-
+```bash
 DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
 NWBP_BUILD_TARGET=mac \
 pnpm build
+```
 
 如果只安装 Command Line Tools 而没有完整 Xcode，可能出现：
 
+```
 Failed to check actool version.
 Is Xcode 26 or higher installed?
+```
 
 ⸻
 
-🪟 在 macOS 上构建 Windows
+## 🪟 在 macOS 上构建 Windows
 
 首次构建 Windows 版本时，Electron Builder 会自动下载 Windows 所需的 Electron、NSIS 和相关工具。
 
 如果网络环境不佳，可以使用镜像：
 
+```bash
 ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ \
 ELECTRON_BUILDER_BINARIES_MIRROR=https://npmmirror.com/mirrors/electron-builder-binaries/ \
 NWBP_BUILD_TARGET=win \
 pnpm build
+```
 
 ⸻
 
-📁 项目结构
+## 🏷 版本号
 
+`package.json` 的 `version` 必须是合法 semver（Electron Builder 依赖它命名产物），当前为 `0.1.0-beta.2`。
+
+界面上的「**Beta 2**」由 `src/common/utils/version.ts` 的 `formatAppVersion()` 转换而来 —— 显示的是**预发布序号**，所以发新版时要把 `beta` 后面的数字往上加（`-beta.2` → `-beta.3` …）。
+
+点分的版本核心（`0.1.0`）不带预发布标记，会被 `plugins/electron-build.ts` 写进 macOS 的 `CFBundleVersion` 与 Windows 的 `FileVersion` / `ProductVersion`。
+
+⸻
+
+## 📁 项目结构
+
+```
 NWBP/
-├── src/
-│   ├── components/       # 通用 UI 与播放器组件
-│   ├── pages/            # 页面
-│   ├── layout/           # 应用布局
-│   ├── store/            # Zustand 状态管理
-│   └── common/           # 通用工具与常量
+├── src/                  渲染层
+│   ├── components/       通用 UI 与播放器组件
+│   ├── pages/            页面（含 pages/netease/ 网易云各页）
+│   ├── layout/           应用布局（侧栏 / 导航栏 / 播放栏）
+│   ├── store/            Zustand 状态管理
+│   └── common/           通用工具与常量
 │
-├── electron/
-│   ├── ipc/              # IPC 处理器
-│   ├── windows/          # 窗口管理
-│   └── ffmpeg/           # FFmpeg
+├── electron/             主进程
+│   ├── ipc/              IPC 处理器（含 ipc/netease/ 网易云接口层）
+│   ├── windows/          窗口管理
+│   └── ffmpeg/           FFmpeg
 │
-├── shared/                # 主进程 / 渲染层共享类型
-├── plugins/               # Rsbuild / Electron Builder 配置
-├── tests/                 # 测试
-├── screenshots/           # README 截图
+├── shared/               主进程 / 渲染层共享类型与默认值
+├── plugins/              Rsbuild / Electron Builder 配置
+├── tests/                测试
+├── screenshots/          README 截图
 ├── LICENSE
 └── package.json
+```
 
 ⸻
 
-🔐 账号与权限
+## 🔐 账号与权限
 
 NWBP 不提供独立的账号系统。
 
-登录功能用于访问用户自己的哔哩哔哩账户及其可访问内容。
+登录功能用于访问用户自己的哔哩哔哩账户（以及可选的网易云账号）及其可访问内容。
 
 请勿：
 
@@ -410,94 +424,87 @@ NWBP 不提供独立的账号系统。
 
 ⸻
 
-📜 Third-party Projects
+## 📜 Third-party Projects
 
 NWBP 使用、参考或集成多个开源项目。
 
 感谢所有相关项目的作者、维护者以及贡献者。
 
-项目	用途
-wood3n/biu	NWBP 的上游项目
-ncm-player	网易云音乐相关功能
-Lyrimuse	桌面歌词相关功能
-bilibili-API-collect	哔哩哔哩 API 研究与参考
-HeroUI	UI 组件
-Rsbuild	构建工具链
-Electron	跨平台桌面应用运行环境
-FFmpeg	音视频处理
+| 项目 | 用途 |
+| --- | --- |
+| wood3n/biu | NWBP 的上游项目 |
+| ncm-player | 网易云音乐相关功能 |
+| Lyrimuse | 桌面歌词相关功能 |
+| bilibili-API-collect | 哔哩哔哩 API 研究与参考 |
+| HeroUI | UI 组件 |
+| Rsbuild | 构建工具链 |
+| Electron | 跨平台桌面应用运行环境 |
+| FFmpeg | 音视频处理 |
 
 第三方项目的版权、商标及许可证归其各自作者或权利人所有。
 
 ⸻
 
-📚 Acknowledgements
+## 📚 Acknowledgements
 
 特别感谢：
 
-wood3n/biu
+**wood3n/biu**
 
 NWBP 的上游项目。
 
 感谢上游项目提供的播放器基础架构以及相关实现。
 
-ncm-player
+**ncm-player**
 
 NWBP 使用其部分实现，为网易云音乐相关功能提供基础。
 
-Lyrimuse
+**Lyrimuse**
 
 NWBP 的桌面歌词功能使用并参考了其相关实现，并在此基础上进行了进一步的 UI 与交互设计。
 
-SocialSisterYi/bilibili-API-collect
+**SocialSisterYi/bilibili-API-collect**
 
 长期收集与整理哔哩哔哩 API，为 NWBP 相关接口研究提供了重要参考。
 
-HeroUI / Rsbuild / Electron / FFmpeg
+**HeroUI / Rsbuild / Electron / FFmpeg**
 
 感谢这些优秀的开源项目为 NWBP 提供基础能力。
 
 ⸻
 
-📄 License
+## 📄 License
 
 NWBP 使用：
 
-PolyForm Noncommercial License 1.0.0
+**GNU General Public License v3.0（GPL-3.0）**
 
-本项目允许非商业用途的使用、修改与研究，但禁止商业用途。
+这是一份 copyleft 许可证：
 
-禁止但不限于：
+* 可以自由使用、修改、分发本项目，**包括用于商业目的**
+* 分发本项目或其修改版时，必须同样以 GPL-3.0 开源，并提供完整源代码
+* 必须保留版权声明与许可证全文，改动过的文件需要标明
+* 本软件按“原样”提供，不附带任何担保
 
-* 销售软件
-* 收费服务
-* 广告变现
-* 商业集成
-* 将本项目作为商业产品的一部分
+完整许可条款请参阅 [`LICENSE`](LICENSE)（SPDX：`GPL-3.0-only`）。
 
-完整许可条款请参阅：
+**Copyright**
 
-LICENSE
+本项目基于 wood3n/biu 派生开发，保留上游版权声明：
 
-SPDX：
-
-PolyForm-Noncommercial-1.0.0
-
-Upstream Copyright
-
-本项目基于 wood3n/biu 派生开发。
-
-根据上游项目相关许可要求，本项目保留：
-
+```
 Copyright (c) 2022–2025 wood3n
+```
 
 ⸻
 
-👥 Developers
+## 👥 Developers
 
-头像	开发者
-	会点技术的佳代子
-	无谬Wumiu
-	DeepSeek
+| 头像 | 开发者 |
+| --- | --- |
+| <img src="./src/assets/images/developers/kayoko.png" width="40" height="40" alt="会点技术的佳代子"> | 会点技术的佳代子 |
+| <img src="./src/assets/images/developers/wumiu.png" width="40" height="40" alt="无谬Wumiu"> | 无谬Wumiu |
+| <img src="./src/assets/images/developers/deepseek.png" width="40" height="40" alt="DeepSeek"> | DeepSeek |
 
 开发者信息同时显示于：
 
@@ -505,15 +512,14 @@ Copyright (c) 2022–2025 wood3n
 
 ⸻
 
-⚖️ Legal Notice
+## ⚖️ Legal Notice
 
 NWBP 是一个非官方第三方项目。
 
 * NWBP 与哔哩哔哩没有任何官方关联、授权或背书。
 * Bilibili、哔哩哔哩及其相关名称、商标与标识归其各自权利人所有。
 * 本项目不主张拥有相关平台的知识产权。
-* 本项目仅供学习、研究与个人使用。
-* 严禁将本项目用于商业用途。
+* 本项目以 GPL-3.0 发布，允许包括商业用途在内的自由使用、修改与分发；分发修改版时需遵守该许可证的开源与署名要求。
 * 用户应自行确保其使用方式符合相关平台规则及适用法律法规。
 * 项目不会以任何形式鼓励绕过会员权限、DRM 或其他访问控制措施。
 * 实际可访问的内容与音频质量取决于用户账号权限、资源本身以及平台当前提供的接口。
@@ -523,7 +529,7 @@ NWBP 是一个非官方第三方项目。
 
 ⸻
 
-⭐ Support
+## ⭐ Support
 
 如果 NWBP 对你有帮助，欢迎给项目一个 ⭐ Star。
 

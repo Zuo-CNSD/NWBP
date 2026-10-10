@@ -5,11 +5,13 @@ import { Chip } from "@heroui/react";
 import { RiArrowUpSLine, RiMusic2Line } from "@remixicon/react";
 import clsx from "classnames";
 
+import { isNeteaseTrack } from "@/common/utils/favorite";
 import { openBiliVideoLink } from "@/common/utils/url";
 import Image from "@/components/image";
 import MusicFavButton from "@/components/music-fav-button";
 import MusicThumb from "@/components/music-thumb";
 import { useModalStore } from "@/store/modal";
+import { useNetease } from "@/store/netease";
 import { usePlayList } from "@/store/play-list";
 import { useUser } from "@/store/user";
 
@@ -22,8 +24,18 @@ const LeftControl = () => {
   const list = usePlayList(s => s.list);
   const playId = usePlayList(s => s.playId);
 
+  const neteaseLoggedIn = useNetease(s => Boolean(s.account?.loggedIn));
+
   const playItem = useMemo(() => list.find(item => item.id === playId), [list, playId]);
   const isClickable = Boolean(playItem && playItem.source !== "local");
+
+  /*
+   * 收藏按钮按**曲目来自哪家**决定要不要显示。
+   * 原来只看 B 站登录态，于是「只登录了网易云、没登 B 站」的人根本看不到这个按钮 ——
+   * 而收藏网易云曲目恰恰不需要 B 站账号。
+   * 点赞（MusicThumb）是 B 站独有的，仍然按 B 站登录态。
+   */
+  const canFavorite = isClickable && (isNeteaseTrack(playItem) ? neteaseLoggedIn : Boolean(user?.isLogin));
 
   return (
     <div className="flex h-full w-full items-center justify-start space-x-2">
@@ -84,12 +96,8 @@ const LeftControl = () => {
       </div>
       <div className="flex items-center">
         {Boolean(playItem?.hasMultiPart) && <PageListDrawer />}
-        {Boolean(user?.isLogin) && Boolean(playItem) && playItem?.source !== "local" && (
-          <>
-            <MusicFavButton />
-            <MusicThumb />
-          </>
-        )}
+        {canFavorite && <MusicFavButton />}
+        {Boolean(user?.isLogin) && isClickable && <MusicThumb />}
       </div>
     </div>
   );

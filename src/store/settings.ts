@@ -21,6 +21,19 @@ export const useSettings = create<AppSettings & SettingsActions>()(
         }, {} as AppSettings);
       },
       update: (patch: Partial<AppSettings>) => {
+        /*
+         * 只写真的变了的字段。
+         *
+         * 两个原因：
+         *  1. 值没变就不该通知订阅者 —— 否则拖着滑块时每帧都白重渲染一轮；
+         *  2. persist 中间件只要收到一次 set 就会把**整份设置**写一遍磁盘，
+         *     值相同的写入纯属浪费。
+         * 比较用 `!==` 就够：设置项要么是原始值，要么是「改了必然换成新引用」的对象。
+         */
+        const current = get();
+        const changed = Object.entries(patch).some(([key, value]) => current[key as keyof AppSettings] !== value);
+        if (!changed) return;
+
         set(patch);
       },
       reset: () => {
@@ -77,6 +90,7 @@ export const useSettings = create<AppSettings & SettingsActions>()(
           backgroundImageDim: state.backgroundImageDim,
           windowTransparent: state.windowTransparent,
           audioQuality: state.audioQuality,
+          musicSource: state.musicSource,
           hiddenMenuKeys: state.hiddenMenuKeys,
           displayMode: state.displayMode,
           ffmpegPath: state.ffmpegPath,

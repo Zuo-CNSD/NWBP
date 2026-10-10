@@ -15,9 +15,30 @@ import { formatUrlProtocol } from "@/common/utils/url";
 import { getAudioSongInfo } from "@/service/audio-song-info";
 import { getWebInterfaceView } from "@/service/web-interface-view";
 
+import { usePlayHistory } from "./play-history";
 import { usePlayProgress } from "./play-progress";
+import { useSettings } from "./settings";
 
 export type PlayDataType = "mv" | "audio";
+
+/**
+ * 把播放器里的音质档位翻成网易云的 `level` 参数。
+ *
+ * 档位语义对不齐是正常的：B 站那边是「自动 / 无损 / 高 / 中 / 低」，
+ * 网易云只有 standard / exhigh / lossless 三档。
+ * 「自动」按 B 站那边的习惯往好里取（那边 auto 也是优先 flac），
+ * 拿不到就让服务端降级 —— 网易云自己会返回能给的最高档。
+ */
+const toNeteaseLevel = (quality: AudioQuality): "standard" | "exhigh" | "lossless" => {
+  switch (quality) {
+    case "low":
+      return "standard";
+    case "medium":
+      return "exhigh";
+    default:
+      return "lossless";
+  }
+};
 
 export interface PlayData {
   id: string;
@@ -59,8 +80,13 @@ export interface PlayData {
   isLossless?: boolean;
   /** 是否为杜比音频 */
   isDolby?: boolean;
+  /**
+   * 网易云歌曲 id。
+   * 音源切到网易云时用它取播放地址与歌词，此时 bvid/cid 都是空的。
+   */
+  neteaseId?: number;
   /** 来源 */
-  source?: "local" | "online";
+  source?: "local" | "online" | "netease";
 }
 
 interface State {
@@ -89,11 +115,15 @@ interface State {
 export interface PlayItem {
   type: PlayDataType;
   id?: string;
-  source?: "local" | "online";
+  source?: "local" | "online" | "netease";
   audioUrl?: string;
   title: string;
   bvid?: string;
   sid?: number;
+  /** 网易云歌曲 id（音源切到网易云时用） */
+  neteaseId?: number;
+  /** 时长（秒）。B 站那边缺省时靠接口补，网易云的搜索结果里直接带 */
+  duration?: number;
   cover?: string;
   ownerName?: string;
   ownerMid?: number;
@@ -252,14 +282,32 @@ const updatePositionState = () => {
 };
 
 export const isSame = (
-  item1?: { type: "mv" | "audio"; sid?: number; bvid?: string; source?: "local" | "online"; id?: string },
-  item2?: { type: "mv" | "audio"; sid?: number; bvid?: string; source?: "local" | "online"; id?: string },
+  item1?: {
+    type: "mv" | "audio";
+    sid?: number;
+    bvid?: string;
+    source?: "local" | "online" | "netease";
+    id?: string;
+    neteaseId?: number;
+  },
+  item2?: {
+    type: "mv" | "audio";
+    sid?: number;
+    bvid?: string;
+    source?: "local" | "online" | "netease";
+    id?: string;
+    neteaseId?: number;
+  },
 ) => {
   if (!item1 || !item2) {
     return false;
   }
   if (item1.source === "local" || item2.source === "local") {
     return Boolean(item1.id) && Boolean(item2.id) && item1.id === item2.id;
+  }
+  // 网易云曲目没有 bvid/sid，唯一身份就是 neteaseId
+  if (item1.source === "netease" || item2.source === "netease") {
+    return item1.neteaseId !== undefined && item1.neteaseId === item2.neteaseId;
   }
   if (item1.type !== item2.type) {
     return false;
@@ -273,8 +321,9 @@ export const isSame = (
   return false;
 };
 
-const shouldReportPlayRecord = (item?: { type: PlayDataType; source?: "local" | "online" }) =>
-  item?.type === "mv" && item?.source !== "local";
+/** 只有 B 站的视频才需要上报播放记录；本地文件和网易云曲目都不上报 */
+const shouldReportPlayRecord = (item?: { type: PlayDataType; source?: "local" | "online" | "netease" }) =>
+  item?.type === "mv" && item?.source !== "local" && item?.source !== "netease";
 
 export const usePlayList = create<State & Action>()(
   persist(
@@ -331,6 +380,45 @@ export const usePlayList = create<State & Action>()(
               mvPlayData,
             });
             toastError("无法获取音频播放链接");
+          }
+        }
+
+        /*
+         * 网易云曲目：直接拿 id 换播放地址。
+         * 它没有 bvid/cid，也不走上面的 sid 分支，所以单独一条。
+         * 拿不到地址最常见的原因是要会员 / 已下架，所以提示语写清楚。
+         *
+         * 这里**每次都会重新取一次地址**：上面那个 `isUrlValid()` 是靠 URL 里的
+         * `deadline` 参数判断过期的，而网易云的地址不带这个参数，所以永远判为无效、
+         * 必然落到这里。多花一次请求，换来的是绝不会用到过期地址。
+         */
+        if (currentPlayItem?.source === "netease" && currentPlayItem?.neteaseId) {
+          const level = toNeteaseLevel(useSettings.getState().audioQuality);
+          const neteasePlayData = await window.electron.netease.songUrl(currentPlayItem.neteaseId, level);
+
+          if (neteasePlayData?.url) {
+            if (audio.src !== neteasePlayData.url) {
+              audio.src = neteasePlayData.url;
+              const currentTime = usePlayProgress.getState().currentTime;
+              if (typeof currentTime === "number") {
+                audio.currentTime = currentTime;
+              }
+            }
+            set(state => {
+              const listItem = state.list.find(item => item.id === state.playId);
+              if (listItem) {
+                listItem.audioUrl = neteasePlayData.url;
+                listItem.isLossless = neteasePlayData.level === "lossless";
+              }
+            });
+          } else {
+            log.error("无法获取网易云播放链接", {
+              type: "netease",
+              neteaseId: currentPlayItem.neteaseId,
+              title: currentPlayItem.title,
+              level,
+            });
+            toastError("无法播放这首：可能需要网易云会员，或该曲目已下架");
           }
         }
 
@@ -409,6 +497,18 @@ export const usePlayList = create<State & Action>()(
               updatePlaybackState();
               updatePositionState();
               const playItem = get().getPlayItem?.();
+
+              /*
+               * 本地播放历史：**所有来源都记**（B 站视频/音频、网易云、本地文件）。
+               *
+               * 挂 `onplay` 而不是 `playId` 变化：切歌时链接可能取不到（会员曲目、
+               * 已下架），那种情况根本没出声，不该进「最近播放」。
+               * 暂停后继续也会走这里，但 store 侧是按曲目去重的，只是把它挪到最前。
+               */
+              if (playItem) {
+                usePlayHistory.getState().record(playItem);
+              }
+
               if (shouldReportPlayRecord(playItem)) {
                 void reportHeartbeat(playItem, audio.currentTime, audio.duration, 1);
               }
@@ -553,11 +653,13 @@ export const usePlayList = create<State & Action>()(
         setShouldKeepPagesOrderInRandomPlayMode: shouldKeep => {
           set({ shouldKeepPagesOrderInRandomPlayMode: shouldKeep });
         },
-        play: async ({ type, bvid, sid, title, cover, ownerName, ownerMid, id, source, audioUrl }: PlayItem) => {
+        play: async (params: PlayItem) => {
+          const { type, bvid, sid, title, cover, ownerName, ownerMid, id, source, audioUrl, neteaseId, duration } =
+            params;
           const { list, playId } = get();
           const currentItem = list?.find(item => item.id === playId);
           const sanitizedTitle = sanitizeTitle(title);
-          const candidate = { type, bvid, sid, source, id };
+          const candidate = { type, bvid, sid, source, id, neteaseId };
 
           // 当前正在播放，如果暂停了则播放
           if (isSame(currentItem, candidate)) {
@@ -600,6 +702,9 @@ export const usePlayList = create<State & Action>()(
                     type,
                     bvid,
                     sid,
+                    neteaseId,
+                    source,
+                    duration,
                     title: sanitizedTitle,
                     cover: cover ? formatUrlProtocol(cover) : undefined,
                     ownerName,
@@ -742,11 +847,24 @@ export const usePlayList = create<State & Action>()(
             state.playId = list[prevIndex].id;
           });
         },
-        addToNext: async ({ type, title, bvid, sid, cover, ownerName, ownerMid, id, source, audioUrl }) => {
+        addToNext: async ({
+          type,
+          title,
+          bvid,
+          sid,
+          neteaseId,
+          duration,
+          cover,
+          ownerName,
+          ownerMid,
+          id,
+          source,
+          audioUrl,
+        }) => {
           const { playId, nextId: currentNextId, list } = get();
           const currentItem = list.find(item => item.id === playId);
           const sanitizedTitle = sanitizeTitle(title);
-          const candidate = { type, bvid, sid, source, id };
+          const candidate = { type, bvid, sid, neteaseId, source, id };
           // 如果当前正在播放，则不添加
           if (isSame(candidate, currentItem)) {
             return;
@@ -797,6 +915,9 @@ export const usePlayList = create<State & Action>()(
                     type,
                     bvid,
                     sid,
+                    neteaseId,
+                    source,
+                    duration,
                     title: sanitizedTitle,
                     cover: cover ? formatUrlProtocol(cover) : undefined,
                     ownerName,
@@ -1152,6 +1273,45 @@ usePlayList.subscribe(async (state, prevState) => {
             });
             toastError("无法获取音频播放链接");
           }
+        }
+      }
+
+      /*
+       * 网易云曲目：切到这一首时按 id 取播放地址。
+       *
+       * 这里和上面 `ensureAudioSrcValid()` 里是**两个不同的取流点**：
+       * 那个函数负责「同一首歌重播 / 从播放列表点已存在的项」，
+       * 而这个 subscribe 负责「切到一首新歌」。两边都要有分支，
+       * 少一边就会出现「点了能加到列表、但不出声」（这个坑踩过）。
+       */
+      if (playItem?.source === "netease" && playItem?.neteaseId) {
+        const level = toNeteaseLevel(useSettings.getState().audioQuality);
+        const neteasePlayData = await window.electron.netease.songUrl(playItem.neteaseId, level);
+
+        if (neteasePlayData?.url) {
+          resetAudioAndPlay(neteasePlayData.url);
+
+          updateMediaSession({
+            title: playItem.title,
+            artist: playItem.ownerName,
+            cover: playItem.cover,
+          });
+
+          usePlayList.setState(state => {
+            const listItem = state.list.find(item => item.id === state.playId);
+            if (listItem) {
+              listItem.audioUrl = neteasePlayData.url;
+              listItem.isLossless = neteasePlayData.level === "lossless";
+            }
+          });
+        } else {
+          log.error("无法获取网易云播放链接", {
+            type: "netease",
+            neteaseId: playItem.neteaseId,
+            title: playItem.title,
+            level,
+          });
+          toastError("无法播放这首：可能需要网易云会员，或该曲目已下架");
         }
       }
 

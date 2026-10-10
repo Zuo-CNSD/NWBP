@@ -400,6 +400,28 @@ export const SystemSettingsTab = ({ appVersion, audioQuality, control, setValue 
       </div>
       <Divider />
       <h2>搜索</h2>
+      {/* 歌曲音源 */}
+      <div className="flex w-full items-center justify-between">
+        <div className="mr-6 space-y-1">
+          <div className="text-medium font-medium">歌曲音源</div>
+          <div className="text-default-500 text-sm">
+            搜索和播放走哪家。B 站能搜视频/音频（含收藏夹这些账号数据），网易云只能搜单曲
+          </div>
+        </div>
+        <div className="w-[200px] flex-none">
+          <Controller
+            control={control}
+            name="musicSource"
+            render={({ field }) => (
+              <RadioGroup orientation="horizontal" value={field.value ?? "bilibili"} onValueChange={field.onChange}>
+                <Radio value="bilibili">B站</Radio>
+                <Radio value="netease">网易云</Radio>
+              </RadioGroup>
+            )}
+          />
+        </div>
+      </div>
+
       {/* 显示搜索历史 */}
       <div className="flex w-full items-center justify-between">
         <div className="mr-6 space-y-1">
@@ -538,7 +560,7 @@ export const SystemSettingsTab = ({ appVersion, audioQuality, control, setValue 
       <Divider />
       <h2>关于应用</h2>
       <div className="flex w-full items-center justify-between">
-        {/* 存的是 semver（0.1.0-beta.1），显示成 Beta V 0.1.0 */}
+        {/* 存的是 semver（0.1.0-beta.2），显示成 Beta 2 */}
         <span className="mr-6">当前版本 {formatAppVersion(appVersion)}</span>
       </div>
       <ImportExport />

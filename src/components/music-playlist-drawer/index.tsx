@@ -4,6 +4,7 @@ import { addToast, Drawer, DrawerBody, DrawerContent, DrawerHeader } from "@hero
 import { RiDeleteBinLine, RiFocus3Line } from "@remixicon/react";
 import { uniqBy } from "es-toolkit/array";
 
+import { favoriteTrack } from "@/common/utils/favorite";
 import { openBiliVideoLink } from "@/common/utils/url";
 import { type ScrollRefObject } from "@/components/scroll-container";
 import { VirtualList } from "@/components/virtual-list";
@@ -37,11 +38,14 @@ const PlayListDrawer = () => {
   const handleAction = useCallback(async (key: string, item: PlayData) => {
     switch (key) {
       case "favorite":
-        useModalStore.getState().onOpenFavSelectModal({
-          rid: item.id,
-          type: item.type === "mv" ? 2 : 12,
-          title: item.title,
-        });
+        /*
+         * 曲目来自哪家就收藏到哪家。
+         *
+         * 顺带修掉一个老 bug：这里原来传的 `rid: item.id` —— 那是**播放列表内部 id**
+         * （idGenerator 造的字符串），不是 B 站的 aid/sid，收藏必然失败。
+         * 现在由 favoriteTrack 按 type 去取 aid / sid。
+         */
+        await favoriteTrack(item, { modalTitle: item.title });
         break;
       case "download-audio":
         await window.electron.addMediaDownloadTask({

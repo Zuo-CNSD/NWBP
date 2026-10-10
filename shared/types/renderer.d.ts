@@ -73,7 +73,8 @@ declare global {
         albums: (keyword: string, limit?: number, offset?: number) => Promise<NeteaseAlbumInfo[]>;
       };
       hotPlaylists: (limit?: number) => Promise<NeteasePlaylistInfo[]>;
-      playlistDetail: (id: number) => Promise<NeteasePlaylistDetail>;
+      /** 分页取歌单曲目：一次最多 100 首，返回的 trackCount 是总数 */
+      playlistDetail: (id: number, offset?: number, limit?: number) => Promise<NeteasePlaylistDetail>;
       albumDetail: (id: number) => Promise<NeteaseAlbumDetail>;
       myPlaylists: () => Promise<NeteasePlaylistInfo[]>;
       myAlbums: () => Promise<NeteaseAlbumInfo[]>;

@@ -1,5 +1,7 @@
 import log from "electron-log";
 
+import { findOwnLikedPlaylist, isOwnLikedPlaylist } from "@shared/netease/playlist";
+
 import {
   clearNeteaseAccount,
   getCachedLikedPlaylistId,
@@ -54,6 +56,8 @@ const normalizePlaylist = (playlist: any): NeteasePlaylistInfo => ({
   cover: https(playlist?.coverImgUrl),
   trackCount: Number(playlist?.trackCount ?? 0),
   creator: String(playlist?.creator?.nickname ?? ""),
+  // 归属判定靠 uid，别只留昵称 —— 昵称会改名、会重名
+  creatorId: Number(playlist?.creator?.userId) || null,
   specialType: playlist?.specialType ?? 0,
   subscribed: Boolean(playlist?.subscribed),
 });
@@ -167,22 +171,60 @@ const fetchTracksByIds = async (ids: number[]) => {
   return tracks;
 };
 
-export const getPlaylistDetail = async (id: number): Promise<NeteasePlaylistDetail> => {
+/** 一页拉多少首。`v3/song/detail` 一次最多吃 100 个 id，默认就按这个分页 */
+export const PLAYLIST_PAGE_SIZE = 100;
+
+/**
+ * 只取歌单的「元信息 + 完整曲目 id 列表」，**不拉歌曲详情**。
+ *
+ * ⚠️ `v6/playlist/detail` 返回的 `tracks` 只有**前 10 首**（实测 2201 首的歌单也只给 10 条），
+ * 但 `trackIds` 是**完整**的（2201 = 2201）—— 所以曲目必须靠 id 列表自己去批量取，
+ * 页数也只能靠这个数组切。
+ * 「我喜欢的音乐」只需要 id 时走这里，比先拉一遍详情便宜得多。
+ */
+const fetchPlaylistTracks = async (id: number) => {
   const res = await neteaseGet<{ playlist?: any }>(`${API}/v6/playlist/detail?id=${encodeURIComponent(String(id))}`);
   const playlist = res?.playlist;
   if (!playlist) throw new Error("歌单不存在或已失效");
 
-  const ids = (playlist.trackIds ?? [])
+  const ids: number[] = (playlist.trackIds ?? [])
     .map((t: any) => Number(t?.id))
-    .filter((v: number) => Number.isFinite(v) && v > 0)
-    .slice(0, 300);
+    .filter((v: number) => Number.isFinite(v) && v > 0);
 
   return {
     id: Number(playlist.id),
     name: String(playlist.name ?? "未命名歌单"),
     cover: https(playlist.coverImgUrl),
-    trackCount: Number(playlist.trackCount ?? ids.length),
-    tracks: await fetchTracksByIds(ids),
+    // 能真正翻到的页数由 trackIds 决定，所以总数优先信它
+    trackCount: ids.length || Number(playlist.trackCount ?? 0),
+    ids,
+  };
+};
+
+/**
+ * 分页拉歌单曲目。
+ *
+ * 曾经是 `.slice(0, 300)` 硬截断 —— 千首歌单永远只加载 300 首，往下滚也不涨。
+ * 现在是 offset/limit 分页：一页 100 首，渲染端滚到底再来要下一页。
+ * 返回值里的 `trackCount` 是**歌单总曲目数**（不是本页曲目数），调用方靠它算 `hasMore`。
+ */
+export const getPlaylistDetail = async (
+  id: number,
+  offset = 0,
+  limit = PLAYLIST_PAGE_SIZE,
+): Promise<NeteasePlaylistDetail> => {
+  const meta = await fetchPlaylistTracks(id);
+
+  const start = Math.max(0, offset);
+  const size = Math.max(1, limit);
+  const pageIds = meta.ids.slice(start, start + size);
+
+  return {
+    id: meta.id,
+    name: meta.name,
+    cover: meta.cover,
+    trackCount: meta.trackCount,
+    tracks: await fetchTracksByIds(pageIds),
   };
 };
 
@@ -214,8 +256,13 @@ export const getMyPlaylists = async () => {
   if (!Array.isArray(list)) throw new Error("获取歌单失败");
 
   const items = list.map(normalizePlaylist);
-  // 「我喜欢的音乐」置顶 → 自己建的 → 收藏的
-  const rank = (x: NeteasePlaylistInfo) => (x.specialType === 5 ? 0 : x.subscribed ? 2 : 1);
+  /*
+   * 排序：「我喜欢的音乐」置顶 → 自己建的 → 收藏的。
+   *
+   * ⚠️ 这里的「我喜欢的音乐」必须用 `isOwnLikedPlaylist` 判归属，不能只判 specialType === 5 ——
+   * 收藏别人的「我喜欢的音乐」时对方那个歌单也是 5，光看它会把两三张别人的歌单一起置顶。
+   */
+  const rank = (x: NeteasePlaylistInfo) => (isOwnLikedPlaylist(x, account.uid) ? 0 : x.subscribed ? 2 : 1);
   items.sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name, "zh"));
 
   return items;
@@ -318,12 +365,21 @@ export const getLyric = async (id: number): Promise<NeteaseLyricResult> => {
 
 // ---------------------------------------------------------------- 收藏
 
+/**
+ * 解析出「我喜欢的音乐」的歌单 id。
+ *
+ * ⚠️ `specialType === 5` **不是「我的」的唯一标识**：收藏别人的「我喜欢的音乐」时，
+ * 对方那个歌单的 `specialType` 同样是 5（实测一个账号 96 个歌单里 3 个是 5）。
+ * 原来用 `find(x => x.specialType === 5)` 取第一个 → 会认成别人的歌单，
+ * 于是「我喜欢的音乐」页、播放栏的星星、收藏状态全按别人的歌单算。
+ * 归属判定统一走 `isOwnLikedPlaylist`（specialType + 非收藏 + creator 是自己）。
+ */
 const resolveLikedPlaylistId = async () => {
   const cached = getCachedLikedPlaylistId();
   if (cached) return cached;
 
   const items = await getMyPlaylists();
-  const liked = items.find(item => item.specialType === 5);
+  const liked = findOwnLikedPlaylist(items, getNeteaseAccount().uid);
   if (!liked) throw new Error("未找到「我喜欢的音乐」歌单");
 
   setCachedLikedPlaylistId(liked.id);
@@ -348,8 +404,8 @@ export const likeSong = async (id: number, like: boolean) => {
 
 export const getLikedIds = async () => {
   const pid = await resolveLikedPlaylistId();
-  const detail = await getPlaylistDetail(pid);
-  return detail.tracks.map(track => track.id);
+  // 只要 id，不必把上千首歌的详情也拉一遍
+  return (await fetchPlaylistTracks(pid)).ids;
 };
 
 // ---------------------------------------------------------------- 登录

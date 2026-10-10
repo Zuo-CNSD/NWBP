@@ -5,6 +5,9 @@ import { RiLogoutBoxRLine, RiQrCodeLine, RiRefreshLine } from "@remixicon/react"
 import { useRequest } from "ahooks";
 import { QRCodeCanvas } from "qrcode.react";
 
+import { useNetease } from "@/store/netease";
+import { useNeteaseLike } from "@/store/netease-like";
+
 /**
  * 网易云账号设置。
  *
@@ -27,6 +30,19 @@ const QR_STATUS_TEXT: Record<number, string> = {
 
 const NeteaseSettings = () => {
   const [account, setAccount] = useState<NeteaseAccountInfo | null>(null);
+
+  /**
+   * 账号变了（登录 / 退出）时同步两处：
+   *  1. 全局 store —— 侧栏那个「网易云」分组要按登录态显示
+   *  2. 喜欢的集合 —— 必须强制重拉，否则星星和右键菜单会停在上一个账号的状态
+   *
+   * 这里用 `useNetease.getState()` 而不是提前 select 出来：函数名和 select 出来的变量
+   * 很容易在批量改名时互相覆盖（踩过一次），直接取 state 更稳。
+   */
+  const syncGlobalAccount = useCallback((info: NeteaseAccountInfo) => {
+    useNetease.getState().setAccount(info);
+    void useNeteaseLike.getState().refresh({ force: true });
+  }, []);
   const [cookieInput, setCookieInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -65,6 +81,7 @@ const NeteaseSettings = () => {
       onSuccess: async result => {
         if (result?.code === 803 && result.account) {
           setAccount(result.account);
+          if (result.account) syncGlobalAccount(result.account);
           addToast({ color: "success", title: `已登录：${result.account.nickname}` });
           return;
         }
@@ -87,6 +104,7 @@ const NeteaseSettings = () => {
     try {
       const info = await window.electron.netease.loginWithCookie(cookie);
       setAccount(info);
+      syncGlobalAccount(info);
       setCookieInput("");
       addToast({ color: "success", title: `已登录：${info.nickname}` });
     } catch (error) {
@@ -101,7 +119,9 @@ const NeteaseSettings = () => {
   };
 
   const handleLogout = async () => {
-    setAccount(await window.electron.netease.logout());
+    const info = await window.electron.netease.logout();
+    setAccount(info);
+    syncGlobalAccount(info);
     addToast({ color: "success", title: "已退出网易云账号" });
   };
 

@@ -233,14 +233,20 @@ export function registerWindowHandlers({ getMainWindow }) {
   };
 
   /**
-   * 把「桌面歌词的当前状态」推给两个窗口。
+   * 把「桌面歌词的当前状态」推给窗口。
    *
    * 为什么必须由主进程广播：主窗口与桌面歌词窗是两个渲染进程，
    * 各自的 zustand store 是独立的内存副本，谁也看不到谁改了什么。
    * 而开关和锁定这两件事**只有主进程是准的** —— 比如用户直接在歌词条上点 ×，
    * 那是主进程 destroy 的窗口，两个渲染端都不知道。
+   *
+   * `toMain: false` 给**由主窗口自己发起**的样式变更用（设置页拖滑块）。
+   * 那种情况下主窗口就是真源，再回推一趟是纯粹的环路：这趟异步往返慢于手指，
+   * 回来的必然是上一帧的旧值，主窗口照着写回 store 就会把**受控的** Slider
+   * 拽回去 —— 拖字号时表现就是数值来回跳。
+   * 所以那条路只推给桌面歌词窗，主窗口不需要被自己同步。
    */
-  const broadcastDesktopLyricsState = () => {
+  const broadcastDesktopLyricsState = ({ toMain = true }: { toMain?: boolean } = {}) => {
     let settings: AppSettings | undefined;
     try {
       settings = appSettingsStore.get("appSettings");
@@ -264,7 +270,7 @@ export function registerWindowHandlers({ getMainWindow }) {
       locked: Boolean(settings?.desktopLyricsLocked),
     };
 
-    for (const win of [getDesktopLyricsWindow(), getMainWindow()]) {
+    for (const win of toMain ? [getDesktopLyricsWindow(), getMainWindow()] : [getDesktopLyricsWindow()]) {
       if (win && !win.isDestroyed()) win.webContents.send(channel.desktopLyrics.styleChanged, payload);
     }
   };
@@ -303,6 +309,9 @@ export function registerWindowHandlers({ getMainWindow }) {
    * 样式变更推给桌面歌词窗。
    * 设置页改字号/颜色时调它，桌面歌词窗不用自己去轮询设置。
    * 注意这里**只写样式四项**，开关和锁定各有各的 handler，避免互相覆盖。
+   *
+   * 广播**刻意不回推主窗口**：调用方就是主窗口，回推会形成环路把拖动的滑块拽回去
+   * （详见 broadcastDesktopLyricsState 的说明）。
    */
   ipcMain.handle(channel.desktopLyrics.styleChanged, (_event, style: DesktopLyricsStyle) => {
     patchSettings({
@@ -320,7 +329,7 @@ export function registerWindowHandlers({ getMainWindow }) {
       ...(typeof style.spectrum === "boolean" ? { desktopLyricsSpectrum: style.spectrum } : {}),
     });
 
-    broadcastDesktopLyricsState();
+    broadcastDesktopLyricsState({ toMain: false });
   });
 
   // ------------------------------------------------- 桌面歌词：右键菜单 / 字号

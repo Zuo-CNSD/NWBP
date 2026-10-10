@@ -11,6 +11,7 @@ import { useSettings } from "@/store/settings";
 import Collection from "./collection";
 import DefaultMenus from "./default-menu";
 import Logo from "./logo";
+import NeteaseMenus from "./netease-menu";
 
 const COLLAPSED_WIDTH = 72;
 const MIN_WIDTH = 160;
@@ -167,6 +168,11 @@ const SideNav = () => {
               onOpenAddFavorite={handleOpenAddFavorite}
               onOpenEditFavorite={handleOpenEditFavorite}
             />
+            {/*
+              网易云分组放在最后：前面的「哔哩哔哩 + 收藏夹」是一整块，
+              插在中间会把 B 站那组切开。两组并存，不随搜索页的音源开关变化。
+            */}
+            <NeteaseMenus isCollapsed={isCollapsedVisual} />
           </ScrollContainer>
           <div className="flex flex-none justify-center px-2 pb-2">
             <Button

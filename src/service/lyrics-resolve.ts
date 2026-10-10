@@ -73,6 +73,32 @@ export async function resolveLyricsForCurrentTrack(): Promise<ResolvedLyrics | n
   const playItem = usePlayList.getState().getPlayItem();
   if (!playItem) return null;
 
+  /*
+   * 网易云音源：直接按 id 取那一份歌词。
+   *
+   * 不走下面的多源匹配 —— 匹配那套是为了解决「B 站标题里全是噪声、不知道唱的是哪首歌」，
+   * 而网易云的曲目本来就有精确 id，用它拿到的歌词（含逐字时间轴、翻译、罗马音）
+   * 一定比拿歌名去别处搜更准，也少几次网络请求。
+   */
+  if (playItem.source === "netease" && playItem.neteaseId) {
+    try {
+      const res = await window.electron.netease.lyric(playItem.neteaseId);
+      if (res?.lrc || res?.yrc) {
+        return {
+          lyrics: res.lrc ?? "",
+          wordLyrics: res.yrc ?? "",
+          tLyrics: res.translation ?? "",
+          romanization: res.romanization ?? "",
+          source: "netease",
+          candidateId: `netease-${playItem.neteaseId}`,
+        };
+      }
+    } catch {
+      // 拿不到就当没有，交给上层显示「暂无歌词」
+    }
+    return null;
+  }
+
   const rawTitle = playItem.pageTitle || playItem.title || "";
   const title = cleanTrackTitle(rawTitle);
   const artist = resolveArtistHint(rawTitle, playItem.ownerName);

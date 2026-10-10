@@ -25,7 +25,10 @@ export function registerNeteaseHandlers() {
 
   ipcMain.handle(channel.netease.hotPlaylists, (_, limit?: number) => api.hotPlaylists(limit ?? 30));
 
-  ipcMain.handle(channel.netease.playlistDetail, (_, id: number) => api.getPlaylistDetail(id));
+  // 分页：千首歌单靠 offset/limit 一页页取（默认一页 100 首）
+  ipcMain.handle(channel.netease.playlistDetail, (_, id: number, offset?: number, limit?: number) =>
+    api.getPlaylistDetail(id, offset, limit),
+  );
 
   ipcMain.handle(channel.netease.albumDetail, (_, id: number) => api.getAlbumDetail(id));
 

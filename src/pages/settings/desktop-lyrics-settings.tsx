@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Switch, Slider, Button, Tab, Tabs } from "@heroui/react";
 import { useShallow } from "zustand/react/shallow";
 
+import { createThrottledPush } from "@/common/utils/throttled-push";
 import ColorPicker from "@/components/color-picker";
 import { useSettings } from "@/store/settings";
 
@@ -78,9 +79,23 @@ const DesktopLyricsSettings = () => {
   }, [locked, hydrated]);
 
   // 样式即时推给已经开着的桌面歌词窗
+  /*
+   * 拖动滑块时 onChange 每帧都会触发，不必每帧都走一趟 IPC —— 合并到 60ms 一次
+   * 依旧跟手，还能把主进程侧的写设置 / 广播次数压下一个量级（末次会被补发）。
+   */
+  const pushStyle = useMemo(
+    () =>
+      createThrottledPush<DesktopLyricsStyle>(
+        payload => void window.electron?.desktopLyrics?.notifyStyleChanged?.(payload),
+        60,
+      ),
+    [],
+  );
+
   useEffect(() => {
     if (!hydrated) return;
-    void window.electron?.desktopLyrics?.notifyStyleChanged?.({
+
+    pushStyle.send({
       fontSize,
       color,
       backgroundMode,
@@ -110,7 +125,11 @@ const DesktopLyricsSettings = () => {
     enabled,
     locked,
     hydrated,
+    pushStyle,
   ]);
+
+  // 卸载时把还没到点发出去的最后一次补上，否则「拖到一半切走页面」会丢掉末尾的值
+  useEffect(() => () => pushStyle.flush(), [pushStyle]);
 
   /**
    * 切底板模式。

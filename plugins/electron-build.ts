@@ -15,7 +15,7 @@ export async function buildElectron() {
       copyright: `Copyright © ${new Date().getFullYear()}`,
       nodeVersion: "current",
       /*
-       * 只取点分数字部分（0.1.0-beta.1 → 0.1.0）。
+       * 只取点分数字部分（0.1.0-beta.2 → 0.1.0）。
        * buildVersion 会落到 macOS 的 CFBundleVersion 和 Windows 的
        * FileVersion / ProductVersion 上，这两处都只认「点分数字」：
        * - Apple 要求 CFBundleVersion 是 1~3 段点分整数

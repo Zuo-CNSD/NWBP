@@ -15,6 +15,12 @@ export const defaultAppSettings: AppSettings = {
   primaryColor: "#1ed760",
   backgroundColor: "",
   audioQuality: "auto",
+  /*
+   * 歌曲音源：默认走 B 站（原来的行为）。
+   * 换成 netease 之后，搜索页会用网易云的接口找歌，播的也是网易云的音源，
+   * 歌词直接取网易云那份（含逐字时间轴）。
+   */
+  musicSource: "bilibili",
   hiddenMenuKeys: [],
   displayMode: "list",
   ffmpegPath: "",

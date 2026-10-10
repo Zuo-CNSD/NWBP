@@ -36,7 +36,7 @@ const DefaultMenus = ({ isCollapsed, onOpenAddFavorite }: Props) => {
     return filtered;
   }, [user?.isLogin, hiddenMenuKeys, isCollapsed, onOpenAddFavorite]);
 
-  return <MenuGroup items={items} collapsed={isCollapsed} />;
+  return <MenuGroup title="哔哩哔哩" items={items} collapsed={isCollapsed} />;
 };
 
 export default DefaultMenus;

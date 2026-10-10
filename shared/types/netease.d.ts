@@ -43,9 +43,18 @@ interface NeteasePlaylistInfo {
   name: string;
   cover: string;
   trackCount: number;
+  /** 创建者昵称（展示用） */
   creator: string;
-  /** 5 = 「我喜欢的音乐」 */
+  /** 创建者 uid（**判断归属必须用它**，昵称会重名/改名） */
+  creatorId: number | null;
+  /**
+   * 5 = 「我喜欢的音乐」。
+   *
+   * ⚠️ 光看它认不出「我的」—— **收藏（订阅）别人的「我喜欢的音乐」时，对方那个歌单同样是 5**。
+   * 必须配合 `subscribed` / `creatorId`，统一走 `shared/netease/playlist.ts`。
+   */
   specialType?: number;
+  /** true = 收藏（订阅）来的，不是自己创建的 */
   subscribed?: boolean;
 }
 
@@ -92,7 +101,9 @@ interface NeteasePlaylistDetail {
   id: number;
   name: string;
   cover: string;
+  /** 歌单的**总**曲目数，不是 `tracks` 的条数 —— 渲染端靠它算还有没有下一页 */
   trackCount: number;
+  /** 本次请求的那一页曲目（`playlistDetail(id, offset, limit)`），不是整张歌单 */
   tracks: NeteaseTrack[];
 }
 

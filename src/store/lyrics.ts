@@ -32,6 +32,13 @@ const EMPTY_LYRICS: ResolvedLyrics = {
 /** 曲目唯一键：用于缓存与「人工选定来源」记录 */
 export const currentLyricsTrackKey = () => {
   const item = usePlayList.getState().getPlayItem();
+
+  /*
+   * 网易云曲目没有 bvid/cid，用 neteaseId 当键。
+   * 前缀不能省：neteaseId 和 B 站的 cid 都是数字，不加前缀两者的缓存键会撞。
+   */
+  if (item?.source === "netease" && item.neteaseId) return `netease-${item.neteaseId}`;
+
   if (!item?.bvid || !item.cid) return null;
   return `${item.bvid}-${item.cid}`;
 };

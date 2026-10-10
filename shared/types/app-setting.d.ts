@@ -3,6 +3,16 @@ type ThemeMode = "system" | "light" | "dark";
 type PageTransition = "none" | "fade" | "slide" | "scale" | "slideUp";
 
 /**
+ * 歌曲音源：搜索和播放走哪一家。
+ * - `bilibili` 默认值，站内视频/音频（含收藏夹、稍后再看这些账号数据）
+ * - `netease`  网易云音乐的单曲（走已内置的网易云接口层）
+ *
+ * 注意它只影响「找歌」这条链（搜索 → 播放 → 歌词）。
+ * 推荐音乐 / 历史记录 / 关注 / 稍后再看这些是 B 站账号数据，不跟着切。
+ */
+type MusicSource = "bilibili" | "netease";
+
+/**
  * app 打开动画（启动时盖住整窗的那层开场画面）。
  * - `none`  关掉，直接进主界面
  * - `fade`  只做一次淡入淡出，不出现图案
@@ -44,6 +54,8 @@ interface AppSettings {
   closeWindowOption: "hide" | "exit";
   autoStart: boolean;
   audioQuality: AudioQuality;
+  /** 歌曲音源：搜索与播放走 B 站还是网易云 */
+  musicSource: MusicSource;
   hiddenMenuKeys: string[];
   displayMode: "card" | "list" | "compact";
   ffmpegPath?: string;

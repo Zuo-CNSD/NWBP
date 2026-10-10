@@ -45,7 +45,7 @@ const api: ElectronAPI = {
         ipcRenderer.invoke(channel.netease.search, { keyword, type: 10, limit, offset }),
     },
     hotPlaylists: limit => ipcRenderer.invoke(channel.netease.hotPlaylists, limit),
-    playlistDetail: id => ipcRenderer.invoke(channel.netease.playlistDetail, id),
+    playlistDetail: (id, offset, limit) => ipcRenderer.invoke(channel.netease.playlistDetail, id, offset, limit),
     albumDetail: id => ipcRenderer.invoke(channel.netease.albumDetail, id),
     myPlaylists: () => ipcRenderer.invoke(channel.netease.myPlaylists),
     myAlbums: () => ipcRenderer.invoke(channel.netease.myAlbums),
