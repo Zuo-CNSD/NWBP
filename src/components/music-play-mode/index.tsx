@@ -3,6 +3,7 @@ import React from "react";
 import { Tooltip, Switch } from "@heroui/react";
 
 import { getPlayModeList, PlayMode } from "@/common/constants/audio";
+import { t } from "@/common/i18n";
 import IconButton from "@/components/icon-button";
 import { usePlayList } from "@/store/play-list";
 
@@ -49,14 +50,14 @@ const MusicPlayMode = () => {
               isSelected={shouldKeepPagesOrderInRandomPlayMode}
               onValueChange={setShouldKeepPagesOrderInRandomPlayMode}
             >
-              保持分集顺序
+              {t("保持分集顺序")}
             </Switch>
           </div>
         }
       >
         <IconButton
           className="flex-none"
-          aria-label="播放模式"
+          aria-label={t("播放模式")}
           onPress={togglePlayMode}
           onMouseEnter={openPopover}
           onMouseLeave={closePopoverWithDelay}
@@ -68,7 +69,7 @@ const MusicPlayMode = () => {
   }
 
   return (
-    <IconButton className="flex-none" aria-label="播放模式" onPress={togglePlayMode}>
+    <IconButton className="flex-none" aria-label={t("播放模式")} onPress={togglePlayMode}>
       {PlayModeList.find(item => item.value === playMode)?.icon}
     </IconButton>
   );

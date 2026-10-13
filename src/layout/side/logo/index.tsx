@@ -3,6 +3,8 @@ import { useNavigate } from "react-router";
 
 import { twMerge } from "tailwind-merge";
 
+import { t } from "@/common/i18n";
+
 const isMac = window.electron?.getPlatform() === "macos";
 
 interface LogoProps {
@@ -43,7 +45,7 @@ const Logo = ({ isCollapsed }: LogoProps) => {
       {/* 折叠后侧栏只有 72px（去掉左右内边距剩 44px），"NWBP" 放不下，所以用 "NW" */}
       <button
         type="button"
-        title="回到主页"
+        title={t("回到主页")}
         onClick={() => void navigate("/")}
         className={twMerge(
           "window-no-drag cursor-pointer leading-none font-bold tracking-tight transition-opacity hover:opacity-70",

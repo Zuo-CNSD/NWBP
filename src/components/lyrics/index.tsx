@@ -4,6 +4,7 @@ import { useDisclosure } from "@heroui/react";
 import { RiTBoxLine } from "@remixicon/react";
 import clsx from "classnames";
 
+import { t } from "@/common/i18n";
 import { findActiveLineIndex, useSmoothProgress, wordFillStyle } from "@/common/utils/lyrics-render";
 import { useLyrics } from "@/store/lyrics";
 import { usePlayList } from "@/store/play-list";
@@ -185,7 +186,7 @@ const Lyrics = ({ color, align, showControls }: { color?: string; align?: Lyrics
             </div>
           ) : (
             <div className="text-foreground/70 flex h-full items-center justify-center">
-              {isLoading ? "歌词加载中..." : "暂无歌词"}
+              {isLoading ? t("歌词加载中...") : t("暂无歌词")}
             </div>
           )}
         </div>

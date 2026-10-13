@@ -3,6 +3,8 @@ import React from "react";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@heroui/react";
 import { RiFileMusicLine, RiFileVideoLine, RiMore2Fill, RiPlayListAddLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
+
 interface MoreMenuProps {
   onAddToNext?: () => void;
   onDownloadAudio?: () => void;
@@ -19,13 +21,13 @@ const MoreMenu: React.FC<MoreMenuProps> = ({ onAddToNext, onDownloadAudio, onDow
       </DropdownTrigger>
       <DropdownMenu aria-label="More Actions">
         <DropdownItem key="add-next" startContent={<RiPlayListAddLine size={18} />} onPress={onAddToNext}>
-          添加到下一首播放
+          {t("添加到下一首播放")}
         </DropdownItem>
         <DropdownItem key="download-audio" startContent={<RiFileMusicLine size={18} />} onPress={onDownloadAudio}>
-          下载音频
+          {t("下载音频")}
         </DropdownItem>
         <DropdownItem key="download-video" startContent={<RiFileVideoLine size={18} />} onPress={onDownloadVideo}>
-          下载视频
+          {t("下载视频")}
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>

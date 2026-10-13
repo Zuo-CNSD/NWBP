@@ -1,0 +1,562 @@
+[
+  {
+    "file": "electron/ipc/lyrics-engine/index.ts",
+    "line": 81,
+    "kind": "tpl",
+    "text": "`[lyrics] ${trackKey}: 所有候选都被淘汰`",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/lyrics-engine/index.ts",
+    "line": 103,
+    "kind": "str",
+    "text": "网易云直取",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/lyrics-engine/sources.ts",
+    "line": 51,
+    "kind": "tpl",
+    "text": "`[lyrics] ${url} 请求失败，降级 http 重试:`",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/lyrics-engine/sources.ts",
+    "line": 184,
+    "kind": "str",
+    "text": "[lyrics:kugou] KRC 解密失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/lyrics-engine/sources.ts",
+    "line": 211,
+    "kind": "str",
+    "text": "缺少 hash",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/lyrics-engine/sources.ts",
+    "line": 218,
+    "kind": "str",
+    "text": "没有歌词候选",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/lyrics-engine/sources.ts",
+    "line": 301,
+    "kind": "tpl",
+    "text": "`[lyrics:qq] ${host} 搜索失败:`",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/lyrics-engine/sources.ts",
+    "line": 322,
+    "kind": "str",
+    "text": "缺少 songmid",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/lyrics-engine/sources.ts",
+    "line": 415,
+    "kind": "tpl",
+    "text": "`[lyrics] ${source} 抓取失败:`",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/lyrics-engine/sources.ts",
+    "line": 440,
+    "kind": "str",
+    "text": "[lyrics] 按 id 取网易云歌词失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/lyrics-engine/translate.ts",
+    "line": 148,
+    "kind": "str",
+    "text": "[lyrics] 翻译降级:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/netease/api.ts",
+    "line": 93,
+    "kind": "str",
+    "text": "[netease] 搜索封面补全失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/netease/api.ts",
+    "line": 152,
+    "kind": "tpl",
+    "text": "`${API}/playlist/list?cat=${encodeURIComponent(\"全部\")}&order=hot&limit=${limit}&offset=0`",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/netease/api.ts",
+    "line": 152,
+    "kind": "str",
+    "text": "全部",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/netease/api.ts",
+    "line": 329,
+    "kind": "str",
+    "text": "[netease] v1 播放地址失败，降级:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/netease/api.ts",
+    "line": 340,
+    "kind": "str",
+    "text": "[netease] br 播放地址失败，降级外链:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/netease/api.ts",
+    "line": 440,
+    "kind": "str",
+    "text": "[netease] 「我喜欢的音乐」缓存与收藏接口返回不一致，按接口返回为准:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/netease/client.ts",
+    "line": 73,
+    "kind": "tpl",
+    "text": "`${label}：响应解析失败`",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/netease/together.ts",
+    "line": 47,
+    "kind": "tpl",
+    "text": "`${label}失败：${res?.message ?? res?.msg ?? `code ${code}`}`",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/netease/together.ts",
+    "line": 70,
+    "kind": "str",
+    "text": "[netease] 一起听房间已创建:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/window.ts",
+    "line": 237,
+    "kind": "str",
+    "text": "[desktop-lyrics] 写入设置失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/ipc/window.ts",
+    "line": 260,
+    "kind": "str",
+    "text": "[desktop-lyrics] 读取设置失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/legacy-import.ts",
+    "line": 61,
+    "kind": "tpl",
+    "text": "`[legacy-import] 复制失败 ${from} → ${to}:`",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/legacy-import.ts",
+    "line": 125,
+    "kind": "str",
+    "text": "[legacy-import] Local Storage 复制失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/legacy-import.ts",
+    "line": 139,
+    "kind": "tpl",
+    "text": "`[legacy-import] 已从 ${legacy} 导入: ${result.imported.join(\", \")}`",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/preload.ts",
+    "line": 79,
+    "kind": "str",
+    "text": "[preload] 导航回调失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/preload.ts",
+    "line": 99,
+    "kind": "str",
+    "text": "[preload] 上报播放状态失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/preload.ts",
+    "line": 131,
+    "kind": "str",
+    "text": "[preload] 移除上一首监听器失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/preload.ts",
+    "line": 139,
+    "kind": "str",
+    "text": "[preload] 移除下一首监听器失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/preload.ts",
+    "line": 147,
+    "kind": "str",
+    "text": "[preload] 移除播放/暂停监听器失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/preload.ts",
+    "line": 155,
+    "kind": "str",
+    "text": "[preload] player prev 回调失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/preload.ts",
+    "line": 162,
+    "kind": "str",
+    "text": "[preload] player next 回调失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/preload.ts",
+    "line": 169,
+    "kind": "str",
+    "text": "[preload] player toggle 回调失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/windows/desktop-lyrics.ts",
+    "line": 51,
+    "kind": "str",
+    "text": "[desktop-lyrics] 保存窗口位置失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/windows/desktop-lyrics.ts",
+    "line": 186,
+    "kind": "str",
+    "text": "[desktop-lyrics] 重置窗口位置失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "electron/windows/desktop-lyrics.ts",
+    "line": 206,
+    "kind": "str",
+    "text": "[desktop-lyrics] 启动恢复失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "shared/i18n/index.ts",
+    "line": 30,
+    "kind": "str",
+    "text": "简体中文",
+    "moduleScope": true
+  },
+  {
+    "file": "shared/i18n/index.ts",
+    "line": 32,
+    "kind": "str",
+    "text": "日本語",
+    "moduleScope": true
+  },
+  {
+    "file": "shared/settings/shortcut-settings.ts",
+    "line": 6,
+    "kind": "str",
+    "text": "播放/暂停",
+    "moduleScope": true
+  },
+  {
+    "file": "shared/settings/shortcut-settings.ts",
+    "line": 11,
+    "kind": "str",
+    "text": "上一首",
+    "moduleScope": true
+  },
+  {
+    "file": "shared/settings/shortcut-settings.ts",
+    "line": 16,
+    "kind": "str",
+    "text": "下一首",
+    "moduleScope": true
+  },
+  {
+    "file": "shared/settings/shortcut-settings.ts",
+    "line": 21,
+    "kind": "str",
+    "text": "音量加",
+    "moduleScope": true
+  },
+  {
+    "file": "shared/settings/shortcut-settings.ts",
+    "line": 26,
+    "kind": "str",
+    "text": "音量减",
+    "moduleScope": true
+  },
+  {
+    "file": "shared/settings/shortcut-settings.ts",
+    "line": 31,
+    "kind": "str",
+    "text": "切换mini/完整模式",
+    "moduleScope": true
+  },
+  {
+    "file": "src/common/utils/spectrum.ts",
+    "line": 43,
+    "kind": "str",
+    "text": "创建音频分析节点失败：",
+    "moduleScope": false
+  },
+  {
+    "file": "src/components/lyrics-search-modal/netease-tab.tsx",
+    "line": 62,
+    "kind": "tpl",
+    "text": "`${song.name || t(\"未知歌曲\")}-${renderArtists(song.artists)}`",
+    "moduleScope": false
+  },
+  {
+    "file": "src/components/music-rate/index.tsx",
+    "line": 41,
+    "kind": "tpl",
+    "text": "`${v}倍速`",
+    "moduleScope": false
+  },
+  {
+    "file": "src/components/select-all-checkbox-group/index.tsx",
+    "line": 47,
+    "kind": "tpl",
+    "text": "`${groupName}显示项`",
+    "moduleScope": false
+  },
+  {
+    "file": "src/layout/side/collection/index.tsx",
+    "line": 150,
+    "kind": "tpl",
+    "text": "`「${title}」暂无可播放内容`",
+    "moduleScope": false
+  },
+  {
+    "file": "src/layout/side/collection/index.tsx",
+    "line": 171,
+    "kind": "tpl",
+    "text": "`已添加${title ? `「${title}」` : t(\"收藏夹\")}到播放列表`",
+    "moduleScope": false
+  },
+  {
+    "file": "src/pages/download-list/index.tsx",
+    "line": 124,
+    "kind": "jsx",
+    "text": "全部",
+    "moduleScope": false
+  },
+  {
+    "file": "src/pages/download-list/status-desc.ts",
+    "line": 9,
+    "kind": "str",
+    "text": "等待中",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/download-list/status-desc.ts",
+    "line": 10,
+    "kind": "str",
+    "text": "下载中",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/download-list/status-desc.ts",
+    "line": 11,
+    "kind": "str",
+    "text": "下载暂停",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/download-list/status-desc.ts",
+    "line": 12,
+    "kind": "str",
+    "text": "下载完成，合并分块中",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/download-list/status-desc.ts",
+    "line": 13,
+    "kind": "str",
+    "text": "合并暂停",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/download-list/status-desc.ts",
+    "line": 14,
+    "kind": "str",
+    "text": "转换暂停",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/download-list/status-desc.ts",
+    "line": 15,
+    "kind": "str",
+    "text": "转换文件格式中",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/download-list/status-desc.ts",
+    "line": 16,
+    "kind": "str",
+    "text": "已完成",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/download-list/status-desc.ts",
+    "line": 17,
+    "kind": "str",
+    "text": "任务出错",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/dynamic-feed/user.tsx",
+    "line": 20,
+    "kind": "str",
+    "text": "全部",
+    "moduleScope": false
+  },
+  {
+    "file": "src/pages/home/index.tsx",
+    "line": 39,
+    "kind": "str",
+    "text": "夜深了",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/home/index.tsx",
+    "line": 40,
+    "kind": "str",
+    "text": "早上好",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/home/index.tsx",
+    "line": 41,
+    "kind": "str",
+    "text": "上午好",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/home/index.tsx",
+    "line": 42,
+    "kind": "str",
+    "text": "中午好",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/home/index.tsx",
+    "line": 43,
+    "kind": "str",
+    "text": "下午好",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/home/index.tsx",
+    "line": 44,
+    "kind": "str",
+    "text": "晚上好",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/home/index.tsx",
+    "line": 139,
+    "kind": "jsx",
+    "text": "全部",
+    "moduleScope": false
+  },
+  {
+    "file": "src/pages/local-music/index.tsx",
+    "line": 89,
+    "kind": "tpl",
+    "text": "`${items.length}首歌曲已添加到播放列表`",
+    "moduleScope": false
+  },
+  {
+    "file": "src/pages/music-recommend/new-music-top.tsx",
+    "line": 239,
+    "kind": "tpl",
+    "text": "`${formatNumber(item.total_vv ?? 0)}播放`",
+    "moduleScope": false
+  },
+  {
+    "file": "src/pages/settings/developers.tsx",
+    "line": 17,
+    "kind": "str",
+    "text": "会点技术的佳代子",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/settings/developers.tsx",
+    "line": 18,
+    "kind": "str",
+    "text": "无谬Wumiu",
+    "moduleScope": true
+  },
+  {
+    "file": "src/pages/user-profile/grid-card/index.tsx",
+    "line": 34,
+    "kind": "tpl",
+    "text": "`${type === CollectionType.VideoSeries ? t(\"系列\") : t(\"合集\")} · ${mediaCount ?? 0}个视频`",
+    "moduleScope": false
+  },
+  {
+    "file": "src/pages/video-collection/header/index.tsx",
+    "line": 91,
+    "kind": "tpl",
+    "text": "`${attr ? (isPrivateFav(attr as number) ? t(\"私密\") : t(\"公开\")) : \"\"}收藏夹`",
+    "moduleScope": false
+  },
+  {
+    "file": "src/store/netease-together.ts",
+    "line": 145,
+    "kind": "str",
+    "text": "[together] 上报播放状态失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "src/store/netease-together.ts",
+    "line": 221,
+    "kind": "str",
+    "text": "[together] 房间切到了取不到详情的歌曲:",
+    "moduleScope": false
+  },
+  {
+    "file": "src/store/netease-together.ts",
+    "line": 238,
+    "kind": "str",
+    "text": "[together] 套用房间命令失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "src/store/netease-together.ts",
+    "line": 299,
+    "kind": "str",
+    "text": "[together] 读取房间状态失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "src/store/netease-together.ts",
+    "line": 488,
+    "kind": "str",
+    "text": "[together] 关闭房间失败:",
+    "moduleScope": false
+  },
+  {
+    "file": "src/store/netease-together.ts",
+    "line": 528,
+    "kind": "str",
+    "text": "[together] 获取成员失败:",
+    "moduleScope": false
+  }
+]

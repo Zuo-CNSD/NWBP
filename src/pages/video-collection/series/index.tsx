@@ -7,6 +7,7 @@ import { useRequest } from "ahooks";
 import type { Media } from "@/service/user-video-archives-list";
 
 import { CollectionType } from "@/common/constants/collection";
+import { t } from "@/common/i18n";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
 import { getSeriesArchives } from "@/service/series-archives";
 import { getSeriesInfo } from "@/service/series-info";
@@ -189,7 +190,7 @@ const Series = () => {
           bvid: item.bvid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -201,7 +202,7 @@ const Series = () => {
           bvid: item.bvid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -242,8 +243,8 @@ const Series = () => {
         onKeywordSearch={setKeyword}
         onOrderChange={setOrder}
         orderOptions={[
-          { key: "pubtime", label: "最近投稿" },
-          { key: "play", label: "最多播放" },
+          { key: "pubtime", label: t("最近投稿") },
+          { key: "play", label: t("最多播放") },
         ]}
         mediaCount={meta?.total}
         isCreatedBySelf={isCreatedBySelf}

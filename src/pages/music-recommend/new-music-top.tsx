@@ -4,6 +4,7 @@ import { Card, Spinner, addToast } from "@heroui/react";
 import { RiArrowLeftSLine, RiArrowRightSLine, RiMusic2Line, RiPlayFill } from "@remixicon/react";
 import log from "electron-log/renderer";
 
+import { t } from "@/common/i18n";
 import { formatNumber } from "@/common/utils/number";
 import IconButton from "@/components/icon-button";
 import Image from "@/components/image";
@@ -47,7 +48,7 @@ const NewMusicTop = ({ onLayoutChange }: NewMusicTopProps) => {
       })
       .catch(error => {
         log.error("[new-music-top] play error", error);
-        addToast({ title: "播放失败", color: "danger" });
+        addToast({ title: t("播放失败"), color: "danger" });
       });
   }, []);
 
@@ -175,7 +176,7 @@ const NewMusicTop = ({ onLayoutChange }: NewMusicTopProps) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <RiMusic2Line className="text-primary" />
-          <h1>新歌速递</h1>
+          <h1>{t("新歌速递")}</h1>
         </div>
         {newLoading ? null : (
           <div className="flex items-center gap-2">
@@ -210,7 +211,7 @@ const NewMusicTop = ({ onLayoutChange }: NewMusicTopProps) => {
         >
           {pageItems.length === 0 ? (
             <Card className="rounded-medium col-span-full flex h-[200px] items-center justify-center">
-              <span className="text-foreground-500">暂无数据</span>
+              <span className="text-foreground-500">{t("暂无数据")}</span>
             </Card>
           ) : (
             pageItems.map(item => {
@@ -235,7 +236,7 @@ const NewMusicTop = ({ onLayoutChange }: NewMusicTopProps) => {
                     />
                     {typeof item.total_vv === "number" && (
                       <div className="absolute inset-x-0 bottom-0 z-10 bg-linear-to-t from-black/80 via-black/40 to-transparent p-2 text-white">
-                        <div className="line-clamp-1 text-xs">{`${formatNumber(item.total_vv ?? 0)}播放`}</div>
+                        <div className="line-clamp-1 text-xs">{t("{0}播放", formatNumber(item.total_vv ?? 0))}</div>
                       </div>
                     )}
                     <div className="pointer-events-none absolute right-2 bottom-8 z-40 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">

@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+import { useNeteaseTogether } from "./netease-together";
+
 /**
  * 网易云账号状态。
  *
@@ -17,6 +19,13 @@ interface NeteaseState {
   setAccount: (account: NeteaseAccountInfo) => void;
 }
 
+/** 掉登录态时把一起听房间也收掉 —— 否则轮询会一直拿着过期 cookie 去打接口 */
+const dropRoomIfLoggedOut = (account: NeteaseAccountInfo | null) => {
+  if (!account?.loggedIn && useNeteaseTogether.getState().role !== "idle") {
+    void useNeteaseTogether.getState().leaveRoom();
+  }
+};
+
 export const useNetease = create<NeteaseState>()(set => ({
   account: null,
   loaded: false,
@@ -25,12 +34,16 @@ export const useNetease = create<NeteaseState>()(set => ({
     try {
       const account = await window.electron?.netease?.getAccount?.();
       set({ account: account ?? null, loaded: true });
+      dropRoomIfLoggedOut(account ?? null);
     } catch {
       set({ account: null, loaded: true });
     }
   },
 
-  setAccount: account => set({ account, loaded: true }),
+  setAccount: account => {
+    set({ account, loaded: true });
+    dropRoomIfLoggedOut(account);
+  },
 }));
 
 /** 已登录网易云？没查过 / 没登录都算 false */

@@ -1,0 +1,4740 @@
+[
+  {
+    "key": " · 共 {0} 首",
+    "files": [
+      "src/pages/netease/liked/index.tsx:50"
+    ]
+  },
+  {
+    "key": " · 共 {0} 条",
+    "files": [
+      "src/pages/play-history/index.tsx:94"
+    ]
+  },
+  {
+    "key": " · 已加载 {0} 首",
+    "files": [
+      "src/pages/netease/liked/index.tsx:51",
+      "src/pages/netease/playlist-detail/index.tsx:45"
+    ]
+  },
+  {
+    "key": "· 按住 Ctrl / ⌘ 滚动滚轮也能直接改字号",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:355"
+    ]
+  },
+  {
+    "key": "· 鼠标移到歌词右上角会出现锁定 / 关闭按钮",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:356"
+    ]
+  },
+  {
+    "key": "· 拖动歌词任意位置即可移动，拖窗口边缘可改大小，位置会自动记住",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:350"
+    ]
+  },
+  {
+    "key": "· 在歌词上点右键会弹出菜单：锁定、底板（透明 / 纯色 / 自定义背景）、字号、颜色、文字不透明度、翻译 /\n              罗马音、重置位置、关闭",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:352"
+    ]
+  },
+  {
+    "key": "{0}粉丝",
+    "files": [
+      "src/pages/search/user-list/user-card.tsx:80"
+    ]
+  },
+  {
+    "key": "{0}个内容",
+    "files": [
+      "src/components/favorites-select-modal/index.tsx:206"
+    ]
+  },
+  {
+    "key": "{0}观看",
+    "files": [
+      "src/pages/dynamic-feed/item.tsx:183",
+      "src/pages/user-profile/dynamic-list/item.tsx:187"
+    ]
+  },
+  {
+    "key": "{0}条视频",
+    "files": [
+      "src/pages/video-collection/header/index.tsx:96"
+    ]
+  },
+  {
+    "key": "0% 等于透明底板（和上面的「透明」模式效果一样）",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:276"
+    ]
+  },
+  {
+    "key": "把当前 {0} 首网易云歌曲同步给房间",
+    "files": [
+      "src/components/netease/together-modal.tsx:157"
+    ]
+  },
+  {
+    "key": "白色",
+    "files": [
+      "electron/ipc/window.ts:32"
+    ]
+  },
+  {
+    "key": "薄荷绿",
+    "files": [
+      "electron/ipc/window.ts:35"
+    ]
+  },
+  {
+    "key": "保持分集顺序",
+    "files": [
+      "src/components/music-play-mode/index.tsx:52"
+    ]
+  },
+  {
+    "key": "保存",
+    "files": [
+      "src/pages/follow-list/group-modal.tsx:80",
+      "src/pages/follow-list/set-group-modal.tsx:99"
+    ]
+  },
+  {
+    "key": "背景",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:278",
+      "src/pages/settings/color-settings.tsx:53",
+      "src/pages/settings/system-settings.tsx:292"
+    ]
+  },
+  {
+    "key": "背景模糊",
+    "files": [
+      "src/pages/settings/background-settings.tsx:34",
+      "src/pages/settings/background-settings.tsx:39",
+      "src/pages/settings/desktop-lyrics-settings.tsx:253"
+    ]
+  },
+  {
+    "key": "背景图的模糊与压暗跟随「设置 → 常规设置 → 背景」里的参数",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:330"
+    ]
+  },
+  {
+    "key": "背景图片",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:229"
+    ]
+  },
+  {
+    "key": "背景压暗",
+    "files": [
+      "src/pages/settings/background-settings.tsx:57",
+      "src/pages/settings/background-settings.tsx:62"
+    ]
+  },
+  {
+    "key": "背景颜色",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:306"
+    ]
+  },
+  {
+    "key": "本地",
+    "files": [
+      "src/pages/play-history/index.tsx:22"
+    ]
+  },
+  {
+    "key": "本地音乐",
+    "files": [
+      "src/common/constants/menus.tsx:55",
+      "src/components/music-playlist-drawer/list-item.tsx:67",
+      "src/layout/playbar/left/index.tsx:96",
+      "src/pages/local-music/index.tsx:187"
+    ]
+  },
+  {
+    "key": "哔哩哔哩",
+    "files": [
+      "src/layout/side/default-menu/index.tsx:39",
+      "src/pages/play-history/index.tsx:23"
+    ]
+  },
+  {
+    "key": "标题",
+    "files": [
+      "src/components/music-list-item/header.tsx:29",
+      "src/pages/history/header.tsx:21",
+      "src/pages/local-music/index.tsx:255"
+    ]
+  },
+  {
+    "key": "玻璃透明度",
+    "files": [
+      "src/pages/settings/system-settings.tsx:254",
+      "src/pages/settings/system-settings.tsx:265"
+    ]
+  },
+  {
+    "key": "播放",
+    "files": [
+      "src/layout/side/collection/index.tsx:95",
+      "src/layout/side/collection/index.tsx:106",
+      "src/pages/settings/system-settings.tsx:295",
+      "src/pages/user-profile/post/index.tsx:245",
+      "electron/windows/thumbar.ts:27"
+    ]
+  },
+  {
+    "key": "播放、暂停、切歌都会自动同步；进度按心跳对齐，偏差在 3 秒内不校正。",
+    "files": [
+      "src/components/netease/together-modal.tsx:161"
+    ]
+  },
+  {
+    "key": "播放/暂停",
+    "files": [
+      "electron/windows/tray.ts:108"
+    ]
+  },
+  {
+    "key": "播放合集失败",
+    "files": [
+      "src/layout/side/collection/index.tsx:201"
+    ]
+  },
+  {
+    "key": "播放进度",
+    "files": [
+      "src/components/music-play-progress/index.tsx:33",
+      "src/pages/history/header.tsx:23",
+      "src/pages/mini-player/index.tsx:136"
+    ]
+  },
+  {
+    "key": "播放栏音频条",
+    "files": [
+      "src/pages/settings/system-settings.tsx:281"
+    ]
+  },
+  {
+    "key": "播放量",
+    "files": [
+      "src/components/music-list-item/header.tsx:31"
+    ]
+  },
+  {
+    "key": "播放列表",
+    "files": [
+      "src/components/music-playlist-drawer/index.tsx:159"
+    ]
+  },
+  {
+    "key": "播放列表操作菜单",
+    "files": [
+      "src/components/music-page-list/menu.tsx:35",
+      "src/components/music-playlist-drawer/list-item.tsx:90"
+    ]
+  },
+  {
+    "key": "播放列表生成失败",
+    "files": [
+      "src/pages/user-profile/post/index.tsx:230"
+    ]
+  },
+  {
+    "key": "播放模式",
+    "files": [
+      "src/components/music-play-mode/index.tsx:59",
+      "src/components/music-play-mode/index.tsx:71",
+      "src/pages/mini-player/index.tsx:163"
+    ]
+  },
+  {
+    "key": "播放内容只获取最多 200 条数据",
+    "files": [
+      "src/pages/user-profile/post/index.tsx:226"
+    ]
+  },
+  {
+    "key": "播放器里播过的歌都在这里，B 站和网易云都会记",
+    "files": [
+      "src/pages/play-history/index.tsx:93"
+    ]
+  },
+  {
+    "key": "播放全部",
+    "files": [
+      "src/components/netease/track-list.tsx:110",
+      "src/pages/local-music/index.tsx:203",
+      "src/pages/video-collection/operation/index.tsx:42"
+    ]
+  },
+  {
+    "key": "播放失败",
+    "files": [
+      "src/pages/music-recommend/new-music-top.tsx:50"
+    ]
+  },
+  {
+    "key": "播放失败：无法获取播放信息",
+    "files": [
+      "src/store/play-list.ts:711"
+    ]
+  },
+  {
+    "key": "播放收藏夹失败",
+    "files": [
+      "src/layout/side/collection/index.tsx:155"
+    ]
+  },
+  {
+    "key": "播放速率",
+    "files": [
+      "src/components/music-rate/index.tsx:49"
+    ]
+  },
+  {
+    "key": "不使用代理",
+    "files": [
+      "src/pages/settings/proxy-settings.tsx:11"
+    ]
+  },
+  {
+    "key": "不透明度（当前 {0}%）",
+    "files": [
+      "electron/ipc/window.ts:503"
+    ]
+  },
+  {
+    "key": "裁剪",
+    "files": [
+      "src/components/image-upload/crop-modal.tsx:131"
+    ]
+  },
+  {
+    "key": "裁剪封面",
+    "files": [
+      "src/components/image-upload/crop-modal.tsx:116"
+    ]
+  },
+  {
+    "key": "采用歌词",
+    "files": [
+      "src/components/lyrics-search-modal/lyrics-preview-modal.tsx:61"
+    ]
+  },
+  {
+    "key": "菜单设置",
+    "files": [
+      "src/pages/settings/index.tsx:162"
+    ]
+  },
+  {
+    "key": "操作",
+    "files": [
+      "src/pages/download-list/index.tsx:160"
+    ]
+  },
+  {
+    "key": "操作菜单",
+    "files": [
+      "src/components/music-list-item/operation.tsx:20",
+      "src/components/music-list-item/operation.tsx:27",
+      "src/pages/local-music/operation.tsx:38",
+      "src/pages/local-music/operation.tsx:55"
+    ]
+  },
+  {
+    "key": "操作失败",
+    "files": [
+      "src/common/utils/ipc-error.ts:12",
+      "src/pages/search/user-list/user-card.tsx:38",
+      "src/pages/search/user-list/user-card.tsx:44"
+    ]
+  },
+  {
+    "key": "查询房间",
+    "files": [
+      "electron/ipc/netease/together.ts:77"
+    ]
+  },
+  {
+    "key": "常规设置",
+    "files": [
+      "src/pages/settings/index.tsx:153"
+    ]
+  },
+  {
+    "key": "窗口不铺底色，直接透出桌面；开启后会覆盖自定义背景图",
+    "files": [
+      "src/pages/settings/background-settings.tsx:85"
+    ]
+  },
+  {
+    "key": "窗口不铺底色，桌面直接透过来（配合系统毛玻璃）；开启后会覆盖自定义背景图",
+    "files": [
+      "src/pages/settings/background-settings.tsx:84"
+    ]
+  },
+  {
+    "key": "窗口关闭",
+    "files": [
+      "src/pages/settings/system-settings.tsx:443"
+    ]
+  },
+  {
+    "key": "创建",
+    "files": [
+      "src/pages/follow-list/group-modal.tsx:80"
+    ]
+  },
+  {
+    "key": "创建成功",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:148"
+    ]
+  },
+  {
+    "key": "创建房间",
+    "files": [
+      "src/components/netease/together-modal.tsx:88"
+    ]
+  },
+  {
+    "key": "创建房间失败",
+    "files": [
+      "src/store/netease-together.ts:427"
+    ]
+  },
+  {
+    "key": "创建分组",
+    "files": [
+      "src/pages/follow-list/group-modal.tsx:71",
+      "src/pages/follow-list/index.tsx:208"
+    ]
+  },
+  {
+    "key": "创建分组成功",
+    "files": [
+      "src/pages/follow-list/group-modal.tsx:41"
+    ]
+  },
+  {
+    "key": "创建分组失败",
+    "files": [
+      "src/pages/follow-list/group-modal.tsx:46",
+      "src/pages/follow-list/group-modal.tsx:60"
+    ]
+  },
+  {
+    "key": "创建失败",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:158"
+    ]
+  },
+  {
+    "key": "创建时间",
+    "files": [
+      "src/pages/local-music/index.tsx:259"
+    ]
+  },
+  {
+    "key": "创建收藏夹",
+    "files": [
+      "src/layout/side/default-menu/index.tsx:28"
+    ]
+  },
+  {
+    "key": "创建一起听房间",
+    "files": [
+      "electron/ipc/netease/together.ts:59"
+    ]
+  },
+  {
+    "key": "创建一起听房间失败：没拿到房间号",
+    "files": [
+      "electron/ipc/netease/together.ts:66"
+    ]
+  },
+  {
+    "key": "纯黑",
+    "files": [
+      "electron/ipc/window.ts:47"
+    ]
+  },
+  {
+    "key": "纯色",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:294",
+      "src/pages/settings/desktop-lyrics-settings.tsx:206",
+      "electron/ipc/window.ts:477"
+    ]
+  },
+  {
+    "key": "从播放记录里移除「{0}」？",
+    "files": [
+      "src/pages/play-history/index.tsx:50"
+    ]
+  },
+  {
+    "key": "从列表删除",
+    "files": [
+      "src/components/music-page-list/menu.tsx:51",
+      "src/components/music-playlist-drawer/menu.tsx:41"
+    ]
+  },
+  {
+    "key": "打开动画",
+    "files": [
+      "src/pages/settings/system-settings.tsx:461"
+    ]
+  },
+  {
+    "key": "打开文件",
+    "files": [
+      "src/pages/download-list/actions.tsx:74",
+      "src/pages/local-music/item.tsx:27"
+    ]
+  },
+  {
+    "key": "打开B站链接",
+    "files": [
+      "src/pages/user-profile/dynamic-list/item.tsx:130"
+    ]
+  },
+  {
+    "key": "大小",
+    "files": [
+      "src/pages/download-list/index.tsx:154",
+      "src/pages/local-music/index.tsx:256"
+    ]
+  },
+  {
+    "key": "代理类型",
+    "files": [
+      "src/pages/settings/proxy-settings.tsx:46"
+    ]
+  },
+  {
+    "key": "代理设置",
+    "files": [
+      "src/pages/settings/index.tsx:168"
+    ]
+  },
+  {
+    "key": "单曲播放",
+    "files": [
+      "src/common/constants/audio.tsx:45"
+    ]
+  },
+  {
+    "key": "淡入",
+    "files": [
+      "src/pages/settings/system-settings.tsx:477"
+    ]
+  },
+  {
+    "key": "当前版本 {0}",
+    "files": [
+      "src/pages/settings/system-settings.tsx:564"
+    ]
+  },
+  {
+    "key": "当前背景图预览",
+    "files": [
+      "src/pages/settings/background-settings.tsx:149"
+    ]
+  },
+  {
+    "key": "当前播放列表里没有网易云歌曲",
+    "files": [
+      "electron/ipc/netease/together.ts:182"
+    ]
+  },
+  {
+    "key": "当前播放列表里没有网易云歌曲，对方进来会是一片空白",
+    "files": [
+      "src/store/netease-together.ts:504"
+    ]
+  },
+  {
+    "key": "当前播放信息缺失，无法保存歌词",
+    "files": [
+      "src/components/lyrics-search-modal/index.tsx:110"
+    ]
+  },
+  {
+    "key": "当前列表里没有网易云歌曲",
+    "files": [
+      "src/components/netease/together-modal.tsx:157"
+    ]
+  },
+  {
+    "key": "当前没有正在播放的歌曲",
+    "files": [
+      "src/components/music-playlist-drawer/index.tsx:111"
+    ]
+  },
+  {
+    "key": "当前任务未下载完成，确认删除后将无法恢复",
+    "files": [
+      "src/pages/download-list/actions.tsx:144"
+    ]
+  },
+  {
+    "key": "导出配置",
+    "files": [
+      "src/pages/settings/export-import.tsx:67"
+    ]
+  },
+  {
+    "key": "导出失败",
+    "files": [
+      "src/pages/settings/export-import.tsx:32"
+    ]
+  },
+  {
+    "key": "导入配置",
+    "files": [
+      "src/pages/settings/export-import.tsx:70"
+    ]
+  },
+  {
+    "key": "导入失败",
+    "files": [
+      "src/pages/settings/export-import.tsx:59"
+    ]
+  },
+  {
+    "key": "登录",
+    "files": [
+      "src/common/utils/ipc-error.ts:25",
+      "src/layout/navbar/login/code-login.tsx:265",
+      "src/layout/navbar/login/password-login.tsx:186",
+      "src/layout/navbar/user/index.tsx:91"
+    ]
+  },
+  {
+    "key": "登录成功",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:149",
+      "src/layout/navbar/login/password-login.tsx:90",
+      "src/layout/navbar/login/qrcode-login.tsx:42",
+      "src/pages/settings/netease-settings.tsx:28"
+    ]
+  },
+  {
+    "key": "登录方式",
+    "files": [
+      "src/layout/navbar/login/index.tsx:59"
+    ]
+  },
+  {
+    "key": "登录后即可使用网易云作为歌词来源；Cookie 会加密保存在本机，仅用于网易云接口。",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:223"
+    ]
+  },
+  {
+    "key": "登录后显示最新动态",
+    "files": [
+      "src/pages/home/index.tsx:190"
+    ]
+  },
+  {
+    "key": "登录凭据无效或已过期",
+    "files": [
+      "electron/ipc/netease/api.ts:464"
+    ]
+  },
+  {
+    "key": "登录失败",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:153",
+      "src/layout/navbar/login/password-login.tsx:94",
+      "src/pages/settings/netease-settings.tsx:113"
+    ]
+  },
+  {
+    "key": "登录网易云后才能读取「我喜欢的音乐」",
+    "files": [
+      "src/pages/netease/liked/index.tsx:59"
+    ]
+  },
+  {
+    "key": "登录网易云后才能读取你的歌单",
+    "files": [
+      "src/pages/netease/playlists/index.tsx:43"
+    ]
+  },
+  {
+    "key": "登录网易云后才能读取你收藏的专辑",
+    "files": [
+      "src/pages/netease/albums/index.tsx:43"
+    ]
+  },
+  {
+    "key": "登录状态",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:132"
+    ]
+  },
+  {
+    "key": "等  级",
+    "files": [
+      "src/pages/user-profile/space-info.tsx:42"
+    ]
+  },
+  {
+    "key": "等待对方加入",
+    "files": [
+      "src/components/netease/together-modal.tsx:131"
+    ]
+  },
+  {
+    "key": "等待扫码…",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:26"
+    ]
+  },
+  {
+    "key": "等待下载...",
+    "files": [
+      "src/pages/download-list/progress.tsx:14"
+    ]
+  },
+  {
+    "key": "等待中",
+    "files": [
+      "src/pages/download-list/status-desc.ts:2"
+    ]
+  },
+  {
+    "key": "低品质",
+    "files": [
+      "src/pages/settings/system-settings.tsx:326"
+    ]
+  },
+  {
+    "key": "底板不透明度",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:275"
+    ]
+  },
+  {
+    "key": "底板色",
+    "files": [
+      "electron/ipc/window.ts:492"
+    ]
+  },
+  {
+    "key": "底板颜色",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:213"
+    ]
+  },
+  {
+    "key": "点击任意处跳过",
+    "files": [
+      "src/components/app-launch-animation/index.tsx:187"
+    ]
+  },
+  {
+    "key": "点击上传图片",
+    "files": [
+      "src/components/image-upload/index.tsx:148"
+    ]
+  },
+  {
+    "key": "点赞",
+    "files": [
+      "src/components/music-thumb/index.tsx:152",
+      "src/pages/dynamic-feed/item.tsx:115",
+      "src/pages/user-profile/dynamic-list/item.tsx:117"
+    ]
+  },
+  {
+    "key": "点赞失败，请稍后重试",
+    "files": [
+      "src/components/music-thumb/index.tsx:60",
+      "src/components/music-thumb/index.tsx:64",
+      "src/pages/dynamic-feed/item.tsx:73"
+    ]
+  },
+  {
+    "key": "调暗背景图，保证文字和控件看得清",
+    "files": [
+      "src/pages/settings/background-settings.tsx:57"
+    ]
+  },
+  {
+    "key": "调整歌词偏移",
+    "files": [
+      "src/components/lyrics/offset-control.tsx:44",
+      "src/components/lyrics/offset-control.tsx:53"
+    ]
+  },
+  {
+    "key": "调整界面控件的圆角大小",
+    "files": [
+      "src/pages/settings/system-settings.tsx:213"
+    ]
+  },
+  {
+    "key": "调整字体大小",
+    "files": [
+      "src/components/lyrics/font-size-control.tsx:42",
+      "src/components/lyrics/font-size-control.tsx:51"
+    ]
+  },
+  {
+    "key": "定位当前播放",
+    "files": [
+      "src/components/music-playlist-drawer/index.tsx:164"
+    ]
+  },
+  {
+    "key": "动画时长",
+    "files": [
+      "src/pages/settings/system-settings.tsx:491"
+    ]
+  },
+  {
+    "key": "动态",
+    "files": [
+      "src/layout/navbar/user-feed/index.tsx:50",
+      "src/pages/user-profile/index.tsx:91"
+    ]
+  },
+  {
+    "key": "读取房间状态",
+    "files": [
+      "electron/ipc/netease/together.ts:155"
+    ]
+  },
+  {
+    "key": "读取图片失败，请换一张（支持 png/jpg/webp/gif/bmp，且不超过 32MB）",
+    "files": [
+      "src/pages/settings/background-settings.tsx:129"
+    ]
+  },
+  {
+    "key": "杜比",
+    "files": [
+      "src/layout/playbar/left/index.tsx:82"
+    ]
+  },
+  {
+    "key": "杜比音频",
+    "files": [
+      "src/pages/download-list/index.tsx:85"
+    ]
+  },
+  {
+    "key": "端口",
+    "files": [
+      "src/pages/settings/proxy-settings.tsx:66",
+      "src/pages/settings/proxy-settings.tsx:71"
+    ]
+  },
+  {
+    "key": "短信登录",
+    "files": [
+      "src/layout/navbar/login/index.tsx:65"
+    ]
+  },
+  {
+    "key": "对方分享过来的一整句话也可以直接粘进来",
+    "files": [
+      "src/components/netease/together-modal.tsx:104"
+    ]
+  },
+  {
+    "key": "二维码已过期，点右上角刷新",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:25"
+    ]
+  },
+  {
+    "key": "二维码已扫码未确认",
+    "files": [
+      "src/layout/navbar/login/qrcode-login.tsx:88"
+    ]
+  },
+  {
+    "key": "二维码已失效，请刷新",
+    "files": [
+      "src/layout/navbar/login/qrcode-login.tsx:80"
+    ]
+  },
+  {
+    "key": "反馈",
+    "files": [
+      "src/components/error-fallback/index.tsx:15"
+    ]
+  },
+  {
+    "key": "返回",
+    "files": [
+      "src/pages/netease/album-detail/index.tsx:50",
+      "src/pages/netease/playlist-detail/index.tsx:40",
+      "src/pages/play-history/index.tsx:86"
+    ]
+  },
+  {
+    "key": "返回顶部",
+    "files": [
+      "src/components/scroll-container/index.tsx:81"
+    ]
+  },
+  {
+    "key": "房间号|发起人ID",
+    "files": [
+      "src/components/netease/together-modal.tsx:100"
+    ]
+  },
+  {
+    "key": "分集",
+    "files": [
+      "src/layout/playbar/left/page-list.tsx:33"
+    ]
+  },
+  {
+    "key": "粉丝数",
+    "files": [
+      "src/pages/user-profile/space-info.tsx:38"
+    ]
+  },
+  {
+    "key": "粉丝数由低到高",
+    "files": [
+      "src/pages/search/user-list/search-header.tsx:15"
+    ]
+  },
+  {
+    "key": "粉丝数由高到低",
+    "files": [
+      "src/pages/search/user-list/search-header.tsx:14"
+    ]
+  },
+  {
+    "key": "封面下载失败",
+    "files": [
+      "src/components/music-download-button/index.tsx:107"
+    ]
+  },
+  {
+    "key": "复制",
+    "files": [
+      "src/components/netease/together-modal.tsx:143"
+    ]
+  },
+  {
+    "key": "复制失败，请手动选中复制",
+    "files": [
+      "src/components/netease/together-modal.tsx:60"
+    ]
+  },
+  {
+    "key": "该操作会删除本地文件且不可恢复，请谨慎操作",
+    "files": [
+      "src/pages/local-music/index.tsx:170"
+    ]
+  },
+  {
+    "key": "该项目无法收藏",
+    "files": [
+      "src/pages/music-recommend/index.tsx:195"
+    ]
+  },
+  {
+    "key": "高品质",
+    "files": [
+      "src/pages/settings/system-settings.tsx:324"
+    ]
+  },
+  {
+    "key": "歌词保存失败",
+    "files": [
+      "src/components/lyrics-search-modal/index.tsx:128"
+    ]
+  },
+  {
+    "key": "歌词底板",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:195",
+      "electron/ipc/window.ts:468"
+    ]
+  },
+  {
+    "key": "歌词翻译",
+    "files": [
+      "src/components/lyrics-search-modal/lyrics-preview-modal.tsx:48"
+    ]
+  },
+  {
+    "key": "歌词横向",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:183"
+    ]
+  },
+  {
+    "key": "歌词横向位置",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:191"
+    ]
+  },
+  {
+    "key": "歌词后面那块底。「透明」= 只有字，不带任何底板",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:196"
+    ]
+  },
+  {
+    "key": "歌词加载中...",
+    "files": [
+      "src/components/lyrics/index.tsx:188"
+    ]
+  },
+  {
+    "key": "歌词加载中…",
+    "files": [
+      "src/pages/desktop-lyrics/index.tsx:342"
+    ]
+  },
+  {
+    "key": "歌词居中时铺满整屏，「显示封面」会暂时不占位",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:205"
+    ]
+  },
+  {
+    "key": "歌词设置",
+    "files": [
+      "src/pages/settings/index.tsx:156"
+    ]
+  },
+  {
+    "key": "歌词文字",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:295"
+    ]
+  },
+  {
+    "key": "歌词文字（当前 {0}%）",
+    "files": [
+      "electron/ipc/window.ts:522"
+    ]
+  },
+  {
+    "key": "歌词预览",
+    "files": [
+      "src/components/lyrics-search-modal/lyrics-preview-modal.tsx:40"
+    ]
+  },
+  {
+    "key": "歌词原文",
+    "files": [
+      "src/components/lyrics-search-modal/lyrics-preview-modal.tsx:47"
+    ]
+  },
+  {
+    "key": "歌词字号（当前 {0}px）",
+    "files": [
+      "electron/ipc/window.ts:433"
+    ]
+  },
+  {
+    "key": "歌词字体颜色",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:156"
+    ]
+  },
+  {
+    "key": "歌词纵向",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:210"
+    ]
+  },
+  {
+    "key": "歌词纵向位置",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:218"
+    ]
+  },
+  {
+    "key": "歌单",
+    "files": [
+      "src/pages/netease/playlist-detail/index.tsx:42"
+    ]
+  },
+  {
+    "key": "歌单不存在或已失效",
+    "files": [
+      "src/pages/netease/playlist-detail/index.tsx:55",
+      "electron/ipc/netease/api.ts:197"
+    ]
+  },
+  {
+    "key": "歌曲",
+    "files": [
+      "src/components/lyrics-search-modal/lrclib-tab.tsx:67",
+      "src/components/lyrics-search-modal/netease-tab.tsx:103"
+    ]
+  },
+  {
+    "key": "歌曲音源",
+    "files": [
+      "src/pages/search/index.tsx:66",
+      "src/pages/settings/system-settings.tsx:406"
+    ]
+  },
+  {
+    "key": "歌手",
+    "files": [
+      "src/components/lyrics-search-modal/lrclib-tab.tsx:69",
+      "src/components/lyrics-search-modal/netease-tab.tsx:105"
+    ]
+  },
+  {
+    "key": "格式",
+    "files": [
+      "src/pages/local-music/index.tsx:257"
+    ]
+  },
+  {
+    "key": "个人创建菜单",
+    "files": [
+      "src/pages/settings/menu-settings.tsx:100",
+      "src/pages/settings/menu-settings.tsx:124"
+    ]
+  },
+  {
+    "key": "个人收藏菜单",
+    "files": [
+      "src/pages/settings/menu-settings.tsx:137",
+      "src/pages/settings/menu-settings.tsx:161"
+    ]
+  },
+  {
+    "key": "个人资料",
+    "files": [
+      "src/layout/navbar/user/index.tsx:98"
+    ]
+  },
+  {
+    "key": "个人资料栏目",
+    "files": [
+      "src/pages/user-profile/index.tsx:139"
+    ]
+  },
+  {
+    "key": "给背景图加毛玻璃，面板压在上面更有层次",
+    "files": [
+      "src/pages/settings/background-settings.tsx:34"
+    ]
+  },
+  {
+    "key": "跟随系统",
+    "files": [
+      "src/pages/settings/system-settings.tsx:135"
+    ]
+  },
+  {
+    "key": "更换背景图…",
+    "files": [
+      "electron/ipc/window.ts:489"
+    ]
+  },
+  {
+    "key": "更换视频",
+    "files": [
+      "src/pages/settings/system-settings.tsx:530"
+    ]
+  },
+  {
+    "key": "更新用户信息失败",
+    "files": [
+      "src/layout/navbar/login/index.tsx:45"
+    ]
+  },
+  {
+    "key": "公开",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:247",
+      "src/pages/video-collection/header/index.tsx:90"
+    ]
+  },
+  {
+    "key": "功能说明",
+    "files": [
+      "src/pages/settings/shortcut-settings.tsx:103"
+    ]
+  },
+  {
+    "key": "共",
+    "files": [
+      "src/pages/netease/playlist-detail/index.tsx:45"
+    ]
+  },
+  {
+    "key": "共 {0}条",
+    "files": [
+      "src/pages/user-profile/post/index.tsx:247"
+    ]
+  },
+  {
+    "key": "关闭",
+    "files": [
+      "src/components/lyrics-search-modal/lyrics-preview-modal.tsx:58"
+    ]
+  },
+  {
+    "key": "关闭弹窗",
+    "files": [
+      "src/components/full-screen-player/index.tsx:359"
+    ]
+  },
+  {
+    "key": "关闭桌面歌词",
+    "files": [
+      "src/components/desktop-lyrics-button/index.tsx:48",
+      "src/components/desktop-lyrics-button/index.tsx:49",
+      "src/pages/desktop-lyrics/index.tsx:511",
+      "electron/ipc/window.ts:552"
+    ]
+  },
+  {
+    "key": "关于应用",
+    "files": [
+      "src/pages/settings/system-settings.tsx:561"
+    ]
+  },
+  {
+    "key": "关注",
+    "files": [
+      "src/pages/search/user-list/user-card.tsx:97",
+      "src/pages/user-profile/space-info.tsx:124"
+    ]
+  },
+  {
+    "key": "关注数",
+    "files": [
+      "src/pages/user-profile/space-info.tsx:33"
+    ]
+  },
+  {
+    "key": "观看时间",
+    "files": [
+      "src/pages/history/header.tsx:24"
+    ]
+  },
+  {
+    "key": "鬼畜",
+    "files": [
+      "src/pages/music-recommend/index.tsx:281"
+    ]
+  },
+  {
+    "key": "还没选图片",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:231"
+    ]
+  },
+  {
+    "key": "还没有播放记录",
+    "files": [
+      "src/pages/home/index.tsx:141"
+    ]
+  },
+  {
+    "key": "还没有播放记录，去搜一首听听",
+    "files": [
+      "src/pages/play-history/index.tsx:109"
+    ]
+  },
+  {
+    "key": "还没有设置自定义背景图，去「设置 → 常规设置 → 背景」里选一张",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:301"
+    ]
+  },
+  {
+    "key": "合并暂停",
+    "files": [
+      "src/pages/download-list/status-desc.ts:6"
+    ]
+  },
+  {
+    "key": "合集",
+    "files": [
+      "src/pages/user-profile/grid-card/index.tsx:33",
+      "src/pages/user-profile/index.tsx:112"
+    ]
+  },
+  {
+    "key": "和另一个人同步听同一份歌单。双方都要登录网易云账号 ——\n                    房间里的状态存在网易云服务端，只有一个人的房间读不到任何东西。",
+    "files": [
+      "src/components/netease/together-modal.tsx:78"
+    ]
+  },
+  {
+    "key": "黑色",
+    "files": [
+      "electron/ipc/window.ts:36"
+    ]
+  },
+  {
+    "key": "糊一点，歌词压在上面更好读",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:254"
+    ]
+  },
+  {
+    "key": "恢复默认",
+    "files": [
+      "src/pages/settings/shortcut-settings.tsx:98"
+    ]
+  },
+  {
+    "key": "回到首页",
+    "files": [
+      "src/components/error-fallback/index.tsx:23"
+    ]
+  },
+  {
+    "key": "回到主页",
+    "files": [
+      "src/layout/side/logo/index.tsx:46"
+    ]
+  },
+  {
+    "key": "或加入对方的房间",
+    "files": [
+      "src/components/netease/together-modal.tsx:93"
+    ]
+  },
+  {
+    "key": "获取播放链接失败",
+    "files": [
+      "src/store/play-list.ts:199"
+    ]
+  },
+  {
+    "key": "获取登录公钥失败",
+    "files": [
+      "src/layout/navbar/login/password-login.tsx:60"
+    ]
+  },
+  {
+    "key": "获取二维码失败",
+    "files": [
+      "electron/ipc/netease/api.ts:498"
+    ]
+  },
+  {
+    "key": "获取分集信息中...",
+    "files": [
+      "src/components/video-pages-download-select-modal/index.tsx:91"
+    ]
+  },
+  {
+    "key": "获取歌词失败",
+    "files": [
+      "src/components/lyrics-search-modal/netease-tab.tsx:65"
+    ]
+  },
+  {
+    "key": "获取歌单失败",
+    "files": [
+      "electron/ipc/netease/api.ts:265"
+    ]
+  },
+  {
+    "key": "获取历史记录失败",
+    "files": [
+      "src/pages/history/index.tsx:66",
+      "src/pages/history/index.tsx:80"
+    ]
+  },
+  {
+    "key": "获取热门歌单失败",
+    "files": [
+      "electron/ipc/netease/api.ts:153"
+    ]
+  },
+  {
+    "key": "获取收藏夹内容失败",
+    "files": [
+      "src/pages/video-collection/favorites/index.tsx:139"
+    ]
+  },
+  {
+    "key": "获取收藏夹全部歌曲失败",
+    "files": [
+      "src/pages/video-collection/favorites/index.tsx:230",
+      "src/pages/video-collection/favorites/index.tsx:257"
+    ]
+  },
+  {
+    "key": "获取验证码",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:260"
+    ]
+  },
+  {
+    "key": "获取验证码失败",
+    "files": [
+      "src/common/utils/geetest.ts:44"
+    ]
+  },
+  {
+    "key": "获取一起听状态",
+    "files": [
+      "electron/ipc/netease/together.ts:105"
+    ]
+  },
+  {
+    "key": "极验组件加载失败",
+    "files": [
+      "src/common/utils/geetest.ts:53"
+    ]
+  },
+  {
+    "key": "记录播放历史",
+    "files": [
+      "src/pages/history/index.tsx:269"
+    ]
+  },
+  {
+    "key": "继续",
+    "files": [
+      "src/pages/download-list/actions.tsx:105"
+    ]
+  },
+  {
+    "key": "加入房间",
+    "files": [
+      "src/components/netease/together-modal.tsx:116"
+    ]
+  },
+  {
+    "key": "加入房间失败",
+    "files": [
+      "src/store/netease-together.ts:465"
+    ]
+  },
+  {
+    "key": "加入一起听房间",
+    "files": [
+      "electron/ipc/netease/together.ts:91"
+    ]
+  },
+  {
+    "key": "加载风控验证码出错",
+    "files": [
+      "src/common/hooks/use-geetest.ts:14"
+    ]
+  },
+  {
+    "key": "加载更多失败",
+    "files": [
+      "src/pages/search/netease-list.tsx:73",
+      "src/pages/search/user-list/index.tsx:78",
+      "src/pages/search/video-list/index.tsx:62",
+      "src/pages/user-profile/favorites/index.tsx:55",
+      "src/pages/user-profile/series/index.tsx:86"
+    ]
+  },
+  {
+    "key": "加载失败",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:79",
+      "src/pages/search/user-list/index.tsx:95",
+      "src/pages/search/video-list/index.tsx:79",
+      "src/pages/user-profile/favorites/index.tsx:70",
+      "src/pages/user-profile/series/index.tsx:101"
+    ]
+  },
+  {
+    "key": "加载失败，检查一下网络或代理",
+    "files": [
+      "src/common/utils/ipc-error.ts:25"
+    ]
+  },
+  {
+    "key": "加载中",
+    "files": [
+      "src/components/lyrics-search-modal/lrclib-tab.tsx:51",
+      "src/components/lyrics-search-modal/netease-tab.tsx:87",
+      "src/components/netease/page-status.tsx:27",
+      "src/pages/follow-list/index.tsx:307",
+      "src/pages/search/netease-list.tsx:96",
+      "src/pages/search/user-list/index.tsx:108",
+      "src/pages/search/video-list/index.tsx:178",
+      "src/pages/user-profile/favorites/index.tsx:83",
+      "src/pages/user-profile/post/index.tsx:264",
+      "src/pages/user-profile/series/index.tsx:114",
+      "src/pages/video-collection/collections/grid-list.tsx:58",
+      "src/pages/video-collection/collections/list.tsx:43",
+      "src/pages/video-collection/series/grid-list.tsx:68",
+      "src/pages/video-collection/series/list.tsx:53"
+    ]
+  },
+  {
+    "key": "加载中...",
+    "files": [
+      "src/pages/dynamic-feed/author-list.tsx:125"
+    ]
+  },
+  {
+    "key": "减小  −{0}px",
+    "files": [
+      "electron/ipc/window.ts:441"
+    ]
+  },
+  {
+    "key": "简介",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:226"
+    ]
+  },
+  {
+    "key": "建议上传高清封面≥960×600，jpeg或png格式，图片≤5MB",
+    "files": [
+      "src/components/image-upload/index.tsx:159"
+    ]
+  },
+  {
+    "key": "将播放进度同步到Bilibili服务器",
+    "files": [
+      "src/pages/settings/system-settings.tsx:336"
+    ]
+  },
+  {
+    "key": "结束房间",
+    "files": [
+      "src/components/netease/together-modal.tsx:178"
+    ]
+  },
+  {
+    "key": "结束一起听房间",
+    "files": [
+      "electron/ipc/netease/together.ts:97"
+    ]
+  },
+  {
+    "key": "解锁（当前鼠标穿透）",
+    "files": [
+      "src/pages/desktop-lyrics/index.tsx:503"
+    ]
+  },
+  {
+    "key": "今天",
+    "files": [
+      "src/components/date-range-picker/index.tsx:69"
+    ]
+  },
+  {
+    "key": "仅移除列表中的目录，不会删除本地文件",
+    "files": [
+      "src/pages/local-music/index.tsx:105"
+    ]
+  },
+  {
+    "key": "仅音乐分区",
+    "files": [
+      "src/pages/search/video-list/search-header.tsx:66"
+    ]
+  },
+  {
+    "key": "仅支持 jpeg 或 png 格式的图片",
+    "files": [
+      "src/components/image-upload/index.tsx:83"
+    ]
+  },
+  {
+    "key": "紧凑",
+    "files": [
+      "src/pages/settings/system-settings.tsx:103"
+    ]
+  },
+  {
+    "key": "近一周",
+    "files": [
+      "src/components/date-range-picker/index.tsx:71"
+    ]
+  },
+  {
+    "key": "静音",
+    "files": [
+      "src/components/music-volume/index.tsx:177"
+    ]
+  },
+  {
+    "key": "居中",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:196",
+      "src/components/full-screen-player/settings-panel.tsx:223"
+    ]
+  },
+  {
+    "key": "开场动画播多久之后进主界面",
+    "files": [
+      "src/pages/settings/system-settings.tsx:492"
+    ]
+  },
+  {
+    "key": "开场动画每次启动都要读一遍，请换一个 64MB 以内的视频",
+    "files": [
+      "src/pages/settings/system-settings.tsx:50"
+    ]
+  },
+  {
+    "key": "开场动画时长",
+    "files": [
+      "src/pages/settings/system-settings.tsx:503"
+    ]
+  },
+  {
+    "key": "开场视频",
+    "files": [
+      "src/pages/settings/system-settings.tsx:523"
+    ]
+  },
+  {
+    "key": "开发者",
+    "files": [
+      "src/pages/settings/developers.tsx:31"
+    ]
+  },
+  {
+    "key": "开机自启动",
+    "files": [
+      "src/pages/settings/system-settings.tsx:548"
+    ]
+  },
+  {
+    "key": "开启桌面歌词",
+    "files": [
+      "src/components/desktop-lyrics-button/index.tsx:48"
+    ]
+  },
+  {
+    "key": "靠上",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:222"
+    ]
+  },
+  {
+    "key": "靠下",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:224"
+    ]
+  },
+  {
+    "key": "靠右",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:197"
+    ]
+  },
+  {
+    "key": "靠左",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:195"
+    ]
+  },
+  {
+    "key": "可选，简单介绍此收藏夹",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:228"
+    ]
+  },
+  {
+    "key": "快捷键设置",
+    "files": [
+      "src/pages/settings/index.tsx:165",
+      "src/pages/settings/shortcut-settings.tsx:96"
+    ]
+  },
+  {
+    "key": "来自网易云账号",
+    "files": [
+      "src/pages/netease/albums/index.tsx:36",
+      "src/pages/netease/liked/index.tsx:49",
+      "src/pages/netease/playlists/index.tsx:36"
+    ]
+  },
+  {
+    "key": "历史记录",
+    "files": [
+      "src/common/constants/menus.tsx:48",
+      "src/pages/history/index.tsx:260"
+    ]
+  },
+  {
+    "key": "列表",
+    "files": [
+      "src/pages/settings/system-settings.tsx:85"
+    ]
+  },
+  {
+    "key": "流行",
+    "files": [
+      "src/pages/music-recommend/index.tsx:282"
+    ]
+  },
+  {
+    "key": "没拿到房间号",
+    "files": [
+      "src/store/netease-together.ts:404"
+    ]
+  },
+  {
+    "key": "没有更多了",
+    "files": [
+      "src/pages/user-profile/dynamic-list/index.tsx:98"
+    ]
+  },
+  {
+    "key": "没有可下载的封面",
+    "files": [
+      "src/components/music-download-button/index.tsx:79"
+    ]
+  },
+  {
+    "key": "密码",
+    "files": [
+      "src/pages/settings/proxy-settings.tsx:86",
+      "src/pages/settings/proxy-settings.tsx:96"
+    ]
+  },
+  {
+    "key": "密码登录",
+    "files": [
+      "src/layout/navbar/login/index.tsx:68"
+    ]
+  },
+  {
+    "key": "密码加密失败，请重试",
+    "files": [
+      "src/layout/navbar/login/password-login.tsx:69"
+    ]
+  },
+  {
+    "key": "面板改为半透明毛玻璃 + 流动彩色底衬（自定义背景色时自动失效）",
+    "files": [
+      "src/pages/settings/system-settings.tsx:243"
+    ]
+  },
+  {
+    "key": "名称",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:207"
+    ]
+  },
+  {
+    "key": "名称为必填项",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:30"
+    ]
+  },
+  {
+    "key": "墨绿",
+    "files": [
+      "electron/ipc/window.ts:49"
+    ]
+  },
+  {
+    "key": "默认排序",
+    "files": [
+      "src/pages/search/user-list/search-header.tsx:13"
+    ]
+  },
+  {
+    "key": "你是房主，退出即结束房间",
+    "files": [
+      "src/components/netease/together-modal.tsx:134"
+    ]
+  },
+  {
+    "key": "你已加入对方的房间",
+    "files": [
+      "src/components/netease/together-modal.tsx:134"
+    ]
+  },
+  {
+    "key": "暖褐",
+    "files": [
+      "electron/ipc/window.ts:50"
+    ]
+  },
+  {
+    "key": "频谱图颜色",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:241"
+    ]
+  },
+  {
+    "key": "启动 app 时盖住整窗的开场画面，播放期间点任意处或按任意键可跳过",
+    "files": [
+      "src/pages/settings/system-settings.tsx:463"
+    ]
+  },
+  {
+    "key": "启用全局快捷键",
+    "files": [
+      "src/pages/settings/shortcut-settings.tsx:136"
+    ]
+  },
+  {
+    "key": "浅白",
+    "files": [
+      "electron/ipc/window.ts:51"
+    ]
+  },
+  {
+    "key": "浅粉",
+    "files": [
+      "electron/ipc/window.ts:34"
+    ]
+  },
+  {
+    "key": "浅黄",
+    "files": [
+      "electron/ipc/window.ts:33"
+    ]
+  },
+  {
+    "key": "浅色",
+    "files": [
+      "src/pages/settings/system-settings.tsx:144"
+    ]
+  },
+  {
+    "key": "切换出错",
+    "files": [
+      "src/common/utils/mini-player.ts:194"
+    ]
+  },
+  {
+    "key": "切换到迷你播放器",
+    "files": [
+      "src/components/window-action/index.tsx:46"
+    ]
+  },
+  {
+    "key": "清除",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:245",
+      "src/pages/settings/system-settings.tsx:538"
+    ]
+  },
+  {
+    "key": "清除背景图",
+    "files": [
+      "src/pages/settings/background-settings.tsx:164"
+    ]
+  },
+  {
+    "key": "清除全部",
+    "files": [
+      "src/layout/navbar/search/index.tsx:138"
+    ]
+  },
+  {
+    "key": "清除失效内容",
+    "files": [
+      "src/pages/video-collection/operation/menu.tsx:62"
+    ]
+  },
+  {
+    "key": "清除已看完",
+    "files": [
+      "src/pages/later/index.tsx:222"
+    ]
+  },
+  {
+    "key": "清空",
+    "files": [
+      "src/pages/play-history/index.tsx:66",
+      "src/pages/play-history/index.tsx:100"
+    ]
+  },
+  {
+    "key": "清空播放列表",
+    "files": [
+      "src/components/music-playlist-drawer/index.tsx:167"
+    ]
+  },
+  {
+    "key": "清空记录",
+    "files": [
+      "src/pages/download-list/index.tsx:128"
+    ]
+  },
+  {
+    "key": "请检查网络后重试",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:84",
+      "src/components/favorites-edit-modal/index.tsx:167"
+    ]
+  },
+  {
+    "key": "请稍后再试",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:79",
+      "src/components/favorites-edit-modal/index.tsx:130",
+      "src/components/favorites-edit-modal/index.tsx:159"
+    ]
+  },
+  {
+    "key": "请使用bilibili手机客户端扫码登录",
+    "files": [
+      "src/layout/navbar/login/qrcode-login.tsx:88"
+    ]
+  },
+  {
+    "key": "请输入分组名称",
+    "files": [
+      "src/pages/follow-list/group-modal.tsx:32",
+      "src/pages/follow-list/group-modal.tsx:73"
+    ]
+  },
+  {
+    "key": "请输入歌曲或歌手名称",
+    "files": [
+      "src/components/lyrics-search-modal/index.tsx:154"
+    ]
+  },
+  {
+    "key": "请输入关键词",
+    "files": [
+      "electron/ipc/netease/api.ts:100",
+      "electron/ipc/netease/api.ts:116",
+      "electron/ipc/netease/api.ts:129"
+    ]
+  },
+  {
+    "key": "请输入密码",
+    "files": [
+      "src/layout/navbar/login/password-login.tsx:126",
+      "src/layout/navbar/login/password-login.tsx:135"
+    ]
+  },
+  {
+    "key": "请输入收藏夹名称",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:212"
+    ]
+  },
+  {
+    "key": "请输入手机号",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:166",
+      "src/layout/navbar/login/code-login.tsx:183"
+    ]
+  },
+  {
+    "key": "请输入验证码",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:234"
+    ]
+  },
+  {
+    "key": "请输入账号",
+    "files": [
+      "src/layout/navbar/login/password-login.tsx:106",
+      "src/layout/navbar/login/password-login.tsx:114"
+    ]
+  },
+  {
+    "key": "请先登录",
+    "files": [
+      "src/pages/history/index.tsx:64"
+    ]
+  },
+  {
+    "key": "请先登录网易云账号",
+    "files": [
+      "electron/ipc/netease/api.ts:419",
+      "electron/ipc/netease/together.ts:38"
+    ]
+  },
+  {
+    "key": "请先获取验证码",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:134"
+    ]
+  },
+  {
+    "key": "请先粘贴 Cookie",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:99"
+    ]
+  },
+  {
+    "key": "请粘贴 Cookie",
+    "files": [
+      "electron/ipc/netease/api.ts:476"
+    ]
+  },
+  {
+    "key": "取消",
+    "files": [
+      "src/components/confirm-modal/index.tsx:35",
+      "src/components/favorites-edit-modal/index.tsx:263",
+      "src/components/favorites-select-modal/index.tsx:217",
+      "src/components/image-upload/crop-modal.tsx:139",
+      "src/pages/follow-list/group-modal.tsx:77",
+      "src/pages/follow-list/set-group-modal.tsx:96"
+    ]
+  },
+  {
+    "key": "取消关注",
+    "files": [
+      "src/pages/follow-list/user-card.tsx:27",
+      "src/pages/follow-list/user-card.tsx:107",
+      "src/pages/follow-list/user-card.tsx:108",
+      "src/pages/follow-list/user-card.tsx:111"
+    ]
+  },
+  {
+    "key": "取消关注 {0}",
+    "files": [
+      "src/pages/follow-list/user-card.tsx:25"
+    ]
+  },
+  {
+    "key": "取消关注成功",
+    "files": [
+      "src/pages/follow-list/user-card.tsx:39"
+    ]
+  },
+  {
+    "key": "取消关注失败",
+    "files": [
+      "src/pages/follow-list/user-card.tsx:33",
+      "src/pages/follow-list/user-card.tsx:46"
+    ]
+  },
+  {
+    "key": "取消静音",
+    "files": [
+      "src/components/music-volume/index.tsx:177"
+    ]
+  },
+  {
+    "key": "取消收藏",
+    "files": [
+      "src/layout/side/collection/index.tsx:111",
+      "src/pages/video-collection/favorites/menu.tsx:30",
+      "src/pages/video-collection/operation/fav-toggle.tsx:14"
+    ]
+  },
+  {
+    "key": "取消收藏失败",
+    "files": [
+      "src/layout/side/collection/index.tsx:288",
+      "src/layout/side/collection/index.tsx:291"
+    ]
+  },
+  {
+    "key": "取消喜欢",
+    "files": [
+      "src/components/netease/track-menu.ts:12"
+    ]
+  },
+  {
+    "key": "全部播放",
+    "files": [
+      "src/pages/music-recommend/index.tsx:292",
+      "src/pages/search/video-list/search-header.tsx:63"
+    ]
+  },
+  {
+    "key": "全部关注",
+    "files": [
+      "src/pages/follow-list/index.tsx:206"
+    ]
+  },
+  {
+    "key": "全部关注{0}",
+    "files": [
+      "src/pages/follow-list/index.tsx:224"
+    ]
+  },
+  {
+    "key": "全部目录",
+    "files": [
+      "src/pages/local-music/index.tsx:227"
+    ]
+  },
+  {
+    "key": "全部时间",
+    "files": [
+      "src/components/date-range-picker/index.tsx:68"
+    ]
+  },
+  {
+    "key": "全局快捷键",
+    "files": [
+      "src/pages/settings/shortcut-settings.tsx:105"
+    ]
+  },
+  {
+    "key": "全局圆角",
+    "files": [
+      "src/pages/settings/system-settings.tsx:224"
+    ]
+  },
+  {
+    "key": "全屏播放器背景",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:288"
+    ]
+  },
+  {
+    "key": "全选",
+    "files": [
+      "src/components/select-all-checkbox-group/index.tsx:42",
+      "src/components/video-pages-download-select-modal/index.tsx:130",
+      "src/components/video-pages-download-select-modal/index.tsx:141",
+      "src/pages/video-collection/download-select-modal/index.tsx:160"
+    ]
+  },
+  {
+    "key": "缺少歌曲 ID，无法预览",
+    "files": [
+      "src/components/lyrics-search-modal/netease-tab.tsx:41"
+    ]
+  },
+  {
+    "key": "缺少用户信息",
+    "files": [
+      "src/pages/user-profile/post/index.tsx:158"
+    ]
+  },
+  {
+    "key": "确认",
+    "files": [
+      "src/components/confirm-modal/index.tsx:34",
+      "src/components/favorites-select-modal/index.tsx:224"
+    ]
+  },
+  {
+    "key": "确认清除失效内容吗？",
+    "files": [
+      "src/pages/video-collection/operation/menu.tsx:65"
+    ]
+  },
+  {
+    "key": "确认清空全部播放记录？",
+    "files": [
+      "src/pages/play-history/index.tsx:64"
+    ]
+  },
+  {
+    "key": "确认取消收藏{0}？",
+    "files": [
+      "src/pages/video-collection/favorites/index.tsx:332"
+    ]
+  },
+  {
+    "key": "确认取消收藏「{0}」吗？",
+    "files": [
+      "src/layout/side/collection/index.tsx:277"
+    ]
+  },
+  {
+    "key": "确认取消收藏吗？",
+    "files": [
+      "src/layout/side/collection/index.tsx:277"
+    ]
+  },
+  {
+    "key": "确认删除「{0}」吗？",
+    "files": [
+      "src/layout/side/collection/index.tsx:250"
+    ]
+  },
+  {
+    "key": "确认删除当前收藏夹吗？",
+    "files": [
+      "src/pages/video-collection/operation/menu.tsx:83"
+    ]
+  },
+  {
+    "key": "确认删除该收藏夹吗？",
+    "files": [
+      "src/layout/side/collection/index.tsx:250"
+    ]
+  },
+  {
+    "key": "确认删除吗？",
+    "files": [
+      "src/pages/download-list/actions.tsx:143"
+    ]
+  },
+  {
+    "key": "确认删除所有历史记录？",
+    "files": [
+      "src/pages/history/index.tsx:242"
+    ]
+  },
+  {
+    "key": "确认退出登录？",
+    "files": [
+      "src/layout/navbar/user/index.tsx:149"
+    ]
+  },
+  {
+    "key": "确认移除“{0}”",
+    "files": [
+      "src/pages/later/index.tsx:124"
+    ]
+  },
+  {
+    "key": "热门歌单",
+    "files": [
+      "src/common/constants/menus.tsx:100",
+      "src/pages/netease/hot/index.tsx:34"
+    ]
+  },
+  {
+    "key": "任务出错",
+    "files": [
+      "src/pages/download-list/status-desc.ts:10"
+    ]
+  },
+  {
+    "key": "扫码登录",
+    "files": [
+      "src/layout/navbar/login/qrcode-login.tsx:59",
+      "src/pages/settings/netease-settings.tsx:160"
+    ]
+  },
+  {
+    "key": "删除",
+    "files": [
+      "src/layout/side/collection/index.tsx:99",
+      "src/pages/download-list/actions.tsx:129",
+      "src/pages/download-list/actions.tsx:145",
+      "src/pages/follow-list/index.tsx:172",
+      "src/pages/history/index.tsx:220",
+      "src/pages/history/index.tsx:243",
+      "src/pages/history/menu.tsx:46",
+      "src/pages/later/index.tsx:201",
+      "src/pages/local-music/index.tsx:179",
+      "src/pages/video-collection/operation/menu.tsx:78"
+    ]
+  },
+  {
+    "key": "删除成功",
+    "files": [
+      "src/layout/side/collection/index.tsx:258"
+    ]
+  },
+  {
+    "key": "删除分组",
+    "files": [
+      "src/pages/follow-list/index.tsx:265"
+    ]
+  },
+  {
+    "key": "删除分组{0}",
+    "files": [
+      "src/pages/follow-list/index.tsx:170"
+    ]
+  },
+  {
+    "key": "删除分组成功",
+    "files": [
+      "src/pages/follow-list/index.tsx:177"
+    ]
+  },
+  {
+    "key": "删除分组失败",
+    "files": [
+      "src/pages/follow-list/index.tsx:184",
+      "src/pages/follow-list/index.tsx:188"
+    ]
+  },
+  {
+    "key": "删除记录{0}",
+    "files": [
+      "src/pages/history/index.tsx:219"
+    ]
+  },
+  {
+    "key": "删除失败",
+    "files": [
+      "src/layout/side/collection/index.tsx:262",
+      "src/layout/side/collection/index.tsx:265"
+    ]
+  },
+  {
+    "key": "删除文件",
+    "files": [
+      "src/pages/local-music/index.tsx:169",
+      "src/pages/local-music/item.tsx:28"
+    ]
+  },
+  {
+    "key": "删除已观看完的视频？",
+    "files": [
+      "src/pages/later/index.tsx:200"
+    ]
+  },
+  {
+    "key": "上报本机播放记录",
+    "files": [
+      "src/pages/settings/system-settings.tsx:335"
+    ]
+  },
+  {
+    "key": "上传",
+    "files": [
+      "src/components/image-upload/crop-modal.tsx:142"
+    ]
+  },
+  {
+    "key": "上传失败",
+    "files": [
+      "src/components/image-upload/crop-modal.tsx:89"
+    ]
+  },
+  {
+    "key": "上传失败，请稍后重试",
+    "files": [
+      "src/components/image-upload/crop-modal.tsx:95"
+    ]
+  },
+  {
+    "key": "上午好",
+    "files": [
+      "src/pages/home/index.tsx:36"
+    ]
+  },
+  {
+    "key": "上一曲",
+    "files": [
+      "electron/windows/tray.ts:112"
+    ]
+  },
+  {
+    "key": "上一首",
+    "files": [
+      "electron/windows/thumbar.ts:22"
+    ]
+  },
+  {
+    "key": "稍后再看",
+    "files": [
+      "src/common/constants/menus.tsx:41",
+      "src/pages/later/index.tsx:220"
+    ]
+  },
+  {
+    "key": "设置",
+    "files": [
+      "src/components/full-screen-player/index.tsx:378",
+      "src/components/full-screen-player/index.tsx:378",
+      "src/layout/navbar/user/index.tsx:105",
+      "src/pages/settings/index.tsx:151",
+      "electron/windows/tray.ts:127"
+    ]
+  },
+  {
+    "key": "设置侧边菜单项显示和隐藏",
+    "files": [
+      "src/pages/settings/menu-settings.tsx:22"
+    ]
+  },
+  {
+    "key": "设置分组",
+    "files": [
+      "src/pages/follow-list/set-group-modal.tsx:84",
+      "src/pages/follow-list/user-card.tsx:95",
+      "src/pages/follow-list/user-card.tsx:96",
+      "src/pages/follow-list/user-card.tsx:99"
+    ]
+  },
+  {
+    "key": "设置分组成功",
+    "files": [
+      "src/pages/follow-list/set-group-modal.tsx:58"
+    ]
+  },
+  {
+    "key": "设置分组失败",
+    "files": [
+      "src/pages/follow-list/set-group-modal.tsx:65",
+      "src/pages/follow-list/set-group-modal.tsx:71"
+    ]
+  },
+  {
+    "key": "设置选项",
+    "files": [
+      "src/pages/settings/index.tsx:152"
+    ]
+  },
+  {
+    "key": "设置已应用",
+    "files": [
+      "src/pages/settings/export-import.tsx:56"
+    ]
+  },
+  {
+    "key": "深灰",
+    "files": [
+      "electron/ipc/window.ts:46"
+    ]
+  },
+  {
+    "key": "深蓝",
+    "files": [
+      "electron/ipc/window.ts:48"
+    ]
+  },
+  {
+    "key": "深色",
+    "files": [
+      "src/pages/settings/system-settings.tsx:153"
+    ]
+  },
+  {
+    "key": "神秘听众",
+    "files": [
+      "src/components/netease/together-modal.tsx:131"
+    ]
+  },
+  {
+    "key": "时间范围",
+    "files": [
+      "src/components/date-range-picker/index.tsx:60"
+    ]
+  },
+  {
+    "key": "时长",
+    "files": [
+      "src/components/lyrics-search-modal/lrclib-tab.tsx:70",
+      "src/components/lyrics-search-modal/netease-tab.tsx:106",
+      "src/components/music-list-item/header.tsx:33",
+      "src/pages/local-music/index.tsx:258"
+    ]
+  },
+  {
+    "key": "视频",
+    "files": [
+      "src/pages/download-list/index.tsx:125",
+      "src/pages/search/search-type.tsx:8",
+      "src/pages/video-collection/download-select-modal/index.tsx:106",
+      "electron/ipc/window.ts:187"
+    ]
+  },
+  {
+    "key": "视频合集",
+    "files": [
+      "src/pages/video-collection/header/index.tsx:93"
+    ]
+  },
+  {
+    "key": "视频太大了",
+    "files": [
+      "src/pages/settings/system-settings.tsx:49"
+    ]
+  },
+  {
+    "key": "视频系列",
+    "files": [
+      "src/pages/video-collection/header/index.tsx:92"
+    ]
+  },
+  {
+    "key": "收藏",
+    "files": [
+      "src/common/utils/favorite.ts:49",
+      "src/components/music-playlist-drawer/menu.tsx:16",
+      "src/pages/music-recommend/menu.tsx:15",
+      "src/pages/search/video-list/index.tsx:128",
+      "src/pages/search/video-list/menu.tsx:25",
+      "src/pages/user-profile/post/menu.tsx:8",
+      "src/pages/video-collection/collections/menu.tsx:25",
+      "src/pages/video-collection/favorites/menu.tsx:25",
+      "src/pages/video-collection/operation/fav-toggle.tsx:14"
+    ]
+  },
+  {
+    "key": "收藏操作失败：{0}",
+    "files": [
+      "electron/ipc/netease/api.ts:430"
+    ]
+  },
+  {
+    "key": "收藏夹",
+    "files": [
+      "src/layout/side/collection/index.tsx:170",
+      "src/pages/user-profile/index.tsx:106"
+    ]
+  },
+  {
+    "key": "收藏夹 ID 无效",
+    "files": [
+      "src/pages/video-collection/favorites/index.tsx:209",
+      "src/pages/video-collection/favorites/index.tsx:235"
+    ]
+  },
+  {
+    "key": "收藏夹操作",
+    "files": [
+      "src/pages/video-collection/operation/menu.tsx:118"
+    ]
+  },
+  {
+    "key": "收藏夹为空",
+    "files": [
+      "src/pages/video-collection/favorites/index.tsx:215",
+      "src/pages/video-collection/favorites/index.tsx:241"
+    ]
+  },
+  {
+    "key": "收藏时间",
+    "files": [
+      "src/pages/video-collection/favorites/list.tsx:39"
+    ]
+  },
+  {
+    "key": "收起侧边栏",
+    "files": [
+      "src/layout/side/index.tsx:183"
+    ]
+  },
+  {
+    "key": "手动指定 FFmpeg 可执行文件路径",
+    "files": [
+      "src/pages/settings/system-settings.tsx:378"
+    ]
+  },
+  {
+    "key": "手机号格式不正确",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:169"
+    ]
+  },
+  {
+    "key": "首",
+    "files": [
+      "src/pages/netease/playlist-detail/index.tsx:45"
+    ]
+  },
+  {
+    "key": "数据刷新成功",
+    "files": [
+      "src/layout/navbar/user/index.tsx:122"
+    ]
+  },
+  {
+    "key": "数据显示样式",
+    "files": [
+      "src/pages/settings/system-settings.tsx:65"
+    ]
+  },
+  {
+    "key": "数据展示",
+    "files": [
+      "src/pages/settings/system-settings.tsx:73"
+    ]
+  },
+  {
+    "key": "数值越大面板越透（越\"薄\"），越小越厚实",
+    "files": [
+      "src/pages/settings/system-settings.tsx:255"
+    ]
+  },
+  {
+    "key": "刷新",
+    "files": [
+      "src/pages/local-music/index.tsx:238"
+    ]
+  },
+  {
+    "key": "刷新播放链接失败",
+    "files": [
+      "src/store/play-list.ts:1130"
+    ]
+  },
+  {
+    "key": "刷新二维码",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:184"
+    ]
+  },
+  {
+    "key": "刷新数据",
+    "files": [
+      "src/layout/navbar/user/index.tsx:111"
+    ]
+  },
+  {
+    "key": "刷新数据失败",
+    "files": [
+      "src/layout/navbar/user/index.tsx:127"
+    ]
+  },
+  {
+    "key": "顺序播放",
+    "files": [
+      "src/common/constants/audio.tsx:30"
+    ]
+  },
+  {
+    "key": "私密",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:247",
+      "src/pages/video-collection/header/index.tsx:90"
+    ]
+  },
+  {
+    "key": "搜索",
+    "files": [
+      "src/components/lyrics-search-modal/index.tsx:160",
+      "src/components/search-button/index.tsx:53",
+      "src/components/search-button/index.tsx:84",
+      "src/layout/navbar/search/index.tsx:91",
+      "src/pages/settings/system-settings.tsx:402"
+    ]
+  },
+  {
+    "key": "搜索【{0}】的结果",
+    "files": [
+      "src/pages/search/index.tsx:38"
+    ]
+  },
+  {
+    "key": "搜索标题/UP主名称",
+    "files": [
+      "src/pages/history/search.tsx:28",
+      "src/pages/later/search.tsx:29"
+    ]
+  },
+  {
+    "key": "搜索分集",
+    "files": [
+      "src/components/full-screen-player/page-list.tsx:40",
+      "src/layout/playbar/left/page-list.tsx:41"
+    ]
+  },
+  {
+    "key": "搜索歌词",
+    "files": [
+      "src/components/lyrics-search-modal/index.tsx:148"
+    ]
+  },
+  {
+    "key": "搜索关注",
+    "files": [
+      "src/pages/follow-list/index.tsx:287"
+    ]
+  },
+  {
+    "key": "搜索和播放走哪家。B 站能搜视频/音频（含收藏夹这些账号数据），网易云只能搜单曲",
+    "files": [
+      "src/pages/settings/system-settings.tsx:408"
+    ]
+  },
+  {
+    "key": "搜索建议",
+    "files": [
+      "src/layout/navbar/search/index.tsx:112"
+    ]
+  },
+  {
+    "key": "搜索历史",
+    "files": [
+      "src/layout/navbar/search/index.tsx:127"
+    ]
+  },
+  {
+    "key": "搜索失败",
+    "files": [
+      "electron/ipc/netease/api.ts:106",
+      "electron/ipc/netease/api.ts:122",
+      "electron/ipc/netease/api.ts:135"
+    ]
+  },
+  {
+    "key": "随机播放",
+    "files": [
+      "src/common/constants/audio.tsx:40"
+    ]
+  },
+  {
+    "key": "锁定（鼠标穿透）",
+    "files": [
+      "src/pages/desktop-lyrics/index.tsx:503",
+      "src/pages/settings/desktop-lyrics-settings.tsx:340",
+      "electron/ipc/window.ts:422"
+    ]
+  },
+  {
+    "key": "锁定后整条歌词都不吃鼠标事件，不会挡住下面的操作。默认关闭 ——\n                锁定状态下拖不动歌词，所以想挪位置时记得先解锁",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:342"
+    ]
+  },
+  {
+    "key": "提交",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:266"
+    ]
+  },
+  {
+    "key": "添加到播放列表",
+    "files": [
+      "src/components/netease/track-menu.ts:14",
+      "src/layout/side/collection/index.tsx:96",
+      "src/layout/side/collection/index.tsx:107",
+      "src/pages/history/menu.tsx:23",
+      "src/pages/later/menu.tsx:23",
+      "src/pages/local-music/index.tsx:208",
+      "src/pages/local-music/item.tsx:26",
+      "src/pages/music-recommend/menu.tsx:26",
+      "src/pages/search/video-list/menu.tsx:20",
+      "src/pages/user-profile/post/menu.tsx:18",
+      "src/pages/video-collection/collections/menu.tsx:20",
+      "src/pages/video-collection/favorites/menu.tsx:42",
+      "src/pages/video-collection/operation/index.tsx:44"
+    ]
+  },
+  {
+    "key": "添加到播放列表失败",
+    "files": [
+      "src/layout/side/collection/index.tsx:172",
+      "src/layout/side/collection/index.tsx:230"
+    ]
+  },
+  {
+    "key": "添加到下一首播放",
+    "files": [
+      "src/pages/dynamic-feed/more-menu.tsx:22"
+    ]
+  },
+  {
+    "key": "添加目录",
+    "files": [
+      "src/pages/local-music/index.tsx:190"
+    ]
+  },
+  {
+    "key": "添加失败：无法获取播放信息",
+    "files": [
+      "src/store/play-list.ts:922"
+    ]
+  },
+  {
+    "key": "同步播放列表",
+    "files": [
+      "electron/ipc/netease/together.ts:197"
+    ]
+  },
+  {
+    "key": "同步播放列表失败",
+    "files": [
+      "src/store/netease-together.ts:513"
+    ]
+  },
+  {
+    "key": "同步播放状态",
+    "files": [
+      "electron/ipc/netease/together.ts:217"
+    ]
+  },
+  {
+    "key": "投稿",
+    "files": [
+      "src/pages/user-profile/index.tsx:101"
+    ]
+  },
+  {
+    "key": "投稿时间",
+    "files": [
+      "src/components/music-list-item/header.tsx:32"
+    ]
+  },
+  {
+    "key": "透明",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:205"
+    ]
+  },
+  {
+    "key": "透明（只有字）",
+    "files": [
+      "electron/ipc/window.ts:471"
+    ]
+  },
+  {
+    "key": "透明背景",
+    "files": [
+      "src/pages/settings/background-settings.tsx:81"
+    ]
+  },
+  {
+    "key": "图标淡入",
+    "files": [
+      "src/pages/settings/system-settings.tsx:478"
+    ]
+  },
+  {
+    "key": "图标呼吸",
+    "files": [
+      "src/pages/settings/system-settings.tsx:479"
+    ]
+  },
+  {
+    "key": "图片",
+    "files": [
+      "electron/ipc/window.ts:168",
+      "electron/ipc/window.ts:407"
+    ]
+  },
+  {
+    "key": "图片大小需小于等于 5MB",
+    "files": [
+      "src/components/image-upload/index.tsx:90"
+    ]
+  },
+  {
+    "key": "推荐音乐",
+    "files": [
+      "src/common/constants/menus.tsx:28"
+    ]
+  },
+  {
+    "key": "退出",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:146"
+    ]
+  },
+  {
+    "key": "退出程序",
+    "files": [
+      "electron/windows/tray.ts:142"
+    ]
+  },
+  {
+    "key": "退出登录",
+    "files": [
+      "src/layout/navbar/user/index.tsx:142"
+    ]
+  },
+  {
+    "key": "退出登录失败",
+    "files": [
+      "src/layout/navbar/user/index.tsx:81"
+    ]
+  },
+  {
+    "key": "退出房间",
+    "files": [
+      "src/components/netease/together-modal.tsx:178"
+    ]
+  },
+  {
+    "key": "外观",
+    "files": [
+      "src/pages/settings/system-settings.tsx:61"
+    ]
+  },
+  {
+    "key": "晚上好",
+    "files": [
+      "src/pages/home/index.tsx:39",
+      "src/pages/home/index.tsx:42"
+    ]
+  },
+  {
+    "key": "网格",
+    "files": [
+      "src/pages/settings/system-settings.tsx:94"
+    ]
+  },
+  {
+    "key": "网络错误",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:84",
+      "src/components/favorites-edit-modal/index.tsx:166"
+    ]
+  },
+  {
+    "key": "网络异常，稍后重试",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:122",
+      "src/layout/navbar/login/code-login.tsx:156",
+      "src/layout/navbar/login/password-login.tsx:97"
+    ]
+  },
+  {
+    "key": "网易云",
+    "files": [
+      "src/components/lyrics-search-modal/index.tsx:177",
+      "src/layout/side/netease-menu/index.tsx:33",
+      "src/pages/play-history/index.tsx:21",
+      "src/pages/search/index.tsx:17",
+      "src/pages/search/netease-list.tsx:91",
+      "src/pages/settings/menu-settings.tsx:62",
+      "src/pages/settings/menu-settings.tsx:85",
+      "src/pages/settings/system-settings.tsx:418",
+      "electron/ipc/netease/client.ts:79",
+      "electron/ipc/netease/client.ts:115",
+      "electron/ipc/netease/client.ts:194"
+    ]
+  },
+  {
+    "key": "网易云 · 共 {0} 首",
+    "files": [
+      "src/pages/netease/album-detail/index.tsx:69",
+      "src/pages/netease/liked/index.tsx:70",
+      "src/pages/netease/playlist-detail/index.tsx:66",
+      "src/pages/search/netease-list.tsx:91"
+    ]
+  },
+  {
+    "key": "网易云 Cookie",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:199"
+    ]
+  },
+  {
+    "key": "网易云单曲",
+    "files": [
+      "src/pages/search/index.tsx:45"
+    ]
+  },
+  {
+    "key": "网易云当前的热门歌单，不需要登录",
+    "files": [
+      "src/pages/netease/hot/index.tsx:35"
+    ]
+  },
+  {
+    "key": "网易云接口返回 HTTP {0}",
+    "files": [
+      "electron/ipc/netease/client.ts:78",
+      "electron/ipc/netease/client.ts:188"
+    ]
+  },
+  {
+    "key": "网易云搜索失败",
+    "files": [
+      "src/components/lyrics-search-modal/index.tsx:75"
+    ]
+  },
+  {
+    "key": "网易云搜索失败，检查一下网络或代理",
+    "files": [
+      "src/pages/search/netease-list.tsx:54"
+    ]
+  },
+  {
+    "key": "网易云音乐",
+    "files": [
+      "src/pages/settings/index.tsx:159"
+    ]
+  },
+  {
+    "key": "未登录",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:151"
+    ]
+  },
+  {
+    "key": "未登录：请先在设置中登录网易云账号",
+    "files": [
+      "electron/ipc/netease/api.ts:261",
+      "electron/ipc/netease/api.ts:282"
+    ]
+  },
+  {
+    "key": "未命名歌单",
+    "files": [
+      "electron/ipc/netease/api.ts:205"
+    ]
+  },
+  {
+    "key": "未命名合集",
+    "files": [
+      "src/pages/video-collection/collections/index.tsx:142"
+    ]
+  },
+  {
+    "key": "未命名收藏夹",
+    "files": [
+      "src/pages/video-collection/favorites/index.tsx:288"
+    ]
+  },
+  {
+    "key": "未在列表中找到当前播放的歌曲",
+    "files": [
+      "src/components/music-playlist-drawer/index.tsx:120"
+    ]
+  },
+  {
+    "key": "未找到「我喜欢的音乐」歌单",
+    "files": [
+      "electron/ipc/netease/api.ts:392"
+    ]
+  },
+  {
+    "key": "未找到歌词内容",
+    "files": [
+      "src/components/lyrics-search-modal/lrclib-tab.tsx:30",
+      "src/components/lyrics-search-modal/netease-tab.tsx:56"
+    ]
+  },
+  {
+    "key": "未知",
+    "files": [
+      "src/components/music-list-item/index.tsx:126",
+      "src/components/music-list-item/index.tsx:146",
+      "src/components/music-playlist-drawer/list-item.tsx:67",
+      "src/layout/playbar/left/index.tsx:96",
+      "src/pages/history/item.tsx:113",
+      "src/pages/history/item.tsx:132"
+    ]
+  },
+  {
+    "key": "未知错误",
+    "files": [
+      "src/components/music-download-button/index.tsx:105"
+    ]
+  },
+  {
+    "key": "未知歌曲",
+    "files": [
+      "src/components/lyrics-search-modal/netease-tab.tsx:61",
+      "electron/ipc/netease/api.ts:43"
+    ]
+  },
+  {
+    "key": "未知专辑",
+    "files": [
+      "electron/ipc/netease/api.ts:140",
+      "electron/ipc/netease/api.ts:250",
+      "electron/ipc/netease/api.ts:296"
+    ]
+  },
+  {
+    "key": "文件",
+    "files": [
+      "src/pages/download-list/index.tsx:151"
+    ]
+  },
+  {
+    "key": "文件解析错误或格式不正确",
+    "files": [
+      "src/pages/settings/export-import.tsx:59"
+    ]
+  },
+  {
+    "key": "文件路径不存在",
+    "files": [
+      "src/pages/download-list/actions.tsx:79",
+      "electron/ipc/dialog.ts:21"
+    ]
+  },
+  {
+    "key": "文字颜色",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:165",
+      "electron/ipc/window.ts:457"
+    ]
+  },
+  {
+    "key": "问题反馈",
+    "files": [
+      "src/layout/navbar/user/index.tsx:135"
+    ]
+  },
+  {
+    "key": "我创建的",
+    "files": [
+      "src/layout/side/collection/index.tsx:503"
+    ]
+  },
+  {
+    "key": "我的歌单",
+    "files": [
+      "src/common/constants/menus.tsx:86",
+      "src/pages/netease/playlists/index.tsx:35"
+    ]
+  },
+  {
+    "key": "我的关注",
+    "files": [
+      "src/common/constants/menus.tsx:34",
+      "src/pages/follow-list/index.tsx:206"
+    ]
+  },
+  {
+    "key": "我的专辑",
+    "files": [
+      "src/common/constants/menus.tsx:93",
+      "src/pages/netease/albums/index.tsx:35"
+    ]
+  },
+  {
+    "key": "我收藏的",
+    "files": [
+      "src/layout/side/collection/index.tsx:531"
+    ]
+  },
+  {
+    "key": "我喜欢的音乐",
+    "files": [
+      "src/common/constants/menus.tsx:79",
+      "src/pages/netease/liked/index.tsx:47"
+    ]
+  },
+  {
+    "key": "无动画",
+    "files": [
+      "src/pages/settings/system-settings.tsx:476"
+    ]
+  },
+  {
+    "key": "无法播放这首：可能需要网易云会员，或该曲目已下架",
+    "files": [
+      "src/store/play-list.ts:405",
+      "src/store/play-list.ts:1323"
+    ]
+  },
+  {
+    "key": "无法获取动态数据",
+    "files": [
+      "src/pages/dynamic-feed/index.tsx:64"
+    ]
+  },
+  {
+    "key": "无法获取画布上下文",
+    "files": [
+      "src/components/image-upload/crop-modal.tsx:54"
+    ]
+  },
+  {
+    "key": "无法获取视频分集信息",
+    "files": [
+      "electron/ipc/download/download-queue.ts:107"
+    ]
+  },
+  {
+    "key": "无法获取收藏夹全部歌曲",
+    "files": [
+      "src/pages/video-collection/favorites/index.tsx:227",
+      "src/pages/video-collection/favorites/index.tsx:254"
+    ]
+  },
+  {
+    "key": "无法获取网易云播放链接",
+    "files": [
+      "src/store/play-list.ts:399",
+      "src/store/play-list.ts:1317"
+    ]
+  },
+  {
+    "key": "无法获取下载地址：这首歌可能需要网易云会员，或已下架",
+    "files": [
+      "src/common/utils/download.ts:104"
+    ]
+  },
+  {
+    "key": "无法获取音频播放链接",
+    "files": [
+      "src/store/play-list.ts:358",
+      "src/store/play-list.ts:365",
+      "src/store/play-list.ts:427",
+      "src/store/play-list.ts:433",
+      "src/store/play-list.ts:1224",
+      "src/store/play-list.ts:1231",
+      "src/store/play-list.ts:1266",
+      "src/store/play-list.ts:1273",
+      "src/store/play-list.ts:1276",
+      "src/store/play-list.ts:1282",
+      "src/store/play-list.ts:1345",
+      "src/store/play-list.ts:1351"
+    ]
+  },
+  {
+    "key": "无法加载动态",
+    "files": [
+      "src/pages/dynamic-feed/index.tsx:60"
+    ]
+  },
+  {
+    "key": "无法加载关注列表",
+    "files": [
+      "src/pages/dynamic-feed/author-list.tsx:51",
+      "src/pages/dynamic-feed/author-list.tsx:54"
+    ]
+  },
+  {
+    "key": "无法识别收藏夹类型",
+    "files": [
+      "src/layout/side/collection/index.tsx:334",
+      "src/layout/side/collection/index.tsx:343"
+    ]
+  },
+  {
+    "key": "无法下载",
+    "files": [
+      "src/components/music-download-button/index.tsx:30",
+      "src/components/music-playlist-drawer/index.tsx:61"
+    ]
+  },
+  {
+    "key": "无损",
+    "files": [
+      "src/layout/playbar/left/index.tsx:77",
+      "src/pages/settings/system-settings.tsx:323"
+    ]
+  },
+  {
+    "key": "喜欢",
+    "files": [
+      "src/components/netease/track-menu.ts:12"
+    ]
+  },
+  {
+    "key": "系列",
+    "files": [
+      "src/pages/user-profile/grid-card/index.tsx:33"
+    ]
+  },
+  {
+    "key": "系统",
+    "files": [
+      "src/pages/settings/system-settings.tsx:439"
+    ]
+  },
+  {
+    "key": "系统登录后自动启动应用",
+    "files": [
+      "src/pages/settings/system-settings.tsx:549"
+    ]
+  },
+  {
+    "key": "系统默认",
+    "files": [
+      "src/components/font-select/index.tsx:18"
+    ]
+  },
+  {
+    "key": "系统默认菜单",
+    "files": [
+      "src/pages/settings/menu-settings.tsx:25",
+      "src/pages/settings/menu-settings.tsx:48"
+    ]
+  },
+  {
+    "key": "下午好",
+    "files": [
+      "src/pages/home/index.tsx:38"
+    ]
+  },
+  {
+    "key": "下一曲",
+    "files": [
+      "electron/windows/tray.ts:116"
+    ]
+  },
+  {
+    "key": "下一首",
+    "files": [
+      "electron/windows/thumbar.ts:32"
+    ]
+  },
+  {
+    "key": "下一首播放",
+    "files": [
+      "src/components/netease/track-menu.ts:13",
+      "src/pages/history/menu.tsx:17",
+      "src/pages/later/menu.tsx:17",
+      "src/pages/local-music/item.tsx:25",
+      "src/pages/music-recommend/menu.tsx:21",
+      "src/pages/search/video-list/menu.tsx:15",
+      "src/pages/user-profile/post/menu.tsx:13",
+      "src/pages/video-collection/collections/menu.tsx:15",
+      "src/pages/video-collection/favorites/menu.tsx:36"
+    ]
+  },
+  {
+    "key": "下载",
+    "files": [
+      "src/components/video-pages-download-select-modal/index.tsx:144",
+      "src/pages/settings/system-settings.tsx:346",
+      "src/pages/video-collection/download-select-modal/index.tsx:163"
+    ]
+  },
+  {
+    "key": "下载封面",
+    "files": [
+      "src/components/music-download-button/index.tsx:170",
+      "src/components/music-download-button/index.tsx:173"
+    ]
+  },
+  {
+    "key": "下载记录",
+    "files": [
+      "src/common/constants/menus.tsx:61",
+      "src/pages/download-list/index.tsx:98"
+    ]
+  },
+  {
+    "key": "下载列表",
+    "files": [
+      "src/pages/download-list/index.tsx:111"
+    ]
+  },
+  {
+    "key": "下载目录",
+    "files": [
+      "src/pages/settings/system-settings.tsx:349"
+    ]
+  },
+  {
+    "key": "下载全部视频",
+    "files": [
+      "src/pages/video-collection/operation/menu.tsx:52"
+    ]
+  },
+  {
+    "key": "下载全部音频",
+    "files": [
+      "src/pages/video-collection/operation/menu.tsx:42"
+    ]
+  },
+  {
+    "key": "下载任务已添加",
+    "files": [
+      "src/pages/video-collection/download-select-modal/index.tsx:91"
+    ]
+  },
+  {
+    "key": "下载失败，状态码 {0}",
+    "files": [
+      "src/components/music-download-button/index.tsx:89"
+    ]
+  },
+  {
+    "key": "下载时间",
+    "files": [
+      "src/pages/download-list/index.tsx:157"
+    ]
+  },
+  {
+    "key": "下载视频",
+    "files": [
+      "src/components/music-download-button/index.tsx:161",
+      "src/components/music-download-button/index.tsx:165",
+      "src/components/music-playlist-drawer/menu.tsx:29",
+      "src/pages/dynamic-feed/more-menu.tsx:28",
+      "src/pages/history/menu.tsx:35",
+      "src/pages/later/menu.tsx:35",
+      "src/pages/music-recommend/menu.tsx:36",
+      "src/pages/search/video-list/menu.tsx:35",
+      "src/pages/user-profile/post/menu.tsx:28",
+      "src/pages/video-collection/collections/menu.tsx:35",
+      "src/pages/video-collection/favorites/menu.tsx:54"
+    ]
+  },
+  {
+    "key": "下载完成",
+    "files": [
+      "src/pages/download-list/progress.tsx:21"
+    ]
+  },
+  {
+    "key": "下载完成，合并分块中",
+    "files": [
+      "src/pages/download-list/status-desc.ts:5"
+    ]
+  },
+  {
+    "key": "下载选项",
+    "files": [
+      "src/components/music-download-button/index.tsx:137"
+    ]
+  },
+  {
+    "key": "下载音频",
+    "files": [
+      "src/components/music-download-button/index.tsx:153",
+      "src/components/music-download-button/index.tsx:156",
+      "src/components/music-playlist-drawer/menu.tsx:22",
+      "src/pages/dynamic-feed/more-menu.tsx:25",
+      "src/pages/history/menu.tsx:29",
+      "src/pages/later/menu.tsx:29",
+      "src/pages/music-recommend/menu.tsx:31",
+      "src/pages/search/video-list/menu.tsx:30",
+      "src/pages/user-profile/post/menu.tsx:23",
+      "src/pages/video-collection/collections/menu.tsx:30",
+      "src/pages/video-collection/favorites/menu.tsx:48"
+    ]
+  },
+  {
+    "key": "下载暂停",
+    "files": [
+      "src/pages/download-list/status-desc.ts:4"
+    ]
+  },
+  {
+    "key": "下载中",
+    "files": [
+      "src/pages/download-list/status-desc.ts:3"
+    ]
+  },
+  {
+    "key": "先登录网易云账号再收藏",
+    "files": [
+      "src/store/netease-like.ts:83"
+    ]
+  },
+  {
+    "key": "显示/隐藏界面",
+    "files": [
+      "electron/windows/tray.ts:120"
+    ]
+  },
+  {
+    "key": "显示翻译",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:313",
+      "electron/ipc/window.ts:532"
+    ]
+  },
+  {
+    "key": "显示分集列表",
+    "files": [
+      "src/components/full-screen-player/index.tsx:481"
+    ]
+  },
+  {
+    "key": "显示封面",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:267"
+    ]
+  },
+  {
+    "key": "显示歌词",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:147"
+    ]
+  },
+  {
+    "key": "显示罗马音",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:321",
+      "electron/ipc/window.ts:538"
+    ]
+  },
+  {
+    "key": "显示频谱条",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:330",
+      "electron/ipc/window.ts:544"
+    ]
+  },
+  {
+    "key": "显示频谱图",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:232"
+    ]
+  },
+  {
+    "key": "显示搜索历史",
+    "files": [
+      "src/pages/settings/system-settings.tsx:428"
+    ]
+  },
+  {
+    "key": "新歌速递",
+    "files": [
+      "src/pages/music-recommend/new-music-top.tsx:178"
+    ]
+  },
+  {
+    "key": "新建收藏夹",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:184",
+      "src/layout/side/collection/index.tsx:488"
+    ]
+  },
+  {
+    "key": "修改",
+    "files": [
+      "src/layout/side/collection/index.tsx:97",
+      "src/pages/video-collection/header/index.tsx:79"
+    ]
+  },
+  {
+    "key": "修改成功",
+    "files": [
+      "src/components/favorites-select-modal/index.tsx:137"
+    ]
+  },
+  {
+    "key": "修改分组名称",
+    "files": [
+      "src/pages/follow-list/group-modal.tsx:71",
+      "src/pages/follow-list/index.tsx:254"
+    ]
+  },
+  {
+    "key": "修改分组名称成功",
+    "files": [
+      "src/pages/follow-list/group-modal.tsx:51"
+    ]
+  },
+  {
+    "key": "修改分组名称失败",
+    "files": [
+      "src/pages/follow-list/group-modal.tsx:56",
+      "src/pages/follow-list/group-modal.tsx:60"
+    ]
+  },
+  {
+    "key": "修改封面",
+    "files": [
+      "src/pages/video-collection/header/index.tsx:75"
+    ]
+  },
+  {
+    "key": "修改失败",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:129"
+    ]
+  },
+  {
+    "key": "修改收藏夹",
+    "files": [
+      "src/components/favorites-edit-modal/index.tsx:184"
+    ]
+  },
+  {
+    "key": "虚化封面",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:290"
+    ]
+  },
+  {
+    "key": "选一张本地图片作为应用背景",
+    "files": [
+      "src/pages/settings/background-settings.tsx:143"
+    ]
+  },
+  {
+    "key": "选择",
+    "files": [
+      "src/pages/settings/system-settings.tsx:366",
+      "src/pages/settings/system-settings.tsx:394"
+    ]
+  },
+  {
+    "key": "选择背景图片",
+    "files": [
+      "electron/ipc/window.ts:166"
+    ]
+  },
+  {
+    "key": "选择窗口关闭时的行为",
+    "files": [
+      "src/pages/settings/system-settings.tsx:444"
+    ]
+  },
+  {
+    "key": "选择分集",
+    "files": [
+      "src/components/video-pages-download-select-modal/index.tsx:87"
+    ]
+  },
+  {
+    "key": "选择国家/地区",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:216"
+    ]
+  },
+  {
+    "key": "选择界面显示的字体",
+    "files": [
+      "src/pages/settings/system-settings.tsx:169"
+    ]
+  },
+  {
+    "key": "选择开场视频",
+    "files": [
+      "electron/ipc/window.ts:185"
+    ]
+  },
+  {
+    "key": "选择媒体内容的显示样式",
+    "files": [
+      "src/pages/settings/system-settings.tsx:66"
+    ]
+  },
+  {
+    "key": "选择目录",
+    "files": [
+      "electron/ipc/dialog.ts:39"
+    ]
+  },
+  {
+    "key": "选择浅色或深色主题",
+    "files": [
+      "src/pages/settings/system-settings.tsx:115"
+    ]
+  },
+  {
+    "key": "选择日期范围",
+    "files": [
+      "src/components/date-range-picker/index.tsx:76"
+    ]
+  },
+  {
+    "key": "选择视频",
+    "files": [
+      "src/pages/settings/system-settings.tsx:530"
+    ]
+  },
+  {
+    "key": "选择图片",
+    "files": [
+      "src/pages/settings/background-settings.tsx:157",
+      "src/pages/settings/desktop-lyrics-settings.tsx:236"
+    ]
+  },
+  {
+    "key": "选择文件",
+    "files": [
+      "electron/ipc/dialog.ts:52"
+    ]
+  },
+  {
+    "key": "选择文件夹",
+    "files": [
+      "src/pages/settings/system-settings.tsx:358"
+    ]
+  },
+  {
+    "key": "选择要下载的",
+    "files": [
+      "src/pages/video-collection/download-select-modal/index.tsx:106"
+    ]
+  },
+  {
+    "key": "选择音视频保存的位置",
+    "files": [
+      "src/pages/settings/system-settings.tsx:350"
+    ]
+  },
+  {
+    "key": "选择照片",
+    "files": [
+      "src/components/image-upload/index.tsx:154"
+    ]
+  },
+  {
+    "key": "选择桌面歌词底板图片",
+    "files": [
+      "electron/ipc/window.ts:405"
+    ]
+  },
+  {
+    "key": "选择字体",
+    "files": [
+      "src/components/font-select/index.tsx:29",
+      "src/components/font-select/index.tsx:30"
+    ]
+  },
+  {
+    "key": "循环播放",
+    "files": [
+      "src/common/constants/audio.tsx:35"
+    ]
+  },
+  {
+    "key": "验证出错",
+    "files": [
+      "src/common/utils/geetest.ts:86"
+    ]
+  },
+  {
+    "key": "验证过程异常",
+    "files": [
+      "src/common/utils/geetest.ts:99"
+    ]
+  },
+  {
+    "key": "验证码",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:246"
+    ]
+  },
+  {
+    "key": "验证码必须为6位数字",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:235"
+    ]
+  },
+  {
+    "key": "验证码发送失败",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:119"
+    ]
+  },
+  {
+    "key": "验证码已发送",
+    "files": [
+      "src/layout/navbar/login/code-login.tsx:113"
+    ]
+  },
+  {
+    "key": "邀请码",
+    "files": [
+      "src/components/netease/together-modal.tsx:98"
+    ]
+  },
+  {
+    "key": "邀请码（发给对方）",
+    "files": [
+      "src/components/netease/together-modal.tsx:140"
+    ]
+  },
+  {
+    "key": "邀请码格式不对",
+    "files": [
+      "src/store/netease-together.ts:439"
+    ]
+  },
+  {
+    "key": "邀请码格式不对，应形如 房间号|发起人ID",
+    "files": [
+      "src/store/netease-together.ts:440"
+    ]
+  },
+  {
+    "key": "也可用 Ctrl / ⌘ + 滚轮",
+    "files": [
+      "electron/ipc/window.ts:453"
+    ]
+  },
+  {
+    "key": "夜深了",
+    "files": [
+      "src/pages/home/index.tsx:34"
+    ]
+  },
+  {
+    "key": "液态玻璃",
+    "files": [
+      "src/pages/settings/system-settings.tsx:242"
+    ]
+  },
+  {
+    "key": "一键三连失败，请稍后重试",
+    "files": [
+      "src/components/music-thumb/index.tsx:76",
+      "src/components/music-thumb/index.tsx:79"
+    ]
+  },
+  {
+    "key": "一起听",
+    "files": [
+      "src/components/netease/together-button.tsx:33",
+      "src/components/netease/together-modal.tsx:71"
+    ]
+  },
+  {
+    "key": "一起听 · {0} 人在线",
+    "files": [
+      "src/components/netease/together-button.tsx:33"
+    ]
+  },
+  {
+    "key": "一起听 · 等待对方加入",
+    "files": [
+      "src/components/netease/together-button.tsx:33"
+    ]
+  },
+  {
+    "key": "一起听房间已创建",
+    "files": [
+      "src/store/netease-together.ts:424"
+    ]
+  },
+  {
+    "key": "一起听房间已结束",
+    "files": [
+      "src/store/netease-together.ts:339"
+    ]
+  },
+  {
+    "key": "一起听心跳",
+    "files": [
+      "electron/ipc/netease/together.ts:235"
+    ]
+  },
+  {
+    "key": "移除",
+    "files": [
+      "src/pages/later/index.tsx:125",
+      "src/pages/later/menu.tsx:46",
+      "src/pages/local-music/index.tsx:112",
+      "src/pages/play-history/index.tsx:51"
+    ]
+  },
+  {
+    "key": "移除当前目录",
+    "files": [
+      "src/pages/local-music/index.tsx:242"
+    ]
+  },
+  {
+    "key": "移除目录",
+    "files": [
+      "src/pages/local-music/index.tsx:104"
+    ]
+  },
+  {
+    "key": "移除这条播放记录",
+    "files": [
+      "src/pages/play-history/index.tsx:142"
+    ]
+  },
+  {
+    "key": "移动",
+    "files": [
+      "src/pages/video-collection/favorites/menu.tsx:25"
+    ]
+  },
+  {
+    "key": "已把 {0} 首歌同步到房间",
+    "files": [
+      "src/store/netease-together.ts:510"
+    ]
+  },
+  {
+    "key": "已从收藏夹中移除",
+    "files": [
+      "src/components/favorites-select-modal/index.tsx:132"
+    ]
+  },
+  {
+    "key": "已从网易云取消收藏",
+    "files": [
+      "src/store/netease-like.ts:100"
+    ]
+  },
+  {
+    "key": "已导出配置",
+    "files": [
+      "src/pages/settings/export-import.tsx:30"
+    ]
+  },
+  {
+    "key": "已导入配置",
+    "files": [
+      "src/pages/settings/export-import.tsx:56"
+    ]
+  },
+  {
+    "key": "已登录",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:136"
+    ]
+  },
+  {
+    "key": "已登录：{0}",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:85",
+      "src/pages/settings/netease-settings.tsx:109"
+    ]
+  },
+  {
+    "key": "已复制",
+    "files": [
+      "src/components/netease/together-modal.tsx:143"
+    ]
+  },
+  {
+    "key": "已关注",
+    "files": [
+      "src/pages/search/user-list/user-card.tsx:33",
+      "src/pages/search/user-list/user-card.tsx:97",
+      "src/pages/user-profile/space-info.tsx:124"
+    ]
+  },
+  {
+    "key": "已加入一起听房间",
+    "files": [
+      "src/store/netease-together.ts:462"
+    ]
+  },
+  {
+    "key": "已拉黑",
+    "files": [
+      "src/pages/user-profile/space-info.tsx:76"
+    ]
+  },
+  {
+    "key": "已取消关注",
+    "files": [
+      "src/pages/search/user-list/user-card.tsx:33"
+    ]
+  },
+  {
+    "key": "已取消收藏",
+    "files": [
+      "src/layout/side/collection/index.tsx:284"
+    ]
+  },
+  {
+    "key": "已扫码，请在手机上确认",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:27"
+    ]
+  },
+  {
+    "key": "已删除记录",
+    "files": [
+      "src/pages/history/index.tsx:229"
+    ]
+  },
+  {
+    "key": "已收藏到网易云{0}",
+    "files": [
+      "src/store/netease-like.ts:100"
+    ]
+  },
+  {
+    "key": "已添加 {0} 个投稿到播放列表",
+    "files": [
+      "src/pages/user-profile/post/index.tsx:225"
+    ]
+  },
+  {
+    "key": "已添加 {0} 首到播放列表",
+    "files": [
+      "src/components/netease/track-list.tsx:69",
+      "src/pages/music-recommend/index.tsx:184",
+      "src/pages/search/video-list/index.tsx:100",
+      "src/pages/video-collection/favorites/index.tsx:252"
+    ]
+  },
+  {
+    "key": "已添加到播放列表",
+    "files": [
+      "src/components/netease/track-list.tsx:84",
+      "src/pages/local-music/index.tsx:162",
+      "src/pages/search/video-list/index.tsx:120"
+    ]
+  },
+  {
+    "key": "已添加到收藏夹",
+    "files": [
+      "src/components/favorites-select-modal/index.tsx:127"
+    ]
+  },
+  {
+    "key": "已添加到下一首播放",
+    "files": [
+      "src/components/netease/track-list.tsx:80",
+      "src/pages/dynamic-feed/item.tsx:129",
+      "src/pages/search/video-list/index.tsx:116"
+    ]
+  },
+  {
+    "key": "已添加到下载队列",
+    "files": [
+      "src/components/video-pages-download-select-modal/index.tsx:47",
+      "src/components/video-pages-download-select-modal/index.tsx:74",
+      "src/pages/dynamic-feed/item.tsx:47"
+    ]
+  },
+  {
+    "key": "已添加合集到播放列表",
+    "files": [
+      "src/layout/side/collection/index.tsx:228"
+    ]
+  },
+  {
+    "key": "已添加下载任务",
+    "files": [
+      "src/components/music-download-button/index.tsx:45",
+      "src/components/music-download-button/index.tsx:69",
+      "src/components/music-playlist-drawer/index.tsx:72",
+      "src/components/music-playlist-drawer/index.tsx:94",
+      "src/pages/history/index.tsx:197",
+      "src/pages/history/index.tsx:210",
+      "src/pages/later/index.tsx:173",
+      "src/pages/later/index.tsx:186",
+      "src/pages/music-recommend/index.tsx:234",
+      "src/pages/music-recommend/index.tsx:246",
+      "src/pages/search/video-list/index.tsx:142",
+      "src/pages/search/video-list/index.tsx:154",
+      "src/pages/user-profile/post/index.tsx:130",
+      "src/pages/user-profile/post/index.tsx:142",
+      "src/pages/video-collection/collections/index.tsx:192",
+      "src/pages/video-collection/collections/index.tsx:204",
+      "src/pages/video-collection/favorites/index.tsx:405",
+      "src/pages/video-collection/favorites/index.tsx:417",
+      "src/pages/video-collection/series/index.tsx:192",
+      "src/pages/video-collection/series/index.tsx:204"
+    ]
+  },
+  {
+    "key": "已退出网易云账号",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:125"
+    ]
+  },
+  {
+    "key": "已完成",
+    "files": [
+      "src/pages/download-list/status-desc.ts:9"
+    ]
+  },
+  {
+    "key": "已移除",
+    "files": [
+      "src/pages/later/index.tsx:133"
+    ]
+  },
+  {
+    "key": "已隐藏该菜单项",
+    "files": [
+      "src/layout/side/collection/index.tsx:242"
+    ]
+  },
+  {
+    "key": "已载入房间队列（{0} 首）",
+    "files": [
+      "src/store/netease-together.ts:386"
+    ]
+  },
+  {
+    "key": "音乐",
+    "files": [
+      "src/pages/music-recommend/index.tsx:280"
+    ]
+  },
+  {
+    "key": "音量",
+    "files": [
+      "src/components/music-volume/index.tsx:150"
+    ]
+  },
+  {
+    "key": "音频",
+    "files": [
+      "src/pages/download-list/index.tsx:124",
+      "src/pages/video-collection/download-select-modal/index.tsx:106"
+    ]
+  },
+  {
+    "key": "音质偏好",
+    "files": [
+      "src/pages/settings/system-settings.tsx:299",
+      "src/pages/settings/system-settings.tsx:315"
+    ]
+  },
+  {
+    "key": "隐藏",
+    "files": [
+      "src/layout/side/collection/index.tsx:98",
+      "src/layout/side/collection/index.tsx:108"
+    ]
+  },
+  {
+    "key": "隐藏到托盘",
+    "files": [
+      "src/pages/settings/system-settings.tsx:451"
+    ]
+  },
+  {
+    "key": "应用内快捷键",
+    "files": [
+      "src/pages/settings/shortcut-settings.tsx:104"
+    ]
+  },
+  {
+    "key": "用 Cookie 登录",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:215"
+    ]
+  },
+  {
+    "key": "用户",
+    "files": [
+      "src/pages/search/search-type.tsx:12"
+    ]
+  },
+  {
+    "key": "用户操作",
+    "files": [
+      "src/layout/navbar/user/index.tsx:182"
+    ]
+  },
+  {
+    "key": "用户动态",
+    "files": [
+      "src/pages/dynamic-feed/author-list.tsx:109"
+    ]
+  },
+  {
+    "key": "用户动态操作",
+    "files": [
+      "src/pages/user-profile/dynamic-list/item.tsx:126"
+    ]
+  },
+  {
+    "key": "用户名",
+    "files": [
+      "src/pages/settings/proxy-settings.tsx:85",
+      "src/pages/settings/proxy-settings.tsx:90"
+    ]
+  },
+  {
+    "key": "用网易云音乐 App 的「扫一扫」扫描下面的二维码",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:161"
+    ]
+  },
+  {
+    "key": "右键菜单",
+    "files": [
+      "src/components/context-menu/index.tsx:94"
+    ]
+  },
+  {
+    "key": "与“{0}”冲突",
+    "files": [
+      "src/pages/settings/shortcut-settings.tsx:34"
+    ]
+  },
+  {
+    "key": "与{0}冲突",
+    "files": [
+      "src/pages/settings/shortcut-settings.tsx:46"
+    ]
+  },
+  {
+    "key": "与系统或其他应用快捷键冲突",
+    "files": [
+      "src/pages/settings/shortcut-settings.tsx:59",
+      "src/pages/settings/shortcut-settings.tsx:127"
+    ]
+  },
+  {
+    "key": "圆角",
+    "files": [
+      "src/pages/settings/system-settings.tsx:212"
+    ]
+  },
+  {
+    "key": "在 B 站打开",
+    "files": [
+      "src/components/music-page-list/menu.tsx:43",
+      "src/components/music-playlist-drawer/menu.tsx:34",
+      "src/pages/history/menu.tsx:40",
+      "src/pages/later/menu.tsx:40",
+      "src/pages/music-recommend/menu.tsx:41",
+      "src/pages/search/video-list/menu.tsx:40",
+      "src/pages/video-collection/collections/menu.tsx:40",
+      "src/pages/video-collection/favorites/menu.tsx:60"
+    ]
+  },
+  {
+    "key": "在播放栏上方显示一条跟随声音跳动的频谱",
+    "files": [
+      "src/pages/settings/system-settings.tsx:282"
+    ]
+  },
+  {
+    "key": "在歌词上方加一条实时频谱，颜色跟随歌词文字。音频在主窗口分析后推给歌词窗",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:332"
+    ]
+  },
+  {
+    "key": "在浏览器登录 music.163.com 后，从开发者工具里复制整条 Cookie",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:193"
+    ]
+  },
+  {
+    "key": "在搜索框中显示搜索历史记录",
+    "files": [
+      "src/pages/settings/system-settings.tsx:429"
+    ]
+  },
+  {
+    "key": "在网易云打开",
+    "files": [
+      "src/components/netease/collection-list.tsx:47",
+      "src/components/netease/track-menu.ts:15"
+    ]
+  },
+  {
+    "key": "暂时没有新动态",
+    "files": [
+      "src/pages/home/index.tsx:190"
+    ]
+  },
+  {
+    "key": "暂停",
+    "files": [
+      "src/pages/download-list/actions.tsx:92",
+      "electron/windows/thumbar.ts:27"
+    ]
+  },
+  {
+    "key": "暂无播放内容",
+    "files": [
+      "src/pages/mini-player/index.tsx:131"
+    ]
+  },
+  {
+    "key": "暂无动态",
+    "files": [
+      "src/pages/user-profile/dynamic-list/index.tsx:80"
+    ]
+  },
+  {
+    "key": "暂无歌词",
+    "files": [
+      "src/components/lyrics/index.tsx:188",
+      "src/components/lyrics-search-modal/lyrics-preview-modal.tsx:52",
+      "src/components/lyrics-search-modal/lyrics-preview-modal.tsx:52",
+      "src/pages/desktop-lyrics/index.tsx:342"
+    ]
+  },
+  {
+    "key": "暂无关注",
+    "files": [
+      "src/pages/dynamic-feed/author-list.tsx:137"
+    ]
+  },
+  {
+    "key": "暂无可播放内容",
+    "files": [
+      "src/layout/side/collection/index.tsx:149",
+      "src/layout/side/collection/index.tsx:165",
+      "src/layout/side/collection/index.tsx:195",
+      "src/layout/side/collection/index.tsx:223",
+      "src/pages/music-recommend/index.tsx:179",
+      "src/pages/music-recommend/index.tsx:189",
+      "src/pages/user-profile/post/index.tsx:174",
+      "src/pages/user-profile/post/index.tsx:219"
+    ]
+  },
+  {
+    "key": "暂无历史记录",
+    "files": [
+      "src/pages/history/index.tsx:284"
+    ]
+  },
+  {
+    "key": "暂无内容",
+    "files": [
+      "src/components/empty/index.tsx:15"
+    ]
+  },
+  {
+    "key": "暂无匹配结果",
+    "files": [
+      "src/components/music-page-list/index.tsx:56"
+    ]
+  },
+  {
+    "key": "暂无稍后再看内容",
+    "files": [
+      "src/pages/later/index.tsx:236"
+    ]
+  },
+  {
+    "key": "暂无数据",
+    "files": [
+      "src/components/lyrics-search-modal/lrclib-tab.tsx:72",
+      "src/components/lyrics-search-modal/netease-tab.tsx:108",
+      "src/pages/music-recommend/new-music-top.tsx:213"
+    ]
+  },
+  {
+    "key": "暂无搜索建议",
+    "files": [
+      "src/layout/navbar/search/index.tsx:121"
+    ]
+  },
+  {
+    "key": "早上好",
+    "files": [
+      "src/pages/home/index.tsx:35"
+    ]
+  },
+  {
+    "key": "增大  +{0}px",
+    "files": [
+      "electron/ipc/window.ts:436"
+    ]
+  },
+  {
+    "key": "粘贴 Cookie",
+    "files": [
+      "src/pages/settings/netease-settings.tsx:191"
+    ]
+  },
+  {
+    "key": "展开侧边栏",
+    "files": [
+      "src/layout/side/index.tsx:183"
+    ]
+  },
+  {
+    "key": "找回密码",
+    "files": [
+      "src/layout/navbar/login/password-login.tsx:161"
+    ]
+  },
+  {
+    "key": "这个歌单还是空的",
+    "files": [
+      "src/pages/netease/liked/index.tsx:59"
+    ]
+  },
+  {
+    "key": "这个歌单里没有可显示的曲目",
+    "files": [
+      "src/pages/netease/playlist-detail/index.tsx:55"
+    ]
+  },
+  {
+    "key": "这首歌没有可下载的视频",
+    "files": [
+      "src/components/music-download-button/index.tsx:54",
+      "src/components/music-playlist-drawer/index.tsx:80"
+    ]
+  },
+  {
+    "key": "这首歌没有可下载的音源",
+    "files": [
+      "src/common/utils/download.ts:73"
+    ]
+  },
+  {
+    "key": "这张专辑里没有可显示的曲目",
+    "files": [
+      "src/pages/netease/album-detail/index.tsx:61"
+    ]
+  },
+  {
+    "key": "正在搜索网易云…",
+    "files": [
+      "src/pages/search/netease-list.tsx:91"
+    ]
+  },
+  {
+    "key": "支持 mp4 / webm / mov，不超过 64MB；铺满整窗播放",
+    "files": [
+      "src/pages/settings/system-settings.tsx:525"
+    ]
+  },
+  {
+    "key": "直接退出",
+    "files": [
+      "src/pages/settings/system-settings.tsx:452"
+    ]
+  },
+  {
+    "key": "只清掉这份本地记录，不影响 B 站的历史记录。",
+    "files": [
+      "src/pages/play-history/index.tsx:65"
+    ]
+  },
+  {
+    "key": "只影响歌词文字本身，和底板互不影响",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:296"
+    ]
+  },
+  {
+    "key": "中等",
+    "files": [
+      "src/pages/settings/system-settings.tsx:325"
+    ]
+  },
+  {
+    "key": "中午好",
+    "files": [
+      "src/pages/home/index.tsx:37"
+    ]
+  },
+  {
+    "key": "重试",
+    "files": [
+      "src/components/netease/page-status.tsx:38",
+      "src/pages/download-list/actions.tsx:118",
+      "src/pages/dynamic-feed/author-list.tsx:132"
+    ]
+  },
+  {
+    "key": "重置窗口位置",
+    "files": [
+      "electron/ipc/window.ts:550"
+    ]
+  },
+  {
+    "key": "主机",
+    "files": [
+      "src/pages/settings/proxy-settings.tsx:65",
+      "src/pages/settings/proxy-settings.tsx:69"
+    ]
+  },
+  {
+    "key": "主色",
+    "files": [
+      "src/pages/settings/color-settings.tsx:64"
+    ]
+  },
+  {
+    "key": "主题",
+    "files": [
+      "src/pages/settings/system-settings.tsx:114"
+    ]
+  },
+  {
+    "key": "主题切换",
+    "files": [
+      "src/pages/settings/system-settings.tsx:123"
+    ]
+  },
+  {
+    "key": "专辑",
+    "files": [
+      "src/components/lyrics-search-modal/lrclib-tab.tsx:68",
+      "src/components/lyrics-search-modal/netease-tab.tsx:104",
+      "src/components/netease/track-list.tsx:119",
+      "src/pages/netease/album-detail/index.tsx:52"
+    ]
+  },
+  {
+    "key": "专辑不存在或已失效",
+    "files": [
+      "electron/ipc/netease/api.ts:244"
+    ]
+  },
+  {
+    "key": "转换文件格式中",
+    "files": [
+      "src/pages/download-list/status-desc.ts:8"
+    ]
+  },
+  {
+    "key": "转换暂停",
+    "files": [
+      "src/pages/download-list/status-desc.ts:7"
+    ]
+  },
+  {
+    "key": "状态",
+    "files": [
+      "src/pages/download-list/index.tsx:152"
+    ]
+  },
+  {
+    "key": "桌面歌词",
+    "files": [
+      "src/components/desktop-lyrics-button/index.tsx:49",
+      "src/pages/settings/desktop-lyrics-settings.tsx:158"
+    ]
+  },
+  {
+    "key": "桌面歌词背景模糊",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:258"
+    ]
+  },
+  {
+    "key": "桌面歌词底板不透明度",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:280"
+    ]
+  },
+  {
+    "key": "桌面歌词底板模式",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:199"
+    ]
+  },
+  {
+    "key": "桌面歌词文字透明度",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:300"
+    ]
+  },
+  {
+    "key": "桌面歌词字号",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:180"
+    ]
+  },
+  {
+    "key": "字号",
+    "files": [
+      "src/pages/settings/desktop-lyrics-settings.tsx:177"
+    ]
+  },
+  {
+    "key": "字体",
+    "files": [
+      "src/pages/settings/system-settings.tsx:168"
+    ]
+  },
+  {
+    "key": "自定义背景",
+    "files": [
+      "src/components/full-screen-player/settings-panel.tsx:292",
+      "src/pages/settings/background-settings.tsx:143",
+      "src/pages/settings/desktop-lyrics-settings.tsx:207"
+    ]
+  },
+  {
+    "key": "自定义背景图",
+    "files": [
+      "electron/ipc/window.ts:483"
+    ]
+  },
+  {
+    "key": "自定义视频",
+    "files": [
+      "src/pages/settings/system-settings.tsx:480"
+    ]
+  },
+  {
+    "key": "自动",
+    "files": [
+      "src/pages/settings/system-settings.tsx:322"
+    ]
+  },
+  {
+    "key": "自动检测",
+    "files": [
+      "src/pages/settings/system-settings.tsx:386"
+    ]
+  },
+  {
+    "key": "自动选择最高音质",
+    "files": [
+      "src/pages/settings/system-settings.tsx:301"
+    ]
+  },
+  {
+    "key": "综合排序",
+    "files": [
+      "src/pages/search/video-list/search-header.tsx:22"
+    ]
+  },
+  {
+    "key": "最多播放",
+    "files": [
+      "src/pages/search/video-list/search-header.tsx:23",
+      "src/pages/user-profile/post/index.tsx:255",
+      "src/pages/video-collection/collections/index.tsx:241",
+      "src/pages/video-collection/favorites/index.tsx:456",
+      "src/pages/video-collection/series/index.tsx:246"
+    ]
+  },
+  {
+    "key": "最多弹幕",
+    "files": [
+      "src/pages/search/video-list/search-header.tsx:25"
+    ]
+  },
+  {
+    "key": "最多收藏",
+    "files": [
+      "src/pages/search/video-list/search-header.tsx:26",
+      "src/pages/user-profile/post/index.tsx:256",
+      "src/pages/video-collection/collections/index.tsx:242"
+    ]
+  },
+  {
+    "key": "最近播放",
+    "files": [
+      "src/pages/home/index.tsx:128",
+      "src/pages/play-history/index.tsx:91"
+    ]
+  },
+  {
+    "key": "最近收藏",
+    "files": [
+      "src/pages/video-collection/favorites/index.tsx:455"
+    ]
+  },
+  {
+    "key": "最近投稿",
+    "files": [
+      "src/pages/video-collection/collections/index.tsx:240",
+      "src/pages/video-collection/favorites/index.tsx:457",
+      "src/pages/video-collection/series/index.tsx:245"
+    ]
+  },
+  {
+    "key": "最新动态",
+    "files": [
+      "src/pages/home/index.tsx:175"
+    ]
+  },
+  {
+    "key": "最新发布",
+    "files": [
+      "src/pages/search/video-list/search-header.tsx:24",
+      "src/pages/user-profile/post/index.tsx:254"
+    ]
+  },
+  {
+    "key": "昨天",
+    "files": [
+      "src/components/date-range-picker/index.tsx:70"
+    ]
+  },
+  {
+    "key": "app 打开动画",
+    "files": [
+      "src/pages/settings/system-settings.tsx:472"
+    ]
+  },
+  {
+    "key": "B站",
+    "files": [
+      "src/pages/search/index.tsx:16",
+      "src/pages/settings/system-settings.tsx:417"
+    ]
+  },
+  {
+    "key": "Cookies（B 站登录态）",
+    "files": [
+      "electron/legacy-import.ts:109"
+    ]
+  },
+  {
+    "key": "CSRF Token 不存在",
+    "files": [
+      "src/layout/navbar/user/index.tsx:54"
+    ]
+  },
+  {
+    "key": "FFmpeg 路径",
+    "files": [
+      "src/pages/settings/system-settings.tsx:377"
+    ]
+  },
+  {
+    "key": "Google 翻译返回空",
+    "files": [
+      "electron/ipc/lyrics-engine/translate.ts:49"
+    ]
+  },
+  {
+    "key": "Google 翻译冷却中",
+    "files": [
+      "electron/ipc/lyrics-engine/translate.ts:36"
+    ]
+  },
+  {
+    "key": "HTTP 代理",
+    "files": [
+      "src/pages/settings/proxy-settings.tsx:12"
+    ]
+  },
+  {
+    "key": "JSON 文件已下载",
+    "files": [
+      "src/pages/settings/export-import.tsx:30"
+    ]
+  },
+  {
+    "key": "LrcLib 搜索失败",
+    "files": [
+      "src/components/lyrics-search-modal/index.tsx:87"
+    ]
+  },
+  {
+    "key": "Lv等级由低到高",
+    "files": [
+      "src/pages/search/user-list/search-header.tsx:17"
+    ]
+  },
+  {
+    "key": "Lv等级由高到低",
+    "files": [
+      "src/pages/search/user-list/search-header.tsx:16"
+    ]
+  },
+  {
+    "key": "MyMemory 返回空",
+    "files": [
+      "electron/ipc/lyrics-engine/translate.ts:67"
+    ]
+  },
+  {
+    "key": "MyMemory 冷却中",
+    "files": [
+      "electron/ipc/lyrics-engine/translate.ts:55"
+    ]
+  },
+  {
+    "key": "NWBP · 桌面歌词",
+    "files": [
+      "src/pages/desktop-lyrics/index.tsx:342"
+    ]
+  },
+  {
+    "key": "NWBP 桌面歌词",
+    "files": [
+      "electron/windows/desktop-lyrics.ts:93"
+    ]
+  },
+  {
+    "key": "NWBP下载-{0}",
+    "files": [
+      "electron/ipc/download/download-core.ts:65"
+    ]
+  },
+  {
+    "key": "SOCKS4 代理",
+    "files": [
+      "src/pages/settings/proxy-settings.tsx:13"
+    ]
+  },
+  {
+    "key": "SOCKS5 代理",
+    "files": [
+      "src/pages/settings/proxy-settings.tsx:14"
+    ]
+  },
+  {
+    "key": "YYYY年M月D日 dddd",
+    "files": [
+      "src/pages/home/index.tsx:118"
+    ]
+  }
+]

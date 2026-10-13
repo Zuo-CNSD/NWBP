@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Spinner, Button } from "@heroui/react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
+import { t } from "@/common/i18n";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
 import { getWebDynamicFeedAll, getWebDynamicFeedSpace, type WebDynamicItem } from "@/service/web-dynamic";
 
@@ -57,11 +58,11 @@ const DynamicFeedPage = () => {
           setOffset(res.data.offset);
           setHasMore(res.data.has_more);
         } else {
-          setError(res.message || "无法加载动态");
+          setError(res.message || t("无法加载动态"));
         }
       } catch {
         if (requestId !== requestIdRef.current) return;
-        setError("无法获取动态数据");
+        setError(t("无法获取动态数据"));
       } finally {
         if (requestId === requestIdRef.current) {
           isLoadingRef.current = false;

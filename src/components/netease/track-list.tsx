@@ -3,6 +3,7 @@ import React, { useCallback, useEffect } from "react";
 import { addToast, Button } from "@heroui/react";
 import { RiPlayFill } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import { favoriteTrack } from "@/common/utils/favorite";
 import { formatUrlProtocol } from "@/common/utils/url";
 import MusicListItem from "@/components/music-list-item";
@@ -66,7 +67,7 @@ const NeteaseTrackList = ({
   const handlePlayAll = useCallback(() => {
     if (!tracks.length) return;
     usePlayList.getState().addList(tracks.map(toNeteasePlayItem));
-    addToast({ title: `已添加 ${tracks.length} 首到播放列表`, color: "success" });
+    addToast({ title: t("已添加 {0} 首到播放列表", tracks.length), color: "success" });
   }, [tracks]);
 
   const handleMenuAction = useCallback((key: string, track: NeteaseTrack) => {
@@ -77,11 +78,11 @@ const NeteaseTrackList = ({
         break;
       case "play-next":
         usePlayList.getState().addToNext(toNeteasePlayItem(track));
-        addToast({ title: "已添加到下一首播放", color: "success" });
+        addToast({ title: t("已添加到下一首播放"), color: "success" });
         break;
       case "add-to-playlist":
         usePlayList.getState().addList([toNeteasePlayItem(track)]);
-        addToast({ title: "已添加到播放列表", color: "success" });
+        addToast({ title: t("已添加到播放列表"), color: "success" });
         break;
       case "netease-link":
         void window.electron.openExternal(neteaseSongUrl(track.id));
@@ -107,7 +108,7 @@ const NeteaseTrackList = ({
               startContent={<RiPlayFill />}
               onPress={handlePlayAll}
             >
-              播放全部
+              {t("播放全部")}
             </Button>
           )}
         </div>
@@ -116,7 +117,7 @@ const NeteaseTrackList = ({
       {tracks.length > 0 && (
         <>
           {/* 网易云没有「播放量 / 投稿时间」，那一列拿来放专辑名 */}
-          <MusicListHeader timeTitle="专辑" />
+          <MusicListHeader timeTitle={t("专辑")} />
           <VirtualPageList
             items={tracks}
             hasMore={hasMore}

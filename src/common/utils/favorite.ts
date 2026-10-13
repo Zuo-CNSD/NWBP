@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { t } from "@/common/i18n";
 import { useModalStore } from "@/store/modal";
 import { useNeteaseLike } from "@/store/netease-like";
 
@@ -46,7 +47,7 @@ export async function favoriteTrack(track: FavoriteTrack, options?: Options) {
   useModalStore.getState().onOpenFavSelectModal({
     rid: track.type === "mv" ? String(track.aid ?? "") : String(track.sid ?? ""),
     type: track.type === "mv" ? 2 : 12,
-    title: options?.modalTitle ?? "收藏",
+    title: options?.modalTitle ?? t("收藏"),
     onSuccess: selectedIds => options?.onChanged?.(Boolean(selectedIds?.length)),
   });
 }

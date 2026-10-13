@@ -1,6 +1,7 @@
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from "@heroui/react";
 import { RiDeleteBinLine, RiExternalLinkLine, RiMoreFill } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import { openBiliVideoLink } from "@/common/utils/url";
 import { usePlayList, type PlayData } from "@/store/play-list";
 
@@ -32,7 +33,7 @@ const Menus = ({ data }: Props) => {
             <RiMoreFill size={16} />
           </Button>
         </DropdownTrigger>
-        <DropdownMenu aria-label="播放列表操作菜单">
+        <DropdownMenu aria-label={t("播放列表操作菜单")}>
           <DropdownItem
             key="bililink"
             startContent={<RiExternalLinkLine size={16} />}
@@ -40,7 +41,7 @@ const Menus = ({ data }: Props) => {
               openBiliVideoLink(data);
             }}
           >
-            在 B 站打开
+            {t("在 B 站打开")}
           </DropdownItem>
           <DropdownItem
             key="del"
@@ -48,7 +49,7 @@ const Menus = ({ data }: Props) => {
             startContent={<RiDeleteBinLine size={16} />}
             onPress={() => delPage(data.id)}
           >
-            从列表删除
+            {t("从列表删除")}
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>

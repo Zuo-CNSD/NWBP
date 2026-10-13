@@ -1,3 +1,10 @@
+/**
+ * 下载状态 → 人话。
+ *
+ * 这里存的是**中文原文（也就是词条 key）**，不是翻好的文案 ——
+ * 因为这张表在模块顶层求值，写 `t()` 只会在 import 时算一次，
+ * 换语言不会重算。渲染那边再 `t(StatusDesc[status])`。
+ */
 export const StatusDesc: Record<MediaDownloadStatus, string> = {
   waiting: "等待中",
   downloading: "下载中",

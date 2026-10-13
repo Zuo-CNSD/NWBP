@@ -5,6 +5,7 @@ import { Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, useDiscl
 import { RiDeleteBinLine, RiEraserLine, RiFileMusicLine, RiFileVideoLine, RiMoreLine } from "@remixicon/react";
 
 import { CollectionType } from "@/common/constants/collection";
+import { t } from "@/common/i18n";
 import { isDefaultFav } from "@/common/utils/fav";
 import { postFavFolderDel } from "@/service/fav-folder-del";
 import { useFavoritesStore } from "@/store/favorite";
@@ -39,7 +40,7 @@ const Menu = ({ type, isCreatedBySelf, mediaCount, attr, onClearInvalid }: MenuP
       key: "download-audio",
       show: Boolean(mediaCount),
       startContent: <RiFileMusicLine size={18} />,
-      label: "下载全部音频",
+      label: t("下载全部音频"),
       onPress: () => {
         setOutputFileType("audio");
         onDownloadSelectOpen();
@@ -49,7 +50,7 @@ const Menu = ({ type, isCreatedBySelf, mediaCount, attr, onClearInvalid }: MenuP
       key: "download-video",
       show: Boolean(mediaCount),
       startContent: <RiFileVideoLine size={18} />,
-      label: "下载全部视频",
+      label: t("下载全部视频"),
       onPress: () => {
         setOutputFileType("video");
         onDownloadSelectOpen();
@@ -59,10 +60,10 @@ const Menu = ({ type, isCreatedBySelf, mediaCount, attr, onClearInvalid }: MenuP
       key: "clear-invalid",
       show: Boolean(onClearInvalid) && isCreatedBySelf,
       startContent: <RiEraserLine size={18} />,
-      label: "清除失效内容",
+      label: t("清除失效内容"),
       onPress: () => {
         onOpenConfirmModal({
-          title: "确认清除失效内容吗？",
+          title: t("确认清除失效内容吗？"),
           type: "warning",
           onConfirm: async () => {
             await onClearInvalid?.();
@@ -75,12 +76,12 @@ const Menu = ({ type, isCreatedBySelf, mediaCount, attr, onClearInvalid }: MenuP
       key: "delete",
       show: isCreatedBySelf && !isDefaultFav(attr),
       startContent: <RiDeleteBinLine size={18} />,
-      label: "删除",
+      label: t("删除"),
       className: "text-danger",
       color: "danger" as const,
       onPress: () => {
         onOpenConfirmModal({
-          title: "确认删除当前收藏夹吗？",
+          title: t("确认删除当前收藏夹吗？"),
           type: "danger",
           onConfirm: async () => {
             const res = await postFavFolderDel({
@@ -115,7 +116,7 @@ const Menu = ({ type, isCreatedBySelf, mediaCount, attr, onClearInvalid }: MenuP
             <RiMoreLine />
           </Button>
         </DropdownTrigger>
-        <DropdownMenu aria-label="收藏夹操作" items={menus.filter(item => item.show)}>
+        <DropdownMenu aria-label={t("收藏夹操作")} items={menus.filter(item => item.show)}>
           {item => (
             <DropdownItem
               key={item.key}

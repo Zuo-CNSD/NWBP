@@ -1,5 +1,7 @@
 import clx from "classnames";
 
+import { t } from "@/common/i18n";
+
 interface Props {
   className?: string;
   isCompact?: boolean;
@@ -18,10 +20,10 @@ const HistoryListHeader = ({ className, isCompact }: Props) => {
       )}
     >
       <div className="text-center">#</div>
-      <div className="text-left">标题</div>
+      <div className="text-left">{t("标题")}</div>
       {isCompact && <div className="text-left">UP</div>}
-      <div className="text-right">播放进度</div>
-      <div className="text-right">观看时间</div>
+      <div className="text-right">{t("播放进度")}</div>
+      <div className="text-right">{t("观看时间")}</div>
       <div className="w-8" />
     </div>
   );

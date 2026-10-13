@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import { Button } from "@heroui/react";
 import { RiArrowLeftLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import NeteasePageStatus from "@/components/netease/page-status";
 import NeteaseTrackList from "@/components/netease/track-list";
 import { useNeteaseLoad } from "@/components/netease/use-netease-load";
@@ -47,9 +48,9 @@ const NeteaseAlbumDetail = () => {
           startContent={<RiArrowLeftLine size={16} />}
           onPress={() => void navigate(-1)}
         >
-          返回
+          {t("返回")}
         </Button>
-        <h1>{data.name || "专辑"}</h1>
+        <h1>{data.name || t("专辑")}</h1>
         {data.artist && <div className="text-default-500 mt-1 text-sm">{data.artist}</div>}
         <div className="mb-2" />
       </div>
@@ -58,7 +59,7 @@ const NeteaseAlbumDetail = () => {
         loading={loading}
         error={error}
         empty={!loading && !error && data.tracks.length === 0}
-        emptyText="这张专辑里没有可显示的曲目"
+        emptyText={t("这张专辑里没有可显示的曲目")}
         onRetry={reload}
       />
 
@@ -66,7 +67,7 @@ const NeteaseAlbumDetail = () => {
         <NeteaseTrackList
           tracks={data.tracks}
           getScrollElement={() => scrollerRef.current?.osInstance()?.elements().viewport || null}
-          summary={`网易云 · 共 ${data.tracks.length} 首`}
+          summary={t("网易云 · 共 {0} 首", data.tracks.length)}
         />
       )}
     </ScrollContainer>

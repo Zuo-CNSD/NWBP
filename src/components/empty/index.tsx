@@ -3,6 +3,8 @@ import React from "react";
 import { RiCloseCircleLine } from "@remixicon/react";
 import { twMerge } from "tailwind-merge";
 
+import { t } from "@/common/i18n";
+
 interface Props {
   title?: React.ReactNode;
   className?: string;
@@ -12,7 +14,7 @@ const Empty = ({ title, className }: Props) => {
   return (
     <div className={twMerge("text-default-400 flex flex-col items-center justify-center space-y-2 py-20", className)}>
       <RiCloseCircleLine size={32} />
-      <span>{title ?? "暂无内容"}</span>
+      <span>{title ?? t("暂无内容")}</span>
     </div>
   );
 };

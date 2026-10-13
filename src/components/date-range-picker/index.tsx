@@ -4,6 +4,8 @@ import { DateRangePicker as HeroDateRangePicker, Tab, Tabs, type DateValue, type
 import { getLocalTimeZone } from "@internationalized/date";
 import moment from "moment";
 
+import { t } from "@/common/i18n";
+
 interface Props {
   onDateRangeChange?: (range: { start?: number; end?: number } | null) => void;
 }
@@ -57,7 +59,7 @@ const DateRangePicker = ({ onDateRangeChange }: Props) => {
   return (
     <div className="-ml-1 flex items-center space-x-4">
       <Tabs
-        aria-label="时间范围"
+        aria-label={t("时间范围")}
         variant="light"
         selectedKey={selectedKey}
         onSelectionChange={key => handlePresetChange(key as string)}
@@ -65,15 +67,15 @@ const DateRangePicker = ({ onDateRangeChange }: Props) => {
           cursor: "rounded-medium",
         }}
       >
-        <Tab key="all" title="全部时间" />
-        <Tab key="today" title="今天" />
-        <Tab key="yesterday" title="昨天" />
-        <Tab key="week" title="近一周" />
+        <Tab key="all" title={t("全部时间")} />
+        <Tab key="today" title={t("今天")} />
+        <Tab key="yesterday" title={t("昨天")} />
+        <Tab key="week" title={t("近一周")} />
       </Tabs>
 
       <div className="w-64">
         <HeroDateRangePicker
-          aria-label="选择日期范围"
+          aria-label={t("选择日期范围")}
           // @ts-ignore 忽略类型检查，因为 HeroDateRangePicker 的类型定义有问题
           value={dateRange}
           onChange={handleDateRangeChange}

@@ -4,6 +4,7 @@ import { Input } from "@heroui/react";
 import { RiArrowRightSLine, RiSearchLine } from "@remixicon/react";
 import { twMerge } from "tailwind-merge";
 
+import { t } from "@/common/i18n";
 import IconButton from "@/components/icon-button";
 import MusicPageList from "@/components/music-page-list";
 
@@ -37,7 +38,7 @@ const FullScreenPageList = ({
             input: "text-sm",
             inputWrapper: "bg-black/20 hover:bg-black/30 group-data-[focus=true]:bg-black/30",
           }}
-          placeholder="搜索分集"
+          placeholder={t("搜索分集")}
           size="sm"
           startContent={<RiSearchLine size={16} />}
           type="search"

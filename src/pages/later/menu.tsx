@@ -7,6 +7,8 @@ import {
   RiPlayListAddLine,
 } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
+
 export const getContextMenus = ({ is_pgc }: { is_pgc: boolean }) => {
   const cannotPlay = is_pgc;
 
@@ -14,36 +16,36 @@ export const getContextMenus = ({ is_pgc }: { is_pgc: boolean }) => {
     {
       icon: <RiPlayCircleLine size={18} />,
       key: "play-next",
-      label: "下一首播放",
+      label: t("下一首播放"),
       hidden: cannotPlay,
     },
     {
       icon: <RiPlayListAddLine size={18} />,
       key: "add-to-playlist",
-      label: "添加到播放列表",
+      label: t("添加到播放列表"),
       hidden: cannotPlay,
     },
     {
       icon: <RiFileMusicLine size={18} />,
       key: "download-audio",
-      label: "下载音频",
+      label: t("下载音频"),
       hidden: cannotPlay,
     },
     {
       icon: <RiFileVideoLine size={18} />,
       key: "download-video",
-      label: "下载视频",
+      label: t("下载视频"),
       hidden: cannotPlay,
     },
     {
       key: "bililink",
-      label: "在 B 站打开",
+      label: t("在 B 站打开"),
       icon: <RiExternalLinkLine size={18} />,
     },
     {
       icon: <RiDeleteBinLine size={18} />,
       key: "delete",
-      label: "移除",
+      label: t("移除"),
       className: "text-danger",
       color: "danger" as const,
     },

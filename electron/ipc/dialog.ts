@@ -5,6 +5,7 @@ import log from "electron-log";
 import fs from "node:fs";
 import path from "node:path";
 
+import { t } from "../i18n";
 import { appSettingsStore } from "../store";
 import { channel } from "./channel";
 
@@ -18,7 +19,7 @@ export function registerDialogHandlers() {
 
   ipcMain.handle(channel.dialog.showFileInFolder, (_event: IpcMainInvokeEvent, filePath: string) => {
     if (!filePath || !fs.existsSync(filePath)) {
-      throw new Error("文件路径不存在");
+      throw new Error(t("文件路径不存在"));
     }
     shell.showItemInFolder(filePath);
     return true;
@@ -36,7 +37,7 @@ export function registerDialogHandlers() {
   });
 
   ipcMain.handle(channel.dialog.selectDirectory, async (_event: IpcMainInvokeEvent, title?: string) => {
-    const resolvedTitle = title?.trim() || "选择目录";
+    const resolvedTitle = title?.trim() || t("选择目录");
     const result = await dialog.showOpenDialog({
       properties: ["openDirectory", "createDirectory"],
       title: resolvedTitle,
@@ -49,7 +50,7 @@ export function registerDialogHandlers() {
   ipcMain.handle(channel.dialog.selectFile, async () => {
     const result = await dialog.showOpenDialog({
       properties: ["openFile"],
-      title: "选择文件",
+      title: t("选择文件"),
     });
     if (result.canceled) return null;
     return result.filePaths?.[0] ?? null;

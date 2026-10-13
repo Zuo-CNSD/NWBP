@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { addToast, Spinner } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import Empty from "@/components/empty";
 import NeteaseTrackList from "@/components/netease/track-list";
 
@@ -51,7 +52,7 @@ export default function SearchNetease({ keyword, getScrollElement }: Props) {
       setTotal(count);
       setHasMore(tracks.length < count);
     } catch {
-      addToast({ title: "网易云搜索失败，检查一下网络或代理", color: "danger" });
+      addToast({ title: t("网易云搜索失败，检查一下网络或代理"), color: "danger" });
     } finally {
       setInitialLoading(false);
     }
@@ -70,7 +71,7 @@ export default function SearchNetease({ keyword, getScrollElement }: Props) {
       });
       setOffset(nextOffset);
     } catch {
-      addToast({ title: "加载更多失败", color: "danger" });
+      addToast({ title: t("加载更多失败"), color: "danger" });
     } finally {
       setLoadingMore(false);
     }
@@ -88,12 +89,12 @@ export default function SearchNetease({ keyword, getScrollElement }: Props) {
         hasMore={hasMore}
         loading={loadingMore}
         onLoadMore={loadMore}
-        summary={initialLoading ? "正在搜索网易云…" : total > 0 ? `网易云 · 共 ${total} 首` : "网易云"}
+        summary={initialLoading ? t("正在搜索网易云…") : total > 0 ? t("网易云 · 共 {0} 首", total) : t("网易云")}
       />
 
       {initialLoading && (
         <div className="flex min-h-[200px] items-center justify-center">
-          <Spinner label="加载中" />
+          <Spinner label={t("加载中")} />
         </div>
       )}
 

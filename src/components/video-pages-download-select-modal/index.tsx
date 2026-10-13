@@ -4,6 +4,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Checkbox, Spi
 import { useRequest } from "ahooks";
 import { useShallow } from "zustand/react/shallow";
 
+import { t } from "@/common/i18n";
 import { getPlayerPagelist } from "@/service/player-pagelist";
 import { useModalStore } from "@/store/modal";
 
@@ -44,7 +45,7 @@ const VideoPagesDownloadSelectModal = () => {
         });
         onVideoPageDownloadModalOpenChange(false);
         addToast({
-          title: "已添加到下载队列",
+          title: t("已添加到下载队列"),
           color: "success",
         });
       }
@@ -71,7 +72,7 @@ const VideoPagesDownloadSelectModal = () => {
     );
     onVideoPageDownloadModalOpenChange(false);
     addToast({
-      title: "已添加到下载队列",
+      title: t("已添加到下载队列"),
       color: "success",
     });
   };
@@ -84,11 +85,11 @@ const VideoPagesDownloadSelectModal = () => {
       onOpenChange={onVideoPageDownloadModalOpenChange}
     >
       <ModalContent>
-        {Boolean(data?.length) && <ModalHeader>选择分集</ModalHeader>}
+        {Boolean(data?.length) && <ModalHeader>{t("选择分集")}</ModalHeader>}
         <ModalBody className="p-0">
           {loading ? (
             <div className="flex h-60 items-center justify-center">
-              <Spinner label="获取分集信息中..." />
+              <Spinner label={t("获取分集信息中...")} />
             </div>
           ) : (
             <ScrollContainer>
@@ -127,7 +128,7 @@ const VideoPagesDownloadSelectModal = () => {
           <ModalFooter>
             <Checkbox
               color="primary"
-              aria-label="全选"
+              aria-label={t("全选")}
               isSelected={selectedCids.length === data?.length}
               onValueChange={isSelected => {
                 if (isSelected) {
@@ -138,10 +139,10 @@ const VideoPagesDownloadSelectModal = () => {
               }}
               className="px-4"
             >
-              全选
+              {t("全选")}
             </Checkbox>
             <AsyncButton color="primary" isDisabled={!selectedCids.length} onPress={downloadSelected}>
-              下载
+              {t("下载")}
             </AsyncButton>
           </ModalFooter>
         )}

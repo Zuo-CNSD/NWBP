@@ -7,6 +7,7 @@ import { RiFlashlightFill, RiGroupLine, RiUserUnfollowLine } from "@remixicon/re
 import type { RelationListItem } from "@/service/relation-followings";
 import type { RelationTagUser } from "@/service/relation-tag";
 
+import { t } from "@/common/i18n";
 import { UserRelationAction, postRelationModify } from "@/service/relation-modify";
 import { useModalStore } from "@/store/modal";
 
@@ -22,28 +23,28 @@ const UserCard = ({ u, refresh, onSetGroup }: Props) => {
 
   const handleUnfollow = async () => {
     onOpenConfirmModal({
-      title: `取消关注 ${u.uname}`,
+      title: t("取消关注 {0}", u.uname),
       type: "danger",
-      confirmText: "取消关注",
+      confirmText: t("取消关注"),
       onConfirm: async () => {
         try {
           const res = await postRelationModify({ fid: u.mid, act: UserRelationAction.Unfollow });
           if (res?.code !== 0) {
             addToast({
-              title: "取消关注失败",
+              title: t("取消关注失败"),
               color: "danger",
             });
             return false;
           }
           addToast({
-            title: "取消关注成功",
+            title: t("取消关注成功"),
             color: "success",
           });
           refresh();
           return true;
         } catch {
           addToast({
-            title: "取消关注失败",
+            title: t("取消关注失败"),
             color: "danger",
           });
           return false;
@@ -92,11 +93,11 @@ const UserCard = ({ u, refresh, onSetGroup }: Props) => {
           variant="light"
           radius="full"
           onPress={handleSetGroup}
-          aria-label="设置分组"
-          title="设置分组"
+          aria-label={t("设置分组")}
+          title={t("设置分组")}
           startContent={<RiGroupLine size={18} />}
         >
-          设置分组
+          {t("设置分组")}
         </Button>
         <Button
           size="sm"
@@ -104,11 +105,11 @@ const UserCard = ({ u, refresh, onSetGroup }: Props) => {
           variant="light"
           radius="full"
           onPress={handleUnfollow}
-          aria-label="取消关注"
-          title="取消关注"
+          aria-label={t("取消关注")}
+          title={t("取消关注")}
           startContent={<RiUserUnfollowLine size={18} />}
         >
-          取消关注
+          {t("取消关注")}
         </Button>
       </div>
     </Card>

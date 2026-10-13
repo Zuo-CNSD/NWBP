@@ -4,6 +4,7 @@ import { Controller, type Control } from "react-hook-form";
 import { Card, CardBody, CardFooter } from "@heroui/react";
 
 import { Themes } from "@/common/constants/theme";
+import { t } from "@/common/i18n";
 import { isHex } from "@/common/utils/color";
 import ColorPicker from "@/components/color-picker";
 import { useTheme } from "@/components/theme/use-theme";
@@ -50,7 +51,12 @@ const ColorSettings = ({ control }: { control: Control<AppSettings> }) => {
           const backgroundColor = Themes[theme].colors!.background as string;
           const pickerValue = isHex(field.value) ? field.value : backgroundColor;
           return (
-            <ColorItem label="背景" value={pickerValue} onChange={v => field.onChange(v)} presets={[backgroundColor]} />
+            <ColorItem
+              label={t("背景")}
+              value={pickerValue}
+              onChange={v => field.onChange(v)}
+              presets={[backgroundColor]}
+            />
           );
         }}
       />
@@ -61,7 +67,12 @@ const ColorSettings = ({ control }: { control: Control<AppSettings> }) => {
           const primaryColor = Themes[theme].colors!.primary as string;
           const pickerValue = isHex(field.value) ? field.value : primaryColor;
           return (
-            <ColorItem label="主色" value={pickerValue} onChange={v => field.onChange(v)} presets={[primaryColor]} />
+            <ColorItem
+              label={t("主色")}
+              value={pickerValue}
+              onChange={v => field.onChange(v)}
+              presets={[primaryColor]}
+            />
           );
         }}
       />

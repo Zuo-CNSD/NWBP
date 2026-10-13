@@ -1,0 +1,45 @@
+[
+  {
+    "key": "{0}：响应解析失败",
+    "files": [
+      "electron/ipc/netease/client.ts:73"
+    ]
+  },
+  {
+    "key": "{0}倍速",
+    "files": [
+      "src/components/music-rate/index.tsx:41"
+    ]
+  },
+  {
+    "key": "{0}播放",
+    "files": [
+      "src/pages/music-recommend/new-music-top.tsx:239"
+    ]
+  },
+  {
+    "key": "{0}失败：{1}",
+    "files": [
+      "electron/ipc/netease/together.ts:47"
+    ]
+  },
+  {
+    "key": "{0}首歌曲已添加到播放列表",
+    "files": [
+      "src/pages/local-music/index.tsx:89"
+    ]
+  },
+  {
+    "key": "{0}显示项",
+    "files": [
+      "src/components/select-all-checkbox-group/index.tsx:47"
+    ]
+  },
+  {
+    "key": "「{0}」暂无可播放内容",
+    "files": [
+      "src/layout/side/collection/index.tsx:150",
+      "src/layout/side/collection/index.tsx:166"
+    ]
+  }
+]

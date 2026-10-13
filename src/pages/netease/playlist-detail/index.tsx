@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import { Button } from "@heroui/react";
 import { RiArrowLeftLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import NeteasePageStatus from "@/components/netease/page-status";
 import NeteaseTrackList from "@/components/netease/track-list";
 import { useNeteasePlaylistTracks } from "@/components/netease/use-netease-playlist-tracks";
@@ -37,12 +38,13 @@ const NeteasePlaylistDetail = () => {
           startContent={<RiArrowLeftLine size={16} />}
           onPress={() => void navigate(-1)}
         >
-          返回
+          {t("返回")}
         </Button>
-        <h1>{name || "歌单"}</h1>
+        <h1>{name || t("歌单")}</h1>
         {trackCount > 0 && (
           <div className="text-default-500 mt-1 text-sm">
-            共 {trackCount} 首{tracks.length < trackCount ? ` · 已加载 ${tracks.length} 首` : ""}
+            {t("共 {0} 首", trackCount)}
+            {tracks.length < trackCount ? t(" · 已加载 {0} 首", tracks.length) : ""}
           </div>
         )}
         <div className="mb-2" />
@@ -52,7 +54,7 @@ const NeteasePlaylistDetail = () => {
         loading={loading}
         error={error}
         empty={!loading && !error && tracks.length === 0}
-        emptyText={found ? "这个歌单里没有可显示的曲目" : "歌单不存在或已失效"}
+        emptyText={found ? t("这个歌单里没有可显示的曲目") : t("歌单不存在或已失效")}
         onRetry={reload}
       />
 
@@ -63,7 +65,7 @@ const NeteasePlaylistDetail = () => {
           hasMore={hasMore}
           loading={loadingMore}
           onLoadMore={() => void loadMore()}
-          summary={`网易云 · 共 ${trackCount} 首`}
+          summary={t("网易云 · 共 {0} 首", trackCount)}
         />
       )}
     </ScrollContainer>

@@ -3,6 +3,7 @@ import { shallow } from "zustand/shallow";
 
 import type { PlayMode } from "@/common/constants/audio";
 
+import { t } from "@/common/i18n";
 import { usePlayList } from "@/store/play-list";
 import { usePlayProgress } from "@/store/play-progress";
 
@@ -84,9 +85,9 @@ function handleMessageFromMini(message: MiniPlayerMessageFromMini, channel: Broa
       break;
     }
     case "seek": {
-      const t = data.state?.currentTime;
-      if (typeof t === "number" && Number.isFinite(t)) {
-        usePlayList.getState().seek(t);
+      const position = data.state?.currentTime;
+      if (typeof position === "number" && Number.isFinite(position)) {
+        usePlayList.getState().seek(position);
       }
       break;
     }
@@ -191,7 +192,7 @@ export async function toggleMiniMode() {
     await window.electron.toggleMiniPlayer();
   } catch {
     addToast({
-      title: "切换出错",
+      title: t("切换出错"),
       color: "danger",
     });
   }

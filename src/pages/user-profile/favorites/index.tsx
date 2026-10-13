@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import { addToast, Spinner } from "@heroui/react";
 
 import { CollectionType } from "@/common/constants/collection";
+import { t } from "@/common/i18n";
 import VirtualGridPageList from "@/components/virtual-grid-page-list";
 import { getFavFolderCreatedList, type FavFolderCreatedList } from "@/service/fav-folder-created-list";
 
@@ -52,7 +53,7 @@ const Favorites = ({ getScrollElement }: Props) => {
       });
       setPage(nextPage);
     } catch {
-      addToast({ title: "加载更多失败", color: "danger" });
+      addToast({ title: t("加载更多失败"), color: "danger" });
     } finally {
       setLoadingMore(false);
     }
@@ -67,7 +68,7 @@ const Favorites = ({ getScrollElement }: Props) => {
       setList(items);
       setHasMore(items.length < total);
     } catch {
-      addToast({ title: "加载失败", color: "danger" });
+      addToast({ title: t("加载失败"), color: "danger" });
     } finally {
       setInitialLoading(false);
     }
@@ -80,7 +81,7 @@ const Favorites = ({ getScrollElement }: Props) => {
   if (initialLoading) {
     return (
       <div className="flex h-[280px] items-center justify-center">
-        <Spinner label="加载中" />
+        <Spinner label={t("加载中")} />
       </div>
     );
   }

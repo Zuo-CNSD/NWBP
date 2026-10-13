@@ -21,44 +21,52 @@ import {
   RiFireFill,
 } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import { type MenuItemProps } from "@/components/menu/menu-item";
 
-export const DefaultMenuList: (MenuItemProps & { needLogin?: boolean })[] = [
+/**
+ * 侧栏菜单是**函数**而不是常量数组。
+ *
+ * 因为标题要能跟着语言变：常量数组在模块顶层求值，`t()` 只跑一次，
+ * 用户在设置里换成英文后侧栏还是中文。改成函数就没这个问题 ——
+ * 每次渲染都会重新取一遍标题。
+ */
+export const getDefaultMenuList = (): (MenuItemProps & { needLogin?: boolean })[] => [
   {
-    title: "推荐音乐",
+    title: t("推荐音乐"),
     href: "/recommend",
     icon: RiDiscLine,
     activeIcon: RiDiscFill,
   },
   {
-    title: "我的关注",
+    title: t("我的关注"),
     href: "/follow",
     needLogin: true,
     icon: RiUserFollowLine,
     activeIcon: RiUserFollowFill,
   },
   {
-    title: "稍后再看",
+    title: t("稍后再看"),
     href: "/later",
     needLogin: true,
     icon: RiCalendarScheduleLine,
     activeIcon: RiCalendarScheduleFill,
   },
   {
-    title: "历史记录",
+    title: t("历史记录"),
     href: "/history",
     needLogin: true,
     icon: RiHistoryLine,
     activeIcon: RiHistoryFill,
   },
   {
-    title: "本地音乐",
+    title: t("本地音乐"),
     href: "/local-music",
     icon: RiFolderMusicLine,
     activeIcon: RiFolderMusicFill,
   },
   {
-    title: "下载记录",
+    title: t("下载记录"),
     href: "/download-list",
     icon: RiFileDownloadLine,
     activeIcon: RiFileDownloadFill,
@@ -74,30 +82,30 @@ export const DefaultMenuList: (MenuItemProps & { needLogin?: boolean })[] = [
  * `needLogin` 指的是**网易云账号**（`useNetease`），不是 B 站账号 ——
  * 「热门歌单」不需要登录，所以没标。
  */
-export const NeteaseMenuList: (MenuItemProps & { needLogin?: boolean })[] = [
+export const getNeteaseMenuList = (): (MenuItemProps & { needLogin?: boolean })[] => [
   {
-    title: "我喜欢的音乐",
+    title: t("我喜欢的音乐"),
     href: "/netease/liked",
     needLogin: true,
     icon: RiHeartLine,
     activeIcon: RiHeartFill,
   },
   {
-    title: "我的歌单",
+    title: t("我的歌单"),
     href: "/netease/playlists",
     needLogin: true,
     icon: RiPlayListLine,
     activeIcon: RiPlayListFill,
   },
   {
-    title: "我的专辑",
+    title: t("我的专辑"),
     href: "/netease/albums",
     needLogin: true,
     icon: RiAlbumLine,
     activeIcon: RiAlbumFill,
   },
   {
-    title: "热门歌单",
+    title: t("热门歌单"),
     href: "/netease/hot",
     icon: RiFireLine,
     activeIcon: RiFireFill,

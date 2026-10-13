@@ -1,5 +1,7 @@
 import type { ContextMenuItem } from "@/components/context-menu";
 
+import { t } from "@/common/i18n";
+
 /**
  * 网易云曲目的右键菜单。
  *
@@ -9,10 +11,10 @@ import type { ContextMenuItem } from "@/components/context-menu";
  * `liked` 决定第一项是「喜欢」还是「取消喜欢」—— 状态从 `useNeteaseLike` 的集合来。
  */
 export const getNeteaseTrackMenus = (liked: boolean): ContextMenuItem[] => [
-  { key: liked ? "unlike" : "like", label: liked ? "取消喜欢" : "喜欢" },
-  { key: "play-next", label: "下一首播放" },
-  { key: "add-to-playlist", label: "添加到播放列表" },
-  { key: "netease-link", label: "在网易云打开" },
+  { key: liked ? "unlike" : "like", label: liked ? t("取消喜欢") : t("喜欢") },
+  { key: "play-next", label: t("下一首播放") },
+  { key: "add-to-playlist", label: t("添加到播放列表") },
+  { key: "netease-link", label: t("在网易云打开") },
 ];
 
 /** 曲目时长：网易云给的是毫秒，播放列表统一用秒 */

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { RiCloseLine, RiLockLine, RiLockUnlockLine } from "@remixicon/react";
 import clsx from "classnames";
 
+import { t } from "@/common/i18n";
 import { DESKTOP_LYRICS_CHANNEL, type DesktopLyricsMessage } from "@/common/utils/desktop-lyrics-channel";
 import { findActiveLineIndex } from "@/common/utils/lyrics-render";
 import { useSettings } from "@/store/settings";
@@ -339,7 +340,7 @@ const DesktopLyrics = () => {
   const activeLine = activeIndex >= 0 ? lines[activeIndex] : undefined;
   const nextLine = activeIndex >= 0 ? lines[activeIndex + 1] : undefined;
 
-  const emptyHint = loading ? "歌词加载中…" : hasTrack ? "暂无歌词" : "NWBP · 桌面歌词";
+  const emptyHint = loading ? t("歌词加载中…") : hasTrack ? t("暂无歌词") : t("NWBP · 桌面歌词");
 
   // 底板 / 文字两块透明度各自独立
   const backgroundAlpha = Math.min(100, Math.max(0, style.backgroundOpacity)) / 100;
@@ -500,7 +501,7 @@ const DesktopLyrics = () => {
         >
           <button
             type="button"
-            title={locked ? "解锁（当前鼠标穿透）" : "锁定（鼠标穿透）"}
+            title={locked ? t("解锁（当前鼠标穿透）") : t("锁定（鼠标穿透）")}
             className="flex h-6 w-6 items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/15 hover:text-white"
             onClick={() => void toggleLock()}
           >
@@ -508,7 +509,7 @@ const DesktopLyrics = () => {
           </button>
           <button
             type="button"
-            title="关闭桌面歌词"
+            title={t("关闭桌面歌词")}
             className="flex h-6 w-6 items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/15 hover:text-white"
             onClick={() => void window.electron?.desktopLyrics?.close()}
           >

@@ -3,6 +3,7 @@ import React, { useCallback } from "react";
 import { Divider, Modal, ModalBody, ModalContent, Tab, Tabs, addToast } from "@heroui/react";
 import moment from "moment";
 
+import { t } from "@/common/i18n";
 import { useFavoritesStore } from "@/store/favorite";
 import { useToken } from "@/store/token";
 import { useUser } from "@/store/user";
@@ -42,7 +43,7 @@ const Login = ({ isOpen, onOpenChange }: Props) => {
           await Promise.allSettled([updateCreatedFavorites(user.mid), updateCollectedFavorites(user.mid)]);
         }
       } catch {
-        addToast({ title: "更新用户信息失败", color: "danger" });
+        addToast({ title: t("更新用户信息失败"), color: "danger" });
       }
     },
     [updateCollectedFavorites, updateCreatedFavorites, updateToken, updateUser],
@@ -56,16 +57,16 @@ const Login = ({ isOpen, onOpenChange }: Props) => {
           <Divider className="h-42" orientation="vertical" />
           <div className="w-[320px]">
             <Tabs
-              aria-label="登录方式"
+              aria-label={t("登录方式")}
               classNames={{ cursor: "rounded-medium", tabContent: "text-lg font-medium mb-4" }}
               fullWidth
               size="lg"
               variant="underlined"
             >
-              <Tab key="code" title="短信登录">
+              <Tab key="code" title={t("短信登录")}>
                 <CodeLogin onClose={onClose} updateUserData={updateUserData} />
               </Tab>
-              <Tab key="password" title="密码登录">
+              <Tab key="password" title={t("密码登录")}>
                 <PasswordLogin onClose={onClose} updateUserData={updateUserData} />
               </Tab>
             </Tabs>

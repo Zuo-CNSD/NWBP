@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { addToast, Button, Input, Spinner, Tooltip, useDisclosure } from "@heroui/react";
 import { RiAddLine, RiDeleteBinLine, RiEditLine, RiSearchLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
 import VirtualGridPageList from "@/components/virtual-grid-page-list";
 import { getRelationFollowings, type RelationListItem } from "@/service/relation-followings";
@@ -167,25 +168,25 @@ const FollowList = () => {
   // Open Delete Modal
   const handleOpenDelete = (tag: RelationTag) => {
     onOpenConfirmModal({
-      title: `删除分组${tag.name}`,
+      title: t("删除分组{0}", tag.name),
       type: "danger",
-      confirmText: "删除",
+      confirmText: t("删除"),
       onConfirm: async () => {
         try {
           const res = await deleteRelationTag({ tagid: tag.tagid });
           if (res.code === 0) {
-            addToast({ title: "删除分组成功", color: "success" });
+            addToast({ title: t("删除分组成功"), color: "success" });
             if (activeTab === String(tag.tagid)) {
               setActiveTab("all");
             }
             fetchTags();
             return true;
           } else {
-            addToast({ title: res.message || "删除分组失败", color: "danger" });
+            addToast({ title: res.message || t("删除分组失败"), color: "danger" });
             return false;
           }
         } catch {
-          addToast({ title: "删除分组失败", color: "danger" });
+          addToast({ title: t("删除分组失败"), color: "danger" });
           return false;
         }
       },
@@ -203,9 +204,11 @@ const FollowList = () => {
         <div className="h-full w-50 pb-4">
           <div className="border-divider/40 flex h-full flex-col border-r">
             <div className="mb-2 flex items-center justify-between space-x-1 px-4">
-              <h1 className="min-w-0 truncate">{activeTab === "all" ? "全部关注" : activeTag?.name || "我的关注"}</h1>
+              <h1 className="min-w-0 truncate">
+                {activeTab === "all" ? t("全部关注") : activeTag?.name || t("我的关注")}
+              </h1>
               <div className="flex items-center">
-                <Tooltip content="创建分组" closeDelay={0}>
+                <Tooltip content={t("创建分组")} closeDelay={0}>
                   <Button size="sm" radius="md" onPress={handleOpenCreate} isIconOnly variant="light">
                     <RiAddLine size={20} />
                   </Button>
@@ -221,7 +224,7 @@ const FollowList = () => {
                   className="justify-between px-3"
                   onPress={() => setActiveTab("all")}
                 >
-                  <span className="truncate">{`全部关注${allCount ? `(${allCount})` : ""}`}</span>
+                  <span className="truncate">{t("全部关注{0}", allCount ? `(${allCount})` : "")}</span>
                 </Button>
                 {tags.map(tag => {
                   const key = String(tag.tagid);
@@ -251,7 +254,7 @@ const FollowList = () => {
                 <div className="flex items-center space-x-1">
                   {isCustomTag && activeTag && (
                     <>
-                      <Tooltip content="修改分组名称" closeDelay={0}>
+                      <Tooltip content={t("修改分组名称")} closeDelay={0}>
                         <Button
                           onPress={() => handleOpenRename(activeTag)}
                           isIconOnly
@@ -262,7 +265,7 @@ const FollowList = () => {
                           <RiEditLine size={18} />
                         </Button>
                       </Tooltip>
-                      <Tooltip content="删除分组" closeDelay={0}>
+                      <Tooltip content={t("删除分组")} closeDelay={0}>
                         <Button
                           onPress={() => handleOpenDelete(activeTag)}
                           isIconOnly
@@ -284,7 +287,7 @@ const FollowList = () => {
                         base: "w-64",
                         inputWrapper: "h-10",
                       }}
-                      placeholder="搜索关注"
+                      placeholder={t("搜索关注")}
                       size="sm"
                       radius="md"
                       startContent={<RiSearchLine size={16} />}
@@ -304,7 +307,7 @@ const FollowList = () => {
 
               {loading && !list.length ? (
                 <div className="flex h-[40vh] items-center justify-center">
-                  <Spinner label="加载中" />
+                  <Spinner label={t("加载中")} />
                 </div>
               ) : (
                 <VirtualGridPageList

@@ -4,6 +4,8 @@ import { Avatar } from "@heroui/react";
 import { RiAppsLine, RiSendInsLine } from "@remixicon/react";
 import clsx from "classnames";
 
+import { t } from "@/common/i18n";
+
 export interface AuthorItem {
   mid: number;
   face: string;
@@ -17,7 +19,7 @@ interface UserItemProps {
 }
 
 const UserItem: React.FC<UserItemProps> = ({ author, isSelected, onSelect }) => {
-  const displayName = author?.name || "全部";
+  const displayName = author?.name || t("全部");
   const displayFace = author?.face || "";
   const isAll = author === null;
   return (

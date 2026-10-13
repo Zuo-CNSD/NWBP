@@ -5,6 +5,7 @@ import { RiLogoutBoxRLine, RiQrCodeLine, RiRefreshLine } from "@remixicon/react"
 import { useRequest } from "ahooks";
 import { QRCodeCanvas } from "qrcode.react";
 
+import { t } from "@/common/i18n";
 import { useNetease } from "@/store/netease";
 import { useNeteaseLike } from "@/store/netease-like";
 
@@ -21,12 +22,21 @@ import { useNeteaseLike } from "@/store/netease-like";
  * 渲染端只接触「昵称 / 头像 / 是否登录」，不碰明文。
  */
 
-const QR_STATUS_TEXT: Record<number, string> = {
-  800: "二维码已过期，点右上角刷新",
-  801: "等待扫码…",
-  802: "已扫码，请在手机上确认",
-  803: "登录成功",
-};
+/**
+ * 扫码状态 → 提示语。
+ *
+ * 做成函数而不是常量表：状态文案要跟着语言变，
+ * 常量表在模块顶层求值，`t()` 只会跑一次。
+ */
+const qrStatusText = (code: number): string =>
+  (
+    ({
+      800: t("二维码已过期，点右上角刷新"),
+      801: t("等待扫码…"),
+      802: t("已扫码，请在手机上确认"),
+      803: t("登录成功"),
+    }) as Record<number, string>
+  )[code] ?? "";
 
 const NeteaseSettings = () => {
   const [account, setAccount] = useState<NeteaseAccountInfo | null>(null);
@@ -82,7 +92,7 @@ const NeteaseSettings = () => {
         if (result?.code === 803 && result.account) {
           setAccount(result.account);
           if (result.account) syncGlobalAccount(result.account);
-          addToast({ color: "success", title: `已登录：${result.account.nickname}` });
+          addToast({ color: "success", title: t("已登录：{0}", result.account.nickname) });
           return;
         }
         if (result?.code === 800) {
@@ -96,7 +106,7 @@ const NeteaseSettings = () => {
   const handleLoginWithCookie = async () => {
     const cookie = cookieInput.trim();
     if (!cookie) {
-      addToast({ color: "warning", title: "请先粘贴 Cookie" });
+      addToast({ color: "warning", title: t("请先粘贴 Cookie") });
       return;
     }
 
@@ -106,11 +116,11 @@ const NeteaseSettings = () => {
       setAccount(info);
       syncGlobalAccount(info);
       setCookieInput("");
-      addToast({ color: "success", title: `已登录：${info.nickname}` });
+      addToast({ color: "success", title: t("已登录：{0}", info.nickname) });
     } catch (error) {
       addToast({
         color: "danger",
-        title: "登录失败",
+        title: t("登录失败"),
         description: String(error instanceof Error ? error.message : error),
       });
     } finally {
@@ -122,18 +132,18 @@ const NeteaseSettings = () => {
     const info = await window.electron.netease.logout();
     setAccount(info);
     syncGlobalAccount(info);
-    addToast({ color: "success", title: "已退出网易云账号" });
+    addToast({ color: "success", title: t("已退出网易云账号") });
   };
 
   return (
     <div className="space-y-5">
       {/* 登录状态 */}
       <div className="flex items-center justify-between">
-        <div className="text-medium mr-6">登录状态</div>
+        <div className="text-medium mr-6">{t("登录状态")}</div>
         {account?.loggedIn ? (
           <div className="flex items-center gap-3">
             <Chip color="success" variant="flat" size="sm">
-              已登录
+              {t("已登录")}
             </Chip>
             <span className="text-sm">{account.nickname || `UID ${account.uid}`}</span>
             <Button
@@ -143,12 +153,12 @@ const NeteaseSettings = () => {
               startContent={<RiLogoutBoxRLine size={16} />}
               onPress={handleLogout}
             >
-              退出
+              {t("退出")}
             </Button>
           </div>
         ) : (
           <Chip color="default" variant="flat" size="sm">
-            未登录
+            {t("未登录")}
           </Chip>
         )}
       </div>
@@ -157,8 +167,10 @@ const NeteaseSettings = () => {
         <>
           <div className="flex items-start justify-between gap-8">
             <div className="mr-6">
-              <div className="text-medium">扫码登录</div>
-              <div className="text-default-500 mt-0.5 text-xs">用网易云音乐 App 的「扫一扫」扫描下面的二维码</div>
+              <div className="text-medium">{t("扫码登录")}</div>
+              <div className="text-default-500 mt-0.5 text-xs">
+                {t("用网易云音乐 App 的「扫一扫」扫描下面的二维码")}
+              </div>
             </div>
 
             <div className="flex w-[200px] flex-col items-center gap-2">
@@ -169,7 +181,7 @@ const NeteaseSettings = () => {
                   <QRCodeCanvas value={qrSession.loginUrl} size={164} level="M" marginSize={0} />
                   {qrCheck && qrCheck.code !== 803 && (
                     <div className="absolute inset-x-0 -bottom-1 text-center text-[11px] text-black/60">
-                      {QR_STATUS_TEXT[qrCheck.code] ?? ""}
+                      {qrStatusText(qrCheck.code)}
                     </div>
                   )}
                 </div>
@@ -181,22 +193,22 @@ const NeteaseSettings = () => {
                 startContent={<RiRefreshLine size={14} />}
                 onPress={() => void refreshQr()}
               >
-                刷新二维码
+                {t("刷新二维码")}
               </Button>
             </div>
           </div>
 
           <div className="flex items-start justify-between gap-8">
             <div className="mr-6 shrink-0">
-              <div className="text-medium">粘贴 Cookie</div>
+              <div className="text-medium">{t("粘贴 Cookie")}</div>
               <div className="text-default-500 mt-0.5 text-xs">
-                在浏览器登录 music.163.com 后，从开发者工具里复制整条 Cookie
+                {t("在浏览器登录 music.163.com 后，从开发者工具里复制整条 Cookie")}
               </div>
             </div>
 
             <div className="flex w-[420px] flex-col gap-2">
               <Textarea
-                aria-label="网易云 Cookie"
+                aria-label={t("网易云 Cookie")}
                 placeholder="MUSIC_U=…; __csrf=…"
                 minRows={2}
                 maxRows={4}
@@ -212,7 +224,7 @@ const NeteaseSettings = () => {
                 startContent={!isSubmitting ? <RiQrCodeLine size={16} /> : undefined}
                 onPress={handleLoginWithCookie}
               >
-                用 Cookie 登录
+                {t("用 Cookie 登录")}
               </Button>
             </div>
           </div>
@@ -220,7 +232,7 @@ const NeteaseSettings = () => {
       )}
 
       <div className="text-default-500 text-xs">
-        登录后即可使用网易云作为歌词来源；Cookie 会加密保存在本机，仅用于网易云接口。
+        {t("登录后即可使用网易云作为歌词来源；Cookie 会加密保存在本机，仅用于网易云接口。")}
       </div>
     </div>
   );

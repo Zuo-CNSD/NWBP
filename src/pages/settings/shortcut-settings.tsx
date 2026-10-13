@@ -3,6 +3,7 @@ import React from "react";
 import { Checkbox, addToast } from "@heroui/react";
 import { useShallow } from "zustand/react/shallow";
 
+import { t } from "@/common/i18n";
 import AsyncButton from "@/components/async-button";
 import ShortcutKeyInput from "@/components/shortcut-key-input";
 import { useShortcutSettings } from "@/store/shortcuts";
@@ -31,7 +32,7 @@ const ShortcutSettingsPage = () => {
       return {
         ...s,
         isConflict: !!existing,
-        error: existing ? `与“${existing.name}”冲突` : undefined,
+        error: existing ? t("与“{0}”冲突", t(existing.name)) : undefined,
       };
     });
 
@@ -43,7 +44,7 @@ const ShortcutSettingsPage = () => {
       const existing = globalShortcuts.find(g => g.id !== id && g.shortcut === shortcut);
       if (existing) {
         addToast({
-          title: `与${existing.name}冲突`,
+          title: t("与{0}冲突", t(existing.name)),
           color: "danger",
         });
         return;
@@ -56,7 +57,7 @@ const ShortcutSettingsPage = () => {
 
       if (!registerSuccess) {
         addToast({
-          title: "与系统或其他应用快捷键冲突",
+          title: t("与系统或其他应用快捷键冲突"),
           color: "danger",
         });
         return;
@@ -93,16 +94,16 @@ const ShortcutSettingsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2>快捷键设置</h2>
+        <h2>{t("快捷键设置")}</h2>
         <AsyncButton size="sm" radius="md" variant="flat" onPress={handleReset}>
-          恢复默认
+          {t("恢复默认")}
         </AsyncButton>
       </div>
 
       <div className="text-default-500 grid grid-cols-[1fr_200px_200px] gap-4 text-sm font-medium">
-        <div>功能说明</div>
-        <div>应用内快捷键</div>
-        <div>全局快捷键</div>
+        <div>{t("功能说明")}</div>
+        <div>{t("应用内快捷键")}</div>
+        <div>{t("全局快捷键")}</div>
       </div>
 
       <div className="space-y-4">
@@ -111,7 +112,7 @@ const ShortcutSettingsPage = () => {
 
           return (
             <div key={item.id} className="grid grid-cols-[1fr_200px_200px] items-start gap-4">
-              <div className="text-medium">{item.name}</div>
+              <div className="text-medium">{t(item.name)}</div>
               <ShortcutKeyInput
                 value={item.shortcut}
                 onChange={v => handleChangeShortcut(item.id, v)}
@@ -124,7 +125,7 @@ const ShortcutSettingsPage = () => {
                   onChange={v => handleChangeGlobalShortcut(globalShortcut.id, v)}
                   isDisabled={!enableGlobalShortcuts}
                   isInvalid={globalShortcut.isConflict}
-                  errorMessage="与系统或其他应用快捷键冲突"
+                  errorMessage={t("与系统或其他应用快捷键冲突")}
                 />
               )}
             </div>
@@ -133,7 +134,7 @@ const ShortcutSettingsPage = () => {
       </div>
       <div className="text-end">
         <Checkbox color="primary" isSelected={enableGlobalShortcuts} onValueChange={handleToggleEnableGlobalShortcut}>
-          启用全局快捷键
+          {t("启用全局快捷键")}
         </Checkbox>
       </div>
     </div>

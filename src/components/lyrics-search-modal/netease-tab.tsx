@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 
 import { Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, addToast } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import { formatDuration } from "@/common/utils/time";
 
 import LyricsPreviewModal from "./lyrics-preview-modal";
@@ -38,7 +39,7 @@ const NeteaseTab = ({ songs, loading, onAdoptLyrics }: NeteaseTabProps) => {
   const handleSelect = useCallback(async (song: NeteaseSong) => {
     const id = song.id;
     if (!id) {
-      addToast({ title: "缺少歌曲 ID，无法预览", color: "warning" });
+      addToast({ title: t("缺少歌曲 ID，无法预览"), color: "warning" });
       return;
     }
     setLyrics("");
@@ -53,16 +54,16 @@ const NeteaseTab = ({ songs, loading, onAdoptLyrics }: NeteaseTabProps) => {
       const translation = res?.tlyric?.lyric?.trim() || "";
 
       if (!text) {
-        addToast({ title: "未找到歌词内容", color: "warning" });
+        addToast({ title: t("未找到歌词内容"), color: "warning" });
         setIsPreviewOpen(false);
         return;
       }
 
-      setLyricsTitle(`${song.name || "未知歌曲"}-${renderArtists(song.artists)}`);
+      setLyricsTitle(`${song.name || t("未知歌曲")}-${renderArtists(song.artists)}`);
       setLyrics(text);
       setTlyrics(translation);
     } catch {
-      addToast({ title: "获取歌词失败", color: "danger" });
+      addToast({ title: t("获取歌词失败"), color: "danger" });
       setIsPreviewOpen(false);
     } finally {
       setPreviewLoading(false);
@@ -84,7 +85,7 @@ const NeteaseTab = ({ songs, loading, onAdoptLyrics }: NeteaseTabProps) => {
     <div className="h-[340px] overflow-auto">
       {loading ? (
         <div className="flex h-full items-center justify-center">
-          <Spinner color="primary" label="加载中" />
+          <Spinner color="primary" label={t("加载中")} />
         </div>
       ) : (
         <Table
@@ -100,12 +101,12 @@ const NeteaseTab = ({ songs, loading, onAdoptLyrics }: NeteaseTabProps) => {
           }}
         >
           <TableHeader>
-            <TableColumn width={200}>歌曲</TableColumn>
-            <TableColumn>专辑</TableColumn>
-            <TableColumn width={200}>歌手</TableColumn>
-            <TableColumn width={90}>时长</TableColumn>
+            <TableColumn width={200}>{t("歌曲")}</TableColumn>
+            <TableColumn>{t("专辑")}</TableColumn>
+            <TableColumn width={200}>{t("歌手")}</TableColumn>
+            <TableColumn width={90}>{t("时长")}</TableColumn>
           </TableHeader>
-          <TableBody emptyContent="暂无数据" items={songs}>
+          <TableBody emptyContent={t("暂无数据")} items={songs}>
             {song => (
               <TableRow key={song.id} onClick={() => handleSelect(song)} className="cursor-pointer">
                 <TableCell>{song.name || "--"}</TableCell>

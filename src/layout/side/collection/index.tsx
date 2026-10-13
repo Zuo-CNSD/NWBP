@@ -23,6 +23,7 @@ import {
 } from "@remixicon/react";
 
 import { CollectionType } from "@/common/constants/collection";
+import { t } from "@/common/i18n";
 import { getAllFavMedia } from "@/common/utils/fav";
 import { type ContextMenuItem } from "@/components/context-menu";
 import MenuGroup from "@/components/menu/menu-group";
@@ -92,23 +93,29 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
 
   const createdContextMenus = useMemo<ContextMenuItem[]>(
     () => [
-      { key: "play", label: "播放", icon: <RiPlayCircleLine size={20} /> },
-      { key: "add-to-playlist", label: "添加到播放列表", icon: <RiPlayListAddLine size={18} /> },
-      { key: "edit", label: "修改", icon: <RiEdit2Line size={18} /> },
-      { key: "hide", label: "隐藏", icon: <RiEyeOffLine size={18} /> },
-      { key: "delete", label: "删除", icon: <RiDeleteBinLine size={18} />, color: "danger", className: "text-danger" },
+      { key: "play", label: t("播放"), icon: <RiPlayCircleLine size={20} /> },
+      { key: "add-to-playlist", label: t("添加到播放列表"), icon: <RiPlayListAddLine size={18} /> },
+      { key: "edit", label: t("修改"), icon: <RiEdit2Line size={18} /> },
+      { key: "hide", label: t("隐藏"), icon: <RiEyeOffLine size={18} /> },
+      {
+        key: "delete",
+        label: t("删除"),
+        icon: <RiDeleteBinLine size={18} />,
+        color: "danger",
+        className: "text-danger",
+      },
     ],
     [],
   );
 
   const collectedContextMenus = useMemo<ContextMenuItem[]>(
     () => [
-      { key: "play", label: "播放", icon: <RiPlayCircleLine size={20} /> },
-      { key: "add-to-playlist", label: "添加到播放列表", icon: <RiPlayListAddLine size={18} /> },
-      { key: "hide", label: "隐藏", icon: <RiEyeOffLine size={18} /> },
+      { key: "play", label: t("播放"), icon: <RiPlayCircleLine size={20} /> },
+      { key: "add-to-playlist", label: t("添加到播放列表"), icon: <RiPlayListAddLine size={18} /> },
+      { key: "hide", label: t("隐藏"), icon: <RiEyeOffLine size={18} /> },
       {
         key: "unfavorite",
-        label: "取消收藏",
+        label: t("取消收藏"),
         icon: <RiStarOffLine size={18} />,
         color: "danger",
         className: "text-danger",
@@ -146,13 +153,13 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
       const medias = await getAllFavMedia({ id: String(favoriteId) });
 
       if (!medias.length) {
-        addToast({ title: title ? `「${title}」暂无可播放内容` : "暂无可播放内容", color: "warning" });
+        addToast({ title: title ? t("「{0}」暂无可播放内容", title) : t("暂无可播放内容"), color: "warning" });
         return;
       }
 
       await usePlayList.getState().playList(medias);
     } catch (error) {
-      addToast({ title: "播放收藏夹失败", color: "danger" });
+      addToast({ title: t("播放收藏夹失败"), color: "danger" });
       console.error(error);
     }
   }, []);
@@ -162,14 +169,17 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
       const medias = await getAllFavMedia({ id: String(favoriteId) });
 
       if (!medias.length) {
-        addToast({ title: title ? `「${title}」暂无可播放内容` : "暂无可播放内容", color: "warning" });
+        addToast({ title: title ? t("「{0}」暂无可播放内容", title) : t("暂无可播放内容"), color: "warning" });
         return;
       }
 
       usePlayList.getState().addList(medias);
-      addToast({ title: `已添加${title ? `「${title}」` : "收藏夹"}到播放列表`, color: "success" });
+      addToast({
+        title: t("已添加{0}到播放列表", title ? `「${title}」` : t("收藏夹")),
+        color: "success",
+      });
     } catch (error) {
-      addToast({ title: "添加到播放列表失败", color: "danger" });
+      addToast({ title: t("添加到播放列表失败"), color: "danger" });
       console.error(error);
     }
   }, []);
@@ -192,13 +202,13 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
         }));
 
       if (!sortedMapped?.length) {
-        addToast({ title: "暂无可播放内容", color: "warning" });
+        addToast({ title: t("暂无可播放内容"), color: "warning" });
         return;
       }
 
       await usePlayList.getState().playList(sortedMapped);
     } catch {
-      addToast({ title: "播放合集失败", color: "danger" });
+      addToast({ title: t("播放合集失败"), color: "danger" });
     }
   }, []);
 
@@ -220,14 +230,14 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
         }));
 
       if (!sortedMapped?.length) {
-        addToast({ title: "暂无可播放内容", color: "warning" });
+        addToast({ title: t("暂无可播放内容"), color: "warning" });
         return;
       }
 
       usePlayList.getState().addList(sortedMapped);
-      addToast({ title: "已添加合集到播放列表", color: "success" });
+      addToast({ title: t("已添加合集到播放列表"), color: "success" });
     } catch {
-      addToast({ title: "添加到播放列表失败", color: "danger" });
+      addToast({ title: t("添加到播放列表失败"), color: "danger" });
     }
   }, []);
 
@@ -239,7 +249,7 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
 
       const nextHiddenKeys = Array.from(new Set([...hiddenMenuKeys, key]));
       updateSettings({ hiddenMenuKeys: nextHiddenKeys });
-      addToast({ title: "已隐藏该菜单项", color: "success" });
+      addToast({ title: t("已隐藏该菜单项"), color: "success" });
     },
     [hiddenMenuKeys, updateSettings],
   );
@@ -247,7 +257,7 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
   const handleDeleteFavorite = useCallback(
     (favorite: FavoriteItem) => {
       onOpenConfirmModal({
-        title: favorite.title ? `确认删除「${favorite.title}」吗？` : "确认删除该收藏夹吗？",
+        title: favorite.title ? t("确认删除「{0}」吗？", favorite.title) : t("确认删除该收藏夹吗？"),
         type: "danger",
         onConfirm: async () => {
           try {
@@ -255,14 +265,14 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
 
             if (res.code === 0 && res.data === 0) {
               rmCreatedFavorite(Number(favorite.id));
-              addToast({ title: "删除成功", color: "success" });
+              addToast({ title: t("删除成功"), color: "success" });
               return true;
             }
 
-            addToast({ title: res.message || "删除失败", color: "danger" });
+            addToast({ title: res.message || t("删除失败"), color: "danger" });
             return false;
           } catch {
-            addToast({ title: "删除失败", color: "danger" });
+            addToast({ title: t("删除失败"), color: "danger" });
             return false;
           }
         },
@@ -274,21 +284,21 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
   const handleUnfavoriteFavorite = useCallback(
     (favorite: FavoriteItem) => {
       onOpenConfirmModal({
-        title: favorite.title ? `确认取消收藏「${favorite.title}」吗？` : "确认取消收藏吗？",
+        title: favorite.title ? t("确认取消收藏「{0}」吗？", favorite.title) : t("确认取消收藏吗？"),
         onConfirm: async () => {
           try {
             const res = await postFavFolderUnfav({ media_id: favorite.id, platform: "web" });
 
             if (res.code === 0) {
               rmCollectedFavorite(Number(favorite.id));
-              addToast({ title: "已取消收藏", color: "success" });
+              addToast({ title: t("已取消收藏"), color: "success" });
               return true;
             }
 
-            addToast({ title: res.message || "取消收藏失败", color: "danger" });
+            addToast({ title: res.message || t("取消收藏失败"), color: "danger" });
             return false;
           } catch {
-            addToast({ title: "取消收藏失败", color: "danger" });
+            addToast({ title: t("取消收藏失败"), color: "danger" });
             return false;
           }
         },
@@ -331,7 +341,7 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
           } else if (item.type === CollectionType.VideoCollections) {
             await handlePlaySeries(item.id);
           } else {
-            addToast({ title: "无法识别收藏夹类型", color: "warning" });
+            addToast({ title: t("无法识别收藏夹类型"), color: "warning" });
           }
           break;
         case "add-to-playlist":
@@ -340,7 +350,7 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
           } else if (item.type === CollectionType.VideoCollections) {
             await handleAddSeriesToPlaylist(item.id);
           } else {
-            addToast({ title: "无法识别收藏夹类型", color: "warning" });
+            addToast({ title: t("无法识别收藏夹类型"), color: "warning" });
           }
           break;
         case "hide":
@@ -485,7 +495,7 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
     }));
 
     const titleExtra = onOpenAddFavorite ? (
-      <Tooltip closeDelay={0} content="新建收藏夹">
+      <Tooltip closeDelay={0} content={t("新建收藏夹")}>
         <Button
           isIconOnly
           variant="light"
@@ -500,7 +510,7 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
     ) : null;
 
     return renderFavoriteGroup({
-      title: "我创建的",
+      title: t("我创建的"),
       items,
       isFolded: createdFolded,
       onToggleFolded: handleToggleCreatedFolded,
@@ -528,7 +538,7 @@ const Collection = ({ isCollapsed, onOpenAddFavorite, onOpenEditFavorite }: Prop
     }));
 
     return renderFavoriteGroup({
-      title: "我收藏的",
+      title: t("我收藏的"),
       items,
       isFolded: collectedFolded,
       onToggleFolded: handleToggleCollectedFolded,

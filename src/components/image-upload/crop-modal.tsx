@@ -4,6 +4,7 @@ import "react-image-crop/dist/ReactCrop.css";
 
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import { postVuWebCoverUp } from "@/service/vu-web-cover-up";
 
 import "./index.css";
@@ -51,7 +52,7 @@ const CropModal = ({ src, isOpen, onClose, onUploaded }: Props) => {
     const ctx = canvas.getContext("2d");
 
     if (!ctx) {
-      throw new Error("无法获取画布上下文");
+      throw new Error(t("无法获取画布上下文"));
     }
 
     ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
@@ -86,13 +87,13 @@ const CropModal = ({ src, isOpen, onClose, onUploaded }: Props) => {
       const res = await postVuWebCoverUp({ cover: dataUrl, ts });
 
       if (res.code !== 0 || !res.data?.url) {
-        setError(res.message || "上传失败");
+        setError(res.message || t("上传失败"));
         return;
       }
 
       onUploaded(res.data.url);
     } catch {
-      setError("上传失败，请稍后重试");
+      setError(t("上传失败，请稍后重试"));
     } finally {
       setIsUploading(false);
     }
@@ -113,7 +114,7 @@ const CropModal = ({ src, isOpen, onClose, onUploaded }: Props) => {
       disableAnimation
     >
       <ModalContent>
-        <ModalHeader className="py-3">裁剪封面</ModalHeader>
+        <ModalHeader className="py-3">{t("裁剪封面")}</ModalHeader>
         <ModalBody className="items-center">
           {src && (
             <div className="flex items-center justify-center" style={{ width: 322, height: 202 }}>
@@ -128,7 +129,7 @@ const CropModal = ({ src, isOpen, onClose, onUploaded }: Props) => {
                 }}
                 className="h-full w-full"
               >
-                <img src={src} alt="裁剪" onLoad={handleImageLoad} className="h-full w-full object-contain" />
+                <img src={src} alt={t("裁剪")} onLoad={handleImageLoad} className="h-full w-full object-contain" />
               </ReactCrop>
             </div>
           )}
@@ -136,10 +137,10 @@ const CropModal = ({ src, isOpen, onClose, onUploaded }: Props) => {
         </ModalBody>
         <ModalFooter>
           <Button variant="light" onPress={onClose} isDisabled={isUploading}>
-            取消
+            {t("取消")}
           </Button>
           <Button isLoading={isUploading} color="primary" onPress={handleUpload}>
-            上传
+            {t("上传")}
           </Button>
         </ModalFooter>
       </ModalContent>

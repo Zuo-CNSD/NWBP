@@ -78,3 +78,44 @@ export const toWeapiForm = (payload: unknown) => {
   const { params, encSecKey } = weapi(payload);
   return `params=${encodeURIComponent(params)}&encSecKey=${encodeURIComponent(encSecKey)}`;
 };
+
+/**
+ * 网易云的 eapi 加密。
+ *
+ * 「一起听」那一批接口（`interface.music.163.com/eapi/listen/together/**`）只认 eapi，
+ * 和 weapi 是两套完全不同的东西：
+ *
+ *   message = `nobody${url}use${JSON.stringify(data)}md5forencrypt`
+ *   digest  = md5(message)                             ← 十六进制
+ *   payload = `${url}-36cd479b6b5-${data}-36cd479b6b5-${digest}`
+ *   params  = AES-128-ECB(EAPI_KEY, payload)           ← 输出十六进制大写
+ *
+ * 两个容易踩的点：
+ *   1. 是 **ECB、没有 IV**（weapi 那套是 CBC + 固定 IV）；
+ *   2. 摘要里的 `url` 用 **`/api/...`** 形式，而真正打过去的是 `/eapi/...` —— 两者不一样。
+ */
+const EAPI_KEY = Buffer.from("e82ckenh8dichen8");
+
+export const eapi = (url: string, payload: unknown) => {
+  const text = JSON.stringify(payload);
+  const digest = crypto.createHash("md5").update(`nobody${url}use${text}md5forencrypt`).digest("hex");
+  const data = `${url}-36cd479b6b5-${text}-36cd479b6b5-${digest}`;
+
+  const cipher = crypto.createCipheriv("aes-128-ecb", EAPI_KEY, null);
+  return Buffer.concat([cipher.update(Buffer.from(data, "utf-8")), cipher.final()])
+    .toString("hex")
+    .toUpperCase();
+};
+
+/** eapi 的 body 就是 `params=<hex>`，hex 全是安全字符，不用再编码 */
+export const toEapiForm = (url: string, payload: unknown) => `params=${eapi(url, payload)}`;
+
+/**
+ * ⚠️ eapi 的**响应体也是密文**（不是 JSON）—— 这是最容易漏的一步。
+ * 直接 `JSON.parse(response.body)` 会抛错，得先用同一把 key 做 AES-128-ECB 解密。
+ * 只对 eapi 通道生效，weapi / 明文接口的响应本来就是 JSON。
+ */
+export const eapiDecrypt = (body: Buffer) => {
+  const decipher = crypto.createDecipheriv("aes-128-ecb", EAPI_KEY, null);
+  return Buffer.concat([decipher.update(body), decipher.final()]).toString("utf-8");
+};

@@ -12,6 +12,7 @@ import clx from "classnames";
 import { useShallow } from "zustand/react/shallow";
 
 import { getPlayModeList } from "@/common/constants/audio";
+import { t } from "@/common/i18n";
 import { createBroadcastChannel, toggleMiniMode } from "@/common/utils/mini-player";
 import Image from "@/components/image";
 import { usePlayProgress } from "@/store/play-progress";
@@ -128,12 +129,12 @@ const MiniPlayer = () => {
             {title ? (
               <span className="truncate text-center text-sm font-medium">{title}</span>
             ) : (
-              <span className="text-default-500 text-center text-sm">暂无播放内容</span>
+              <span className="text-default-500 text-center text-sm">{t("暂无播放内容")}</span>
             )}
           </div>
           <div className="window-no-drag mt-1 flex items-center">
             <Slider
-              aria-label="播放进度"
+              aria-label={t("播放进度")}
               minValue={0}
               maxValue={maxDuration}
               value={Math.min(currentTime, maxDuration)}
@@ -160,7 +161,7 @@ const MiniPlayer = () => {
               disableAnimation
               onPress={togglePlayMode}
               className="hover:text-primary window-no-drag"
-              aria-label="播放模式"
+              aria-label={t("播放模式")}
             >
               {playModeIcon}
             </Button>

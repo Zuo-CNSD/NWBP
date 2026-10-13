@@ -14,6 +14,7 @@ import {
 
 import type { RelationListItem } from "@/service/relation-followings";
 
+import { t } from "@/common/i18n";
 import { type RelationTag, type RelationTagUser, relationTagAddUsers } from "@/service/relation-tag";
 
 interface Props {
@@ -55,20 +56,20 @@ const SetGroupModal = ({ isOpen, onOpenChange, onClose, user, tags, onSuccess }:
 
       if (res.code === 0) {
         addToast({
-          title: "设置分组成功",
+          title: t("设置分组成功"),
           color: "success",
         });
         onSuccess();
         onClose();
       } else {
         addToast({
-          title: res.message || "设置分组失败",
+          title: res.message || t("设置分组失败"),
           color: "danger",
         });
       }
     } catch {
       addToast({
-        title: "设置分组失败",
+        title: t("设置分组失败"),
         color: "danger",
       });
     } finally {
@@ -81,7 +82,7 @@ const SetGroupModal = ({ isOpen, onOpenChange, onClose, user, tags, onSuccess }:
       <ModalContent>
         {onClose => (
           <>
-            <ModalHeader className="flex flex-col gap-1">设置分组</ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">{t("设置分组")}</ModalHeader>
             <ModalBody>
               <CheckboxGroup color="primary" value={selectedTags} onValueChange={setSelectedTags}>
                 {tags.map(tag => (
@@ -93,10 +94,10 @@ const SetGroupModal = ({ isOpen, onOpenChange, onClose, user, tags, onSuccess }:
             </ModalBody>
             <ModalFooter>
               <Button variant="light" onPress={onClose}>
-                取消
+                {t("取消")}
               </Button>
               <Button color="primary" isLoading={loading} onPress={handleConfirmSetGroup}>
-                保存
+                {t("保存")}
               </Button>
             </ModalFooter>
           </>

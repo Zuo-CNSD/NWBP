@@ -4,6 +4,7 @@ import { Input } from "@heroui/react";
 import { RiSearchLine } from "@remixicon/react";
 import { useDebounceFn } from "ahooks";
 
+import { t } from "@/common/i18n";
 import DateRangePicker from "@/components/date-range-picker";
 
 interface Props {
@@ -26,7 +27,7 @@ const Search = ({ onSearch, onDateRangeChange }: Props) => {
       <DateRangePicker onDateRangeChange={onDateRangeChange} />
 
       <Input
-        placeholder="搜索标题/UP主名称"
+        placeholder={t("搜索标题/UP主名称")}
         startContent={<RiSearchLine size={16} />}
         value={keyword}
         onValueChange={setKeyword}

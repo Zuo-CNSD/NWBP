@@ -5,11 +5,13 @@ import { Chip } from "@heroui/react";
 import { RiArrowUpSLine, RiMusic2Line } from "@remixicon/react";
 import clsx from "classnames";
 
+import { t } from "@/common/i18n";
 import { isNeteaseTrack } from "@/common/utils/favorite";
 import { openBiliVideoLink } from "@/common/utils/url";
 import Image from "@/components/image";
 import MusicFavButton from "@/components/music-fav-button";
 import MusicThumb from "@/components/music-thumb";
+import TogetherBadge from "@/components/netease/together-badge";
 import { useModalStore } from "@/store/modal";
 import { useNetease } from "@/store/netease";
 import { usePlayList } from "@/store/play-list";
@@ -54,6 +56,7 @@ const LeftControl = () => {
         <div className="text-primary rounded-medium absolute top-0 left-0 z-10 flex h-full w-full items-center justify-center overflow-hidden bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100">
           <RiArrowUpSLine size={32} />
         </div>
+        <TogetherBadge />
       </div>
       <div className="flex min-w-0 flex-col items-start space-y-1">
         <span className="flex w-full items-center">
@@ -72,12 +75,12 @@ const LeftControl = () => {
           </span>
           {Boolean(playItem?.isLossless) && (
             <Chip size="sm" className="h-auto px-0 py-0.5 text-[10px]">
-              无损
+              {t("无损")}
             </Chip>
           )}
           {Boolean(playItem?.isDolby) && (
             <Chip size="sm" className="h-auto px-0 py-0.5 text-[10px]">
-              杜比
+              {t("杜比")}
             </Chip>
           )}
         </span>
@@ -91,7 +94,7 @@ const LeftControl = () => {
             navigate(`/user/${playItem?.ownerMid}`);
           }}
         >
-          {playItem?.source === "local" ? "本地音乐" : playItem?.ownerName || "未知"}
+          {playItem?.source === "local" ? t("本地音乐") : playItem?.ownerName || t("未知")}
         </span>
       </div>
       <div className="flex items-center">

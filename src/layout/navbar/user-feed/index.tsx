@@ -5,6 +5,7 @@ import { Tooltip, Button, Badge } from "@heroui/react";
 import { RiTeamLine } from "@remixicon/react";
 import { useRequest } from "ahooks";
 
+import { t } from "@/common/i18n";
 import { getWebDynamicFeedAllUpdate } from "@/service/web-dynamic";
 
 const UserFeed = () => {
@@ -47,7 +48,7 @@ const UserFeed = () => {
 
   return (
     <>
-      <Tooltip closeDelay={0} content="动态">
+      <Tooltip closeDelay={0} content={t("动态")}>
         {updateCount > 0 ? (
           <Badge
             isDot

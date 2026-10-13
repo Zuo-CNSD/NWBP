@@ -1,6 +1,8 @@
 export const defaultAppSettings: AppSettings = {
   autoStart: false,
   closeWindowOption: "hide",
+  // 默认中文。老用户升级后配置文件里没有这一项，electron-store 会用这个默认值补上。
+  language: "zh-CN",
   fontFamily: "system-ui",
   // 默认圆角（基准档位，对应 HeroUI 的 medium）。14px 让整体更圆润，
   // 旧版本默认值是 8px，会在 settings store 里做一次迁移

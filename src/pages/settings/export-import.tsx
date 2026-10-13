@@ -4,6 +4,7 @@ import { Button, addToast } from "@heroui/react";
 import { RiExportFill, RiImportFill } from "@remixicon/react";
 import { merge } from "es-toolkit/object";
 
+import { t } from "@/common/i18n";
 import { useSettings } from "@/store/settings";
 import { defaultAppSettings } from "@shared/settings/app-settings";
 import { StoreNameMap } from "@shared/store";
@@ -27,9 +28,9 @@ const ImportExport = () => {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      addToast({ title: "已导出配置", description: "JSON 文件已下载", color: "success" });
+      addToast({ title: t("已导出配置"), description: t("JSON 文件已下载"), color: "success" });
     } catch (e) {
-      addToast({ title: "导出失败", description: String(e), color: "danger" });
+      addToast({ title: t("导出失败"), description: String(e), color: "danger" });
     }
   };
 
@@ -53,10 +54,10 @@ const ImportExport = () => {
       const merged = merge(getSettings(), patch);
 
       updateSettings(merged);
-      addToast({ title: "已导入配置", description: "设置已应用", color: "success" });
+      addToast({ title: t("已导入配置"), description: t("设置已应用"), color: "success" });
       window.location.reload();
     } catch {
-      addToast({ title: "导入失败", description: "文件解析错误或格式不正确", color: "danger" });
+      addToast({ title: t("导入失败"), description: t("文件解析错误或格式不正确"), color: "danger" });
     }
   };
 
@@ -64,10 +65,10 @@ const ImportExport = () => {
     <div className="flex items-center space-x-2">
       <input ref={fileInputRef} type="file" accept="application/json" hidden onChange={handleImportFileChange} />
       <Button size="sm" radius="md" startContent={<RiExportFill size={16} />} onPress={handleExport}>
-        导出配置
+        {t("导出配置")}
       </Button>
       <Button size="sm" radius="md" startContent={<RiImportFill size={16} />} onPress={handleImportClick}>
-        导入配置
+        {t("导入配置")}
       </Button>
     </div>
   );

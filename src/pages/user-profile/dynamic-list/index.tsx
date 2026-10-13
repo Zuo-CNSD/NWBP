@@ -4,6 +4,7 @@ import { Spinner } from "@heroui/react";
 import { useInViewport, useMount } from "ahooks";
 
 import { DynamicType } from "@/common/constants/feed";
+import { t } from "@/common/i18n";
 import Empty from "@/components/empty";
 import { getWebDynamicFeedSpace, type WebDynamicItem } from "@/service/web-dynamic";
 
@@ -77,7 +78,7 @@ const DynamicList: React.FC<DynamicListProps> = ({ mid, getScrollElement }) => {
   }
 
   if (initialized && items.length === 0) {
-    return <Empty title="暂无动态" />;
+    return <Empty title={t("暂无动态")} />;
   }
 
   return (
@@ -95,7 +96,7 @@ const DynamicList: React.FC<DynamicListProps> = ({ mid, getScrollElement }) => {
             <span>Loading...</span>
           </div>
         )}
-        {!hasMore && items.length > 0 && <div className="text-default-500 text-sm">没有更多了</div>}
+        {!hasMore && items.length > 0 && <div className="text-default-500 text-sm">{t("没有更多了")}</div>}
       </div>
     </div>
   );

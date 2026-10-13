@@ -10,6 +10,7 @@ import PQueue from "p-queue";
 
 import type { FullMediaDownloadTask, MediaDownloadChunk } from "./types";
 
+import { t } from "../../i18n";
 import { UserAgent } from "../../network/user-agent";
 import { appSettingsStore } from "../../store";
 import { sanitizeFilename } from "../../utils";
@@ -62,7 +63,7 @@ export class DownloadCore extends EventEmitter {
     this.saveDir = appSettingsStore.get("appSettings.downloadPath") || app.getPath("downloads");
     Object.assign(this, task);
     if (!this.title.trim()) {
-      this.title = `NWBP下载-${this.id}`;
+      this.title = t("NWBP下载-{0}", this.id);
     }
   }
 

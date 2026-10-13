@@ -7,6 +7,7 @@ import { useRequest, useClickAway } from "ahooks";
 import classNames from "classnames";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 
+import { t } from "@/common/i18n";
 import { getSearchSuggestMain } from "@/service/main-suggest";
 import { useSearchHistory } from "@/store/search-history";
 import { useSettings } from "@/store/settings";
@@ -88,7 +89,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFocusChange }) => {
           onFocusChange?.(true);
         }}
         onClick={() => setOpen(true)}
-        placeholder="搜索"
+        placeholder={t("搜索")}
         isClearable
         radius="full"
         startContent={<RiSearchLine size={16} />}
@@ -109,7 +110,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFocusChange }) => {
       >
         <OverlayScrollbarsComponent className="h-full flex-1 p-2" options={{ scrollbars: { autoHide: "leave" } }}>
           <Listbox
-            aria-label="搜索建议"
+            aria-label={t("搜索建议")}
             selectionMode="none"
             items={
               suggestionsData?.map(item => ({
@@ -118,13 +119,13 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFocusChange }) => {
                 name: item.name,
               })) || []
             }
-            emptyContent={<div className="flex items-center justify-center py-6">暂无搜索建议</div>}
+            emptyContent={<div className="flex items-center justify-center py-6">{t("暂无搜索建议")}</div>}
             topContent={
               showSearchHistory &&
               searchHistoryItems.length > 0 && (
                 <>
                   <div className="mb-1 flex items-center justify-between px-1">
-                    <span className="text-sm">搜索历史</span>
+                    <span className="text-sm">{t("搜索历史")}</span>
                     <span
                       className="text-foreground-400 hover:text-foreground-600 cursor-pointer text-xs"
                       onMouseDown={e => e.preventDefault()}
@@ -135,7 +136,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFocusChange }) => {
                         inputRef.current?.focus();
                       }}
                     >
-                      清除全部
+                      {t("清除全部")}
                     </span>
                   </div>
                   <div className="mb-1 flex flex-wrap gap-2">

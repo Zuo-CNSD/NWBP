@@ -16,6 +16,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import { t } from "@/common/i18n";
 import { isPrivateFav } from "@/common/utils/fav";
 import ImageUpload from "@/components/image-upload";
 import { postFavFolderAdd } from "@/service/fav-folder-add";
@@ -25,15 +26,21 @@ import { useFavoritesStore } from "@/store/favorite";
 
 import ScrollContainer from "../scroll-container";
 
-// 表单校验规则：title 必填（去除首尾空格），intro 可选
-const schema = z.object({
-  title: z.string().trim().min(1, "名称为必填项"),
-  intro: z.string().optional(),
-  cover: z.string().optional(),
-  isPublic: z.boolean().default(true),
-});
+/**
+ * 表单校验规则：title 必填（去除首尾空格），intro 可选。
+ *
+ * 做成函数是因为校验提示语要跟着语言变 —— 常量 schema 在模块顶层求值，
+ * `t()` 只跑一次，换语言后提示语还是旧语言。
+ */
+const createSchema = () =>
+  z.object({
+    title: z.string().trim().min(1, t("名称为必填项")),
+    intro: z.string().optional(),
+    cover: z.string().optional(),
+    isPublic: z.boolean().default(true),
+  });
 
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<ReturnType<typeof createSchema>>;
 
 interface Props {
   /** 收藏夹id */
@@ -55,7 +62,7 @@ const FavoritesEditModal = ({ mid, isOpen, onOpenChange, onSuccess }: Props) => 
     reset,
     formState: { touchedFields, isSubmitting, isSubmitted, isValid },
   } = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(createSchema()),
     defaultValues: { title: "", intro: "", isPublic: true, cover: "" },
     mode: "onChange",
   });
@@ -76,12 +83,12 @@ const FavoritesEditModal = ({ mid, isOpen, onOpenChange, onSuccess }: Props) => 
               setValue("isPublic", !isPrivateFav(res.data.attr));
               setValue("cover", res.data.cover ?? "");
             } else {
-              addToast({ color: "danger", title: "加载失败", description: res?.message || "请稍后再试" });
+              addToast({ color: "danger", title: t("加载失败"), description: res?.message || t("请稍后再试") });
             }
           }
         } catch (error: any) {
           if (!canceled) {
-            addToast({ color: "danger", title: "网络错误", description: error?.message || "请检查网络后重试" });
+            addToast({ color: "danger", title: t("网络错误"), description: error?.message || t("请检查网络后重试") });
           }
         } finally {
           if (!canceled) setIsFetching(false);
@@ -126,8 +133,8 @@ const FavoritesEditModal = ({ mid, isOpen, onOpenChange, onSuccess }: Props) => 
         } else {
           addToast({
             color: "danger",
-            title: "修改失败",
-            description: res?.message || "请稍后再试",
+            title: t("修改失败"),
+            description: res?.message || t("请稍后再试"),
           });
         }
       } else {
@@ -145,7 +152,7 @@ const FavoritesEditModal = ({ mid, isOpen, onOpenChange, onSuccess }: Props) => 
             type: res.data.type,
             mid: res.data.mid,
           });
-          addToast({ color: "success", title: "创建成功" });
+          addToast({ color: "success", title: t("创建成功") });
           reset();
           onOpenChange(false);
           onSuccess?.({
@@ -155,16 +162,16 @@ const FavoritesEditModal = ({ mid, isOpen, onOpenChange, onSuccess }: Props) => 
         } else {
           addToast({
             color: "danger",
-            title: "创建失败",
-            description: res?.message || "请稍后再试",
+            title: t("创建失败"),
+            description: res?.message || t("请稍后再试"),
           });
         }
       }
     } catch (error: any) {
       addToast({
         color: "danger",
-        title: "网络错误",
-        description: error?.message || "请检查网络后重试",
+        title: t("网络错误"),
+        description: error?.message || t("请检查网络后重试"),
       });
     }
   };
@@ -181,7 +188,7 @@ const FavoritesEditModal = ({ mid, isOpen, onOpenChange, onSuccess }: Props) => 
     >
       <ModalContent>
         <form onSubmit={handleSubmit(onSubmit)} className="flex h-full min-h-0 flex-1 flex-col">
-          <ModalHeader className="py-3">{mid ? "修改收藏夹" : "新建收藏夹"}</ModalHeader>
+          <ModalHeader className="py-3">{mid ? t("修改收藏夹") : t("新建收藏夹")}</ModalHeader>
           <ModalBody className="min-h-0 p-0">
             <ScrollContainer className="px-4">
               <div className="flex flex-col space-y-4">
@@ -204,12 +211,12 @@ const FavoritesEditModal = ({ mid, isOpen, onOpenChange, onSuccess }: Props) => 
                   control={control}
                   render={({ field, fieldState }) => (
                     <Input
-                      label="名称"
+                      label={t("名称")}
                       labelPlacement="outside"
                       value={field.value}
                       onValueChange={field.onChange}
                       onBlur={field.onBlur}
-                      placeholder="请输入收藏夹名称"
+                      placeholder={t("请输入收藏夹名称")}
                       isRequired
                       isDisabled={isFetching || isSubmitting}
                       isInvalid={(touchedFields.title || isSubmitted) && !!fieldState.error}
@@ -223,9 +230,9 @@ const FavoritesEditModal = ({ mid, isOpen, onOpenChange, onSuccess }: Props) => 
                   control={control}
                   render={({ field }) => (
                     <Textarea
-                      label="简介"
+                      label={t("简介")}
                       labelPlacement="outside"
-                      placeholder="可选，简单介绍此收藏夹"
+                      placeholder={t("可选，简单介绍此收藏夹")}
                       value={field.value}
                       onValueChange={field.onChange}
                       onBlur={field.onBlur}
@@ -244,7 +251,7 @@ const FavoritesEditModal = ({ mid, isOpen, onOpenChange, onSuccess }: Props) => 
                       onValueChange={field.onChange}
                       isDisabled={isFetching || isSubmitting}
                     >
-                      {field.value ? "公开" : "私密"}
+                      {field.value ? t("公开") : t("私密")}
                     </Switch>
                   )}
                 />
@@ -260,10 +267,10 @@ const FavoritesEditModal = ({ mid, isOpen, onOpenChange, onSuccess }: Props) => 
               }}
               isDisabled={isSubmitting || isFetching}
             >
-              取消
+              {t("取消")}
             </Button>
             <Button type="submit" color="primary" isLoading={isSubmitting} isDisabled={!isValid || isFetching}>
-              提交
+              {t("提交")}
             </Button>
           </ModalFooter>
         </form>

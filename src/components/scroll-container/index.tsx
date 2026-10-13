@@ -8,6 +8,8 @@ import {
   type OverlayScrollbarsComponentRef,
 } from "overlayscrollbars-react";
 
+import { t } from "@/common/i18n";
+
 const ScrollContainer = ({
   ref,
   options,
@@ -78,7 +80,7 @@ const ScrollContainer = ({
             radius="full"
             variant="flat"
             onPress={handleBackToTop}
-            aria-label="返回顶部"
+            aria-label={t("返回顶部")}
             className="bg-default/50 fixed right-10 bottom-[120px] z-20 shadow-xl shadow-black/30"
           >
             <RiArrowUpSLine size={20} />

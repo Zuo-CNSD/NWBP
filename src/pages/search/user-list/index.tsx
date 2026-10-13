@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { Spinner, addToast } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import VirtualGridPageList from "@/components/virtual-grid-page-list";
 import { getRelationRelations } from "@/service/relation-relations";
 import { getWebInterfaceWbiSearchType, type SearchUserItem } from "@/service/web-interface-search-type";
@@ -75,7 +76,7 @@ export default function UserList({ keyword, getScrollElement }: UserListProps) {
       });
       setPage(nextPage);
     } catch {
-      addToast({ title: "加载更多失败", color: "danger" });
+      addToast({ title: t("加载更多失败"), color: "danger" });
     } finally {
       setLoadingMore(false);
     }
@@ -92,7 +93,7 @@ export default function UserList({ keyword, getScrollElement }: UserListProps) {
       setList(items);
       setHasMore(items.length < total);
     } catch {
-      addToast({ title: "加载失败", color: "danger" });
+      addToast({ title: t("加载失败"), color: "danger" });
     } finally {
       setInitialLoading(false);
     }
@@ -105,7 +106,7 @@ export default function UserList({ keyword, getScrollElement }: UserListProps) {
   if (initialLoading) {
     return (
       <div className="flex min-h-[280px] items-center justify-center">
-        <Spinner label="加载中" />
+        <Spinner label={t("加载中")} />
       </div>
     );
   }

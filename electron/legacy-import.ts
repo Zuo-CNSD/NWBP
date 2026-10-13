@@ -3,6 +3,8 @@ import log from "electron-log";
 import fs from "node:fs";
 import path from "node:path";
 
+import { t } from "./i18n";
+
 /**
  * 把旧版 Biu 的登录态同步到 NWBP。
  *
@@ -106,7 +108,7 @@ export function importLegacyData(options: { includeState: boolean } = { includeS
 
     if (copyFileSafe(legacyCookies, currentCookies)) {
       result.loginImported = true;
-      result.imported.push("Cookies（B 站登录态）");
+      result.imported.push(t("Cookies（B 站登录态）"));
       result.needRestart = true;
     }
   }

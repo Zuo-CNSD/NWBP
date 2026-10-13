@@ -5,6 +5,7 @@ import { Button } from "@heroui/react";
 import { RiPlayFill } from "@remixicon/react";
 import clx from "classnames";
 
+import { t } from "@/common/i18n";
 import { formatNumber } from "@/common/utils/number";
 import { formatDuration } from "@/common/utils/time";
 import Image from "@/components/image";
@@ -123,7 +124,7 @@ const MusicListItem = ({
                       navigate(`/user/${upMid}`);
                     }}
                   >
-                    {upName || "未知"}
+                    {upName || t("未知")}
                   </span>
                 )}
               </div>
@@ -143,7 +144,7 @@ const MusicListItem = ({
                   navigate(`/user/${upMid}`);
                 }}
               >
-                {upName || "未知"}
+                {upName || t("未知")}
               </span>
             </div>
           )}

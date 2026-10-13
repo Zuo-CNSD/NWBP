@@ -1,6 +1,7 @@
 import { addToast } from "@heroui/react";
 import { create } from "zustand";
 
+import { t } from "@/common/i18n";
 import { cleanErrorMessage } from "@/common/utils/ipc-error";
 
 import { isNeteaseLoggedIn, useNetease } from "./netease";
@@ -80,7 +81,7 @@ export const useNeteaseLike = create<State & Action>()((set, get) => ({
 
   toggle: async (id, name) => {
     if (!isNeteaseLoggedIn()) {
-      addToast({ title: "先登录网易云账号再收藏", color: "warning" });
+      addToast({ title: t("先登录网易云账号再收藏"), color: "warning" });
       return false;
     }
 
@@ -97,7 +98,7 @@ export const useNeteaseLike = create<State & Action>()((set, get) => ({
     try {
       await window.electron.netease.like(id, next);
       addToast({
-        title: next ? `已收藏到网易云${name ? `：${name}` : ""}` : "已从网易云取消收藏",
+        title: next ? t("已收藏到网易云{0}", name ? `：${name}` : "") : t("已从网易云取消收藏"),
         color: "success",
       });
       return next;

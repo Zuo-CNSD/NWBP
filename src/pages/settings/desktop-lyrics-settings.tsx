@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Switch, Slider, Button, Tab, Tabs } from "@heroui/react";
 import { useShallow } from "zustand/react/shallow";
 
+import { t } from "@/common/i18n";
 import { createThrottledPush } from "@/common/utils/throttled-push";
 import ColorPicker from "@/components/color-picker";
 import { useSettings } from "@/store/settings";
@@ -155,14 +156,14 @@ const DesktopLyricsSettings = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="text-medium mr-6">桌面歌词</div>
+        <div className="text-medium mr-6">{t("桌面歌词")}</div>
         <Switch isSelected={enabled} onValueChange={value => update({ desktopLyrics: value })} />
       </div>
 
       {enabled && (
         <>
           <div className="flex items-center justify-between">
-            <div className="text-medium mr-6">文字颜色</div>
+            <div className="text-medium mr-6">{t("文字颜色")}</div>
             <ColorPicker
               value={color}
               onChange={hex => update({ desktopLyricsColor: hex })}
@@ -174,10 +175,10 @@ const DesktopLyricsSettings = () => {
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="text-medium mr-6">字号</div>
+            <div className="text-medium mr-6">{t("字号")}</div>
             <div className="flex w-[260px] items-center gap-3">
               <Slider
-                aria-label="桌面歌词字号"
+                aria-label={t("桌面歌词字号")}
                 minValue={MIN_FONT_SIZE}
                 maxValue={MAX_FONT_SIZE}
                 step={1}
@@ -192,25 +193,27 @@ const DesktopLyricsSettings = () => {
           {/* ---- 底板：三选一 ---- */}
           <div className="flex items-center justify-between">
             <div className="mr-6">
-              <div className="text-medium">歌词底板</div>
-              <div className="text-default-500 mt-0.5 text-xs">歌词后面那块底。「透明」= 只有字，不带任何底板</div>
+              <div className="text-medium">{t("歌词底板")}</div>
+              <div className="text-default-500 mt-0.5 text-xs">
+                {t("歌词后面那块底。「透明」= 只有字，不带任何底板")}
+              </div>
             </div>
             <Tabs
-              aria-label="桌面歌词底板模式"
+              aria-label={t("桌面歌词底板模式")}
               size="sm"
               selectedKey={backgroundMode}
               onSelectionChange={key => handleBackgroundModeChange(key as DesktopLyricsBackgroundMode)}
               classNames={{ cursor: "rounded-medium" }}
             >
-              <Tab key="transparent" title="透明" />
-              <Tab key="color" title="纯色" />
-              <Tab key="image" title="自定义背景" />
+              <Tab key="transparent" title={t("透明")} />
+              <Tab key="color" title={t("纯色")} />
+              <Tab key="image" title={t("自定义背景")} />
             </Tabs>
           </div>
 
           {backgroundMode === "color" && (
             <div className="flex items-center justify-between">
-              <div className="text-medium mr-6">底板颜色</div>
+              <div className="text-medium mr-6">{t("底板颜色")}</div>
               <ColorPicker
                 value={backgroundColor}
                 onChange={hex => update({ desktopLyricsBackgroundColor: hex })}
@@ -226,14 +229,14 @@ const DesktopLyricsSettings = () => {
             <>
               <div className="flex items-center justify-between">
                 <div className="mr-6 min-w-0">
-                  <div className="text-medium">背景图片</div>
+                  <div className="text-medium">{t("背景图片")}</div>
                   <div className="text-default-500 mt-0.5 max-w-[420px] truncate text-xs">
-                    {backgroundImage || "还没选图片"}
+                    {backgroundImage || t("还没选图片")}
                   </div>
                 </div>
                 <div className="flex flex-none items-center gap-2">
                   <Button size="sm" variant="flat" onPress={() => void handlePickBackgroundImage()}>
-                    选择图片
+                    {t("选择图片")}
                   </Button>
                   {Boolean(backgroundImage) && (
                     <Button
@@ -242,7 +245,7 @@ const DesktopLyricsSettings = () => {
                       color="danger"
                       onPress={() => update({ desktopLyricsBackgroundImage: "" })}
                     >
-                      清除
+                      {t("清除")}
                     </Button>
                   )}
                 </div>
@@ -250,12 +253,12 @@ const DesktopLyricsSettings = () => {
 
               <div className="flex items-center justify-between">
                 <div className="mr-6">
-                  <div className="text-medium">背景模糊</div>
-                  <div className="text-default-500 mt-0.5 text-xs">糊一点，歌词压在上面更好读</div>
+                  <div className="text-medium">{t("背景模糊")}</div>
+                  <div className="text-default-500 mt-0.5 text-xs">{t("糊一点，歌词压在上面更好读")}</div>
                 </div>
                 <div className="flex w-[260px] items-center gap-3">
                   <Slider
-                    aria-label="桌面歌词背景模糊"
+                    aria-label={t("桌面歌词背景模糊")}
                     minValue={0}
                     maxValue={40}
                     step={1}
@@ -272,12 +275,14 @@ const DesktopLyricsSettings = () => {
           {backgroundMode !== "transparent" && (
             <div className="flex items-center justify-between">
               <div className="mr-6">
-                <div className="text-medium">底板不透明度</div>
-                <div className="text-default-500 mt-0.5 text-xs">0% 等于透明底板（和上面的「透明」模式效果一样）</div>
+                <div className="text-medium">{t("底板不透明度")}</div>
+                <div className="text-default-500 mt-0.5 text-xs">
+                  {t("0% 等于透明底板（和上面的「透明」模式效果一样）")}
+                </div>
               </div>
               <div className="flex w-[260px] items-center gap-3">
                 <Slider
-                  aria-label="桌面歌词底板不透明度"
+                  aria-label={t("桌面歌词底板不透明度")}
                   minValue={0}
                   maxValue={100}
                   step={1}
@@ -292,12 +297,12 @@ const DesktopLyricsSettings = () => {
 
           <div className="flex items-center justify-between">
             <div className="mr-6">
-              <div className="text-medium">歌词文字</div>
-              <div className="text-default-500 mt-0.5 text-xs">只影响歌词文字本身，和底板互不影响</div>
+              <div className="text-medium">{t("歌词文字")}</div>
+              <div className="text-default-500 mt-0.5 text-xs">{t("只影响歌词文字本身，和底板互不影响")}</div>
             </div>
             <div className="flex w-[260px] items-center gap-3">
               <Slider
-                aria-label="桌面歌词文字透明度"
+                aria-label={t("桌面歌词文字透明度")}
                 minValue={0}
                 maxValue={100}
                 step={1}
@@ -310,7 +315,7 @@ const DesktopLyricsSettings = () => {
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="text-medium mr-6">显示翻译</div>
+            <div className="text-medium mr-6">{t("显示翻译")}</div>
             <Switch
               isSelected={showTranslation}
               onValueChange={value => update({ desktopLyricsShowTranslation: value })}
@@ -318,7 +323,7 @@ const DesktopLyricsSettings = () => {
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="text-medium mr-6">显示罗马音</div>
+            <div className="text-medium mr-6">{t("显示罗马音")}</div>
             <Switch
               isSelected={showRomanization}
               onValueChange={value => update({ desktopLyricsShowRomanization: value })}
@@ -327,9 +332,9 @@ const DesktopLyricsSettings = () => {
 
           <div className="flex items-center justify-between">
             <div className="mr-6">
-              <div className="text-medium">显示频谱条</div>
+              <div className="text-medium">{t("显示频谱条")}</div>
               <div className="text-default-500 mt-0.5 text-xs">
-                在歌词上方加一条实时频谱，颜色跟随歌词文字。音频在主窗口分析后推给歌词窗
+                {t("在歌词上方加一条实时频谱，颜色跟随歌词文字。音频在主窗口分析后推给歌词窗")}
               </div>
             </div>
             <Switch isSelected={spectrum} onValueChange={value => update({ desktopLyricsSpectrum: value })} />
@@ -337,23 +342,25 @@ const DesktopLyricsSettings = () => {
 
           <div className="flex items-center justify-between">
             <div className="mr-6">
-              <div className="text-medium">锁定（鼠标穿透）</div>
+              <div className="text-medium">{t("锁定（鼠标穿透）")}</div>
               <div className="text-default-500 mt-0.5 text-xs">
-                锁定后整条歌词都不吃鼠标事件，不会挡住下面的操作。默认关闭 ——
-                锁定状态下拖不动歌词，所以想挪位置时记得先解锁
+                {t(
+                  "锁定后整条歌词都不吃鼠标事件，不会挡住下面的操作。默认关闭 ——\n                锁定状态下拖不动歌词，所以想挪位置时记得先解锁",
+                )}
               </div>
             </div>
             <Switch isSelected={locked} onValueChange={value => update({ desktopLyricsLocked: value })} />
           </div>
 
           <div className="text-default-500 space-y-1 text-xs">
-            <div>· 拖动歌词任意位置即可移动，拖窗口边缘可改大小，位置会自动记住</div>
+            <div>{t("· 拖动歌词任意位置即可移动，拖窗口边缘可改大小，位置会自动记住")}</div>
             <div>
-              · 在歌词上点右键会弹出菜单：锁定、底板（透明 / 纯色 / 自定义背景）、字号、颜色、文字不透明度、翻译 /
-              罗马音、重置位置、关闭
+              {t(
+                "· 在歌词上点右键会弹出菜单：锁定、底板（透明 / 纯色 / 自定义背景）、字号、颜色、文字不透明度、翻译 /\n              罗马音、重置位置、关闭",
+              )}
             </div>
-            <div>· 按住 Ctrl / ⌘ 滚动滚轮也能直接改字号</div>
-            <div>· 鼠标移到歌词右上角会出现锁定 / 关闭按钮</div>
+            <div>{t("· 按住 Ctrl / ⌘ 滚动滚轮也能直接改字号")}</div>
+            <div>{t("· 鼠标移到歌词右上角会出现锁定 / 关闭按钮")}</div>
           </div>
         </>
       )}

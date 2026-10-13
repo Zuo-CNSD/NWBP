@@ -6,6 +6,7 @@ import PQueue from "p-queue";
 
 import type { FullMediaDownloadTask } from "./types";
 
+import { t } from "../../i18n";
 import { channel } from "../channel";
 import { mediaDownloadsStore } from "./../../store";
 import { DownloadCore } from "./download-core";
@@ -67,6 +68,7 @@ export class DownloadQueue {
       bvid: mediaInfo.bvid,
       cid: mediaInfo.cid,
       sid: mediaInfo.sid,
+      audioUrl: mediaInfo.audioUrl,
       createdTime: Date.now(),
       status: "waiting",
       abortSignal: controller.signal,
@@ -103,7 +105,7 @@ export class DownloadQueue {
           await this.cancelTask(core.id);
         }
       } else {
-        throw new Error("无法获取视频分集信息");
+        throw new Error(t("无法获取视频分集信息"));
       }
     }
   }

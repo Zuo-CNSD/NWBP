@@ -65,6 +65,18 @@ export const channel = {
     lyric: "netease:lyric",
     like: "netease:like",
     likedIds: "netease:liked-ids",
+    /** 按 id 批量取歌曲详情（一起听的客队灌队列用） */
+    trackDetail: "netease:track-detail",
+    /** 「一起听」 */
+    togetherCreate: "netease:together-create",
+    togetherCheck: "netease:together-check",
+    togetherAccept: "netease:together-accept",
+    togetherEnd: "netease:together-end",
+    togetherStatus: "netease:together-status",
+    togetherSnapshot: "netease:together-snapshot",
+    togetherReportPlaylist: "netease:together-report-playlist",
+    togetherReportCommand: "netease:together-report-command",
+    togetherHeartbeat: "netease:together-heartbeat",
   },
   router: {
     navigate: "router:navigate",

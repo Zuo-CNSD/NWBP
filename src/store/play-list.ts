@@ -8,7 +8,10 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { getPlayModeList, PlayMode } from "@/common/constants/audio";
+import { t } from "@/common/i18n";
 import { getAudioUrl, getDashUrl, isUrlValid } from "@/common/utils/audio";
+import { toNeteaseLevel } from "@/common/utils/download";
+import { fetchNeteaseUrl, prefetchNeteaseUrl } from "@/common/utils/netease-audio-url";
 import { beginPlayReport, endPlayReport, reportHeartbeat } from "@/common/utils/play-report";
 import { stripHtml } from "@/common/utils/str";
 import { formatUrlProtocol } from "@/common/utils/url";
@@ -20,25 +23,6 @@ import { usePlayProgress } from "./play-progress";
 import { useSettings } from "./settings";
 
 export type PlayDataType = "mv" | "audio";
-
-/**
- * 把播放器里的音质档位翻成网易云的 `level` 参数。
- *
- * 档位语义对不齐是正常的：B 站那边是「自动 / 无损 / 高 / 中 / 低」，
- * 网易云只有 standard / exhigh / lossless 三档。
- * 「自动」按 B 站那边的习惯往好里取（那边 auto 也是优先 flac），
- * 拿不到就让服务端降级 —— 网易云自己会返回能给的最高档。
- */
-const toNeteaseLevel = (quality: AudioQuality): "standard" | "exhigh" | "lossless" => {
-  switch (quality) {
-    case "low":
-      return "standard";
-    case "medium":
-      return "exhigh";
-    default:
-      return "lossless";
-  }
-};
 
 export interface PlayData {
   id: string;
@@ -213,7 +197,7 @@ const sanitizeTitle = (title: string) => stripHtml(title);
 const handlePlayError = (error: any) => {
   const errorMsg = error?.message || error?.name || "";
   if (!errorMsg.includes("interrupted") && !errorMsg.includes("NotAllowed")) {
-    toastError(error instanceof Error ? error.message : "获取播放链接失败");
+    toastError(error instanceof Error ? error.message : t("获取播放链接失败"));
   }
 };
 
@@ -372,14 +356,14 @@ export const usePlayList = create<State & Action>()(
               }
             });
           } else {
-            log.error("无法获取音频播放链接", {
+            log.error(t("无法获取音频播放链接"), {
               type: "mv",
               bvid: currentPlayItem.bvid,
               cid: currentPlayItem.cid,
               title: currentPlayItem.title,
               mvPlayData,
             });
-            toastError("无法获取音频播放链接");
+            toastError(t("无法获取音频播放链接"));
           }
         }
 
@@ -394,7 +378,8 @@ export const usePlayList = create<State & Action>()(
          */
         if (currentPlayItem?.source === "netease" && currentPlayItem?.neteaseId) {
           const level = toNeteaseLevel(useSettings.getState().audioQuality);
-          const neteasePlayData = await window.electron.netease.songUrl(currentPlayItem.neteaseId, level);
+          // 走带缓存的那条：同一首重播时这里会直接命中，不用再等一次网络往返
+          const neteasePlayData = await fetchNeteaseUrl(currentPlayItem.neteaseId, level);
 
           if (neteasePlayData?.url) {
             if (audio.src !== neteasePlayData.url) {
@@ -412,13 +397,13 @@ export const usePlayList = create<State & Action>()(
               }
             });
           } else {
-            log.error("无法获取网易云播放链接", {
+            log.error(t("无法获取网易云播放链接"), {
               type: "netease",
               neteaseId: currentPlayItem.neteaseId,
               title: currentPlayItem.title,
               level,
             });
-            toastError("无法播放这首：可能需要网易云会员，或该曲目已下架");
+            toastError(t("无法播放这首：可能需要网易云会员，或该曲目已下架"));
           }
         }
 
@@ -440,13 +425,13 @@ export const usePlayList = create<State & Action>()(
               }
             });
           } else {
-            log.error("无法获取音频播放链接", {
+            log.error(t("无法获取音频播放链接"), {
               type: "audio",
               sid: currentPlayItem.sid,
               title: currentPlayItem.title,
               musicPlayData,
             });
-            toastError("无法获取音频播放链接");
+            toastError(t("无法获取音频播放链接"));
           }
         }
       };
@@ -724,7 +709,7 @@ export const usePlayList = create<State & Action>()(
 
           const nextPlayItem = playItem[0];
           if (!nextPlayItem) {
-            toastError("播放失败：无法获取播放信息");
+            toastError(t("播放失败：无法获取播放信息"));
             return;
           }
 
@@ -935,7 +920,7 @@ export const usePlayList = create<State & Action>()(
           }
 
           if (!nextPlayItem || nextPlayItem.length === 0) {
-            toastError("添加失败：无法获取播放信息");
+            toastError(t("添加失败：无法获取播放信息"));
             return;
           }
 
@@ -1143,7 +1128,7 @@ async function refreshCurrentAudioSource(): Promise<boolean> {
       }
     }
   } catch (refreshError) {
-    log.error("刷新播放链接失败", {
+    log.error(t("刷新播放链接失败"), {
       playItem,
       refreshError,
     });
@@ -1153,11 +1138,35 @@ async function refreshCurrentAudioSource(): Promise<boolean> {
   return false;
 }
 
+/**
+ * 把「列表里当前曲目之后的第一首网易云曲目」的地址提前取好。
+ *
+ * 只按**列表顺序**找，不跟随播放模式：猜错了顶多浪费一次请求，不影响任何正确性。
+ * 从当前项往后找，找不到就绕回列表开头 —— 顺序播放和列表循环都能蹭到。
+ */
+function prefetchNextNetease() {
+  const { list, playId } = usePlayList.getState();
+  const index = list.findIndex(item => item.id === playId);
+  const ordered = index >= 0 ? [...list.slice(index + 1), ...list.slice(0, index)] : list;
+  const next = ordered.find(item => item.source === "netease" && item.neteaseId);
+
+  if (next?.neteaseId) {
+    prefetchNeteaseUrl(next.neteaseId, toNeteaseLevel(useSettings.getState().audioQuality));
+  }
+}
+
 function resetAudioAndPlay(url: string) {
   audio.src = url;
   audio.currentTime = 0;
   audio.load();
-  void playAudioSafely();
+  void playAudioSafely().then(() => {
+    /*
+     * 这一首已经响起来了，顺手把下一首的地址取好。
+     * 放在这里是因为它是**所有播放路径的必经之处**（B 站 / 网易云 / 本地都走它），
+     * 只写这一处就全覆盖，不用在每个分支里各加一遍。
+     */
+    prefetchNextNetease();
+  });
 }
 
 // 切换歌曲时，更新当前播放的歌曲信息
@@ -1213,14 +1222,14 @@ usePlayList.subscribe(async (state, prevState) => {
               }
             });
           } else {
-            log.error("无法获取音频播放链接", {
+            log.error(t("无法获取音频播放链接"), {
               type: "mv",
               bvid: playItem.bvid,
               cid: playItem.cid,
               title: playItem.title,
               mvPlayData,
             });
-            toastError("无法获取音频播放链接");
+            toastError(t("无法获取音频播放链接"));
           }
         } else if (playItem?.bvid) {
           const mvData = await getMVData(playItem.bvid);
@@ -1255,23 +1264,23 @@ usePlayList.subscribe(async (state, prevState) => {
                 state.playId = firstMV.id;
               });
             } else {
-              log.error("无法获取音频播放链接", {
+              log.error(t("无法获取音频播放链接"), {
                 type: "mv",
                 bvid: playItem.bvid,
                 cid: firstMV.cid,
                 title: firstMV.title,
                 mvPlayData,
               });
-              toastError("无法获取音频播放链接");
+              toastError(t("无法获取音频播放链接"));
             }
           } else {
-            log.error("无法获取音频播放链接", {
+            log.error(t("无法获取音频播放链接"), {
               type: "mv",
               bvid: playItem.bvid,
               title: playItem.title,
               mvData,
             });
-            toastError("无法获取音频播放链接");
+            toastError(t("无法获取音频播放链接"));
           }
         }
       }
@@ -1286,7 +1295,8 @@ usePlayList.subscribe(async (state, prevState) => {
        */
       if (playItem?.source === "netease" && playItem?.neteaseId) {
         const level = toNeteaseLevel(useSettings.getState().audioQuality);
-        const neteasePlayData = await window.electron.netease.songUrl(playItem.neteaseId, level);
+        // 同上：这一首如果在上一首播放时被预取过，这里就直接命中缓存了
+        const neteasePlayData = await fetchNeteaseUrl(playItem.neteaseId, level);
 
         if (neteasePlayData?.url) {
           resetAudioAndPlay(neteasePlayData.url);
@@ -1305,13 +1315,13 @@ usePlayList.subscribe(async (state, prevState) => {
             }
           });
         } else {
-          log.error("无法获取网易云播放链接", {
+          log.error(t("无法获取网易云播放链接"), {
             type: "netease",
             neteaseId: playItem.neteaseId,
             title: playItem.title,
             level,
           });
-          toastError("无法播放这首：可能需要网易云会员，或该曲目已下架");
+          toastError(t("无法播放这首：可能需要网易云会员，或该曲目已下架"));
         }
       }
 
@@ -1333,13 +1343,13 @@ usePlayList.subscribe(async (state, prevState) => {
             }
           });
         } else {
-          log.error("无法获取音频播放链接", {
+          log.error(t("无法获取音频播放链接"), {
             type: "audio",
             sid: playItem.sid,
             title: playItem.title,
             musicPlayData,
           });
-          toastError("无法获取音频播放链接");
+          toastError(t("无法获取音频播放链接"));
         }
       }
     }

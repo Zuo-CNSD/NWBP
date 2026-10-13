@@ -4,6 +4,7 @@ import { useRequest } from "ahooks";
 import clx from "classnames";
 import { QRCodeCanvas } from "qrcode.react";
 
+import { t } from "@/common/i18n";
 import { getPassportLoginWebQrcodeGenerate } from "@/service/passport-login-web-qrcode-generate";
 import { getPassportLoginWebQrcodePoll } from "@/service/passport-login-web-qrcode-poll";
 
@@ -39,7 +40,7 @@ const QrcodeLogin = ({ onClose, updateUserData }: QrcodeLoginProps) => {
 
           await updateUserData(refresh_token);
 
-          addToast({ title: "登录成功", color: "success" });
+          addToast({ title: t("登录成功"), color: "success" });
           onClose();
           cancelPoll();
         }
@@ -56,7 +57,7 @@ const QrcodeLogin = ({ onClose, updateUserData }: QrcodeLoginProps) => {
 
   return (
     <div className="flex flex-col items-center p-6">
-      <div className="mb-4 text-lg font-medium">扫码登录</div>
+      <div className="mb-4 text-lg font-medium">{t("扫码登录")}</div>
       <div className="border-divider rounded-medium relative flex h-40 w-40 items-center justify-center overflow-hidden border">
         {genLoading || !qrcodeData?.url ? (
           <Skeleton className="rounded-medium">
@@ -77,7 +78,7 @@ const QrcodeLogin = ({ onClose, updateUserData }: QrcodeLoginProps) => {
           <Button isLoading={genLoading} isIconOnly color="primary" variant="solid" onPress={refreshCode}>
             <RiRefreshLine />
           </Button>
-          {isOvertime && <p className="mt-2 text-center text-sm font-bold text-white">二维码已失效，请刷新</p>}
+          {isOvertime && <p className="mt-2 text-center text-sm font-bold text-white">{t("二维码已失效，请刷新")}</p>}
         </div>
       </div>
       <p
@@ -85,7 +86,7 @@ const QrcodeLogin = ({ onClose, updateUserData }: QrcodeLoginProps) => {
           "text-warning-500 dark:text-warning-400": isPendingConfirm,
         })}
       >
-        {isPendingConfirm ? "二维码已扫码未确认" : "请使用bilibili手机客户端扫码登录"}
+        {isPendingConfirm ? t("二维码已扫码未确认") : t("请使用bilibili手机客户端扫码登录")}
       </p>
     </div>
   );

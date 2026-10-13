@@ -4,9 +4,11 @@ import { useForm } from "react-hook-form";
 import { Tab, Tabs } from "@heroui/react";
 import { useShallow } from "zustand/react/shallow";
 
+import { t } from "@/common/i18n";
 import { DEFAULT_GLASS_OPACITY } from "@/common/utils/glass";
 import ScrollContainer from "@/components/scroll-container";
 import { useSettings } from "@/store/settings";
+import { normalizeLanguage } from "@shared/i18n";
 
 import DesktopLyricsSettings from "./desktop-lyrics-settings";
 import Developers from "./developers";
@@ -19,6 +21,7 @@ import { SystemSettingsTab } from "./system-settings";
 const useSystemSettingsForm = () => {
   const [appVersion, setAppVersion] = useState<string>("");
   const {
+    language,
     fontFamily,
     primaryColor,
     backgroundColor,
@@ -48,6 +51,7 @@ const useSystemSettingsForm = () => {
     reportPlayHistory,
   } = useSettings(
     useShallow(s => ({
+      language: normalizeLanguage(s.language),
       fontFamily: s.fontFamily,
       primaryColor: s.primaryColor,
       backgroundColor: s.backgroundColor,
@@ -81,6 +85,7 @@ const useSystemSettingsForm = () => {
 
   const { control, watch, setValue } = useForm<AppSettings>({
     defaultValues: {
+      language,
       fontFamily,
       primaryColor,
       backgroundColor,
@@ -148,24 +153,24 @@ const SettingsPage = () => {
     <ScrollContainer enableBackToTop className="h-full w-full">
       <div className="m-auto mb-6 max-w-[900px] px-8 py-4">
         <div className="space-y-6">
-          <h1>设置</h1>
-          <Tabs aria-label="设置选项" classNames={{ panel: "px-1 py-0", cursor: "rounded-medium" }}>
-            <Tab key="system" title="常规设置">
+          <h1>{t("设置")}</h1>
+          <Tabs aria-label={t("设置选项")} classNames={{ panel: "px-1 py-0", cursor: "rounded-medium" }}>
+            <Tab key="system" title={t("常规设置")}>
               <SystemSettingsTab {...system} />
             </Tab>
-            <Tab key="lyrics" title="歌词设置">
+            <Tab key="lyrics" title={t("歌词设置")}>
               <DesktopLyricsSettings />
             </Tab>
-            <Tab key="netease" title="网易云音乐">
+            <Tab key="netease" title={t("网易云音乐")}>
               <NeteaseSettings />
             </Tab>
-            <Tab key="menu" title="菜单设置">
+            <Tab key="menu" title={t("菜单设置")}>
               <MenuSettings control={system.control} />
             </Tab>
-            <Tab key="shortcut" title="快捷键设置">
+            <Tab key="shortcut" title={t("快捷键设置")}>
               <ShortcutSettingsPage />
             </Tab>
-            <Tab key="proxy" title="代理设置">
+            <Tab key="proxy" title={t("代理设置")}>
               <ProxySettings control={system.control} />
             </Tab>
           </Tabs>

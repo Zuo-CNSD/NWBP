@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button, Input, Modal, ModalBody, ModalContent, ModalHeader, Tab, Tabs, addToast } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import { usePlayList } from "@/store/play-list";
 import { StoreNameMap } from "@shared/store";
 
@@ -72,7 +73,7 @@ const LyricsSearchModal = ({ isOpen, onOpenChange, onLyricsAdopted }: Props) => 
           setNeteaseSongs(res?.result?.songs ?? []);
         } catch {
           setNeteaseSongs([]);
-          addToast({ title: "网易云搜索失败", color: "danger" });
+          addToast({ title: t("网易云搜索失败"), color: "danger" });
         } finally {
           setNeteaseLoading(false);
         }
@@ -84,7 +85,7 @@ const LyricsSearchModal = ({ isOpen, onOpenChange, onLyricsAdopted }: Props) => 
           setLrclibSongs(res ?? []);
         } catch {
           setLrclibSongs([]);
-          addToast({ title: "LrcLib 搜索失败", color: "danger" });
+          addToast({ title: t("LrcLib 搜索失败"), color: "danger" });
         } finally {
           setLrclibLoading(false);
         }
@@ -107,7 +108,7 @@ const LyricsSearchModal = ({ isOpen, onOpenChange, onLyricsAdopted }: Props) => 
       const cid = current?.cid ? Number(current.cid) : undefined;
 
       if (!current?.bvid || cid === undefined || Number.isNaN(cid)) {
-        addToast({ title: "当前播放信息缺失，无法保存歌词", color: "warning" });
+        addToast({ title: t("当前播放信息缺失，无法保存歌词"), color: "warning" });
         return false;
       }
 
@@ -125,7 +126,7 @@ const LyricsSearchModal = ({ isOpen, onOpenChange, onLyricsAdopted }: Props) => 
         onLyricsAdopted?.(lyricsText, tLyricsText);
         return true;
       } catch {
-        addToast({ title: "歌词保存失败", color: "danger" });
+        addToast({ title: t("歌词保存失败"), color: "danger" });
         return false;
       }
     },
@@ -145,19 +146,19 @@ const LyricsSearchModal = ({ isOpen, onOpenChange, onLyricsAdopted }: Props) => 
   return (
     <Modal isOpen={isOpen} onOpenChange={handleOpenChange} scrollBehavior="inside" size="4xl" disableAnimation>
       <ModalContent>
-        <ModalHeader className="flex flex-col gap-1">搜索歌词</ModalHeader>
+        <ModalHeader className="flex flex-col gap-1">{t("搜索歌词")}</ModalHeader>
         <ModalBody className="pb-6">
           <div className="flex gap-2">
             <Input
               value={keyword}
               onValueChange={setKeyword}
-              placeholder="请输入歌曲或歌手名称"
+              placeholder={t("请输入歌曲或歌手名称")}
               onKeyDown={e => {
                 if (e.key === "Enter") handleSubmit(activeTab);
               }}
             />
             <Button color="primary" onPress={() => handleSubmit(activeTab)}>
-              搜索
+              {t("搜索")}
             </Button>
           </div>
           <Tabs
@@ -174,7 +175,7 @@ const LyricsSearchModal = ({ isOpen, onOpenChange, onLyricsAdopted }: Props) => 
               panel: "py-0",
             }}
           >
-            <Tab key="netease" title="网易云" />
+            <Tab key="netease" title={t("网易云")} />
             <Tab key="lrclib" title="LrcLib" />
           </Tabs>
           {activeTab === "netease" ? (

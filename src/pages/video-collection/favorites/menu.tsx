@@ -8,6 +8,8 @@ import {
   RiStarOffLine,
 } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
+
 interface Props {
   /** 2:视频稿件 12:音频 21:视频合集 24:电影 */
   type: number;
@@ -22,42 +24,42 @@ export const getContextMenus = ({ type, isCreatedBySelf }: Props) => {
     {
       icon: <RiStarLine size={18} />,
       key: "favorite",
-      label: isCreatedBySelf ? "移动" : "收藏",
+      label: isCreatedBySelf ? t("移动") : t("收藏"),
     },
     {
       icon: <RiStarOffLine size={18} />,
       key: "cancelFavorite",
-      label: "取消收藏",
+      label: t("取消收藏"),
       hidden: !isCreatedBySelf,
     },
     {
       icon: <RiPlayCircleLine size={18} />,
       key: "play-next",
-      label: "下一首播放",
+      label: t("下一首播放"),
       hidden: canNotPlay,
     },
     {
       icon: <RiPlayListAddLine size={18} />,
       key: "add-to-playlist",
-      label: "添加到播放列表",
+      label: t("添加到播放列表"),
       hidden: canNotPlay,
     },
     {
       icon: <RiFileMusicLine size={18} />,
       key: "download-audio",
-      label: "下载音频",
+      label: t("下载音频"),
       hidden: canNotPlay,
     },
     {
       icon: <RiFileVideoLine size={18} />,
       key: "download-video",
-      label: "下载视频",
+      label: t("下载视频"),
       hidden: canNotPlay || isAudio,
     },
     {
       icon: <RiExternalLinkLine size={18} />,
       key: "bililink",
-      label: "在 B 站打开",
+      label: t("在 B 站打开"),
     },
   ];
 };

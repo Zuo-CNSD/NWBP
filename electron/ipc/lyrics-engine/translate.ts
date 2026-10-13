@@ -1,6 +1,8 @@
 import log from "electron-log";
 import got from "got";
 
+import { t } from "../../i18n";
+
 /**
  * 歌词翻译（移植自 lyrimuse 的 translate.go 降级链，砍掉端上那一级）。
  *
@@ -33,7 +35,7 @@ const cache = new Map<string, string>();
 const cacheKey = (text: string, target: string) => `${target}\u0000${text}`;
 
 const translateByGoogle = async (text: string, target: string) => {
-  if (Date.now() < googleBlockedUntil) throw new Error("Google 翻译冷却中");
+  if (Date.now() < googleBlockedUntil) throw new Error(t("Google 翻译冷却中"));
 
   const response = await got
     .get(GOOGLE_ENDPOINT, {
@@ -46,13 +48,13 @@ const translateByGoogle = async (text: string, target: string) => {
 
   const parsed = JSON.parse(response) as [Array<[string]> | null];
   const result = (parsed?.[0] ?? []).map(segment => segment?.[0] ?? "").join("");
-  if (!result) throw new Error("Google 翻译返回空");
+  if (!result) throw new Error(t("Google 翻译返回空"));
 
   return result;
 };
 
 const translateByMyMemory = async (text: string, target: string) => {
-  if (Date.now() < myMemoryBlockedUntil) throw new Error("MyMemory 冷却中");
+  if (Date.now() < myMemoryBlockedUntil) throw new Error(t("MyMemory 冷却中"));
 
   const response = await got
     .get(MYMEMORY_ENDPOINT, {
@@ -64,7 +66,7 @@ const translateByMyMemory = async (text: string, target: string) => {
     .json<{ responseData?: { translatedText?: string }; responseStatus?: number }>();
 
   const result = response?.responseData?.translatedText;
-  if (!result) throw new Error("MyMemory 返回空");
+  if (!result) throw new Error(t("MyMemory 返回空"));
 
   return result;
 };

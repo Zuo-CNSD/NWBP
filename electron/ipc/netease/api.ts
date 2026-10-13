@@ -2,6 +2,7 @@ import log from "electron-log";
 
 import { findOwnLikedPlaylist, isOwnLikedPlaylist } from "@shared/netease/playlist";
 
+import { t } from "../../i18n";
 import {
   clearNeteaseAccount,
   getCachedLikedPlaylistId,
@@ -40,7 +41,7 @@ const normalizeTrack = (song: any): NeteaseTrack => {
 
   return {
     id: Number(song?.id ?? 0),
-    name: String(song?.name ?? "未知歌曲"),
+    name: String(song?.name ?? t("未知歌曲")),
     artists: joinArtists(artists),
     album: String(album?.name ?? ""),
     albumId: typeof album?.id === "number" ? album.id : null,
@@ -97,13 +98,13 @@ const enrichCovers = async (tracks: NeteaseTrack[]) => {
 
 export const searchTracks = async (keyword: string, limit = 30, offset = 0) => {
   const kw = keyword.trim();
-  if (!kw) throw new Error("请输入关键词");
+  if (!kw) throw new Error(t("请输入关键词"));
 
   const res = await neteaseGet<{ result?: { songs?: any[]; songCount?: number } }>(
     `${API}/search/get?s=${encodeURIComponent(kw)}&type=1&limit=${limit}&offset=${offset}`,
   );
   const songs = res?.result?.songs;
-  if (!Array.isArray(songs)) throw new Error("搜索失败");
+  if (!Array.isArray(songs)) throw new Error(t("搜索失败"));
 
   const tracks = songs.map(normalizeTrack);
   await enrichCovers(tracks);
@@ -113,31 +114,31 @@ export const searchTracks = async (keyword: string, limit = 30, offset = 0) => {
 
 export const searchPlaylists = async (keyword: string, limit = 30, offset = 0) => {
   const kw = keyword.trim();
-  if (!kw) throw new Error("请输入关键词");
+  if (!kw) throw new Error(t("请输入关键词"));
 
   const res = await neteaseGet<{ result?: { playlists?: any[] } }>(
     `${API}/search/get?s=${encodeURIComponent(kw)}&type=1000&limit=${limit}&offset=${offset}`,
   );
   const list = res?.result?.playlists;
-  if (!Array.isArray(list)) throw new Error("搜索失败");
+  if (!Array.isArray(list)) throw new Error(t("搜索失败"));
 
   return list.map(normalizePlaylist);
 };
 
 export const searchAlbums = async (keyword: string, limit = 30, offset = 0) => {
   const kw = keyword.trim();
-  if (!kw) throw new Error("请输入关键词");
+  if (!kw) throw new Error(t("请输入关键词"));
 
   const res = await neteaseGet<{ result?: { albums?: any[] } }>(
     `${API}/search/get?s=${encodeURIComponent(kw)}&type=10&limit=${limit}&offset=${offset}`,
   );
   const list = res?.result?.albums;
-  if (!Array.isArray(list)) throw new Error("搜索失败");
+  if (!Array.isArray(list)) throw new Error(t("搜索失败"));
 
   return list.map(
     (a: any): NeteaseAlbumInfo => ({
       id: Number(a?.id ?? 0),
-      name: String(a?.name ?? "未知专辑"),
+      name: String(a?.name ?? t("未知专辑")),
       cover: https(a?.picUrl),
       artist: String(a?.artist?.name ?? ""),
       trackCount: Number(a?.size ?? 0),
@@ -150,7 +151,7 @@ export const hotPlaylists = async (limit = 30) => {
   const res = await neteaseGet<{ playlists?: any[] }>(
     `${API}/playlist/list?cat=${encodeURIComponent("全部")}&order=hot&limit=${limit}&offset=0`,
   );
-  if (!Array.isArray(res?.playlists)) throw new Error("获取热门歌单失败");
+  if (!Array.isArray(res?.playlists)) throw new Error(t("获取热门歌单失败"));
 
   return res.playlists.map(normalizePlaylist);
 };
@@ -171,6 +172,15 @@ const fetchTracksByIds = async (ids: number[]) => {
   return tracks;
 };
 
+/**
+ * 按 id 批量取歌曲详情（对外）。
+ *
+ * 「一起听」的客人拿到的是房间队列里的一串 id，得先换成标题/歌手/封面
+ * 才能灌进本地播放列表 —— 没有这一步，对方看到的是一堆没有名字的行。
+ */
+export const getTrackDetail = (ids: number[]) =>
+  fetchTracksByIds(ids.filter(id => Number.isFinite(id) && id > 0).slice(0, 300));
+
 /** 一页拉多少首。`v3/song/detail` 一次最多吃 100 个 id，默认就按这个分页 */
 export const PLAYLIST_PAGE_SIZE = 100;
 
@@ -185,7 +195,7 @@ export const PLAYLIST_PAGE_SIZE = 100;
 const fetchPlaylistTracks = async (id: number) => {
   const res = await neteaseGet<{ playlist?: any }>(`${API}/v6/playlist/detail?id=${encodeURIComponent(String(id))}`);
   const playlist = res?.playlist;
-  if (!playlist) throw new Error("歌单不存在或已失效");
+  if (!playlist) throw new Error(t("歌单不存在或已失效"));
 
   const ids: number[] = (playlist.trackIds ?? [])
     .map((t: any) => Number(t?.id))
@@ -193,7 +203,7 @@ const fetchPlaylistTracks = async (id: number) => {
 
   return {
     id: Number(playlist.id),
-    name: String(playlist.name ?? "未命名歌单"),
+    name: String(playlist.name ?? t("未命名歌单")),
     cover: https(playlist.coverImgUrl),
     // 能真正翻到的页数由 trackIds 决定，所以总数优先信它
     trackCount: ids.length || Number(playlist.trackCount ?? 0),
@@ -232,13 +242,13 @@ export const getAlbumDetail = async (id: number): Promise<NeteaseAlbumDetail> =>
   // 这个接口要求带 os=pc，否则会走成移动端结构
   const res = await neteaseGet<{ album?: any }>(`${API}/album/${encodeURIComponent(String(id))}`, { osPc: true });
   const album = res?.album;
-  if (!album) throw new Error("专辑不存在或已失效");
+  if (!album) throw new Error(t("专辑不存在或已失效"));
 
   const tracks = (Array.isArray(album.songs) ? album.songs : []).map(normalizeTrack);
 
   return {
     id: Number(album.id),
-    name: String(album.name ?? "未知专辑"),
+    name: String(album.name ?? t("未知专辑")),
     cover: https(album.picUrl),
     artist: String(album.artist?.name ?? ""),
     tracks,
@@ -249,11 +259,11 @@ export const getAlbumDetail = async (id: number): Promise<NeteaseAlbumDetail> =>
 
 export const getMyPlaylists = async () => {
   const account = getNeteaseAccount();
-  if (!account.uid) throw new Error("未登录：请先在设置中登录网易云账号");
+  if (!account.uid) throw new Error(t("未登录：请先在设置中登录网易云账号"));
 
   const res = await neteaseGet<{ playlist?: any[] }>(`${API}/user/playlist?uid=${account.uid}&limit=1000&offset=0`);
   const list = res?.playlist;
-  if (!Array.isArray(list)) throw new Error("获取歌单失败");
+  if (!Array.isArray(list)) throw new Error(t("获取歌单失败"));
 
   const items = list.map(normalizePlaylist);
   /*
@@ -270,7 +280,7 @@ export const getMyPlaylists = async () => {
 
 export const getMyAlbums = async () => {
   const account = getNeteaseAccount();
-  if (!account.uid) throw new Error("未登录：请先在设置中登录网易云账号");
+  if (!account.uid) throw new Error(t("未登录：请先在设置中登录网易云账号"));
 
   const out: NeteaseAlbumInfo[] = [];
   for (let offset = 0; offset < 500 && out.length < 300; offset += 50) {
@@ -284,7 +294,7 @@ export const getMyAlbums = async () => {
     for (const album of list) {
       out.push({
         id: Number(album.id),
-        name: String(album.name ?? "未知专辑"),
+        name: String(album.name ?? t("未知专辑")),
         cover: https(album.picUrl),
         artist: String(album.artists?.[0]?.name ?? ""),
         trackCount: Number(album.size ?? 0),
@@ -380,23 +390,56 @@ const resolveLikedPlaylistId = async () => {
 
   const items = await getMyPlaylists();
   const liked = findOwnLikedPlaylist(items, getNeteaseAccount().uid);
-  if (!liked) throw new Error("未找到「我喜欢的音乐」歌单");
+  if (!liked) throw new Error(t("未找到「我喜欢的音乐」歌单"));
 
   setCachedLikedPlaylistId(liked.id);
   return liked.id;
 };
 
+/**
+ * 收藏 / 取消收藏一首歌。
+ *
+ * ⚠️ 走 `/api/song/like`，**不要用 `/api/radio/like`**。
+ * `radio/like`（ncm-player 以及网上大多数老教程里的写法）现在被网易云风控拦死 ——
+ * 同一份 cookie、同一时刻实测：
+ *
+ *   POST /api/radio/like?alg=itembased&trackId=<id>&like=true
+ *     → {"code":-460,"message":"检测到您的网络环境存在风险，请稍后再试"}
+ *   POST /api/song/like?trackId=<id>&like=true
+ *     → {"code":200,"playlistId":<我喜欢的音乐的歌单 id>}
+ *
+ * 而且 `radio/like` 换 body 写法也救不回来：明文表单、weapi 加密、加 `csrf_token`、
+ * 换 `/weapi` 前缀，四种都还是 -460。**换接口**才是解法。
+ *
+ * ⚠️ 反过来，`/api/song/like` 是**明文表单**接口，别再套 weapi 加密 ——
+ * 加密后 body 会变成 `params` + `encSecKey`，服务端读不到 `trackId`，一样失败。
+ *
+ * 失败时网易云会在 `message` 里给一句人话（如「歌曲已经下架了」），原样透出即可。
+ */
 export const likeSong = async (id: number, like: boolean) => {
-  if (!getNeteaseAccount().uid) throw new Error("请先登录网易云账号");
-  await resolveLikedPlaylistId();
+  if (!getNeteaseAccount().uid) throw new Error(t("请先登录网易云账号"));
 
-  const res = await neteaseWeapiPost<{ code?: number; message?: string }>(
-    `${API}/radio/like?alg=itembased&trackId=${id}&like=${like}`,
-    { trackId: id, like },
+  const form = `trackId=${id}&like=${like}`;
+  const res = await neteaseFormPost<{ code?: number; message?: string; playlistId?: number }>(
+    `${API}/song/like?${form}`,
+    form,
   );
 
-  if (!res || res.code !== 200) {
-    throw new Error(`收藏操作失败${res?.message ? `：${res.message}` : ""}（可能是账号风控，稍后再试）`);
+  if (res.json?.code !== 200) {
+    const detail =
+      res.json?.message ?? (typeof res.json?.code === "number" ? `code ${res.json.code}` : `HTTP ${res.status}`);
+    throw new Error(t("收藏操作失败：{0}", detail));
+  }
+
+  // 响应里的 playlistId 就是这次被改动的歌单，用它校正「我喜欢的音乐」的缓存 ——
+  // 服务器是权威，缓存跟它对不上说明之前解析错了（这正是「我喜欢的音乐认成别人歌单」那次的坑）。
+  const playlistId = res.json?.playlistId;
+  if (typeof playlistId === "number" && playlistId > 0) {
+    const cached = getCachedLikedPlaylistId();
+    if (cached && cached !== playlistId) {
+      log.warn("[netease] 「我喜欢的音乐」缓存与收藏接口返回不一致，按接口返回为准:", cached, "→", playlistId);
+    }
+    setCachedLikedPlaylistId(playlistId);
   }
 
   return true;
@@ -419,7 +462,7 @@ const accountFromCookie = async (cookie: string) => {
 
   const profile = res?.profile;
   if (!res || res.code !== 200 || !profile?.userId) {
-    throw new Error("登录凭据无效或已过期");
+    throw new Error(t("登录凭据无效或已过期"));
   }
 
   return {
@@ -431,7 +474,7 @@ const accountFromCookie = async (cookie: string) => {
 
 export const loginWithCookie = async (rawCookie: string) => {
   const cookie = String(rawCookie ?? "").trim();
-  if (!cookie) throw new Error("请粘贴 Cookie");
+  if (!cookie) throw new Error(t("请粘贴 Cookie"));
 
   const info = await accountFromCookie(cookie);
   return saveNeteaseAccount({ cookie, ...info });
@@ -453,7 +496,7 @@ export const createQrSession = async (): Promise<NeteaseQrSession> => {
   });
 
   const unikey = res.json?.unikey;
-  if (res.json?.code !== 200 || !unikey) throw new Error("获取二维码失败");
+  if (res.json?.code !== 200 || !unikey) throw new Error(t("获取二维码失败"));
 
   // 首次下发就把 cookie 记下来（后续轮询要带上，否则登录态接不上）
   qrSessions.set(unikey, mergeCookies(NETEASE_COOKIE_OS, cookiePairs(res.setCookies)));

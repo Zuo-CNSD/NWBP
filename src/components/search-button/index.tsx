@@ -5,6 +5,8 @@ import { RiSearchLine } from "@remixicon/react";
 import { useClickAway, useDebounceFn } from "ahooks";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { t } from "@/common/i18n";
+
 interface Props {
   onSearch?: (value: string) => void;
 }
@@ -50,7 +52,7 @@ const SearchButton = ({ onSearch }: Props) => {
             transition={{ duration: 0.2 }}
             layout
           >
-            <Button isIconOnly radius="full" variant="flat" onPress={() => setIsExpanded(true)} aria-label="搜索">
+            <Button isIconOnly radius="full" variant="flat" onPress={() => setIsExpanded(true)} aria-label={t("搜索")}>
               <RiSearchLine size={18} />
             </Button>
           </motion.div>
@@ -81,7 +83,7 @@ const SearchButton = ({ onSearch }: Props) => {
                 }
               }}
               ref={inputRef}
-              placeholder="搜索"
+              placeholder={t("搜索")}
               startContent={<RiSearchLine size={18} className="text-default-400" />}
               classNames={{
                 inputWrapper: "h-10 pr-1",

@@ -5,6 +5,7 @@ import { Divider } from "@heroui/react";
 import deepseekAvatar from "@/assets/images/developers/deepseek.png";
 import kayokoAvatar from "@/assets/images/developers/kayoko.png";
 import wumiuAvatar from "@/assets/images/developers/wumiu.png";
+import { t } from "@/common/i18n";
 
 /**
  * 开发者署名。
@@ -28,7 +29,7 @@ const Developers = () => (
   <>
     <Divider className="mt-10" />
     <section className="flex flex-col items-center gap-5 pt-7 pb-2">
-      <span className="text-default-500 text-sm">开发者</span>
+      <span className="text-default-500 text-sm">{t("开发者")}</span>
       <ul className="flex flex-wrap items-center justify-center gap-x-9 gap-y-4">
         {DEVELOPERS.map(({ name, avatar }) => (
           <li key={name} className="group flex items-center gap-3">

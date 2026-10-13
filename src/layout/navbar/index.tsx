@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import clx from "classnames";
 
+import TogetherButton from "@/components/netease/together-button";
 import { useUser } from "@/store/user";
 
 import WindowAction from "../../components/window-action";
@@ -34,6 +35,7 @@ const LayoutNavbar = () => {
       <div className="window-no-drag flex items-center justify-center space-x-4">
         <Dev />
         {Boolean(user?.isLogin) && <UserFeed />}
+        <TogetherButton />
         <UserCard onDropdownOpenChange={setIsUserDropdownOpen} />
         {["linux", "windows"].includes(platform) && <WindowAction />}
       </div>

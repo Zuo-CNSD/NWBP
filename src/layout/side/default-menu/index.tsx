@@ -2,7 +2,8 @@ import React, { useMemo } from "react";
 
 import { RiApps2AddFill, RiApps2AddLine } from "@remixicon/react";
 
-import { DefaultMenuList } from "@/common/constants/menus";
+import { getDefaultMenuList } from "@/common/constants/menus";
+import { t } from "@/common/i18n";
 import MenuGroup from "@/components/menu/menu-group";
 import { useSettings } from "@/store/settings";
 import { useUser } from "@/store/user";
@@ -17,15 +18,15 @@ const DefaultMenus = ({ isCollapsed, onOpenAddFavorite }: Props) => {
   const hiddenMenuKeys = useSettings(state => state.hiddenMenuKeys);
 
   const items = useMemo(() => {
-    const filtered = DefaultMenuList.filter(item => (item.needLogin ? user?.isLogin : true)).filter(
-      item => item.href && !hiddenMenuKeys.includes(item.href),
-    );
+    const filtered = getDefaultMenuList()
+      .filter(item => (item.needLogin ? user?.isLogin : true))
+      .filter(item => item.href && !hiddenMenuKeys.includes(item.href));
 
     if (isCollapsed) {
       return [
         ...filtered,
         {
-          title: "创建收藏夹",
+          title: t("创建收藏夹"),
           icon: RiApps2AddLine,
           activeIcon: RiApps2AddFill,
           onPress: onOpenAddFavorite,
@@ -36,7 +37,7 @@ const DefaultMenus = ({ isCollapsed, onOpenAddFavorite }: Props) => {
     return filtered;
   }, [user?.isLogin, hiddenMenuKeys, isCollapsed, onOpenAddFavorite]);
 
-  return <MenuGroup title="哔哩哔哩" items={items} collapsed={isCollapsed} />;
+  return <MenuGroup title={t("哔哩哔哩")} items={items} collapsed={isCollapsed} />;
 };
 
 export default DefaultMenus;

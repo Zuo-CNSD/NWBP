@@ -3,6 +3,8 @@ import { useCallback, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger, Slider } from "@heroui/react";
 import { RiTimeLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
+
 import IconButton from "../icon-button";
 
 interface OffsetControlProps {
@@ -41,7 +43,7 @@ const OffsetControl = ({ value, min = -5000, max = 5000, onChange, onOpenChange 
         <IconButton
           size="sm"
           variant="light"
-          aria-label="调整歌词偏移"
+          aria-label={t("调整歌词偏移")}
           className="bg-foreground/20 text-foreground hover:bg-foreground/30 min-w-0 rounded-full text-xs font-semibold"
         >
           <RiTimeLine size={16} />
@@ -50,7 +52,7 @@ const OffsetControl = ({ value, min = -5000, max = 5000, onChange, onOpenChange 
       <PopoverContent className="px-3 py-2">
         <div className="flex flex-col items-center gap-2">
           <Slider
-            aria-label="调整歌词偏移"
+            aria-label={t("调整歌词偏移")}
             minValue={min}
             maxValue={max}
             step={step}

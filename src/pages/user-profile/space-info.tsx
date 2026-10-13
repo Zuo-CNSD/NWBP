@@ -5,6 +5,7 @@ import { Avatar, Divider, Image, Tooltip } from "@heroui/react";
 import { RiAddLine, RiCheckLine, RiFlashlightFill } from "@remixicon/react";
 
 import { UserRelation } from "@/common/constants/relation";
+import { t } from "@/common/i18n";
 import { formatNumber } from "@/common/utils/number";
 import AsyncButton from "@/components/async-button";
 import { postRelationModify, UserRelationAction } from "@/service/relation-modify";
@@ -30,16 +31,16 @@ const SpaceInfo = ({ spaceInfo, relationStats, relationWithMe, refreshRelation }
 
   const stats = [
     {
-      title: "关注数",
+      title: t("关注数"),
       value: relationStats?.following,
       hidden: !isSelf,
     },
     {
-      title: "粉丝数",
+      title: t("粉丝数"),
       value: formatNumber(relationStats?.follower),
     },
     {
-      title: "等  级",
+      title: t("等  级"),
       value: `Lv${spaceInfo?.level ?? 0}`,
     },
   ].filter(item => !item.hidden);
@@ -73,7 +74,7 @@ const SpaceInfo = ({ spaceInfo, relationStats, relationWithMe, refreshRelation }
     return (
       <div className="flex h-[480px] w-full flex-col items-center justify-center space-y-6">
         <Avatar src={spaceInfo?.face} alt={spaceInfo?.name} className="h-[120px] w-[120px] shadow-lg" />
-        <p className="text-lg">已拉黑</p>
+        <p className="text-lg">{t("已拉黑")}</p>
       </div>
     );
   }
@@ -121,7 +122,7 @@ const SpaceInfo = ({ spaceInfo, relationStats, relationWithMe, refreshRelation }
             onPress={toggleFollow}
             className="mt-2"
           >
-            {isFollow ? "已关注" : "关注"}
+            {isFollow ? t("已关注") : t("关注")}
           </AsyncButton>
         )}
         {user?.isLogin

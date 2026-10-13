@@ -5,6 +5,7 @@ import { RiDeleteBinLine, RiFileMusicLine, RiPlayCircleLine, RiPlayFill, RiPlayL
 import clsx from "classnames";
 import { filesize } from "filesize";
 
+import { t } from "@/common/i18n";
 import { formatDuration, formatMillisecond } from "@/common/utils/time";
 import ContextMenu from "@/components/context-menu";
 
@@ -21,11 +22,17 @@ interface Props {
   onDelete: () => void;
 }
 
-const menus: LocalOperationItem[] = [
-  { key: "nextplay", label: "下一首播放", icon: <RiPlayCircleLine size={18} /> },
-  { key: "play", label: "添加到播放列表", icon: <RiPlayListAddLine size={18} /> },
-  { key: "open", label: "打开文件", icon: <RiFileMusicLine size={18} /> },
-  { key: "delete", label: "删除文件", color: "danger", className: "text-danger", icon: <RiDeleteBinLine size={18} /> },
+const getMenus = (): LocalOperationItem[] => [
+  { key: "nextplay", label: t("下一首播放"), icon: <RiPlayCircleLine size={18} /> },
+  { key: "play", label: t("添加到播放列表"), icon: <RiPlayListAddLine size={18} /> },
+  { key: "open", label: t("打开文件"), icon: <RiFileMusicLine size={18} /> },
+  {
+    key: "delete",
+    label: t("删除文件"),
+    color: "danger",
+    className: "text-danger",
+    icon: <RiDeleteBinLine size={18} />,
+  },
 ];
 
 const LocalMusicItemRow = ({
@@ -39,7 +46,8 @@ const LocalMusicItemRow = ({
   onDelete,
 }: Props) => {
   const [isOpOpen, setIsOpOpen] = React.useState(false);
-  const items = isPlaying ? menus.filter(m => m.key !== "delete") : menus;
+  const menuItems = getMenus();
+  const items = isPlaying ? menuItems.filter(m => m.key !== "delete") : menuItems;
 
   const onAction = (key: string) => {
     if (key === "nextplay") onAddToNext();

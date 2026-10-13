@@ -5,6 +5,7 @@ import { addToast } from "@heroui/react";
 import { useRequest } from "ahooks";
 
 import { CollectionType } from "@/common/constants/collection";
+import { t } from "@/common/i18n";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
 import { postFavSeasonFav } from "@/service/fav-season-fav";
 import { postFavSeasonUnfav } from "@/service/fav-season-unfav";
@@ -139,7 +140,7 @@ const VideoCollections = () => {
       if (res.code === 0) {
         addCollectedFavorite({
           id: Number(id),
-          title: data?.info?.title || "未命名合集",
+          title: data?.info?.title || t("未命名合集"),
           cover: data?.info?.cover,
           type: CollectionType.VideoCollections,
           mid: data?.info?.upper?.mid,
@@ -189,7 +190,7 @@ const VideoCollections = () => {
           bvid: item.bvid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -201,7 +202,7 @@ const VideoCollections = () => {
           bvid: item.bvid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -237,9 +238,9 @@ const VideoCollections = () => {
         onKeywordSearch={setKeyword}
         onOrderChange={setOrder}
         orderOptions={[
-          { key: "pubtime", label: "最近投稿" },
-          { key: "play", label: "最多播放" },
-          { key: "collect", label: "最多收藏" },
+          { key: "pubtime", label: t("最近投稿") },
+          { key: "play", label: t("最多播放") },
+          { key: "collect", label: t("最多收藏") },
         ]}
         mediaCount={data?.info?.media_count}
         isFavorite={isFavorite}

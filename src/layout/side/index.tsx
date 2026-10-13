@@ -4,6 +4,7 @@ import { Button, useDisclosure } from "@heroui/react";
 import { RiArrowLeftDoubleLine, RiArrowRightDoubleLine } from "@remixicon/react";
 import clx from "classnames";
 
+import { t } from "@/common/i18n";
 import FavoritesEditModal from "@/components/favorites-edit-modal";
 import ScrollContainer from "@/components/scroll-container";
 import { useSettings } from "@/store/settings";
@@ -180,7 +181,7 @@ const SideNav = () => {
               isIconOnly
               radius="md"
               onPress={onToggleCollapsed}
-              aria-label={isCollapsedVisual ? "展开侧边栏" : "收起侧边栏"}
+              aria-label={isCollapsedVisual ? t("展开侧边栏") : t("收起侧边栏")}
               className="bg-default/40 hover:bg-primary/20 hover:text-primary h-7 w-full min-w-0 transition-colors"
             >
               {isCollapsedVisual ? <RiArrowRightDoubleLine size={16} /> : <RiArrowLeftDoubleLine size={16} />}

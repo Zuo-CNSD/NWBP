@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { Button } from "@heroui/react";
 import clx from "classnames";
 
+import { t } from "@/common/i18n";
 import { formatDuration } from "@/common/utils/time";
 import ContextMenu, { type ContextMenuItem } from "@/components/context-menu";
 import Image from "@/components/image";
@@ -110,7 +111,7 @@ const HistoryListItem = ({
                     navigate(`/user/${upMid}`);
                   }}
                 >
-                  {upName || "未知"}
+                  {upName || t("未知")}
                 </span>
               )}
             </div>
@@ -129,7 +130,7 @@ const HistoryListItem = ({
                   navigate(`/user/${upMid}`);
                 }}
               >
-                {upName || "未知"}
+                {upName || t("未知")}
               </span>
             </div>
           )}

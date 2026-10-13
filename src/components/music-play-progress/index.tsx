@@ -3,6 +3,7 @@ import { memo, useState } from "react";
 import { Slider } from "@heroui/react";
 import { twMerge } from "tailwind-merge";
 
+import { t } from "@/common/i18n";
 import { formatDuration } from "@/common/utils/time";
 import { usePlayList } from "@/store/play-list";
 import { usePlayProgress } from "@/store/play-progress";
@@ -30,7 +31,7 @@ const MusicPlayProgress = memo(({ isDisabled, className, trackClassName }: Props
         {currentTime ? formatDuration(currentTime) : "-:--"}
       </div>
       <Slider
-        aria-label="播放进度"
+        aria-label={t("播放进度")}
         hideThumb={!showThumb}
         minValue={0}
         maxValue={maxDuration}

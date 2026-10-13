@@ -1,6 +1,7 @@
 import { RiPlayFill, RiPlayListAddLine } from "@remixicon/react";
 
 import { CollectionType } from "@/common/constants/collection";
+import { t } from "@/common/i18n";
 import AsyncButton from "@/components/async-button";
 import IconButton from "@/components/icon-button";
 import SearchWithSort, { type SearchProps } from "@/components/search-with-sort";
@@ -39,9 +40,9 @@ const Operations = ({
           onPress={onPlayAll}
           className="dark:text-black"
         >
-          播放全部
+          {t("播放全部")}
         </AsyncButton>
-        <IconButton size="md" variant="flat" tooltip="添加到播放列表" onPress={onAddToPlayList}>
+        <IconButton size="md" variant="flat" tooltip={t("添加到播放列表")} onPress={onAddToPlayList}>
           <RiPlayListAddLine size={18} />
         </IconButton>
         {!loading && type !== CollectionType.VideoSeries && isCreatedBySelf !== true && (

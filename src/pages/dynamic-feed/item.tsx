@@ -8,6 +8,7 @@ import { twMerge } from "tailwind-merge";
 
 import type { WebDynamicItem } from "@/service/web-dynamic";
 
+import { t } from "@/common/i18n";
 import { formatNumber } from "@/common/utils/number";
 import Image from "@/components/image";
 import { postDynamicFeedThumb } from "@/service/web-dynamic-feed-thumb";
@@ -44,7 +45,7 @@ const DynamicItem: React.FC<DynamicItemProps> = ({ item, className }) => {
       bvid: archive?.bvid,
     });
     addToast({
-      title: "已添加到下载队列",
+      title: t("已添加到下载队列"),
       color: "success",
     });
   };
@@ -70,7 +71,7 @@ const DynamicItem: React.FC<DynamicItemProps> = ({ item, className }) => {
         useMusicFavStore.getState().setIsThumb(prevIsLike);
       }
       addToast({
-        title: "点赞失败，请稍后重试",
+        title: t("点赞失败，请稍后重试"),
         color: "danger",
       });
     }
@@ -112,7 +113,7 @@ const DynamicItem: React.FC<DynamicItemProps> = ({ item, className }) => {
             onPress={handleThumb}
           >
             {isLike ? <RiThumbUpFill size={18} /> : <RiThumbUpLine size={18} />}
-            <span>{likeCount > 0 ? formatNumber(likeCount) : "点赞"}</span>
+            <span>{likeCount > 0 ? formatNumber(likeCount) : t("点赞")}</span>
           </Button>
           <MoreMenu
             onAddToNext={() => {
@@ -126,7 +127,7 @@ const DynamicItem: React.FC<DynamicItemProps> = ({ item, className }) => {
                   ownerMid: author.mid,
                 });
                 addToast({
-                  title: "已添加到下一首播放",
+                  title: t("已添加到下一首播放"),
                   color: "success",
                 });
               }
@@ -180,7 +181,7 @@ const DynamicItem: React.FC<DynamicItemProps> = ({ item, className }) => {
                 </h3>
                 <div className="text-default-500 line-clamp-1 text-xs">{archive?.desc || ""}</div>
               </div>
-              <span className="text-default-400 mt-1 text-xs">{archive?.stat?.play || 0}观看</span>
+              <span className="text-default-400 mt-1 text-xs">{t("{0}观看", archive?.stat?.play || 0)}</span>
             </div>
           </div>
         </div>

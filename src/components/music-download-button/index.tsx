@@ -3,9 +3,12 @@ import React, { useState } from "react";
 import { addToast, Tooltip, Listbox, ListboxItem } from "@heroui/react";
 import { RiDownload2Fill, RiFileImageLine, RiFileMusicLine, RiFileVideoLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
+import { resolveDownloadSource, toNeteaseLevel } from "@/common/utils/download";
 import AsyncButton from "@/components/async-button";
 import IconButton from "@/components/icon-button";
 import { usePlayList } from "@/store/play-list";
+import { useSettings } from "@/store/settings";
 
 const MusicDownloadButton = () => {
   const list = usePlayList(s => s.list);
@@ -13,23 +16,48 @@ const MusicDownloadButton = () => {
   const playItem = list.find(item => item.id === playId);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
+  /*
+   * 来源解析统一走 `resolveDownloadSource`。
+   * 网易云曲目的直链要在这里先换出来（主进程没有网易云接口），
+   * 换不到就明确报错，别丢一个「必然失败」的任务进下载页。
+   */
   const downloadAudio = async () => {
+    if (!playItem) return;
+
+    const resolved = await resolveDownloadSource(playItem, toNeteaseLevel(useSettings.getState().audioQuality));
+
+    if (!resolved.ok) {
+      addToast({
+        title: t("无法下载"),
+        description: resolved.reason,
+        color: "warning",
+      });
+      return;
+    }
+
     await window.electron.addMediaDownloadTask({
       outputFileType: "audio",
       title: playItem?.pageTitle || playItem?.title || `audio-${Date.now()}`,
       cover: playItem?.pageCover || playItem?.cover,
-      bvid: playItem?.bvid,
-      cid: playItem?.cid,
-      sid: playItem?.type === "audio" ? playItem?.sid : undefined,
+      ...resolved.source,
     });
 
     addToast({
-      title: "已添加下载任务",
+      title: t("已添加下载任务"),
       color: "success",
     });
   };
 
   const downloadVideo = async () => {
+    // 网易云曲目、B 站音频站都没有视频流，别让按钮点了必失败
+    if (!playItem?.bvid) {
+      addToast({
+        title: t("这首歌没有可下载的视频"),
+        color: "warning",
+      });
+      return;
+    }
+
     await window.electron.addMediaDownloadTask({
       outputFileType: "video",
       title: playItem?.pageTitle || playItem?.title || `video-${Date.now()}`,
@@ -39,7 +67,7 @@ const MusicDownloadButton = () => {
     });
 
     addToast({
-      title: "已添加下载任务",
+      title: t("已添加下载任务"),
       color: "success",
     });
   };
@@ -49,7 +77,7 @@ const MusicDownloadButton = () => {
 
     if (!coverUrl) {
       addToast({
-        title: "没有可下载的封面",
+        title: t("没有可下载的封面"),
         color: "warning",
       });
       return;
@@ -59,7 +87,7 @@ const MusicDownloadButton = () => {
       const response = await fetch(coverUrl);
 
       if (!response.ok) {
-        throw new Error(`下载失败，状态码 ${response.status}`);
+        throw new Error(t("下载失败，状态码 {0}", response.status));
       }
 
       const blob = await response.blob();
@@ -75,9 +103,9 @@ const MusicDownloadButton = () => {
       document.body.removeChild(link);
       URL.revokeObjectURL(objectUrl);
     } catch (error) {
-      const message = error instanceof Error ? error.message : "未知错误";
+      const message = error instanceof Error ? error.message : t("未知错误");
       addToast({
-        title: "封面下载失败",
+        title: t("封面下载失败"),
         description: message,
         color: "danger",
       });
@@ -107,7 +135,7 @@ const MusicDownloadButton = () => {
       }}
       content={
         <Listbox
-          aria-label="下载选项"
+          aria-label={t("下载选项")}
           selectionMode="none"
           onAction={key => {
             if (key === "audio") {
@@ -123,26 +151,27 @@ const MusicDownloadButton = () => {
           <ListboxItem
             className="rounded-medium"
             key="audio"
-            textValue="下载音频"
+            textValue={t("下载音频")}
             startContent={<RiFileMusicLine size={16} />}
           >
-            下载音频
+            {t("下载音频")}
           </ListboxItem>
           <ListboxItem
             className="rounded-medium"
             key="video"
-            textValue="下载视频"
+            textValue={t("下载视频")}
+            hidden={!playItem?.bvid}
             startContent={<RiFileVideoLine size={16} />}
           >
-            下载视频
+            {t("下载视频")}
           </ListboxItem>
           <ListboxItem
             className="rounded-medium"
             key="cover"
-            textValue="下载封面"
+            textValue={t("下载封面")}
             startContent={<RiFileImageLine size={16} />}
           >
-            下载封面
+            {t("下载封面")}
           </ListboxItem>
         </Listbox>
       }

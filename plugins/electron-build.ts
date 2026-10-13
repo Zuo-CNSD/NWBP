@@ -86,17 +86,21 @@ export async function buildElectron() {
         ],
         icon: `${ELECTRON_ICON_BASE_PATH}/logo.png`,
         category: "AudioVideo",
-        synopsis: "NWBP - bilibili music desktop application",
-        maintainer: "wood3n",
-        vendor: "wood3n",
+        synopsis: "NWBP - a desktop music player for bilibili and NetEase Cloud Music",
+        /*
+         * 这两处原来还写着上游（wood3n），打进 deb/rpm 的元信息里就是别人的名字。
+         * deb 的 Maintainer 字段惯例是 "Name <email>"，少了邮箱 lintian 会告警。
+         */
+        maintainer: "Zuo-CNSD <zuo-cnsd@users.noreply.github.com>",
+        vendor: "Zuo-CNSD",
         executableName: "NWBP",
         artifactName: "${productName}-${version}-linux-${arch}.${ext}",
         extraResources: [{ from: "electron/ffmpeg/ffmpeg-linux", to: "electron/ffmpeg/ffmpeg-linux" }],
       },
       publish: {
         provider: "github",
-        owner: "wood3n",
-        repo: "biu",
+        owner: "Zuo-CNSD",
+        repo: "NWBP",
         releaseType: null,
       },
     },

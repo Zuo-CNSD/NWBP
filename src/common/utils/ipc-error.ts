@@ -1,3 +1,5 @@
+import { t } from "@/common/i18n";
+
 /**
  * 主进程抛回来的错误会被 Electron 包一层前缀
  * （`Error invoking remote method 'xxx': Error: 真正的信息`），这里剥掉它，
@@ -9,7 +11,7 @@ export const cleanErrorMessage = (error: unknown) => {
     raw
       .replace(/^Error invoking remote method '[^']*':\s*/, "")
       .replace(/^Error:\s*/, "")
-      .trim() || "操作失败"
+      .trim() || t("操作失败")
   );
 };
 
@@ -22,5 +24,5 @@ export const cleanErrorMessage = (error: unknown) => {
  */
 export const describeLoadError = (error: unknown) => {
   const message = cleanErrorMessage(error);
-  return message.includes("登录") ? message : "加载失败，检查一下网络或代理";
+  return message.includes(t("登录")) ? message : t("加载失败，检查一下网络或代理");
 };

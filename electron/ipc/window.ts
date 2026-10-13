@@ -5,6 +5,7 @@ import path from "node:path";
 
 import { defaultAppSettings } from "@shared/settings/app-settings";
 
+import { t } from "../i18n";
 import { createMiniPlayer, destroyMiniPlayer, miniPlayer } from "../mini-player";
 import { appSettingsStore } from "../store";
 import {
@@ -27,13 +28,18 @@ const DESKTOP_LYRICS_FONT_SIZE_MAX = 72;
 const DESKTOP_LYRICS_FONT_SIZE_STEP = 4;
 const DESKTOP_LYRICS_FONT_SIZE_PRESETS = [24, 34, 44, 56];
 
-/** 右键菜单里的文字颜色快捷档 */
-const DESKTOP_LYRICS_COLOR_PRESETS = [
-  { label: "白色", value: "#ffffff" },
-  { label: "浅黄", value: "#ffe08a" },
-  { label: "浅粉", value: "#ffb3c1" },
-  { label: "薄荷绿", value: "#9ff5c8" },
-  { label: "黑色", value: "#111111" },
+/**
+ * 右键菜单里的文字颜色快捷档。
+ *
+ * 做成函数而不是常量：菜单是**按需重建**的，这样换语言后重新打开右键菜单
+ * 就是新语言。写成模块顶层常量的话只会在进程启动时求值一次，永远停在启动时的语言。
+ */
+const desktopLyricsColorPresets = (): { label: string; value: string }[] => [
+  { label: t("白色"), value: "#ffffff" },
+  { label: t("浅黄"), value: "#ffe08a" },
+  { label: t("浅粉"), value: "#ffb3c1" },
+  { label: t("薄荷绿"), value: "#9ff5c8" },
+  { label: t("黑色"), value: "#111111" },
 ];
 
 /** 底板透明度快捷档 */
@@ -41,14 +47,14 @@ const DESKTOP_LYRICS_OPACITY_PRESETS = [0, 30, 55, 80, 100];
 /** 文字透明度快捷档 */
 const DESKTOP_LYRICS_TEXT_OPACITY_PRESETS = [100, 85, 70, 55, 35];
 
-/** 右键菜单里的底板纯色快捷档 */
-const DESKTOP_LYRICS_BACKGROUND_COLORS = [
-  { label: "深灰", value: "#0e0e12" },
-  { label: "纯黑", value: "#000000" },
-  { label: "深蓝", value: "#0b1a2b" },
-  { label: "墨绿", value: "#0b1f18" },
-  { label: "暖褐", value: "#241a12" },
-  { label: "浅白", value: "#f5f5f7" },
+/** 右键菜单里的底板纯色快捷档，做成函数的理由同上 */
+const desktopLyricsBackgroundColors = (): { label: string; value: string }[] => [
+  { label: t("深灰"), value: "#0e0e12" },
+  { label: t("纯黑"), value: "#000000" },
+  { label: t("深蓝"), value: "#0b1a2b" },
+  { label: t("墨绿"), value: "#0b1f18" },
+  { label: t("暖褐"), value: "#241a12" },
+  { label: t("浅白"), value: "#f5f5f7" },
 ];
 
 const IMAGE_MIME: Record<string, string> = {
@@ -163,9 +169,9 @@ export function registerWindowHandlers({ getMainWindow }) {
   /** 选择一张本地图片作为背景，返回路径与 data URL */
   ipcMain.handle(channel.window.pickBackgroundImage, async () => {
     const result = await dialog.showOpenDialog({
-      title: "选择背景图片",
+      title: t("选择背景图片"),
       properties: ["openFile"],
-      filters: [{ name: "图片", extensions: ["png", "jpg", "jpeg", "webp", "gif", "bmp", "avif"] }],
+      filters: [{ name: t("图片"), extensions: ["png", "jpg", "jpeg", "webp", "gif", "bmp", "avif"] }],
     });
 
     const filePath = result.canceled ? null : (result.filePaths?.[0] ?? null);
@@ -182,9 +188,9 @@ export function registerWindowHandlers({ getMainWindow }) {
   /** 选一个本地视频当开场动画。只回路径与体积，视频本体等真要播时再读 */
   ipcMain.handle(channel.window.pickLaunchVideo, async () => {
     const result = await dialog.showOpenDialog({
-      title: "选择开场视频",
+      title: t("选择开场视频"),
       properties: ["openFile"],
-      filters: [{ name: "视频", extensions: ["mp4", "webm", "mov", "m4v"] }],
+      filters: [{ name: t("视频"), extensions: ["mp4", "webm", "mov", "m4v"] }],
     });
 
     const filePath = result.canceled ? null : (result.filePaths?.[0] ?? null);
@@ -402,9 +408,9 @@ export function registerWindowHandlers({ getMainWindow }) {
     /** 从菜单里直接选背景图：复用主窗口那套选图对话框 */
     const pickBackgroundImageForLyrics = async () => {
       const result = await dialog.showOpenDialog({
-        title: "选择桌面歌词底板图片",
+        title: t("选择桌面歌词底板图片"),
         properties: ["openFile"],
-        filters: [{ name: "图片", extensions: ["png", "jpg", "jpeg", "webp", "gif", "bmp", "avif"] }],
+        filters: [{ name: t("图片"), extensions: ["png", "jpg", "jpeg", "webp", "gif", "bmp", "avif"] }],
       });
 
       const filePath = result.canceled ? null : (result.filePaths?.[0] ?? null);
@@ -419,7 +425,7 @@ export function registerWindowHandlers({ getMainWindow }) {
 
     const menu = Menu.buildFromTemplate([
       {
-        label: "锁定（鼠标穿透）",
+        label: t("锁定（鼠标穿透）"),
         type: "checkbox",
         checked: locked,
         click: () => {
@@ -430,15 +436,15 @@ export function registerWindowHandlers({ getMainWindow }) {
       },
       { type: "separator" },
       {
-        label: `歌词字号（当前 ${fontSize}px）`,
+        label: t("歌词字号（当前 {0}px）", fontSize),
         submenu: [
           {
-            label: `增大  +${DESKTOP_LYRICS_FONT_SIZE_STEP}px`,
+            label: t("增大  +{0}px", DESKTOP_LYRICS_FONT_SIZE_STEP),
             enabled: fontSize < DESKTOP_LYRICS_FONT_SIZE_MAX,
             click: () => setFontSize(fontSize + DESKTOP_LYRICS_FONT_SIZE_STEP),
           },
           {
-            label: `减小  −${DESKTOP_LYRICS_FONT_SIZE_STEP}px`,
+            label: t("减小  −{0}px", DESKTOP_LYRICS_FONT_SIZE_STEP),
             enabled: fontSize > DESKTOP_LYRICS_FONT_SIZE_MIN,
             click: () => setFontSize(fontSize - DESKTOP_LYRICS_FONT_SIZE_STEP),
           },
@@ -450,12 +456,12 @@ export function registerWindowHandlers({ getMainWindow }) {
             click: () => setFontSize(preset),
           })),
           { type: "separator" },
-          { label: "也可用 Ctrl / ⌘ + 滚轮", enabled: false },
+          { label: t("也可用 Ctrl / ⌘ + 滚轮"), enabled: false },
         ],
       },
       {
-        label: "文字颜色",
-        submenu: DESKTOP_LYRICS_COLOR_PRESETS.map(preset => ({
+        label: t("文字颜色"),
+        submenu: desktopLyricsColorPresets().map(preset => ({
           label: preset.label,
           type: "radio" as const,
           checked: settings.desktopLyricsColor === preset.value,
@@ -465,32 +471,32 @@ export function registerWindowHandlers({ getMainWindow }) {
       { type: "separator" },
       {
         // 底板三选一：透明 / 纯色 / 自定义背景图，下面是这个模式自己的参数
-        label: "歌词底板",
+        label: t("歌词底板"),
         submenu: [
           {
-            label: "透明（只有字）",
+            label: t("透明（只有字）"),
             type: "radio" as const,
             checked: backgroundMode === "transparent",
             click: () => setBackgroundMode("transparent"),
           },
           {
-            label: "纯色",
+            label: t("纯色"),
             type: "radio" as const,
             checked: backgroundMode === "color",
             click: () => setBackgroundMode("color"),
           },
           {
-            label: "自定义背景图",
+            label: t("自定义背景图"),
             type: "radio" as const,
             checked: backgroundMode === "image",
             click: () => setBackgroundMode("image"),
           },
           { type: "separator" },
-          { label: "更换背景图…", click: () => void pickBackgroundImageForLyrics() },
+          { label: t("更换背景图…"), click: () => void pickBackgroundImageForLyrics() },
           { type: "separator" },
           {
-            label: "底板色",
-            submenu: DESKTOP_LYRICS_BACKGROUND_COLORS.map(preset => ({
+            label: t("底板色"),
+            submenu: desktopLyricsBackgroundColors().map(preset => ({
               label: preset.label,
               type: "radio" as const,
               checked: backgroundColor === preset.value,
@@ -500,7 +506,7 @@ export function registerWindowHandlers({ getMainWindow }) {
             })),
           },
           {
-            label: `不透明度（当前 ${backgroundOpacity}%）`,
+            label: t("不透明度（当前 {0}%）", backgroundOpacity),
             submenu: [
               {
                 type: "radio" as const,
@@ -519,7 +525,7 @@ export function registerWindowHandlers({ getMainWindow }) {
         ],
       },
       {
-        label: `歌词文字（当前 ${textOpacity}%）`,
+        label: t("歌词文字（当前 {0}%）", textOpacity),
         submenu: DESKTOP_LYRICS_TEXT_OPACITY_PRESETS.map(value => ({
           label: `${value}%`,
           type: "radio" as const,
@@ -529,27 +535,27 @@ export function registerWindowHandlers({ getMainWindow }) {
       },
       { type: "separator" },
       {
-        label: "显示翻译",
+        label: t("显示翻译"),
         type: "checkbox",
         checked: Boolean(settings.desktopLyricsShowTranslation),
         click: () => togglePatch({ desktopLyricsShowTranslation: !settings.desktopLyricsShowTranslation }),
       },
       {
-        label: "显示罗马音",
+        label: t("显示罗马音"),
         type: "checkbox",
         checked: Boolean(settings.desktopLyricsShowRomanization),
         click: () => togglePatch({ desktopLyricsShowRomanization: !settings.desktopLyricsShowRomanization }),
       },
       {
-        label: "显示频谱条",
+        label: t("显示频谱条"),
         type: "checkbox",
         checked: settings.desktopLyricsSpectrum !== false,
         click: () => togglePatch({ desktopLyricsSpectrum: settings.desktopLyricsSpectrum === false }),
       },
       { type: "separator" },
-      { label: "重置窗口位置", click: () => resetDesktopLyricsBounds() },
+      { label: t("重置窗口位置"), click: () => resetDesktopLyricsBounds() },
       {
-        label: "关闭桌面歌词",
+        label: t("关闭桌面歌词"),
         click: () => {
           patchSettings({ desktopLyrics: false });
           destroyDesktopLyricsWindow();

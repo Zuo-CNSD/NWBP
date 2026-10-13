@@ -1,5 +1,6 @@
 import React, { useCallback, useRef } from "react";
 
+import { t } from "@/common/i18n";
 import NeteasePageStatus from "@/components/netease/page-status";
 import NeteaseTrackList from "@/components/netease/track-list";
 import { useNeteasePlaylistTracks } from "@/components/netease/use-netease-playlist-tracks";
@@ -44,11 +45,11 @@ const NeteaseLiked = () => {
   return (
     <ScrollContainer enableBackToTop ref={scrollerRef} className="h-full w-full">
       <div className="px-4 pt-4">
-        <h1>{name || "我喜欢的音乐"}</h1>
+        <h1>{name || t("我喜欢的音乐")}</h1>
         <div className="text-default-500 mt-1 mb-2 text-sm">
-          来自网易云账号
-          {trackCount > 0 ? ` · 共 ${trackCount} 首` : ""}
-          {tracks.length < trackCount ? ` · 已加载 ${tracks.length} 首` : ""}
+          {t("来自网易云账号")}
+          {trackCount > 0 ? t(" · 共 {0} 首", trackCount) : ""}
+          {tracks.length < trackCount ? t(" · 已加载 {0} 首", tracks.length) : ""}
         </div>
       </div>
 
@@ -56,7 +57,7 @@ const NeteaseLiked = () => {
         loading={loading}
         error={error}
         empty={!loading && !error && tracks.length === 0}
-        emptyText={found ? "这个歌单还是空的" : "登录网易云后才能读取「我喜欢的音乐」"}
+        emptyText={found ? t("这个歌单还是空的") : t("登录网易云后才能读取「我喜欢的音乐」")}
         onRetry={reload}
       />
 
@@ -67,7 +68,7 @@ const NeteaseLiked = () => {
           hasMore={hasMore}
           loading={loadingMore}
           onLoadMore={() => void loadMore()}
-          summary={`网易云 · 共 ${trackCount} 首`}
+          summary={t("网易云 · 共 {0} 首", trackCount)}
         />
       )}
     </ScrollContainer>

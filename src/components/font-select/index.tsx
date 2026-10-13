@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import { defaultAppSettings } from "@shared/settings/app-settings";
 
 export interface FontSelectProps {
@@ -15,7 +16,7 @@ export default function FontSelect({ value = defaultAppSettings.fontFamily, onCh
 
   const getFonts = async () => {
     const fonts = await window.electron.getFonts();
-    setFonts([{ name: "系统默认", familyName: defaultAppSettings.fontFamily }, ...fonts]);
+    setFonts([{ name: t("系统默认"), familyName: defaultAppSettings.fontFamily }, ...fonts]);
   };
 
   useEffect(() => {
@@ -26,8 +27,8 @@ export default function FontSelect({ value = defaultAppSettings.fontFamily, onCh
 
   return (
     <Autocomplete
-      aria-label="选择字体"
-      placeholder="选择字体"
+      aria-label={t("选择字体")}
+      placeholder={t("选择字体")}
       selectedKey={selectedValue}
       onSelectionChange={key => {
         if (key) onChange(String(key));

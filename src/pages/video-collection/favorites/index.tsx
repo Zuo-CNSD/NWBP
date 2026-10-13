@@ -5,6 +5,7 @@ import { addToast, useDisclosure } from "@heroui/react";
 import { useRequest } from "ahooks";
 
 import { CollectionType } from "@/common/constants/collection";
+import { t } from "@/common/i18n";
 import { getAllFavMedia } from "@/common/utils/fav";
 import { openBiliVideoLink } from "@/common/utils/url";
 import FavoritesEditModal from "@/components/favorites-edit-modal";
@@ -136,7 +137,7 @@ const Favorites = () => {
         }
       } catch (error) {
         addToast({
-          title: error instanceof Error ? error.message : "获取收藏夹内容失败",
+          title: error instanceof Error ? error.message : t("获取收藏夹内容失败"),
           color: "danger",
         });
         setHasMore(false);
@@ -206,13 +207,13 @@ const Favorites = () => {
 
   const onPlayAll = async () => {
     if (!favFolderId) {
-      addToast({ title: "收藏夹 ID 无效", color: "danger" });
+      addToast({ title: t("收藏夹 ID 无效"), color: "danger" });
       return;
     }
 
     const totalCount = favInfo?.media_count ?? 0;
     if (!totalCount) {
-      addToast({ title: "收藏夹为空", color: "warning" });
+      addToast({ title: t("收藏夹为空"), color: "warning" });
       return;
     }
 
@@ -224,21 +225,21 @@ const Favorites = () => {
       if (allMedias.length) {
         playList(allMedias);
       } else {
-        addToast({ title: "无法获取收藏夹全部歌曲", color: "danger" });
+        addToast({ title: t("无法获取收藏夹全部歌曲"), color: "danger" });
       }
     } catch {
-      addToast({ title: "获取收藏夹全部歌曲失败", color: "danger" });
+      addToast({ title: t("获取收藏夹全部歌曲失败"), color: "danger" });
     }
   };
   const addAllMedia = async () => {
     if (!favFolderId) {
-      addToast({ title: "收藏夹 ID 无效", color: "danger" });
+      addToast({ title: t("收藏夹 ID 无效"), color: "danger" });
       return;
     }
 
     const totalCount = favInfo?.media_count ?? 0;
     if (!totalCount) {
-      addToast({ title: "收藏夹为空", color: "warning" });
+      addToast({ title: t("收藏夹为空"), color: "warning" });
       return;
     }
 
@@ -249,12 +250,12 @@ const Favorites = () => {
 
       if (allMedias.length) {
         addToPlayList(allMedias);
-        addToast({ title: `已添加 ${allMedias.length} 首到播放列表`, color: "success" });
+        addToast({ title: t("已添加 {0} 首到播放列表", allMedias.length), color: "success" });
       } else {
-        addToast({ title: "无法获取收藏夹全部歌曲", color: "danger" });
+        addToast({ title: t("无法获取收藏夹全部歌曲"), color: "danger" });
       }
     } catch {
-      addToast({ title: "获取收藏夹全部歌曲失败", color: "danger" });
+      addToast({ title: t("获取收藏夹全部歌曲失败"), color: "danger" });
     }
   };
 
@@ -285,7 +286,7 @@ const Favorites = () => {
       if (res.code === 0) {
         addCollectedFavorite({
           id: favInfo?.id as number,
-          title: favInfo?.title || "未命名收藏夹",
+          title: favInfo?.title || t("未命名收藏夹"),
           cover: favInfo?.cover,
           type: CollectionType.Favorite,
           mid: favInfo?.upper?.mid,
@@ -329,7 +330,7 @@ const Favorites = () => {
           break;
         case "cancelFavorite":
           useModalStore.getState().onOpenConfirmModal({
-            title: `确认取消收藏${item.title}？`,
+            title: t("确认取消收藏{0}？", item.title),
             onConfirm: async () => {
               if (!favFolderId) return false;
 
@@ -402,7 +403,7 @@ const Favorites = () => {
             sid: item.type === 12 ? item.id : undefined,
           });
           addToast({
-            title: "已添加下载任务",
+            title: t("已添加下载任务"),
             color: "success",
           });
           break;
@@ -414,7 +415,7 @@ const Favorites = () => {
             bvid: item.bvid,
           });
           addToast({
-            title: "已添加下载任务",
+            title: t("已添加下载任务"),
             color: "success",
           });
           break;
@@ -452,9 +453,9 @@ const Favorites = () => {
         onOrderChange={handleOrderChange}
         onKeywordSearch={handleKeywordSearch}
         orderOptions={[
-          { key: "mtime", label: "最近收藏" },
-          { key: "view", label: "最多播放" },
-          { key: "pubtime", label: "最近投稿" },
+          { key: "mtime", label: t("最近收藏") },
+          { key: "view", label: t("最多播放") },
+          { key: "pubtime", label: t("最近投稿") },
         ]}
         mediaCount={favInfo?.media_count}
         attr={favInfo?.attr}

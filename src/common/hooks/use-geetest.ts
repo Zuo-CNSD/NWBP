@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { addToast } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import { getPassportLoginCaptcha } from "@/service/passport-login-captcha";
 
 import { loadGeetestScript, verifyGeetest, type GeetestResult } from "../utils/geetest";
@@ -11,7 +12,7 @@ export const useGeetest = () => {
 
   useEffect(() => {
     loadGeetestScript().catch(() => {
-      addToast({ title: "加载风控验证码出错", color: "danger" });
+      addToast({ title: t("加载风控验证码出错"), color: "danger" });
     });
   }, []);
 

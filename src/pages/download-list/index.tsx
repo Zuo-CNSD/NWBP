@@ -18,6 +18,7 @@ import {
 import { RiDeleteBinLine, RiExternalLinkLine, RiFolderLine } from "@remixicon/react";
 import { filesize } from "filesize";
 
+import { t } from "@/common/i18n";
 import { formatMillisecond } from "@/common/utils/time";
 import { openBiliVideoLink } from "@/common/utils/url";
 import Empty from "@/components/empty";
@@ -82,7 +83,7 @@ const DownloadList = () => {
     }
 
     if (item.audioCodecs?.includes("ec-3")) {
-      return "杜比音频";
+      return t("杜比音频");
     }
 
     if (item.audioBandwidth) {
@@ -95,7 +96,7 @@ const DownloadList = () => {
   return (
     <ScrollContainer enableBackToTop className="h-full w-full px-4">
       <div className="mb-2 flex items-center justify-between">
-        <h1 className="flex items-center space-x-1">下载记录</h1>
+        <h1 className="flex items-center space-x-1">{t("下载记录")}</h1>
         <div className="flex items-center space-x-1">
           <Button variant="flat" onPress={openDownloadDir} startContent={<RiFolderLine size={18} />}>
             {downloadPath}
@@ -108,7 +109,7 @@ const DownloadList = () => {
             <Table
               fullWidth
               radius="md"
-              aria-label="下载列表"
+              aria-label={t("下载列表")}
               removeWrapper
               topContent={
                 <div className="flex justify-between">
@@ -120,12 +121,12 @@ const DownloadList = () => {
                       wrapper: "gap-4",
                     }}
                   >
-                    <Radio value="all">全部</Radio>
-                    <Radio value="audio">音频</Radio>
-                    <Radio value="video">视频</Radio>
+                    <Radio value="all">{t("全部")}</Radio>
+                    <Radio value="audio">{t("音频")}</Radio>
+                    <Radio value="video">{t("视频")}</Radio>
                   </RadioGroup>
                   {Boolean(downloadList.length) && (
-                    <Tooltip content="清空记录" closeDelay={0}>
+                    <Tooltip content={t("清空记录")} closeDelay={0}>
                       <Button size="sm" isIconOnly onPress={clearDownloadList}>
                         <RiDeleteBinLine size={18} />
                       </Button>
@@ -148,16 +149,16 @@ const DownloadList = () => {
               }}
             >
               <TableHeader className="rounded-medium">
-                <TableColumn width={350}>文件</TableColumn>
-                <TableColumn align="center">状态</TableColumn>
+                <TableColumn width={350}>{t("文件")}</TableColumn>
+                <TableColumn align="center">{t("状态")}</TableColumn>
                 <TableColumn width={120} align="center">
-                  大小
+                  {t("大小")}
                 </TableColumn>
                 <TableColumn width={120} align="center">
-                  下载时间
+                  {t("下载时间")}
                 </TableColumn>
                 <TableColumn width={120} align="center">
-                  操作
+                  {t("操作")}
                 </TableColumn>
               </TableHeader>
               <TableBody

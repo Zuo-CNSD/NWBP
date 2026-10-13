@@ -114,3 +114,69 @@ interface NeteaseAlbumDetail {
   artist: string;
   tracks: NeteaseTrack[];
 }
+
+// ---------------------------------------------------------------- 一起听
+
+/** 一起听房间成员 */
+interface NeteaseTogetherUser {
+  uid: number;
+  nickname: string;
+  avatarUrl: string;
+}
+
+/** 房间号 + 发起人 uid —— 两半合起来才是能分享的邀请码 */
+interface NeteaseTogetherRoom {
+  /** 服务端房间号，形如 `6be6cda6f9b0ff91233f42baf6c79d5d_1790909976` */
+  roomId: string;
+  /** 发起人 uid。**加房间必须带它**，光有 roomId 进不去 */
+  inviterId: number;
+}
+
+interface NeteaseTogetherStatus {
+  inRoom: boolean;
+  roomId: string;
+  members: NeteaseTogetherUser[];
+}
+
+/**
+ * 房间里「当前那条命令」。
+ *
+ * ⚠️ `positionMs` 是**下发那一刻**的进度快照，不是实时值 ——
+ * 要用 `serverSeq`（毫秒时间戳）补上流逝的时间，见 `shared/netease/together.ts`。
+ */
+interface NeteaseTogetherCommand {
+  /** 谁操作的 */
+  userId: number;
+  songId: number;
+  positionMs: number;
+  playing: boolean;
+  serverSeq: number;
+  commandType: string;
+}
+
+/** `sync/playlist/get` 的快照。只有自己的房间里恒为 `hasCommand: false`（设计如此） */
+interface NeteaseTogetherSnapshot {
+  hasCommand: boolean;
+  command: NeteaseTogetherCommand | null;
+  /** 房间当前队列（网易云歌曲 id） */
+  queue: number[];
+}
+
+/** 上报给房间的播放动作 */
+interface NeteaseTogetherReportArgs {
+  roomId: string;
+  commandType: "PLAY" | "PAUSE" | "GOTO" | "seek" | "NEXT" | "PREV";
+  songId: number;
+  progressMs: number;
+  playing: boolean;
+  formerSongId?: number;
+  clientSeq: number;
+}
+
+/** eapi 通道的原始响应外壳 */
+interface NeteaseTogetherRawResponse {
+  code?: number;
+  message?: string;
+  msg?: string;
+  data?: Record<string, any>;
+}

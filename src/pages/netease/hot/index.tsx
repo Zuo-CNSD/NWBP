@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from "react";
 import { useNavigate } from "react-router";
 
+import { t } from "@/common/i18n";
 import NeteaseCollectionList, { type NeteaseCollectionItem } from "@/components/netease/collection-list";
 import NeteasePageStatus from "@/components/netease/page-status";
 import { useNeteaseLoad } from "@/components/netease/use-netease-load";
@@ -31,8 +32,8 @@ const NeteaseHot = () => {
   return (
     <ScrollContainer enableBackToTop ref={scrollerRef} className="h-full w-full">
       <div className="px-4 pt-4">
-        <h1>热门歌单</h1>
-        <div className="text-default-500 mt-1 mb-2 text-sm">网易云当前的热门歌单，不需要登录</div>
+        <h1>{t("热门歌单")}</h1>
+        <div className="text-default-500 mt-1 mb-2 text-sm">{t("网易云当前的热门歌单，不需要登录")}</div>
       </div>
 
       <NeteasePageStatus

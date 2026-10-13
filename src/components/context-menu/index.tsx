@@ -3,6 +3,8 @@ import React, { useCallback, useState } from "react";
 import { Listbox, ListboxItem, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { twMerge } from "tailwind-merge";
 
+import { t } from "@/common/i18n";
+
 export interface ContextMenuItem {
   key: string;
   label: React.ReactNode;
@@ -91,7 +93,7 @@ const ContextMenu = ({ children, items, className, contentClassName, disabled, o
           <PopoverContent className={twMerge("min-w-[160px] p-0", contentClassName)}>
             {/* @ts-ignore 忽略 ListboxItem 的 key 类型错误 */}
             <Listbox
-              aria-label="右键菜单"
+              aria-label={t("右键菜单")}
               selectionMode="none"
               onAction={key => {
                 onAction?.(key as string);

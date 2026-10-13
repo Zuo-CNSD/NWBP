@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button, Tooltip } from "@heroui/react";
 
 import { PlayRate } from "@/common/constants/audio";
+import { t } from "@/common/i18n";
 import { usePlayList } from "@/store/play-list";
 
 import IconButton from "../icon-button";
@@ -37,7 +38,7 @@ const MusicRate = () => {
               color={v === rate ? "primary" : "default"}
               variant={v === rate ? "solid" : "light"}
               className="min-w-[40px]"
-              aria-label={`${v}倍速`}
+              aria-label={t("{0}倍速", v)}
               onPress={() => setRate(v)}
             >
               {v}x
@@ -46,7 +47,7 @@ const MusicRate = () => {
         </div>
       }
     >
-      <IconButton className="min-w-fit text-[16px]" aria-label="播放速率" aria-describedby={tooltipId}>
+      <IconButton className="min-w-fit text-[16px]" aria-label={t("播放速率")} aria-describedby={tooltipId}>
         {rate}x
       </IconButton>
     </Tooltip>

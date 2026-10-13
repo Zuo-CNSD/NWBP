@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Tooltip, Slider } from "@heroui/react";
 import { RiVolumeDownLine, RiVolumeMuteLine, RiVolumeUpLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import { usePlayList } from "@/store/play-list";
 
 import IconButton from "../icon-button";
@@ -147,7 +148,7 @@ const Volume = () => {
         <div ref={setSliderRef} className="flex items-center justify-center p-3">
           <Slider
             disableAnimation
-            aria-label="音量"
+            aria-label={t("音量")}
             color="primary"
             radius="full"
             size="sm"
@@ -174,7 +175,7 @@ const Volume = () => {
       <IconButton
         ref={buttonRef}
         onPress={onToggleMute}
-        aria-label={isMuted ? "取消静音" : "静音"}
+        aria-label={isMuted ? t("取消静音") : t("静音")}
         aria-describedby={tooltipId}
       >
         {isMuted ? (

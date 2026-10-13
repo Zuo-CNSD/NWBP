@@ -6,6 +6,7 @@ import { RiEyeLine, RiEyeOffLine, RiQuestionLine } from "@remixicon/react";
 import { JSEncrypt } from "jsencrypt";
 
 import { useGeetest } from "@/common/hooks/use-geetest";
+import { t } from "@/common/i18n";
 import { getPassportLoginWebKey } from "@/service/passport-login-web-key";
 import { postPassportLoginWebLoginPassword } from "@/service/passport-login-web-login-passport";
 
@@ -57,7 +58,7 @@ const PasswordLogin = ({ onClose, updateUserData }: PasswordLoginProps) => {
       // 1. Get Public Key
       const webKey = await getPassportLoginWebKey();
       if (webKey.code !== 0 || !webKey.data?.key || !webKey.data?.hash) {
-        addToast({ title: webKey.message || "获取登录公钥失败", color: "danger" });
+        addToast({ title: webKey.message || t("获取登录公钥失败"), color: "danger" });
         return;
       }
 
@@ -66,7 +67,7 @@ const PasswordLogin = ({ onClose, updateUserData }: PasswordLoginProps) => {
       encryptor.setPublicKey(webKey.data.key);
       const encrypted = encryptor.encrypt(webKey.data.hash + rawPwd);
       if (!encrypted) {
-        addToast({ title: "密码加密失败，请重试", color: "danger" });
+        addToast({ title: t("密码加密失败，请重试"), color: "danger" });
         return;
       }
 
@@ -87,14 +88,14 @@ const PasswordLogin = ({ onClose, updateUserData }: PasswordLoginProps) => {
       });
 
       if (resp.code === 0) {
-        addToast({ title: "登录成功", color: "success" });
+        addToast({ title: t("登录成功"), color: "success" });
         await updateUserData(resp.data?.refresh_token);
         onClose?.();
       } else {
-        addToast({ title: resp.message || "登录失败", color: "danger" });
+        addToast({ title: resp.message || t("登录失败"), color: "danger" });
       }
     } catch (e: any) {
-      addToast({ title: e?.message || "网络异常，稍后重试", color: "danger" });
+      addToast({ title: e?.message || t("网络异常，稍后重试"), color: "danger" });
     }
   };
 
@@ -103,7 +104,7 @@ const PasswordLogin = ({ onClose, updateUserData }: PasswordLoginProps) => {
       <Controller
         control={control}
         name="username"
-        rules={{ required: "请输入账号" }}
+        rules={{ required: t("请输入账号") }}
         render={({ field }) => (
           <Input
             {...field}
@@ -111,7 +112,7 @@ const PasswordLogin = ({ onClose, updateUserData }: PasswordLoginProps) => {
               field.ref(e);
               usernameRef.current = e;
             }}
-            placeholder="请输入账号"
+            placeholder={t("请输入账号")}
             variant="bordered"
             autoComplete="username"
             isInvalid={!!errors.username}
@@ -123,7 +124,7 @@ const PasswordLogin = ({ onClose, updateUserData }: PasswordLoginProps) => {
       <Controller
         control={control}
         name="password"
-        rules={{ required: "请输入密码" }}
+        rules={{ required: t("请输入密码") }}
         render={({ field }) => (
           <Input
             {...field}
@@ -132,7 +133,7 @@ const PasswordLogin = ({ onClose, updateUserData }: PasswordLoginProps) => {
               passwordRef.current = e;
             }}
             type={isPwdVisible ? "text" : "password"}
-            placeholder="请输入密码"
+            placeholder={t("请输入密码")}
             variant="bordered"
             autoComplete="current-password"
             isInvalid={!!errors.password}
@@ -158,7 +159,7 @@ const PasswordLogin = ({ onClose, updateUserData }: PasswordLoginProps) => {
                 >
                   {isPwdVisible ? <RiEyeLine size={18} /> : <RiEyeOffLine size={18} />}
                 </Button>
-                <Tooltip content="找回密码">
+                <Tooltip content={t("找回密码")}>
                   <Button
                     isIconOnly
                     size="sm"
@@ -183,7 +184,7 @@ const PasswordLogin = ({ onClose, updateUserData }: PasswordLoginProps) => {
         isDisabled={isSubmitting || geetestLoading}
         isLoading={isSubmitting || geetestLoading}
       >
-        登录
+        {t("登录")}
       </Button>
     </Form>
   );

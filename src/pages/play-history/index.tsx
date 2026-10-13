@@ -5,6 +5,7 @@ import { Button } from "@heroui/react";
 import { RiArrowLeftLine, RiDeleteBinLine } from "@remixicon/react";
 import moment from "moment";
 
+import { t } from "@/common/i18n";
 import Empty from "@/components/empty";
 import Image from "@/components/image";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
@@ -18,9 +19,9 @@ const THUMB_PARAMS = "160w_160h_1c.webp";
 
 /** 给每条记录标个来源 —— 「最近播放」现在 B 站和网易云的歌都会进来，标清楚免得看着像串了 */
 const sourceLabel = (item: PlayHistoryItem) => {
-  if (item.source === "netease") return "网易云";
-  if (item.source === "local") return "本地";
-  return "哔哩哔哩";
+  if (item.source === "netease") return t("网易云");
+  if (item.source === "local") return t("本地");
+  return t("哔哩哔哩");
 };
 
 /**
@@ -47,8 +48,8 @@ const PlayHistory = () => {
   const handleRemove = useCallback(
     (item: PlayHistoryItem) => {
       void useModalStore.getState().onOpenConfirmModal({
-        title: `从播放记录里移除「${item.title}」？`,
-        confirmText: "移除",
+        title: t("从播放记录里移除「{0}」？", item.title),
+        confirmText: t("移除"),
         type: "danger",
         onConfirm: async () => {
           remove(item.key);
@@ -61,9 +62,9 @@ const PlayHistory = () => {
 
   const handleClear = useCallback(() => {
     void useModalStore.getState().onOpenConfirmModal({
-      title: "确认清空全部播放记录？",
-      description: "只清掉这份本地记录，不影响 B 站的历史记录。",
-      confirmText: "清空",
+      title: t("确认清空全部播放记录？"),
+      description: t("只清掉这份本地记录，不影响 B 站的历史记录。"),
+      confirmText: t("清空"),
       type: "danger",
       onConfirm: async () => {
         clear();
@@ -83,21 +84,21 @@ const PlayHistory = () => {
           startContent={<RiArrowLeftLine size={16} />}
           onPress={() => void navigate(-1)}
         >
-          返回
+          {t("返回")}
         </Button>
 
         <div className="flex items-end justify-between gap-4">
           <div className="min-w-0">
-            <h1>最近播放</h1>
+            <h1>{t("最近播放")}</h1>
             <div className="text-default-500 mt-1 text-sm">
-              播放器里播过的歌都在这里，B 站和网易云都会记
-              {items.length > 0 ? ` · 共 ${items.length} 条` : ""}
+              {t("播放器里播过的歌都在这里，B 站和网易云都会记")}
+              {items.length > 0 ? t(" · 共 {0} 条", items.length) : ""}
             </div>
           </div>
 
           {items.length > 0 && (
             <Button size="sm" radius="md" variant="flat" color="danger" onPress={handleClear}>
-              清空
+              {t("清空")}
             </Button>
           )}
         </div>
@@ -106,7 +107,7 @@ const PlayHistory = () => {
       </div>
 
       {items.length === 0 ? (
-        <Empty className="min-h-[280px]" title="还没有播放记录，去搜一首听听" />
+        <Empty className="min-h-[280px]" title={t("还没有播放记录，去搜一首听听")} />
       ) : (
         <div className="px-4">
           <VirtualPageList
@@ -139,7 +140,7 @@ const PlayHistory = () => {
 
                 <button
                   type="button"
-                  aria-label="移除这条播放记录"
+                  aria-label={t("移除这条播放记录")}
                   onClick={() => handleRemove(item)}
                   className="text-default-500 hover:text-danger flex-none p-1.5 opacity-0 transition-opacity group-hover:opacity-100"
                 >

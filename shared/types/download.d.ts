@@ -24,6 +24,14 @@ interface MediaDownloadInfo {
   cid?: string | number;
   /** 音频sid */
   sid?: string | number;
+  /**
+   * 直接可用的音频直链。
+   *
+   * 给「没有 bvid/cid/sid 的音源」用 —— 目前就是网易云：
+   * 主进程没有网易云接口，直链由渲染层用 `neteaseId` 换好后带下来。
+   * 带上它就跳过 `setDownloadUrl()` 的解析步骤。
+   */
+  audioUrl?: string;
 }
 
 interface MediaDownloadTask extends MediaDownloadInfo {

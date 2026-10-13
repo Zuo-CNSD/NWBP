@@ -7,6 +7,7 @@ import { StoreNameMap } from "@shared/store";
 
 import type { FullMediaDownloadTask } from "./ipc/download/types";
 
+import { setMainLanguage } from "./i18n";
 import { getUserDataPath } from "./utils";
 
 export const appSettingsStore = new Store<{ appSettings: AppSettings }>({
@@ -41,6 +42,22 @@ try {
 } catch {
   /* 迁移失败不该拦住启动，后面的默认值兜底 */
 }
+
+/*
+ * 主进程的界面语言。
+ *
+ * 语言存在 appSettings 里（和渲染进程写的是同一份），这里读出当前值注入给
+ * `electron/i18n`，再挂一个变更监听 —— 用户在设置页切语言时，托盘 / 缩略图
+ * 工具栏 / 桌面歌词右键菜单下次重建就是新语言。
+ *
+ * 用 `onDidAnyChange` 而不是 `onDidChange("appSettings")`：渲染端写设置走的是
+ * `setStore(AppSettings, { appSettings: {...} })`，整块替换，两种都能收到；
+ * 用 any 更不容易在将来改结构时漏掉。
+ */
+setMainLanguage(appSettingsStore.get("appSettings.language"));
+appSettingsStore.onDidAnyChange(() => {
+  setMainLanguage(appSettingsStore.get("appSettings.language"));
+});
 
 export const userStore = new Store<UserInfo>({
   name: StoreNameMap.UserLoginInfo,

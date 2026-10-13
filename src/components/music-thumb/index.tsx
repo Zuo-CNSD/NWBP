@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { addToast } from "@heroui/react";
 import { RiThumbUpFill, RiThumbUpLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import IconButton from "@/components/icon-button";
 import { postWebInterfaceArchiveLike } from "@/service/web-interface-archive-like";
 import { postWebInterfaceArchiveLikeTriple } from "@/service/web-interface-archive-like-triple";
@@ -57,11 +58,11 @@ const MusicThumb = () => {
       });
       if (res.code !== 0) {
         setIsThumb(!nextValue);
-        addToast({ title: "点赞失败，请稍后重试", color: "danger" });
+        addToast({ title: t("点赞失败，请稍后重试"), color: "danger" });
       }
     } catch {
       setIsThumb(!nextValue);
-      addToast({ title: "点赞失败，请稍后重试", color: "danger" });
+      addToast({ title: t("点赞失败，请稍后重试"), color: "danger" });
     }
   }, [isThumb, playItem?.bvid, setIsThumb]);
 
@@ -73,10 +74,10 @@ const MusicThumb = () => {
         setIsThumb(res.data.like);
         setIsFav(res.data.fav);
       } else {
-        addToast({ title: "一键三连失败，请稍后重试", color: "danger" });
+        addToast({ title: t("一键三连失败，请稍后重试"), color: "danger" });
       }
     } catch {
-      addToast({ title: "一键三连失败，请稍后重试", color: "danger" });
+      addToast({ title: t("一键三连失败，请稍后重试"), color: "danger" });
     }
   }, [playItem?.aid, playItem?.bvid, setIsFav, setIsThumb]);
 
@@ -149,7 +150,7 @@ const MusicThumb = () => {
       onTouchEndCapture={handleTouchEnd}
       onTouchCancelCapture={handleTouchEnd}
     >
-      <IconButton aria-label="点赞" radius="full" onPress={handleToggleThumb}>
+      <IconButton aria-label={t("点赞")} radius="full" onPress={handleToggleThumb}>
         {isThumb ? <RiThumbUpFill size={18} className="text-primary" /> : <RiThumbUpLine size={18} />}
       </IconButton>
       {isProgressing && !isThumb && <div className="music-thumb-progress" />}

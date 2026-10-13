@@ -1,5 +1,7 @@
 import { addToast } from "@heroui/react";
 
+import { t } from "@/common/i18n";
+
 export interface GeetestResult {
   validate: string;
   seccode: string;
@@ -41,7 +43,7 @@ export const verifyGeetest = async (
 
     const res = await getCaptchaParams();
     if (res.code !== 0 || !res.data.geetest) {
-      addToast({ title: res.message || "获取验证码失败", color: "danger" });
+      addToast({ title: res.message || t("获取验证码失败"), color: "danger" });
       return null;
     }
 
@@ -50,7 +52,7 @@ export const verifyGeetest = async (
 
     return new Promise<GeetestResult | null>(resolve => {
       if (typeof window.initGeetest !== "function") {
-        addToast({ title: "极验组件加载失败", color: "danger" });
+        addToast({ title: t("极验组件加载失败"), color: "danger" });
         resolve(null);
         return;
       }
@@ -83,7 +85,7 @@ export const verifyGeetest = async (
             }
           });
           captchaObj.onError(() => {
-            addToast({ title: "验证出错", color: "danger" });
+            addToast({ title: t("验证出错"), color: "danger" });
             resolve(null);
           });
 
@@ -96,7 +98,7 @@ export const verifyGeetest = async (
       );
     });
   } catch (err) {
-    addToast({ title: err instanceof Error ? err.message : "验证过程异常", color: "danger" });
+    addToast({ title: err instanceof Error ? err.message : t("验证过程异常"), color: "danger" });
     return null;
   }
 };

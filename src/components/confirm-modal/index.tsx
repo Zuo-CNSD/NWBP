@@ -4,6 +4,7 @@ import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from
 import { RiErrorWarningLine } from "@remixicon/react";
 import { useShallow } from "zustand/shallow";
 
+import { t } from "@/common/i18n";
 import { useModalStore } from "@/store/modal";
 
 type ConfirmModalType = "warning" | "danger" | "primary";
@@ -31,8 +32,8 @@ const ConfirmModal = () => {
     title,
     description,
     onConfirm,
-    confirmText = "确认",
-    cancelText = "取消",
+    confirmText = t("确认"),
+    cancelText = t("取消"),
   } = confirmModalData || {};
 
   const [loading, setLoading] = useState(false);

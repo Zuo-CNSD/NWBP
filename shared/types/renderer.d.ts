@@ -82,6 +82,20 @@ declare global {
       lyric: (id: number) => Promise<NeteaseLyricResult>;
       like: (id: number, like: boolean) => Promise<boolean>;
       likedIds: () => Promise<number[]>;
+      /** 按 id 批量取歌曲详情（一起听客人灌队列用） */
+      trackDetail: (ids: number[]) => Promise<NeteaseTrack[]>;
+      /** 一起听 */
+      together: {
+        create: () => Promise<NeteaseTogetherRoom>;
+        check: (roomId: string) => Promise<{ joinable: boolean }>;
+        accept: (roomId: string, inviterId: number) => Promise<void>;
+        end: (roomId: string) => Promise<void>;
+        status: () => Promise<NeteaseTogetherStatus>;
+        snapshot: (roomId: string) => Promise<NeteaseTogetherSnapshot>;
+        reportPlaylist: (roomId: string, songIds: number[]) => Promise<void>;
+        reportCommand: (args: NeteaseTogetherReportArgs) => Promise<void>;
+        heartbeat: (roomId: string, songId: number, playing: boolean, progressMs: number) => Promise<void>;
+      };
     };
     /** 桌面歌词窗控制 */
     desktopLyrics: {

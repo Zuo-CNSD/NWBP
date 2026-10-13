@@ -4,6 +4,7 @@ import { useHref, useNavigate, useRoutes } from "react-router";
 import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import moment from "moment";
 
+import { getLanguage, useLanguage } from "./common/i18n";
 import { getCookitFromBSite } from "./common/utils/cookie";
 import { startDesktopLyricsBroadcast, stopDesktopLyricsBroadcast } from "./common/utils/desktop-lyrics-channel";
 import { isAuxiliaryWindow } from "./common/utils/lyrics-render";
@@ -18,16 +19,44 @@ import { usePlayProgress } from "./store/play-progress";
 import { useSettings } from "./store/settings";
 import { useShortcutSettings } from "./store/shortcuts";
 
+/*
+ * 四种语言各自 moment 的 locale 包。必须显式 import ——
+ * moment 默认只带 en，中文要 `moment/locale/zh-cn` 这种按需引入，
+ * 不引的话 `dddd`（星期几）会静默退化成英文。
+ */
+import "moment/locale/ja";
+import "moment/locale/ko";
 import "moment/locale/zh-cn";
 
 import "overlayscrollbars/overlayscrollbars.css";
 import "./app.css";
 
-moment.locale("zh-cn");
+/** 语言码 → moment 的 locale 名（moment 用 `zh-cn` 这种小写全拼） */
+const MOMENT_LOCALES: Record<Language, string> = {
+  "zh-CN": "zh-cn",
+  en: "en",
+  ja: "ja",
+  ko: "ko",
+};
+
+/** 语言码 → BCP 47（给 HeroUI / 日期选择器用，它们只认标准标签） */
+const BCP47: Record<Language, string> = {
+  "zh-CN": "zh-CN",
+  en: "en-US",
+  ja: "ja-JP",
+  ko: "ko-KR",
+};
+
+moment.locale(MOMENT_LOCALES[getLanguage()]);
 
 export function App() {
   const routeElement = useRoutes(routes);
   const navigate = useNavigate();
+  const language = useLanguage();
+
+  useEffect(() => {
+    moment.locale(MOMENT_LOCALES[language]);
+  }, [language]);
 
   useEffect(() => {
     getCookitFromBSite();
@@ -198,7 +227,17 @@ export function App() {
   }, []);
 
   return (
-    <HeroUIProvider navigate={navigate} useHref={useHref} locale="zh-CN">
+    /*
+     * `key={language}`：换语言时把整棵树重挂载一遍。
+     *
+     * 取词用的是普通函数 `t()`（不是 hook），重挂载是让**所有**已经渲染出来的
+     * 文案立刻换成新语言的最省事做法 —— 否则那些用了 `React.memo`、
+     * 或者只在事件回调里取词的组件会停在旧语言。
+     *
+     * 重挂载不影响播放：音频元素是 `new Audio()` 直接建的（见 store/play-list.ts），
+     * 不在 React 树里，不会被卸载。路由也不会丢 —— `useRoutes` 是从 URL 推导的。
+     */
+    <HeroUIProvider key={language} navigate={navigate} useHref={useHref} locale={BCP47[language]}>
       <ToastProvider
         placement="bottom-right"
         toastOffset={90}

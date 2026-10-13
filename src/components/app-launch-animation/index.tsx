@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import clsx from "classnames";
 
+import { t } from "@/common/i18n";
 import { isAuxiliaryWindow } from "@/common/utils/lyrics-render";
 import { useSettings } from "@/store/settings";
 
@@ -184,7 +185,7 @@ const AppLaunchAnimation = () => {
             </>
           ) : null}
 
-          <div className="app-launch-hint">点击任意处跳过</div>
+          <div className="app-launch-hint">{t("点击任意处跳过")}</div>
         </>
       ) : null}
     </div>

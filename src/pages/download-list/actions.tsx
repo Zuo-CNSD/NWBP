@@ -10,6 +10,7 @@ import {
   RiRefreshLine,
 } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import AsyncButton from "@/components/async-button";
 import { useModalStore } from "@/store/modal";
 
@@ -71,12 +72,12 @@ const DownloadActions = ({ data }: Props) => {
   const actions = [
     {
       key: "open",
-      label: "打开文件",
+      label: t("打开文件"),
       icon: data.outputFileType === "audio" ? <RiFileMusicLine size={18} /> : <RiFileVideoLine size={18} />,
       show: data.status === "completed",
       onPress: async () => {
         if (!data.savePath) {
-          addToast({ title: "文件路径不存在", color: "danger" });
+          addToast({ title: t("文件路径不存在"), color: "danger" });
           return;
         }
 
@@ -89,7 +90,7 @@ const DownloadActions = ({ data }: Props) => {
     },
     {
       key: "pause",
-      label: "暂停",
+      label: t("暂停"),
       icon: <RiPauseLine size={18} />,
       tooltipColor: "warning" as const,
       className: "hover:text-warning",
@@ -102,7 +103,7 @@ const DownloadActions = ({ data }: Props) => {
     },
     {
       key: "resume",
-      label: "继续",
+      label: t("继续"),
       icon: <RiPlayLine size={18} />,
       tooltipColor: "success" as const,
       className: "hover:text-success",
@@ -115,7 +116,7 @@ const DownloadActions = ({ data }: Props) => {
     },
     {
       key: "retry",
-      label: "重试",
+      label: t("重试"),
       icon: <RiRefreshLine size={16} />,
       show: data.status === "failed",
       onPress: async () => {
@@ -126,7 +127,7 @@ const DownloadActions = ({ data }: Props) => {
     },
     {
       key: "delete",
-      label: "删除",
+      label: t("删除"),
       icon: <RiDeleteBinLine size={16} />,
       show: true,
       tooltipColor: "danger" as const,
@@ -140,9 +141,9 @@ const DownloadActions = ({ data }: Props) => {
           )
         ) {
           onOpenConfirmModal({
-            title: "确认删除吗？",
-            description: "当前任务未下载完成，确认删除后将无法恢复",
-            confirmText: "删除",
+            title: t("确认删除吗？"),
+            description: t("当前任务未下载完成，确认删除后将无法恢复"),
+            confirmText: t("删除"),
             onConfirm: async () => {
               if (pendingAction) return false;
               lockAction("delete");

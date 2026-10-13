@@ -4,6 +4,7 @@ import { Controller, type Control } from "react-hook-form";
 import { addToast, Button, Slider, Switch } from "@heroui/react";
 import { RiDeleteBinLine, RiImageAddLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import { MAX_BACKGROUND_BLUR, MAX_BACKGROUND_DIM, MIN_BACKGROUND_BLUR, MIN_BACKGROUND_DIM } from "@/common/utils/glass";
 
 const platform = window.electron.getPlatform();
@@ -31,12 +32,12 @@ const BackgroundSettings = ({ control }: { control: Control<AppSettings> }) => {
         control={control}
         name="backgroundImageBlur"
         render={({ field }) => (
-          <Row title="背景模糊" desc="给背景图加毛玻璃，面板压在上面更有层次">
+          <Row title={t("背景模糊")} desc={t("给背景图加毛玻璃，面板压在上面更有层次")}>
             <div className="w-[360px]">
               <Slider
                 showTooltip={false}
                 size="sm"
-                aria-label="背景模糊"
+                aria-label={t("背景模糊")}
                 endContent={<span className="tabular-nums">{field.value}px</span>}
                 value={field.value}
                 onChange={v => field.onChange(Number(v))}
@@ -54,12 +55,12 @@ const BackgroundSettings = ({ control }: { control: Control<AppSettings> }) => {
         control={control}
         name="backgroundImageDim"
         render={({ field }) => (
-          <Row title="背景压暗" desc="调暗背景图，保证文字和控件看得清">
+          <Row title={t("背景压暗")} desc={t("调暗背景图，保证文字和控件看得清")}>
             <div className="w-[360px]">
               <Slider
                 showTooltip={false}
                 size="sm"
-                aria-label="背景压暗"
+                aria-label={t("背景压暗")}
                 endContent={<span className="tabular-nums">{Math.round(field.value * 100)}%</span>}
                 value={field.value}
                 onChange={v => field.onChange(Number(v))}
@@ -78,11 +79,11 @@ const BackgroundSettings = ({ control }: { control: Control<AppSettings> }) => {
         name="windowTransparent"
         render={({ field }) => (
           <Row
-            title="透明背景"
+            title={t("透明背景")}
             desc={
               platform === "macos"
-                ? "窗口不铺底色，桌面直接透过来（配合系统毛玻璃）；开启后会覆盖自定义背景图"
-                : "窗口不铺底色，直接透出桌面；开启后会覆盖自定义背景图"
+                ? t("窗口不铺底色，桌面直接透过来（配合系统毛玻璃）；开启后会覆盖自定义背景图")
+                : t("窗口不铺底色，直接透出桌面；开启后会覆盖自定义背景图")
             }
           >
             <div className="flex w-[360px] justify-end">
@@ -126,7 +127,7 @@ const ImagePicker = ({ value, onChange }: { value?: string; onChange: (path: str
     if (!result) return;
 
     if (!result.dataUrl) {
-      addToast({ title: "读取图片失败，请换一张（支持 png/jpg/webp/gif/bmp，且不超过 32MB）", color: "danger" });
+      addToast({ title: t("读取图片失败，请换一张（支持 png/jpg/webp/gif/bmp，且不超过 32MB）"), color: "danger" });
       return;
     }
 
@@ -140,13 +141,13 @@ const ImagePicker = ({ value, onChange }: { value?: string; onChange: (path: str
   };
 
   return (
-    <Row title="自定义背景" desc="选一张本地图片作为应用背景">
+    <Row title={t("自定义背景")} desc={t("选一张本地图片作为应用背景")}>
       <div className="flex w-[360px] items-center justify-end space-x-2">
         {previewUrl ? (
           <div
             className="border-default-200 rounded-medium h-10 w-16 flex-none border bg-cover bg-center"
             style={{ backgroundImage: `url("${previewUrl}")` }}
-            aria-label="当前背景图预览"
+            aria-label={t("当前背景图预览")}
           />
         ) : (
           <div className="border-default-200 text-default-400 rounded-medium flex h-10 w-16 flex-none items-center justify-center border border-dashed">
@@ -154,14 +155,14 @@ const ImagePicker = ({ value, onChange }: { value?: string; onChange: (path: str
           </div>
         )}
         <Button size="sm" variant="flat" startContent={<RiImageAddLine size={16} />} onPress={handlePick}>
-          选择图片
+          {t("选择图片")}
         </Button>
         {Boolean(value) && (
           <Button
             size="sm"
             variant="flat"
             isIconOnly
-            aria-label="清除背景图"
+            aria-label={t("清除背景图")}
             className="hover:text-danger"
             onPress={handleClear}
           >

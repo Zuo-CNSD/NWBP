@@ -4,6 +4,8 @@ import { Button, Listbox, ListboxItem, Popover, PopoverContent, PopoverTrigger }
 import { RiMore2Line } from "@remixicon/react";
 import { twMerge } from "tailwind-merge";
 
+import { t } from "@/common/i18n";
+
 export interface LocalOperationItem {
   key: string;
   label: string;
@@ -35,7 +37,7 @@ const OperationMenu = ({ items, onAction, onOpenChange }: OperationMenuProps) =>
       disableAnimation
     >
       <PopoverTrigger>
-        <Button isIconOnly variant="light" size="sm" aria-label="操作菜单">
+        <Button isIconOnly variant="light" size="sm" aria-label={t("操作菜单")}>
           <RiMore2Line size={16} />
         </Button>
       </PopoverTrigger>
@@ -52,7 +54,7 @@ const OperationMenu = ({ items, onAction, onOpenChange }: OperationMenuProps) =>
         }}
       >
         <Listbox
-          aria-label="操作菜单"
+          aria-label={t("操作菜单")}
           selectionMode="none"
           items={items.filter(item => !item.hidden)}
           data-no-contextmenu="true"

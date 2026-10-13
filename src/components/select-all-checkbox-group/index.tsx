@@ -2,6 +2,8 @@ import React from "react";
 
 import { Checkbox, CheckboxGroup } from "@heroui/react";
 
+import { t } from "@/common/i18n";
+
 interface SelectAllCheckboxGroupProps {
   groupName: string;
   groupKeys: string[];
@@ -39,11 +41,11 @@ const SelectAllCheckboxGroup: React.FC<SelectAllCheckboxGroupProps> = ({
           isDisabled={disabled || !groupKeys.length}
           color="primary"
         >
-          全选
+          {t("全选")}
         </Checkbox>
       </div>
       <CheckboxGroup
-        aria-label={`${groupName}显示项`}
+        aria-label={t("{0}显示项", groupName)}
         value={selectedKeys}
         onValueChange={handleCheckboxGroupChange}
         isDisabled={disabled || !groupKeys.length}

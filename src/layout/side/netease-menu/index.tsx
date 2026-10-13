@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 
-import { NeteaseMenuList } from "@/common/constants/menus";
+import { getNeteaseMenuList } from "@/common/constants/menus";
+import { t } from "@/common/i18n";
 import MenuGroup from "@/components/menu/menu-group";
 import { useNetease } from "@/store/netease";
 import { useSettings } from "@/store/settings";
@@ -21,16 +22,16 @@ const NeteaseMenus = ({ isCollapsed }: Props) => {
 
   const items = useMemo(
     () =>
-      NeteaseMenuList.filter(item => (item.needLogin ? loggedIn : true)).filter(
-        item => item.href && !hiddenMenuKeys.includes(item.href),
-      ),
+      getNeteaseMenuList()
+        .filter(item => (item.needLogin ? loggedIn : true))
+        .filter(item => item.href && !hiddenMenuKeys.includes(item.href)),
     [loggedIn, hiddenMenuKeys],
   );
 
   // 一条都没剩（没登录 + 用户把热门歌单也隐藏了）就不画这个分组标题
   if (!items.length) return null;
 
-  return <MenuGroup title="网易云" items={items} collapsed={isCollapsed} />;
+  return <MenuGroup title={t("网易云")} items={items} collapsed={isCollapsed} />;
 };
 
 export default NeteaseMenus;

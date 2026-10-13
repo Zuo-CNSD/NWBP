@@ -4,6 +4,7 @@ import { addToast, Button, Select, SelectItem } from "@heroui/react";
 import { RiDeleteBinLine, RiFolderAddLine, RiRefreshLine, RiPlayFill, RiPlayListAddLine } from "@remixicon/react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
+import { t } from "@/common/i18n";
 import Empty from "@/components/empty";
 import IconButton from "@/components/icon-button";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
@@ -85,7 +86,7 @@ const LocalMusicPage = () => {
     }));
     usePlayList.getState().addList?.(items);
     addToast({
-      title: `${items.length}首歌曲已添加到播放列表`,
+      title: t("{0}首歌曲已添加到播放列表", items.length),
       color: "success",
     });
   };
@@ -101,15 +102,15 @@ const LocalMusicPage = () => {
   const removeSelectedDirectory = () => {
     if (selectedDir === "all") return;
     onOpenConfirmModal({
-      title: "移除目录",
-      description: "仅移除列表中的目录，不会删除本地文件",
+      title: t("移除目录"),
+      description: t("仅移除列表中的目录，不会删除本地文件"),
       onConfirm: async () => {
         const next = (localDirs || []).filter(d => d !== selectedDir);
         updateSettings({ localMusicDirs: next });
         setSelectedDir("all");
         return true;
       },
-      confirmText: "移除",
+      confirmText: t("移除"),
       type: "warning",
     });
   };
@@ -159,15 +160,15 @@ const LocalMusicPage = () => {
     ]);
 
     addToast({
-      title: "已添加到播放列表",
+      title: t("已添加到播放列表"),
       color: "success",
     });
   };
 
   const deleteFile = (filePath: string) => {
     onOpenConfirmModal({
-      title: "删除文件",
-      description: "该操作会删除本地文件且不可恢复，请谨慎操作",
+      title: t("删除文件"),
+      description: t("该操作会删除本地文件且不可恢复，请谨慎操作"),
       onConfirm: async () => {
         const ok = await window.electron.deleteLocalMusicFile(filePath);
         if (ok) {
@@ -176,7 +177,7 @@ const LocalMusicPage = () => {
         }
         return false;
       },
-      confirmText: "删除",
+      confirmText: t("删除"),
       type: "danger",
     });
   };
@@ -184,10 +185,10 @@ const LocalMusicPage = () => {
   return (
     <ScrollContainer ref={scrollRef} enableBackToTop className="h-full w-full px-4">
       <div className="mb-2 flex items-center justify-between">
-        <h1 className="flex items-center space-x-1">本地音乐</h1>
+        <h1 className="flex items-center space-x-1">{t("本地音乐")}</h1>
         <div className="flex items-center space-x-1">
           <Button size="sm" variant="flat" startContent={<RiFolderAddLine size={18} />} onPress={addDirectory}>
-            添加目录
+            {t("添加目录")}
           </Button>
         </div>
       </div>
@@ -200,12 +201,18 @@ const LocalMusicPage = () => {
               startContent={<RiPlayFill size={18} />}
               onPress={playAll}
             >
-              播放全部
+              {t("播放全部")}
             </Button>
           )}
 
           {Boolean(filtered.length) && (
-            <IconButton size="md" variant="flat" color="default" tooltip="添加到播放列表" onPress={addAllToPlaylist}>
+            <IconButton
+              size="md"
+              variant="flat"
+              color="default"
+              tooltip={t("添加到播放列表")}
+              onPress={addAllToPlaylist}
+            >
               <RiPlayListAddLine size={18} />
             </IconButton>
           )}
@@ -224,7 +231,7 @@ const LocalMusicPage = () => {
               hideSelectedIcon: true,
             }}
             items={[
-              { key: "all", label: "全部目录" },
+              { key: "all", label: t("全部目录") },
               ...(localDirs || []).map(dir => ({ key: dir, label: getDirName(dir) })),
             ]}
             selectedKeys={[selectedDir]}
@@ -235,11 +242,11 @@ const LocalMusicPage = () => {
           >
             {item => <SelectItem key={item.key}>{item.label as string}</SelectItem>}
           </Select>
-          <IconButton variant="flat" size="md" color="default" tooltip="刷新" onPress={rescan}>
+          <IconButton variant="flat" size="md" color="default" tooltip={t("刷新")} onPress={rescan}>
             <RiRefreshLine size={18} />
           </IconButton>
           <IconButton
-            tooltip="移除当前目录"
+            tooltip={t("移除当前目录")}
             size="md"
             variant="flat"
             color="default"
@@ -252,11 +259,11 @@ const LocalMusicPage = () => {
       </div>
       <div className="text-foreground-500 rounded-medium grid w-full grid-cols-[40px_minmax(0,1fr)_100px_100px_100px_100px_40px] items-center gap-4 px-2 py-1 text-xs">
         <div className="text-center">#</div>
-        <div>标题</div>
-        <div className="text-right">大小</div>
-        <div className="text-right">格式</div>
-        <div className="text-right">时长</div>
-        <div className="text-right">创建时间</div>
+        <div>{t("标题")}</div>
+        <div className="text-right">{t("大小")}</div>
+        <div className="text-right">{t("格式")}</div>
+        <div className="text-right">{t("时长")}</div>
+        <div className="text-right">{t("创建时间")}</div>
         <div className="text-right" />
       </div>
       {filtered.length === 0 ? (

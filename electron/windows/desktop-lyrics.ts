@@ -4,6 +4,7 @@ import log from "electron-log";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { t } from "../i18n";
 import { appSettingsStore } from "../store";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -90,7 +91,7 @@ export const createDesktopLyricsWindow = () => {
   }
 
   desktopLyricsWindow = new BrowserWindow({
-    title: "NWBP 桌面歌词",
+    title: t("NWBP 桌面歌词"),
     ...resolveInitialBounds(),
     show: true,
     frame: false,

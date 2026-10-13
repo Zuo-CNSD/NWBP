@@ -5,6 +5,7 @@ import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Check
 import clx from "classnames";
 
 import { CollectionType } from "@/common/constants/collection";
+import { t } from "@/common/i18n";
 import { getAllFavMedia } from "@/common/utils/fav";
 import Image from "@/components/image";
 import ScrollContainer from "@/components/scroll-container";
@@ -88,7 +89,7 @@ const DownloadSelectModal = ({ type, outputFileType, mediaCount, isOpen, onOpenC
 
       onOpenChange(false);
       addToast({
-        title: "下载任务已添加",
+        title: t("下载任务已添加"),
         color: "success",
       });
     }
@@ -103,7 +104,10 @@ const DownloadSelectModal = ({ type, outputFileType, mediaCount, isOpen, onOpenC
   return (
     <Modal radius="md" disableAnimation scrollBehavior="inside" isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
-        <ModalHeader>选择要下载的{outputFileType === "audio" ? "音频" : "视频"}</ModalHeader>
+        <ModalHeader>
+          {t("选择要下载的")}
+          {outputFileType === "audio" ? t("音频") : t("视频")}
+        </ModalHeader>
         <ModalBody className="px-0">
           <ScrollContainer className="px-4">
             {list.map(item => {
@@ -157,10 +161,10 @@ const DownloadSelectModal = ({ type, outputFileType, mediaCount, isOpen, onOpenC
             }}
             className="mr-2"
           >
-            全选
+            {t("全选")}
           </Checkbox>
           <Button color="primary" onPress={handleDownload}>
-            下载
+            {t("下载")}
           </Button>
         </ModalFooter>
       </ModalContent>

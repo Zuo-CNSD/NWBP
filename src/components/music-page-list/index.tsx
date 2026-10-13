@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 
 import { twMerge } from "tailwind-merge";
 
+import { t } from "@/common/i18n";
 import Empty from "@/components/empty";
 import { VirtualList } from "@/components/virtual-list";
 import { usePlayList } from "@/store/play-list";
@@ -53,7 +54,7 @@ const MusicPageList = ({
       empty={
         <div className="flex flex-col items-center justify-center px-4">
           <Empty className="min-h-[180px]" />
-          <div className="text-foreground-500 py-3 text-sm">暂无匹配结果</div>
+          <div className="text-foreground-500 py-3 text-sm">{t("暂无匹配结果")}</div>
         </div>
       }
       renderItem={item => {

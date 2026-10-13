@@ -76,6 +76,7 @@ export const useSettings = create<AppSettings & SettingsActions>()(
       },
       partialize: state => {
         return {
+          language: state.language,
           downloadPath: state.downloadPath,
           closeWindowOption: state.closeWindowOption,
           autoStart: state.autoStart,

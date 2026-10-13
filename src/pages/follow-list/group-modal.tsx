@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { addToast, Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import { createRelationTag, type RelationTag, updateRelationTag } from "@/service/relation-tag";
 
 interface Props {
@@ -29,7 +30,7 @@ const GroupModal = ({ isOpen, onOpenChange, onClose, mode, tag, onSuccess }: Pro
 
   const handleSaveTag = async () => {
     if (!tagNameInput.trim()) {
-      addToast({ title: "请输入分组名称", color: "danger" });
+      addToast({ title: t("请输入分组名称"), color: "danger" });
       return;
     }
 
@@ -38,26 +39,26 @@ const GroupModal = ({ isOpen, onOpenChange, onClose, mode, tag, onSuccess }: Pro
       if (mode === "create") {
         const res = await createRelationTag({ tag: tagNameInput.trim() });
         if (res.code === 0) {
-          addToast({ title: "创建分组成功", color: "success" });
+          addToast({ title: t("创建分组成功"), color: "success" });
           setTagNameInput("");
           onClose();
           onSuccess();
         } else {
-          addToast({ title: res.message || "创建分组失败", color: "danger" });
+          addToast({ title: res.message || t("创建分组失败"), color: "danger" });
         }
       } else if (mode === "rename" && tag) {
         const res = await updateRelationTag({ tagid: tag.tagid, name: tagNameInput.trim() });
         if (res.code === 0) {
-          addToast({ title: "修改分组名称成功", color: "success" });
+          addToast({ title: t("修改分组名称成功"), color: "success" });
           setTagNameInput("");
           onClose();
           onSuccess();
         } else {
-          addToast({ title: res.message || "修改分组名称失败", color: "danger" });
+          addToast({ title: res.message || t("修改分组名称失败"), color: "danger" });
         }
       }
     } catch {
-      addToast({ title: mode === "create" ? "创建分组失败" : "修改分组名称失败", color: "danger" });
+      addToast({ title: mode === "create" ? t("创建分组失败") : t("修改分组名称失败"), color: "danger" });
     } finally {
       setLoading(false);
     }
@@ -68,16 +69,18 @@ const GroupModal = ({ isOpen, onOpenChange, onClose, mode, tag, onSuccess }: Pro
       <ModalContent>
         {onClose => (
           <>
-            <ModalHeader className="flex flex-col gap-1">{mode === "create" ? "创建分组" : "修改分组名称"}</ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">
+              {mode === "create" ? t("创建分组") : t("修改分组名称")}
+            </ModalHeader>
             <ModalBody>
-              <Input placeholder="请输入分组名称" value={tagNameInput} onValueChange={setTagNameInput} />
+              <Input placeholder={t("请输入分组名称")} value={tagNameInput} onValueChange={setTagNameInput} />
             </ModalBody>
             <ModalFooter>
               <Button variant="light" onPress={onClose}>
-                取消
+                {t("取消")}
               </Button>
               <Button color="primary" onPress={handleSaveTag} isLoading={loading}>
-                {mode === "create" ? "创建" : "保存"}
+                {mode === "create" ? t("创建") : t("保存")}
               </Button>
             </ModalFooter>
           </>

@@ -6,6 +6,8 @@ import { twMerge } from "tailwind-merge";
 
 import type { ContextMenuItem } from "@/components/context-menu";
 
+import { t } from "@/common/i18n";
+
 export interface OperationMenuProps {
   items: ContextMenuItem[];
   onAction?: (key: string) => void;
@@ -17,14 +19,14 @@ const OperationMenu = ({ items, onAction }: OperationMenuProps) => {
   return (
     <Popover radius="md" isOpen={isOpen} onOpenChange={setIsOpen} placement="bottom-end" offset={4} disableAnimation>
       <PopoverTrigger>
-        <Button isIconOnly variant="light" size="sm" aria-label="操作菜单">
+        <Button isIconOnly variant="light" size="sm" aria-label={t("操作菜单")}>
           <RiMore2Line size={16} />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="min-w-[140px] p-0">
         {/* @ts-ignore 忽略 ListboxItem 的 key 类型错误 */}
         <Listbox
-          aria-label="操作菜单"
+          aria-label={t("操作菜单")}
           selectionMode="none"
           onAction={key => {
             onAction?.(key as string);

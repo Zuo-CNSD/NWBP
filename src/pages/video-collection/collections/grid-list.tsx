@@ -4,6 +4,7 @@ import { Spinner } from "@heroui/react";
 
 import type { Media } from "@/service/user-video-archives-list";
 
+import { t } from "@/common/i18n";
 import Empty from "@/components/empty";
 import MusicCard from "@/components/music-card";
 import VirtualGridPageList from "@/components/virtual-grid-page-list";
@@ -55,7 +56,7 @@ const SeriesGridList = ({ data, loading, className, getScrollElement, onMenuActi
   if (loading && data.length === 0) {
     return (
       <div className="flex h-[280px] items-center justify-center">
-        <Spinner label="加载中" />
+        <Spinner label={t("加载中")} />
       </div>
     );
   }

@@ -6,6 +6,7 @@ import { useRequest } from "ahooks";
 import clx from "classnames";
 
 import { CollectionType } from "@/common/constants/collection";
+import { t } from "@/common/i18n";
 import { isPrivateFav } from "@/common/utils/fav";
 import Image from "@/components/image";
 import { getWebInterfaceCard } from "@/service/user-account";
@@ -72,11 +73,11 @@ const Header = memo(({ loading, type, attr, cover, title, desc, upMid, mediaCoun
               onKeyDown={e => e.key === "Enter" && onEdit()}
               role="button"
               tabIndex={0}
-              aria-label="修改封面"
+              aria-label={t("修改封面")}
             >
               <div className="flex flex-col items-center gap-2">
                 <RiEdit2Line size={28} />
-                <span className="text-sm">修改</span>
+                <span className="text-sm">{t("修改")}</span>
               </div>
             </div>
           )}
@@ -87,13 +88,13 @@ const Header = memo(({ loading, type, attr, cover, title, desc, upMid, mediaCoun
           <div className="text-foreground-400 flex items-center space-x-1 text-sm">
             <span>
               {type === CollectionType.Favorite
-                ? `${attr ? (isPrivateFav(attr as number) ? "私密" : "公开") : ""}收藏夹`
+                ? t("{0}收藏夹", attr ? (isPrivateFav(attr as number) ? t("私密") : t("公开")) : "")
                 : type === CollectionType.VideoSeries
-                  ? "视频系列"
-                  : "视频合集"}
+                  ? t("视频系列")
+                  : t("视频合集")}
             </span>
             <span>•</span>
-            <span>{mediaCount} 条视频</span>
+            <span>{t("{0}条视频", mediaCount)}</span>
           </div>
           <User
             avatarProps={{

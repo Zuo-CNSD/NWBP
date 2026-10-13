@@ -4,6 +4,7 @@ import { Spinner } from "@heroui/react";
 
 import type { Media } from "@/service/user-video-archives-list";
 
+import { t } from "@/common/i18n";
 import { formatSecondsToDate } from "@/common/utils/time";
 import Empty from "@/components/empty";
 import MusicListItem from "@/components/music-list-item";
@@ -40,7 +41,7 @@ const SeriesList = ({ data, loading, className, getScrollElement, onMenuAction }
   if (loading && data.length === 0) {
     return (
       <div className="flex h-[280px] items-center justify-center">
-        <Spinner label="加载中" />
+        <Spinner label={t("加载中")} />
       </div>
     );
   }

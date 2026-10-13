@@ -4,12 +4,15 @@ import { addToast, Drawer, DrawerBody, DrawerContent, DrawerHeader } from "@hero
 import { RiDeleteBinLine, RiFocus3Line } from "@remixicon/react";
 import { uniqBy } from "es-toolkit/array";
 
+import { t } from "@/common/i18n";
+import { resolveDownloadSource, toNeteaseLevel } from "@/common/utils/download";
 import { favoriteTrack } from "@/common/utils/favorite";
 import { openBiliVideoLink } from "@/common/utils/url";
 import { type ScrollRefObject } from "@/components/scroll-container";
 import { VirtualList } from "@/components/virtual-list";
 import { useModalStore } from "@/store/modal";
 import { isSame, usePlayList, type PlayData } from "@/store/play-list";
+import { useSettings } from "@/store/settings";
 import { useUser } from "@/store/user";
 
 import Empty from "../empty";
@@ -47,28 +50,49 @@ const PlayListDrawer = () => {
          */
         await favoriteTrack(item, { modalTitle: item.title });
         break;
-      case "download-audio":
+      case "download-audio": {
+        /*
+         * 来源解析交给 `resolveDownloadSource`：
+         * 别再拿播放列表**内部 id** 当 B 站 sid 传下去（那是 idGenerator 造的字符串），
+         * 网易云曲目更是连 sid 都没有，直链得在这里先换出来。
+         */
+        const resolved = await resolveDownloadSource(item, toNeteaseLevel(useSettings.getState().audioQuality));
+
+        if (!resolved.ok) {
+          addToast({ title: t("无法下载"), description: resolved.reason, color: "warning" });
+          break;
+        }
+
         await window.electron.addMediaDownloadTask({
           outputFileType: "audio",
           title: item.title,
           cover: item.cover,
-          bvid: item.bvid,
-          sid: item.type === "audio" ? item.id : undefined,
+          ...resolved.source,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
+      }
       case "download-video":
+        if (!item.bvid) {
+          addToast({
+            title: t("这首歌没有可下载的视频"),
+            color: "warning",
+          });
+          break;
+        }
+
         await window.electron.addMediaDownloadTask({
           outputFileType: "video",
           title: item.title,
           cover: item.cover,
           bvid: item.bvid,
+          cid: item.cid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -85,7 +109,7 @@ const PlayListDrawer = () => {
 
   const scrollToPlayItem = useCallback(() => {
     if (!playItem) {
-      addToast({ title: "当前没有正在播放的歌曲", color: "warning" });
+      addToast({ title: t("当前没有正在播放的歌曲"), color: "warning" });
       return;
     }
 
@@ -94,7 +118,7 @@ const PlayListDrawer = () => {
         ? pureList.findIndex(item => item.id === playItem.id)
         : pureList.findIndex(item => isSame(playItem, item));
     if (targetIndex < 0) {
-      addToast({ title: "未在列表中找到当前播放的歌曲", color: "warning" });
+      addToast({ title: t("未在列表中找到当前播放的歌曲"), color: "warning" });
       return;
     }
 
@@ -133,15 +157,16 @@ const PlayListDrawer = () => {
       <DrawerContent>
         <DrawerHeader className="border-divider/40 flex flex-row items-center justify-between space-x-2 border-b px-4 py-3">
           <h3>
-            播放列表<span className="text-default-500 text-sm">({pureList?.length || 0})</span>
+            {t("播放列表")}
+            <span className="text-default-500 text-sm">({pureList?.length || 0})</span>
           </h3>
           <div className="flex items-center">
             {Boolean(pureList?.length) && (
               <>
-                <IconButton tooltip="定位当前播放" onPress={scrollToPlayItem}>
+                <IconButton tooltip={t("定位当前播放")} onPress={scrollToPlayItem}>
                   <RiFocus3Line size={16} />
                 </IconButton>
-                <IconButton tooltip="清空播放列表" onPress={clear} className="hover:text-danger">
+                <IconButton tooltip={t("清空播放列表")} onPress={clear} className="hover:text-danger">
                   <RiDeleteBinLine size={16} />
                 </IconButton>
               </>

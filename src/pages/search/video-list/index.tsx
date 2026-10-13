@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { addToast, Spinner } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import { formatUrlProtocol } from "@/common/utils/url";
 import Empty from "@/components/empty";
 import { getWebInterfaceWbiSearchType, type SearchVideoItem } from "@/service/web-interface-search-type";
@@ -59,7 +60,7 @@ export default function SearchVideo({ keyword, getScrollElement }: SearchVideoPr
       });
       setPage(nextPage);
     } catch {
-      addToast({ title: "加载更多失败", color: "danger" });
+      addToast({ title: t("加载更多失败"), color: "danger" });
     } finally {
       setLoadingMore(false);
     }
@@ -76,7 +77,7 @@ export default function SearchVideo({ keyword, getScrollElement }: SearchVideoPr
       setList(items);
       setHasMore(items.length < total);
     } catch {
-      addToast({ title: "加载失败", color: "danger" });
+      addToast({ title: t("加载失败"), color: "danger" });
     } finally {
       setInitialLoading(false);
     }
@@ -97,7 +98,7 @@ export default function SearchVideo({ keyword, getScrollElement }: SearchVideoPr
     }));
 
     await usePlayList.getState().addList(items);
-    addToast({ title: `已添加 ${items.length} 首到播放列表`, color: "success" });
+    addToast({ title: t("已添加 {0} 首到播放列表", items.length), color: "success" });
   }, [list]);
 
   const handleMenuAction = useCallback(async (key: string, item: SearchVideoItem) => {
@@ -113,11 +114,11 @@ export default function SearchVideo({ keyword, getScrollElement }: SearchVideoPr
     switch (key) {
       case "play-next":
         usePlayList.getState().addToNext(musicItem);
-        addToast({ title: "已添加到下一首播放", color: "success" });
+        addToast({ title: t("已添加到下一首播放"), color: "success" });
         break;
       case "add-to-playlist":
         usePlayList.getState().addList([musicItem]);
-        addToast({ title: "已添加到播放列表", color: "success" });
+        addToast({ title: t("已添加到播放列表"), color: "success" });
         break;
       case "favorite":
         useModalStore.getState().onOpenFavSelectModal({
@@ -125,7 +126,7 @@ export default function SearchVideo({ keyword, getScrollElement }: SearchVideoPr
           type: 2,
           title: (
             <div>
-              收藏
+              {t("收藏")}
               <span dangerouslySetInnerHTML={{ __html: item.title }} />
             </div>
           ),
@@ -139,7 +140,7 @@ export default function SearchVideo({ keyword, getScrollElement }: SearchVideoPr
           bvid: item.bvid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -151,7 +152,7 @@ export default function SearchVideo({ keyword, getScrollElement }: SearchVideoPr
           bvid: item.bvid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -175,7 +176,7 @@ export default function SearchVideo({ keyword, getScrollElement }: SearchVideoPr
       />
       {initialLoading && (
         <div className="flex min-h-[280px] items-center justify-center">
-          <Spinner label="加载中" />
+          <Spinner label={t("加载中")} />
         </div>
       )}
       {!initialLoading && !list?.length && <Empty className="min-h-[280px]" />}

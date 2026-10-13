@@ -5,6 +5,7 @@ import { Spinner, Tab, Tabs } from "@heroui/react";
 import { useRequest } from "ahooks";
 
 import { UserRelation } from "@/common/constants/relation";
+import { t } from "@/common/i18n";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
 import { getRelationStat } from "@/service/relation-stat";
 import { getXSpaceSettings } from "@/service/space-setting";
@@ -88,7 +89,7 @@ const UserProfile = () => {
 
   const tabs = [
     {
-      label: "动态",
+      label: t("动态"),
       key: "dynamic",
       content: (
         <DynamicList
@@ -98,18 +99,18 @@ const UserProfile = () => {
       ),
     },
     {
-      label: "投稿",
+      label: t("投稿"),
       key: "video",
       content: <VideoPost getScrollElement={() => scrollRef.current?.osInstance()?.elements().viewport || null} />,
     },
     {
-      label: "收藏夹",
+      label: t("收藏夹"),
       key: "collection",
       hidden: !isSelf && !spacePrivacy?.fav_video,
       content: <Favorites getScrollElement={() => scrollRef.current?.osInstance()?.elements().viewport || null} />,
     },
     {
-      label: "合集",
+      label: t("合集"),
       key: "union",
       content: <VideoSeries getScrollElement={() => scrollRef.current?.osInstance()?.elements().viewport || null} />,
     },
@@ -136,7 +137,7 @@ const UserProfile = () => {
           <Tabs
             radius="md"
             classNames={{ cursor: "rounded-medium", panel: "px-0 py-4" }}
-            aria-label="个人资料栏目"
+            aria-label={t("个人资料栏目")}
             variant="solid"
           >
             {tabs.map(item => (

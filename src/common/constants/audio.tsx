@@ -1,5 +1,7 @@
 import { RiOrderPlayLine, RiRepeat2Line, RiRepeatOneLine, RiShuffleLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
+
 export const PlayRate = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 
 /**
@@ -27,22 +29,22 @@ export enum PlayMode {
 export const getPlayModeList = (iconSize?: number) => [
   {
     value: PlayMode.Sequence,
-    desc: "顺序播放",
+    desc: t("顺序播放"),
     icon: <RiOrderPlayLine size={iconSize} />,
   },
   {
     value: PlayMode.Loop,
-    desc: "循环播放",
+    desc: t("循环播放"),
     icon: <RiRepeat2Line size={iconSize} />,
   },
   {
     value: PlayMode.Random,
-    desc: "随机播放",
+    desc: t("随机播放"),
     icon: <RiShuffleLine size={iconSize} />,
   },
   {
     value: PlayMode.Single,
-    desc: "单曲播放",
+    desc: t("单曲播放"),
     icon: <RiRepeatOneLine size={iconSize} />,
   },
 ];

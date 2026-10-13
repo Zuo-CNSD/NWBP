@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { Avatar, Card, CardBody, addToast } from "@heroui/react";
 import { RiAddLine, RiFlashlightFill, RiUserFollowLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import { formatNumber } from "@/common/utils/number";
 import { formatUrlProtocol } from "@/common/utils/url";
 import AsyncButton from "@/components/async-button";
@@ -30,18 +31,18 @@ const UserCard: React.FC<UserCardProps> = ({ u }) => {
       if (res.code === 0) {
         setIsFollowed(!isFollowed);
         addToast({
-          title: isFollowed ? "已取消关注" : "已关注",
+          title: isFollowed ? t("已取消关注") : t("已关注"),
           color: "success",
         });
       } else {
         addToast({
-          title: res.message || "操作失败",
+          title: res.message || t("操作失败"),
           color: "danger",
         });
       }
     } catch {
       addToast({
-        title: "操作失败",
+        title: t("操作失败"),
         color: "danger",
       });
     }
@@ -77,7 +78,7 @@ const UserCard: React.FC<UserCardProps> = ({ u }) => {
                 </span>
               )}
             </div>
-            <span className="text-small text-default-500 whitespace-nowrap">{formatNumber(u.fans)}粉丝</span>
+            <span className="text-small text-default-500 whitespace-nowrap">{t("{0}粉丝", formatNumber(u.fans))}</span>
           </div>
 
           {/* Stats & Sign */}
@@ -94,7 +95,7 @@ const UserCard: React.FC<UserCardProps> = ({ u }) => {
               onPress={handleFollow}
               startContent={isFollowed ? <RiUserFollowLine size={18} /> : <RiAddLine size={18} />}
             >
-              {isFollowed ? "已关注" : "关注"}
+              {isFollowed ? t("已关注") : t("关注")}
             </AsyncButton>
           </div>
         </div>

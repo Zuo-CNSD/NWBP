@@ -5,6 +5,7 @@ import { Button, Input, Select, SelectItem, addToast } from "@heroui/react";
 import { useRequest } from "ahooks";
 
 import { useGeetest } from "@/common/hooks/use-geetest";
+import { t } from "@/common/i18n";
 import { getGenericCountryList } from "@/service/generic-country-list";
 import { getPassportLoginDefaultCountry } from "@/service/passport-login-web-country";
 import { getPassportLoginWebLoginSms } from "@/service/passport-login-web-login-sms";
@@ -110,16 +111,16 @@ const CodeLogin = ({ onClose, updateUserData }: Props) => {
 
       if (res.code === 0) {
         setCaptchaKey(res.data?.captcha_key || "");
-        addToast({ title: "验证码已发送", color: "success" });
+        addToast({ title: t("验证码已发送"), color: "success" });
         setCountdown(60);
         setTimeout(() => {
           codeRef.current?.focus();
         });
       } else {
-        addToast({ title: res.message || "验证码发送失败", color: "danger" });
+        addToast({ title: res.message || t("验证码发送失败"), color: "danger" });
       }
     } catch (e: any) {
-      addToast({ title: e?.message || "网络异常，稍后重试", color: "danger" });
+      addToast({ title: e?.message || t("网络异常，稍后重试"), color: "danger" });
     } finally {
       setSending(false);
     }
@@ -131,7 +132,7 @@ const CodeLogin = ({ onClose, updateUserData }: Props) => {
       const code = Number(values.code.replace(/\D/g, ""));
 
       if (!captchaKey) {
-        addToast({ title: "请先获取验证码", color: "warning" });
+        addToast({ title: t("请先获取验证码"), color: "warning" });
         return;
       }
 
@@ -146,14 +147,14 @@ const CodeLogin = ({ onClose, updateUserData }: Props) => {
       });
 
       if (resp.code === 0) {
-        addToast({ title: "登录成功", color: "success" });
+        addToast({ title: t("登录成功"), color: "success" });
         await updateUserData(resp.data?.refresh_token);
         onClose();
       } else {
-        addToast({ title: resp.message || "登录失败", color: "danger" });
+        addToast({ title: resp.message || t("登录失败"), color: "danger" });
       }
     } catch (e: any) {
-      addToast({ title: e?.message || "网络异常，稍后重试", color: "danger" });
+      addToast({ title: e?.message || t("网络异常，稍后重试"), color: "danger" });
     }
   };
 
@@ -163,10 +164,10 @@ const CodeLogin = ({ onClose, updateUserData }: Props) => {
         control={control}
         name="phone"
         rules={{
-          required: "请输入手机号",
+          required: t("请输入手机号"),
           validate: value => {
             if (countryId === "1" && !PHONE_REGEX_CN.test(value)) {
-              return "手机号格式不正确";
+              return t("手机号格式不正确");
             }
             return true;
           },
@@ -180,7 +181,7 @@ const CodeLogin = ({ onClose, updateUserData }: Props) => {
             }}
             name="phone"
             type="tel"
-            placeholder="请输入手机号"
+            placeholder={t("请输入手机号")}
             variant="bordered"
             isClearable
             autoComplete="tel"
@@ -213,7 +214,7 @@ const CodeLogin = ({ onClose, updateUserData }: Props) => {
                 onChange={e => {
                   setCountryId(e.target.value);
                 }}
-                aria-label="选择国家/地区"
+                aria-label={t("选择国家/地区")}
               >
                 {country => (
                   <SelectItem key={country.id} textValue={`+${country.country_id}`}>
@@ -231,8 +232,8 @@ const CodeLogin = ({ onClose, updateUserData }: Props) => {
           control={control}
           name="code"
           rules={{
-            required: "请输入验证码",
-            pattern: { value: /^\d{6}$/, message: "验证码必须为6位数字" },
+            required: t("请输入验证码"),
+            pattern: { value: /^\d{6}$/, message: t("验证码必须为6位数字") },
           }}
           render={({ field }) => (
             <Input
@@ -243,7 +244,7 @@ const CodeLogin = ({ onClose, updateUserData }: Props) => {
               }}
               className="flex-1"
               type="text"
-              placeholder="验证码"
+              placeholder={t("验证码")}
               variant="bordered"
               isInvalid={!!errors.code}
               errorMessage={errors.code?.message}
@@ -257,12 +258,12 @@ const CodeLogin = ({ onClose, updateUserData }: Props) => {
           isLoading={sending || geetestLoading}
           onPress={onSendCode}
         >
-          {countdown > 0 ? `${countdown}s` : "获取验证码"}
+          {countdown > 0 ? `${countdown}s` : t("获取验证码")}
         </Button>
       </div>
 
       <Button color="primary" className="w-full" type="submit" isDisabled={isSubmitting} isLoading={isSubmitting}>
-        登录
+        {t("登录")}
       </Button>
     </form>
   );

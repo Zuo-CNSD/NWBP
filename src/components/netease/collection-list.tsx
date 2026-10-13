@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 
 import type { ContextMenuItem } from "@/components/context-menu";
 
+import { t } from "@/common/i18n";
 import MusicCard from "@/components/music-card";
 import VirtualGridPageList from "@/components/virtual-grid-page-list";
 
@@ -44,7 +45,7 @@ const NeteaseCollectionList = ({
 }: Props) => {
   const renderItem = useCallback(
     (item: NeteaseCollectionItem) => {
-      const menus: ContextMenuItem[] = [{ key: "netease-link", label: "在网易云打开" }];
+      const menus: ContextMenuItem[] = [{ key: "netease-link", label: t("在网易云打开") }];
 
       return (
         <MusicCard

@@ -3,6 +3,8 @@ import { useCallback, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger, Slider } from "@heroui/react";
 import { RiFontSize } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
+
 import IconButton from "../icon-button";
 
 interface FontSizeControlProps {
@@ -39,7 +41,7 @@ const FontSizeControl = ({ value, min = 12, max = 48, onChange, onOpenChange }: 
         <IconButton
           size="sm"
           variant="light"
-          aria-label="调整字体大小"
+          aria-label={t("调整字体大小")}
           className="bg-foreground/20 text-foreground hover:bg-foreground/30 min-w-0 rounded-full text-sm font-semibold"
         >
           <RiFontSize size={16} />
@@ -48,7 +50,7 @@ const FontSizeControl = ({ value, min = 12, max = 48, onChange, onOpenChange }: 
       <PopoverContent className="px-3 py-2">
         <div className="flex flex-col items-center gap-2">
           <Slider
-            aria-label="调整字体大小"
+            aria-label={t("调整字体大小")}
             minValue={min}
             maxValue={max}
             step={step}

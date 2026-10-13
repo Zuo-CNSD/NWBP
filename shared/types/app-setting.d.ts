@@ -1,3 +1,11 @@
+/**
+ * 界面语言。
+ *
+ * `zh-CN` 是**基准语言**：源码里写的中文原文就是 key，词典查不到就回落成它。
+ * 所以新增语言时不必给中文建词典，只要保证翻译包覆盖到即可。
+ */
+type Language = "zh-CN" | "en" | "ja" | "ko";
+
 type AudioQuality = "auto" | "lossless" | "high" | "medium" | "low";
 type ThemeMode = "system" | "light" | "dark";
 type PageTransition = "none" | "fade" | "slide" | "scale" | "slideUp";
@@ -33,6 +41,8 @@ interface ProxySettings {
 }
 
 interface AppSettings {
+  /** 界面语言（zh-CN / en / ja / ko），主进程也读这一项来翻原生菜单 */
+  language: Language;
   fontFamily: string;
   primaryColor: string;
   /** 自定义背景色（为空表示使用主题默认） */

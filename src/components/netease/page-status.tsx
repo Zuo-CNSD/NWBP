@@ -2,6 +2,7 @@ import React from "react";
 
 import { Button, Spinner } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import Empty from "@/components/empty";
 
 interface Props {
@@ -24,7 +25,7 @@ const NeteasePageStatus = ({ loading, error, empty, emptyText, onRetry }: Props)
   if (loading) {
     return (
       <div className="flex min-h-[280px] items-center justify-center">
-        <Spinner label="加载中" />
+        <Spinner label={t("加载中")} />
       </div>
     );
   }
@@ -35,7 +36,7 @@ const NeteasePageStatus = ({ loading, error, empty, emptyText, onRetry }: Props)
         <p className="text-default-500 text-sm">{error}</p>
         {onRetry && (
           <Button size="sm" variant="flat" radius="md" onPress={onRetry}>
-            重试
+            {t("重试")}
           </Button>
         )}
       </div>

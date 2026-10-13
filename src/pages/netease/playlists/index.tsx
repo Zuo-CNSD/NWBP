@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from "react";
 import { useNavigate } from "react-router";
 
+import { t } from "@/common/i18n";
 import NeteaseCollectionList, { type NeteaseCollectionItem } from "@/components/netease/collection-list";
 import NeteasePageStatus from "@/components/netease/page-status";
 import { useNeteaseLoad } from "@/components/netease/use-netease-load";
@@ -32,15 +33,15 @@ const NeteasePlaylists = () => {
   return (
     <ScrollContainer enableBackToTop ref={scrollerRef} className="h-full w-full">
       <div className="px-4 pt-4">
-        <h1>我的歌单</h1>
-        <div className="text-default-500 mt-1 mb-2 text-sm">来自网易云账号</div>
+        <h1>{t("我的歌单")}</h1>
+        <div className="text-default-500 mt-1 mb-2 text-sm">{t("来自网易云账号")}</div>
       </div>
 
       <NeteasePageStatus
         loading={loading}
         error={error}
         empty={!loading && !error && data.length === 0}
-        emptyText="登录网易云后才能读取你的歌单"
+        emptyText={t("登录网易云后才能读取你的歌单")}
         onRetry={reload}
       />
 

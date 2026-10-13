@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { addToast, Button, Checkbox, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/react";
 import { useRequest } from "ahooks";
 
+import { t } from "@/common/i18n";
 import { getFavFolderCreatedListAll } from "@/service/fav-folder-created-list-all";
 import { postFavFolderDeal } from "@/service/fav-folder-deal";
 import { getAudioCreatedFavList } from "@/service/medialist-gateway-base-created";
@@ -124,17 +125,17 @@ const FavoritesSelectModal = () => {
         onFavSelectModalOpenChange(false);
         if (prevSelectedRef.current.length === 0 && selectedIds.length) {
           addToast({
-            title: "已添加到收藏夹",
+            title: t("已添加到收藏夹"),
             color: "success",
           });
         } else if (!selectedIds.length) {
           addToast({
-            title: "已从收藏夹中移除",
+            title: t("已从收藏夹中移除"),
             color: "success",
           });
         } else {
           addToast({
-            title: "修改成功",
+            title: t("修改成功"),
             color: "success",
           });
         }
@@ -203,7 +204,7 @@ const FavoritesSelectModal = () => {
                     <div className="flex min-w-0 flex-1 items-center justify-between">
                       <div className="min-w-0">
                         <div className="truncate text-sm font-medium">{item.title}</div>
-                        <div className="text-default-500 mt-0.5 text-xs">{item.media_count ?? 0} 个内容</div>
+                        <div className="text-default-500 mt-0.5 text-xs">{t("{0}个内容", item.media_count ?? 0)}</div>
                       </div>
                     </div>
                   </div>
@@ -214,14 +215,14 @@ const FavoritesSelectModal = () => {
         </ModalBody>
         <ModalFooter>
           <Button variant="light" onPress={handleCancel} isDisabled={submitting}>
-            取消
+            {t("取消")}
           </Button>
           <AsyncButton
             color="primary"
             onPress={handleConfirm}
             isDisabled={hasSameIds(selectedIds, prevSelectedRef.current)}
           >
-            确认
+            {t("确认")}
           </AsyncButton>
         </ModalFooter>
       </ModalContent>

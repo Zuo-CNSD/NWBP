@@ -10,6 +10,7 @@ import { useShallow } from "zustand/shallow";
 import type { FullScreenBackgroundMode } from "@/store/full-screen-player-settings";
 
 import { Themes } from "@/common/constants/theme";
+import { t } from "@/common/i18n";
 import { hexToHsl, resolveTheme, isHex } from "@/common/utils/color";
 import AudioWaveform from "@/components/audio-waveform";
 import Lyrics from "@/components/lyrics";
@@ -356,7 +357,7 @@ const FullScreenPlayer = () => {
                 className={`absolute top-0 right-0 z-20 flex w-full justify-between px-6 py-4 transition-opacity duration-200 ${isUiVisible ? "opacity-100" : "pointer-events-none opacity-0"}`}
               >
                 <div className="window-no-drag top-0 right-0 left-0 flex w-full max-w-2/5 items-center space-x-2">
-                  <IconButton title="关闭弹窗" onPress={onClose} className="">
+                  <IconButton title={t("关闭弹窗")} onPress={onClose} className="">
                     <RiArrowDownSLine size={28} />
                   </IconButton>
                   <h2 className="truncate text-xl select-none">{playItem.pageTitle || playItem.title}</h2>
@@ -375,7 +376,7 @@ const FullScreenPlayer = () => {
                     placement="bottom-start"
                   >
                     <PopoverTrigger>
-                      <IconButton title="设置" tooltip="设置">
+                      <IconButton title={t("设置")} tooltip={t("设置")}>
                         <RiSettings3Line size={22} />
                       </IconButton>
                     </PopoverTrigger>
@@ -478,7 +479,7 @@ const FullScreenPlayer = () => {
                   <IconButton
                     className="h-24 w-6 min-w-0 rounded-l-xl rounded-r-none bg-white/10 px-0 backdrop-blur-md transition-colors hover:bg-white/20"
                     onPress={() => setIsPageListOpen(!isPageListOpen)}
-                    tooltip="显示分集列表"
+                    tooltip={t("显示分集列表")}
                     tooltipProps={{
                       placement: "left",
                     }}

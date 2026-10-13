@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { addToast, Spinner } from "@heroui/react";
 import { RiPlayFill } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import AsyncButton from "@/components/async-button";
 import SearchWithSort from "@/components/search-with-sort";
 import { getSpaceWbiArcSearch, type SpaceArcVListItem } from "@/service/space-wbi-arc-search";
@@ -127,7 +128,7 @@ const VideoPost: React.FC<VideoPostProps> = ({ getScrollElement }) => {
           bvid: item.bvid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -139,7 +140,7 @@ const VideoPost: React.FC<VideoPostProps> = ({ getScrollElement }) => {
           bvid: item.bvid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -155,7 +156,7 @@ const VideoPost: React.FC<VideoPostProps> = ({ getScrollElement }) => {
 
   const handlePlayAll = useCallback(async () => {
     if (!id) {
-      addToast({ title: "缺少用户信息", color: "warning" });
+      addToast({ title: t("缺少用户信息"), color: "warning" });
       return;
     }
 
@@ -171,7 +172,7 @@ const VideoPost: React.FC<VideoPostProps> = ({ getScrollElement }) => {
       });
 
       if (firstRes.code !== 0 || !firstRes.data?.list?.vlist) {
-        addToast({ title: "暂无可播放内容", color: "warning" });
+        addToast({ title: t("暂无可播放内容"), color: "warning" });
         return;
       }
 
@@ -216,18 +217,18 @@ const VideoPost: React.FC<VideoPostProps> = ({ getScrollElement }) => {
         .filter(item => Boolean(item.bvid));
 
       if (!playItems.length) {
-        addToast({ title: "暂无可播放内容", color: "warning" });
+        addToast({ title: t("暂无可播放内容"), color: "warning" });
         return;
       }
 
       await usePlayList.getState().playList(playItems);
       addToast({
-        title: `已添加 ${playItems.length} 个投稿到播放列表`,
-        description: "播放内容只获取最多 200 条数据",
+        title: t("已添加 {0} 个投稿到播放列表", playItems.length),
+        description: t("播放内容只获取最多 200 条数据"),
         color: "success",
       });
     } catch {
-      addToast({ title: "播放列表生成失败", color: "danger" });
+      addToast({ title: t("播放列表生成失败"), color: "danger" });
     }
   }, [id, keyword, order]);
 
@@ -242,18 +243,18 @@ const VideoPost: React.FC<VideoPostProps> = ({ getScrollElement }) => {
             onPress={handlePlayAll}
             className="dark:text-black"
           >
-            播放
+            {t("播放")}
           </AsyncButton>
-          <div className="text-default-500 pl-2 text-sm">共 {total} 条</div>
+          <div className="text-default-500 pl-2 text-sm">{t("共 {0}条", total)}</div>
         </div>
         <div className="flex items-center gap-3">
           <SearchWithSort
             onKeywordSearch={setKeyword}
             order={order}
             orderOptions={[
-              { key: "pubdate", label: "最新发布" },
-              { key: "click", label: "最多播放" },
-              { key: "stow", label: "最多收藏" },
+              { key: "pubdate", label: t("最新发布") },
+              { key: "click", label: t("最多播放") },
+              { key: "stow", label: t("最多收藏") },
             ]}
             onOrderChange={setOrder}
           />
@@ -261,7 +262,7 @@ const VideoPost: React.FC<VideoPostProps> = ({ getScrollElement }) => {
       </div>
       {initialLoading ? (
         <div className="flex h-[280px] items-center justify-center">
-          <Spinner label="加载中" />
+          <Spinner label={t("加载中")} />
         </div>
       ) : displayMode === "card" ? (
         <PostGridList

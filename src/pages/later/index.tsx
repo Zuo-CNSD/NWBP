@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { addToast, Button, Spinner } from "@heroui/react";
 import { RiDeleteBinLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
 import { postHistoryToViewDel } from "@/service/history-toview-del";
 import {
@@ -121,8 +122,8 @@ const Later = () => {
     switch (key) {
       case "delete":
         useModalStore.getState().onOpenConfirmModal({
-          title: `确认移除“${item.title}”`,
-          confirmText: "移除",
+          title: t("确认移除“{0}”", item.title),
+          confirmText: t("移除"),
           onConfirm: async () => {
             const res = await postHistoryToViewDel({
               aid: item.aid,
@@ -130,7 +131,7 @@ const Later = () => {
 
             if (res.code === 0) {
               addToast({
-                title: "已移除",
+                title: t("已移除"),
                 color: "success",
               });
               setList(prev => prev.filter(i => i.aid !== item.aid));
@@ -170,7 +171,7 @@ const Later = () => {
           cid: item.cid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -183,7 +184,7 @@ const Later = () => {
           cid: item.cid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -197,8 +198,8 @@ const Later = () => {
 
   const handleClear = useCallback(() => {
     useModalStore.getState().onOpenConfirmModal({
-      title: "删除已观看完的视频？",
-      confirmText: "删除",
+      title: t("删除已观看完的视频？"),
+      confirmText: t("删除"),
       onConfirm: async () => {
         const res = await postHistoryToViewDel({
           viewed: true,
@@ -217,9 +218,9 @@ const Later = () => {
     <ScrollContainer enableBackToTop ref={scrollerRef} className="h-full w-full px-4">
       <div className="mb-2">
         <div className="flex items-center justify-between">
-          <h1>稍后再看</h1>
+          <h1>{t("稍后再看")}</h1>
           <Button variant="flat" size="sm" startContent={<RiDeleteBinLine size={18} />} onPress={handleClear}>
-            清除已看完
+            {t("清除已看完")}
           </Button>
         </div>
         <LaterSearch onSearch={handleSearch} onDateRangeChange={handleDateRangeChange} />
@@ -233,7 +234,9 @@ const Later = () => {
         )}
 
         {/* 空状态 */}
-        {isEmpty && <div className="flex h-[40vh] items-center justify-center text-gray-500">暂无稍后再看内容</div>}
+        {isEmpty && (
+          <div className="flex h-[40vh] items-center justify-center text-gray-500">{t("暂无稍后再看内容")}</div>
+        )}
 
         {/* 列表内容 */}
         {list.length > 0 && (

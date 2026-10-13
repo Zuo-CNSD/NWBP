@@ -4,6 +4,7 @@ import { addToast, Spinner, Switch } from "@heroui/react";
 import { RiDeleteBinLine } from "@remixicon/react";
 import { useShallow } from "zustand/react/shallow";
 
+import { t } from "@/common/i18n";
 import IconButton from "@/components/icon-button";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
 import { postHistoryClear } from "@/service/history-clear";
@@ -61,9 +62,9 @@ const History = () => {
 
       if (res.code !== 0) {
         if (res.code === -101) {
-          throw new Error("请先登录");
+          throw new Error(t("请先登录"));
         }
-        throw new Error(res.message || "获取历史记录失败");
+        throw new Error(res.message || t("获取历史记录失败"));
       }
 
       const newList = res.data?.list || [];
@@ -77,7 +78,7 @@ const History = () => {
       setHasMore(res.data.has_more);
     } catch (error: any) {
       addToast({
-        title: error?.message || "获取历史记录失败",
+        title: error?.message || t("获取历史记录失败"),
         color: "danger",
       });
       // 如果是第一页请求失败，清空列表
@@ -194,7 +195,7 @@ const History = () => {
           cid: item.history.cid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -207,7 +208,7 @@ const History = () => {
           cid: item.history.cid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -216,8 +217,8 @@ const History = () => {
         break;
       case "delete":
         useModalStore.getState().onOpenConfirmModal({
-          title: `删除记录${item.title}`,
-          confirmText: "删除",
+          title: t("删除记录{0}", item.title),
+          confirmText: t("删除"),
           onConfirm: async () => {
             const res = await postHistoryDelete({
               kid: `${item.history.business}_${item.kid}`,
@@ -226,7 +227,7 @@ const History = () => {
             if (res.code === 0) {
               setList(prev => prev.filter(record => record.kid !== item.kid));
               addToast({
-                title: "已删除记录",
+                title: t("已删除记录"),
                 color: "success",
               });
             }
@@ -239,8 +240,8 @@ const History = () => {
 
   const handleClear = useCallback(() => {
     useModalStore.getState().onOpenConfirmModal({
-      title: "确认删除所有历史记录？",
-      confirmText: "删除",
+      title: t("确认删除所有历史记录？"),
+      confirmText: t("删除"),
       onConfirm: async () => {
         const res = await postHistoryClear();
         if (res.code === 0) {
@@ -257,7 +258,7 @@ const History = () => {
     <ScrollContainer enableBackToTop ref={scrollerRef} className="h-full w-full px-4">
       <div className="mb-2">
         <div className="flex items-center justify-between">
-          <h1>历史记录</h1>
+          <h1>{t("历史记录")}</h1>
           <div className="flex items-center justify-end space-x-2">
             <Switch
               size="sm"
@@ -266,7 +267,7 @@ const History = () => {
                 updateSettings({ reportPlayHistory: isSelected });
               }}
             >
-              记录播放历史
+              {t("记录播放历史")}
             </Switch>
             <IconButton variant="flat" size="sm" onPress={handleClear}>
               <RiDeleteBinLine size={18} />
@@ -281,7 +282,7 @@ const History = () => {
           <Spinner />
         </div>
       ) : isEmpty ? (
-        <div className="flex h-[40vh] items-center justify-center text-gray-500">暂无历史记录</div>
+        <div className="flex h-[40vh] items-center justify-center text-gray-500">{t("暂无历史记录")}</div>
       ) : displayMode === "card" ? (
         <GridList
           items={list}

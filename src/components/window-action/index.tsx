@@ -8,6 +8,7 @@ import {
   RiSubtractLine,
 } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import { toggleMiniMode } from "@/common/utils/mini-player";
 import IconButton from "@/components/icon-button";
 
@@ -43,7 +44,7 @@ const WindowAction = () => {
     <div className="window-no-drag flex items-center justify-center">
       {!isFullScreen && (
         <>
-          <IconButton title="切换到迷你播放器" onPress={toggleMiniMode}>
+          <IconButton title={t("切换到迷你播放器")} onPress={toggleMiniMode}>
             <RiPictureInPicture2Line size={16} />
           </IconButton>
           <IconButton onPress={handleMinimize}>

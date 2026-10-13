@@ -1,21 +1,21 @@
 {
   "name": "nwbp",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.4",
   "private": true,
   "engines": {
     "node": "22.17.1"
   },
   "type": "module",
-  "description": "music application based on bilibili api",
-  "author": "wood3n",
+  "description": "NWBP - a desktop music player for bilibili and NetEase Cloud Music",
+  "author": "Zuo-CNSD",
   "license": "GPL-3.0-only",
-  "homepage": "https://github.com/wood3n/biu#readme",
+  "homepage": "https://github.com/Zuo-CNSD/NWBP#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wood3n/biu.git"
+    "url": "git+https://github.com/Zuo-CNSD/NWBP.git"
   },
   "bugs": {
-    "url": "https://github.com/wood3n/biu/issues"
+    "url": "https://github.com/Zuo-CNSD/NWBP/issues"
   },
   "keywords": [
     "music",

@@ -7,6 +7,7 @@ import path from "node:path";
 
 import { ELECTRON_ICON_BASE_PATH } from "@shared/path";
 
+import { onLanguageChange, t } from "../i18n";
 import { channel } from "../ipc/channel";
 import { destroyMiniPlayer } from "../mini-player";
 import { IconBase } from "../utils";
@@ -27,8 +28,14 @@ interface Props {
  * 用户关掉窗口后会以为程序退出了（实际上音乐还在放）—— 所以三个平台都要建。
  */
 let tray: Tray | null = null;
+/** 语言变化订阅的退订句柄，避免反复创建托盘时越挂越多 */
+let stopLanguageWatch: (() => void) | null = null;
 
 function createTray({ getMainWindow, onExit }: Props) {
+  // 先退订上一轮的订阅，否则反复建托盘会留下一堆指向旧实例的监听
+  stopLanguageWatch?.();
+  stopLanguageWatch = null;
+
   // 若已存在旧实例，先销毁避免重复创建
   if (tray) {
     try {
@@ -103,28 +110,28 @@ function createTray({ getMainWindow, onExit }: Props) {
     }
   };
 
-  const menuTemplate: MenuItemConstructorOptions[] = [
+  const menuTemplate = (): MenuItemConstructorOptions[] => [
     {
-      label: "播放/暂停",
+      label: t("播放/暂停"),
       click: sendPlayerCommand(channel.player.toggle, "toggle play"),
     },
     {
-      label: "上一曲",
+      label: t("上一曲"),
       click: sendPlayerCommand(channel.player.prev, "play previous"),
     },
     {
-      label: "下一曲",
+      label: t("下一曲"),
       click: sendPlayerCommand(channel.player.next, "play next"),
     },
     {
-      label: "显示/隐藏界面",
+      label: t("显示/隐藏界面"),
       click: toggleMainWindowVisibility,
     },
     {
       type: "separator",
     },
     {
-      label: "设置",
+      label: t("设置"),
       click: () => {
         const win = getMainWindow?.();
         if (!win || win.isDestroyed()) return;
@@ -139,7 +146,7 @@ function createTray({ getMainWindow, onExit }: Props) {
       },
     },
     {
-      label: "退出程序",
+      label: t("退出程序"),
       click: () => {
         // 将退出逻辑交给主进程，以便设置 app.quitting 标记
         if (typeof onExit === "function") {
@@ -149,10 +156,24 @@ function createTray({ getMainWindow, onExit }: Props) {
     },
   ];
 
+  /*
+   * 菜单模板是**函数**、每次要用了才生成 —— 托盘菜单只在创建时 setContextMenu 一次，
+   * 模板若在模块顶层求值，换语言后标签就永远停在启动时那份。这里同时订阅语言变化，
+   * 用户一切语言就把菜单重建一遍，不用重启 app。
+   */
+  const applyContextMenu = () => {
+    if (!tray) return;
+    try {
+      tray.setContextMenu(Menu.buildFromTemplate(menuTemplate()));
+    } catch (err) {
+      log.warn("[tray] rebuild context menu failed:", err);
+    }
+  };
+
   // Linux 下必须使用 setContextMenu 才能正常弹出菜单（尤其是 Wayland/AppIndicator 环境）
   // Windows/macOS 也推荐使用 setContextMenu，系统会自动处理右键行为
-  const menu = Menu.buildFromTemplate(menuTemplate);
-  tray.setContextMenu(menu);
+  applyContextMenu();
+  stopLanguageWatch = onLanguageChange(applyContextMenu);
 
   // 左键单击：显示主窗口；若迷你窗口已显示，则关闭它
   tray.on("click", () => {
@@ -172,6 +193,9 @@ function createTray({ getMainWindow, onExit }: Props) {
 }
 
 function destroyTray() {
+  stopLanguageWatch?.();
+  stopLanguageWatch = null;
+
   if (tray) {
     try {
       tray.destroy();

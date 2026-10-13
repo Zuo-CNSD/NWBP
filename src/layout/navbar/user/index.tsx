@@ -21,6 +21,7 @@ import {
 } from "@remixicon/react";
 import { twMerge } from "tailwind-merge";
 
+import { t } from "@/common/i18n";
 import { postPassportLoginExit } from "@/service/passport-login-exit";
 import { useFavoritesStore } from "@/store/favorite";
 import { useModalStore } from "@/store/modal";
@@ -51,7 +52,7 @@ const UserCard = ({ onDropdownOpenChange }: UserCardProps) => {
     const csrfToken = await window.electron.getCookie("bili_jct");
     if (!csrfToken) {
       addToast({
-        title: "CSRF Token 不存在",
+        title: t("CSRF Token 不存在"),
         color: "danger",
       });
       return false;
@@ -78,7 +79,7 @@ const UserCard = ({ onDropdownOpenChange }: UserCardProps) => {
       return true;
     } else {
       addToast({
-        title: res?.message || "退出登录失败",
+        title: res?.message || t("退出登录失败"),
         color: "danger",
       });
       return false;
@@ -88,27 +89,27 @@ const UserCard = ({ onDropdownOpenChange }: UserCardProps) => {
   const dropdownItems: (DropdownItemProps & { label: string; hidden?: boolean })[] = [
     {
       key: "login",
-      label: "登录",
+      label: t("登录"),
       startContent: <RiLoginCircleLine size={18} />,
       hidden: user?.isLogin,
       onPress: openLoginModal,
     },
     {
       key: "profile",
-      label: "个人资料",
+      label: t("个人资料"),
       startContent: <RiProfileLine size={18} />,
       hidden: !user?.isLogin,
       onPress: () => navigate(`/user/${user?.mid}`),
     },
     {
       key: "settings",
-      label: "设置",
+      label: t("设置"),
       startContent: <RiSettings3Line size={18} />,
       onPress: () => navigate("/settings"),
     },
     {
       key: "refresh",
-      label: "刷新数据",
+      label: t("刷新数据"),
       startContent: <RiRefreshLine size={18} />,
       onPress: async () => {
         try {
@@ -119,12 +120,12 @@ const UserCard = ({ onDropdownOpenChange }: UserCardProps) => {
             await useFavoritesStore.getState().updateCollectedFavorites(mid);
           }
           addToast({
-            title: "数据刷新成功",
+            title: t("数据刷新成功"),
             color: "success",
           });
         } catch {
           addToast({
-            title: "刷新数据失败",
+            title: t("刷新数据失败"),
             color: "danger",
           });
         }
@@ -132,21 +133,21 @@ const UserCard = ({ onDropdownOpenChange }: UserCardProps) => {
     },
     {
       key: "feedback",
-      label: "问题反馈",
+      label: t("问题反馈"),
       startContent: <RiFeedbackLine size={18} />,
       endContent: <RiExternalLinkLine size={18} />,
-      onPress: () => window.electron.openExternal("https://github.com/wood3n/biu/issues"),
+      onPress: () => window.electron.openExternal("https://github.com/Zuo-CNSD/NWBP/issues"),
     },
     {
       key: "logout",
-      label: "退出登录",
+      label: t("退出登录"),
       startContent: <RiLogoutCircleLine size={18} />,
       color: "danger" as const,
       className: "text-danger",
       hidden: !user?.isLogin,
       onPress: () => {
         onOpenConfirmModal({
-          title: "确认退出登录？",
+          title: t("确认退出登录？"),
           type: "danger",
           onConfirm: async () => {
             await logout();
@@ -179,7 +180,7 @@ const UserCard = ({ onDropdownOpenChange }: UserCardProps) => {
             src={user?.face}
           />
         </DropdownTrigger>
-        <DropdownMenu aria-label="用户操作" variant="flat" items={dropdownItems}>
+        <DropdownMenu aria-label={t("用户操作")} variant="flat" items={dropdownItems}>
           {({ key, label, className, ...rest }) => (
             <DropdownItem className={twMerge("rounded-medium", className)} key={key} {...rest}>
               {label}

@@ -5,6 +5,7 @@ import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@
 import { RiMoreFill, RiMusic2Line, RiPlayFill } from "@remixicon/react";
 import clx from "classnames";
 
+import { t } from "@/common/i18n";
 import Image from "@/components/image";
 import { type PlayData } from "@/store/play-list";
 
@@ -64,7 +65,7 @@ const ListItem = ({ data, isLogin, isPlaying, onAction, onClose, onPress }: Prop
               onClose();
             }}
           >
-            {data?.source === "local" ? "本地音乐" : data?.ownerName || "未知"}
+            {data?.source === "local" ? t("本地音乐") : data?.ownerName || t("未知")}
           </span>
         </div>
         <Dropdown
@@ -87,8 +88,8 @@ const ListItem = ({ data, isLogin, isPlaying, onAction, onClose, onPress }: Prop
           </DropdownTrigger>
 
           <DropdownMenu
-            aria-label="播放列表操作菜单"
-            items={getMenus({ isLogin, isLocal: data.source === "local" })}
+            aria-label={t("播放列表操作菜单")}
+            items={getMenus({ isLogin, isLocal: data.source === "local", hasVideo: Boolean(data.bvid) })}
             // @ts-ignore 忽略onAction类型问题
             onAction={onAction}
           >

@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { addToast, Spinner, Tab, Tabs } from "@heroui/react";
 import { RiPlayFill } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import AsyncButton from "@/components/async-button";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
 import { getMusicComprehensiveWebRank, type Data as MusicItem } from "@/service/music-comprehensive-web-rank";
@@ -176,23 +177,23 @@ const MusicRecommend = () => {
       .filter(item => Boolean(item.bvid));
 
     if (!items.length) {
-      addToast({ title: "暂无可播放内容", color: "warning" });
+      addToast({ title: t("暂无可播放内容"), color: "warning" });
       return;
     }
 
     await usePlayList.getState().addList(items);
-    addToast({ title: `已添加 ${items.length} 首到播放列表`, color: "success" });
+    addToast({ title: t("已添加 {0} 首到播放列表", items.length), color: "success" });
   }, [list]);
 
   const handleMenuAction = useCallback(async (key: string, item: RecommendItem) => {
     if (!item.bvid && key !== "favorite") {
-      addToast({ title: "暂无可播放内容", color: "warning" });
+      addToast({ title: t("暂无可播放内容"), color: "warning" });
       return;
     }
     switch (key) {
       case "favorite":
         if (!item.aid) {
-          addToast({ title: "该项目无法收藏", color: "warning" });
+          addToast({ title: t("该项目无法收藏"), color: "warning" });
           return;
         }
         useModalStore.getState().onOpenFavSelectModal({
@@ -231,7 +232,7 @@ const MusicRecommend = () => {
           bvid: item.bvid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -243,7 +244,7 @@ const MusicRecommend = () => {
           bvid: item.bvid,
         });
         addToast({
-          title: "已添加下载任务",
+          title: t("已添加下载任务"),
           color: "success",
         });
         break;
@@ -277,9 +278,9 @@ const MusicRecommend = () => {
             setActiveTab(nextTab);
           }}
         >
-          <Tab key="music" title="音乐" />
-          <Tab key="guichu" title="鬼畜" />
-          <Tab key="pop" title="流行" />
+          <Tab key="music" title={t("音乐")} />
+          <Tab key="guichu" title={t("鬼畜")} />
+          <Tab key="pop" title={t("流行")} />
         </Tabs>
         <AsyncButton
           color="primary"
@@ -289,7 +290,7 @@ const MusicRecommend = () => {
           onPress={handlePlayAll}
           className="dark:text-black"
         >
-          全部播放
+          {t("全部播放")}
         </AsyncButton>
       </div>
       {activeTab === "pop" && <NewMusicTop onLayoutChange={handlePopLayoutChange} />}

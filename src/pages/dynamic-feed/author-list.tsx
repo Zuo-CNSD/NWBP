@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button, Spinner } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
 import { getRelationFollowings } from "@/service/relation-followings";
 import { useUser } from "@/store/user";
@@ -48,10 +49,10 @@ const AuthorList: React.FC<AuthorListProps> = ({ selectedAuthorMid, onSelect }) 
           });
           setPage(pageIndex);
         } else {
-          setError(res.message || "无法加载关注列表");
+          setError(res.message || t("无法加载关注列表"));
         }
       } catch {
-        setError("无法加载关注列表");
+        setError(t("无法加载关注列表"));
       } finally {
         loadingRef.current = false;
         setLoading(false);
@@ -106,7 +107,7 @@ const AuthorList: React.FC<AuthorListProps> = ({ selectedAuthorMid, onSelect }) 
     <div className="h-full w-64">
       <div className="border-divider/40 flex h-full flex-col border-r">
         <div className="mb-2 px-4">
-          <h1 className="min-w-0 truncate">用户动态</h1>
+          <h1 className="min-w-0 truncate">{t("用户动态")}</h1>
         </div>
         <ScrollContainer ref={scrollRef} className="h-full min-h-0 w-full flex-1 px-2">
           <div className="flex min-h-0 flex-1 flex-col gap-2">
@@ -122,19 +123,19 @@ const AuthorList: React.FC<AuthorListProps> = ({ selectedAuthorMid, onSelect }) 
             {loading && (
               <div className="text-default-500 flex items-center gap-2 px-2 py-2">
                 <Spinner size="sm" />
-                <span>加载中...</span>
+                <span>{t("加载中...")}</span>
               </div>
             )}
             {!loading && error && (
               <div className="flex flex-col items-start gap-2 px-2 py-2">
                 <p className="text-danger text-sm">{error}</p>
                 <Button size="sm" onPress={() => fetchFollowings(page)}>
-                  重试
+                  {t("重试")}
                 </Button>
               </div>
             )}
             {!loading && !hasMore && list.length === 0 && !error && (
-              <p className="text-default-400 px-2 text-sm">暂无关注</p>
+              <p className="text-default-400 px-2 text-sm">{t("暂无关注")}</p>
             )}
           </div>
         </ScrollContainer>

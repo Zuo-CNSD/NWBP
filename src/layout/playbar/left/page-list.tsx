@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Input, Popover, PopoverContent, PopoverTrigger, useDisclosure } from "@heroui/react";
 import { RiListRadio, RiSearchLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import IconButton from "@/components/icon-button";
 import MusicPageList from "@/components/music-page-list";
 
@@ -30,7 +31,7 @@ const PageListDrawer = () => {
         style={{ maxWidth: "min(500px, 90vw)" }}
       >
         <div className="border-b-content2 flex w-full flex-row items-center justify-between space-x-2 border-b px-4 py-3">
-          <h3>分集</h3>
+          <h3>{t("分集")}</h3>
           <Input
             classNames={{
               base: "max-w-48 h-8",
@@ -38,7 +39,7 @@ const PageListDrawer = () => {
               input: "text-small",
               inputWrapper: "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
             }}
-            placeholder="搜索分集"
+            placeholder={t("搜索分集")}
             size="sm"
             startContent={<RiSearchLine size={14} />}
             type="search"

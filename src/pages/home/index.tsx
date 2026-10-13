@@ -6,6 +6,8 @@ import { RiArrowRightSLine, RiPlayFill } from "@remixicon/react";
 import clsx from "classnames";
 import moment from "moment";
 
+import { greetingKeyOf } from "@/common/constants/greeting";
+import { t } from "@/common/i18n";
 import Image from "@/components/image";
 import { getWebDynamicFeedAll, type WebDynamicItem } from "@/service/web-dynamic";
 import { type PlayHistoryItem, toPlayItem, usePlayHistory } from "@/store/play-history";
@@ -30,16 +32,11 @@ import { useUser } from "@/store/user";
  * 3. **接口挂了不往界面上抛错误**，退化成"暂时没有新动态" —— 主页是门面，
  *    不该因为某个接口失败就变成一块报错板。
  */
-const GREETING_BOUNDS: Array<[number, string]> = [
-  [5, "夜深了"],
-  [9, "早上好"],
-  [12, "上午好"],
-  [14, "中午好"],
-  [18, "下午好"],
-  [24, "晚上好"],
-];
-
-const greetingOf = (hour: number) => GREETING_BOUNDS.find(([end]) => hour < end)?.[1] ?? "晚上好";
+/**
+ * 问候语：档位表在 `common/constants/greeting.ts`，这里只负责取词。
+ * 取词必须发生在渲染时 —— 表是模块顶层的，在那儿 `t()` 只会求值一次。
+ */
+const greetingOf = (hour: number) => t(greetingKeyOf(hour));
 
 const pad = (value: number) => String(value).padStart(2, "0");
 
@@ -93,8 +90,16 @@ const Home = () => {
   };
 
   const author = dynamicItem?.modules?.module_author;
-  const dynamicText = dynamicItem?.modules?.module_dynamic?.desc?.text ?? "";
-  const dynamicCover = dynamicItem?.modules?.module_dynamic?.major?.archive?.cover ?? "";
+  const dynamicModule = dynamicItem?.modules?.module_dynamic;
+  // 正文取文顺序要和动态页（pages/dynamic-feed/item.tsx）一致：
+  // 纯投稿类动态没有 desc.text，正文在 major 里；**绝不能兜底成 `type`**，
+  // 那会把 "DYNAMIC_TYPE_AV" 这种原始枚举直接显示给用户。
+  const dynamicText =
+    dynamicModule?.desc?.text ||
+    dynamicModule?.major?.opus?.summary?.text ||
+    dynamicModule?.major?.archive?.title ||
+    "";
+  const dynamicCover = dynamicModule?.major?.archive?.cover ?? "";
 
   return (
     <div className="flex h-full w-full flex-col items-center overflow-y-auto px-8 pt-[9vh] pb-10">
@@ -107,7 +112,7 @@ const Home = () => {
           {pad(now.getHours())}:{pad(now.getMinutes())}
           <span className="text-3xl opacity-60">:{pad(now.getSeconds())}</span>
         </div>
-        <div className="home-outlined-sm mt-3 text-sm">{moment(now).format("YYYY年M月D日 dddd")}</div>
+        <div className="home-outlined-sm mt-3 text-sm">{moment(now).format(t("YYYY年M月D日 dddd"))}</div>
       </div>
 
       <div
@@ -117,20 +122,20 @@ const Home = () => {
         {/* 最近播放（最多两首） */}
         <section className="flex min-w-[320px] flex-1 flex-col gap-2.5">
           <header className="flex items-center justify-between">
-            <span className="home-outlined text-sm">最近播放</span>
+            <span className="home-outlined text-sm">{t("最近播放")}</span>
             <button
               type="button"
               className="home-outlined-sm flex items-center gap-0.5 text-xs transition-opacity hover:opacity-70"
               onClick={() => void navigate("/play-history")}
             >
-              全部
+              {t("全部")}
               <RiArrowRightSLine size={14} />
             </button>
           </header>
 
           {recent.length === 0 ? (
             <div className="home-outlined-sm rounded-large border-default-200/40 flex h-[64px] items-center justify-center border border-dashed text-sm">
-              还没有播放记录
+              {t("还没有播放记录")}
             </div>
           ) : (
             recent.map(item => (
@@ -164,13 +169,13 @@ const Home = () => {
         {/* 最新动态（最多一条） */}
         <section className="flex w-full max-w-[380px] min-w-[320px] flex-col gap-2.5">
           <header className="flex items-center justify-between">
-            <span className="home-outlined text-sm">最新动态</span>
+            <span className="home-outlined text-sm">{t("最新动态")}</span>
             <button
               type="button"
               className="home-outlined-sm flex items-center gap-0.5 text-xs transition-opacity hover:opacity-70"
               onClick={() => void navigate("/dynamic-feed")}
             >
-              全部
+              {t("全部")}
               <RiArrowRightSLine size={14} />
             </button>
           </header>
@@ -179,7 +184,7 @@ const Home = () => {
             <Skeleton className="rounded-large h-[132px]" />
           ) : !dynamicItem ? (
             <div className="home-outlined-sm rounded-large border-default-200/40 flex h-[132px] items-center justify-center border border-dashed text-sm">
-              {isLogin ? "暂时没有新动态" : "登录后显示最新动态"}
+              {isLogin ? t("暂时没有新动态") : t("登录后显示最新动态")}
             </div>
           ) : (
             <button
@@ -204,7 +209,7 @@ const Home = () => {
                   dynamicCover ? "line-clamp-3" : "line-clamp-5",
                 )}
               >
-                {dynamicText || dynamicItem.type}
+                {dynamicText}
               </div>
 
               {dynamicCover ? (

@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 
 import { CollectionType } from "@/common/constants/collection";
+import { t } from "@/common/i18n";
 import { formatSecondsToDate } from "@/common/utils/time";
 import Image from "@/components/image";
 
@@ -30,7 +31,10 @@ const GridCard = memo(({ title, cover, type, createTime, mediaCount, onPress }: 
           />
           {/* Overlay */}
           <div className="absolute right-2 bottom-2 z-20 rounded-full bg-black/60 px-2 py-0.5 text-xs text-white backdrop-blur-sm">
-            <span>{`${type === CollectionType.VideoSeries ? "系列" : "合集"} · ${mediaCount ?? 0}个视频`}</span>
+            <span>
+              {`${type === CollectionType.VideoSeries ? t("系列") : t("合集")} · `}
+              {t("{0}个视频", mediaCount ?? 0)}
+            </span>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { ipcMain } from "electron";
 
 import { channel } from "../channel";
 import * as api from "./api";
+import * as together from "./together";
 
 export function registerNeteaseHandlers() {
   ipcMain.handle(channel.netease.getAccount, () => api.getAccount());
@@ -45,4 +46,35 @@ export function registerNeteaseHandlers() {
   ipcMain.handle(channel.netease.like, (_, id: number, like: boolean) => api.likeSong(id, like));
 
   ipcMain.handle(channel.netease.likedIds, () => api.getLikedIds());
+
+  ipcMain.handle(channel.netease.trackDetail, (_, ids: number[]) => api.getTrackDetail(ids));
+
+  // ---------------------------------------------------------------- 一起听
+  ipcMain.handle(channel.netease.togetherCreate, () => together.togetherCreate());
+
+  ipcMain.handle(channel.netease.togetherCheck, (_, roomId: string) => together.togetherCheck(roomId));
+
+  ipcMain.handle(channel.netease.togetherAccept, (_, roomId: string, inviterId: number) =>
+    together.togetherAccept(roomId, inviterId),
+  );
+
+  ipcMain.handle(channel.netease.togetherEnd, (_, roomId: string) => together.togetherEnd(roomId));
+
+  ipcMain.handle(channel.netease.togetherStatus, () => together.togetherStatus());
+
+  ipcMain.handle(channel.netease.togetherSnapshot, (_, roomId: string) => together.togetherSnapshot(roomId));
+
+  ipcMain.handle(channel.netease.togetherReportPlaylist, (_, roomId: string, songIds: number[]) =>
+    together.togetherReportPlaylist(roomId, songIds),
+  );
+
+  ipcMain.handle(channel.netease.togetherReportCommand, (_, args: NeteaseTogetherReportArgs) =>
+    together.togetherReportCommand(args),
+  );
+
+  ipcMain.handle(
+    channel.netease.togetherHeartbeat,
+    (_, roomId: string, songId: number, playing: boolean, progressMs: number) =>
+      together.togetherHeartbeat(roomId, songId, playing, progressMs),
+  );
 }

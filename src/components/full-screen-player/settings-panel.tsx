@@ -4,6 +4,7 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { Switch, RadioGroup, Radio } from "@heroui/react";
 import { useShallow } from "zustand/shallow";
 
+import { t } from "@/common/i18n";
 import { isHex } from "@/common/utils/color";
 import ColorPicker from "@/components/color-picker";
 import { useBackgroundImage } from "@/store/background-image";
@@ -144,7 +145,7 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
   return (
     <div className="min-w-[320px] space-y-4">
       <div className="flex items-center justify-between">
-        <div className="text-medium mr-6">显示歌词</div>
+        <div className="text-medium mr-6">{t("显示歌词")}</div>
         <Controller
           control={control}
           name="showLyrics"
@@ -153,7 +154,7 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
       </div>
       {values?.showLyrics && (
         <div className="flex items-center justify-between">
-          <div className="text-medium mr-6">歌词字体颜色</div>
+          <div className="text-medium mr-6">{t("歌词字体颜色")}</div>
           <Controller
             control={control}
             name="lyricsColor"
@@ -180,7 +181,7 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
 
       {values?.showLyrics && (
         <div className="flex items-center justify-between">
-          <div className="text-medium mr-6">歌词横向</div>
+          <div className="text-medium mr-6">{t("歌词横向")}</div>
           <Controller
             control={control}
             name="lyricsPositionH"
@@ -188,13 +189,13 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
               <RadioGroup
                 orientation="horizontal"
                 size="sm"
-                aria-label="歌词横向位置"
+                aria-label={t("歌词横向位置")}
                 value={field.value}
                 onValueChange={field.onChange}
               >
-                <Radio value="left">靠左</Radio>
-                <Radio value="center">居中</Radio>
-                <Radio value="right">靠右</Radio>
+                <Radio value="left">{t("靠左")}</Radio>
+                <Radio value="center">{t("居中")}</Radio>
+                <Radio value="right">{t("靠右")}</Radio>
               </RadioGroup>
             )}
           />
@@ -202,12 +203,12 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
       )}
 
       {values?.showLyrics && values?.lyricsPositionH === "center" && values?.showCover && (
-        <div className="text-default-500 text-right text-xs">歌词居中时铺满整屏，「显示封面」会暂时不占位</div>
+        <div className="text-default-500 text-right text-xs">{t("歌词居中时铺满整屏，「显示封面」会暂时不占位")}</div>
       )}
 
       {values?.showLyrics && (
         <div className="flex items-center justify-between">
-          <div className="text-medium mr-6">歌词纵向</div>
+          <div className="text-medium mr-6">{t("歌词纵向")}</div>
           <Controller
             control={control}
             name="lyricsPositionV"
@@ -215,13 +216,13 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
               <RadioGroup
                 orientation="horizontal"
                 size="sm"
-                aria-label="歌词纵向位置"
+                aria-label={t("歌词纵向位置")}
                 value={field.value}
                 onValueChange={field.onChange}
               >
-                <Radio value="top">靠上</Radio>
-                <Radio value="center">居中</Radio>
-                <Radio value="bottom">靠下</Radio>
+                <Radio value="top">{t("靠上")}</Radio>
+                <Radio value="center">{t("居中")}</Radio>
+                <Radio value="bottom">{t("靠下")}</Radio>
               </RadioGroup>
             )}
           />
@@ -229,7 +230,7 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
       )}
 
       <div className="flex items-center justify-between">
-        <div className="text-medium mr-6">显示频谱图</div>
+        <div className="text-medium mr-6">{t("显示频谱图")}</div>
         <Controller
           control={control}
           name="showSpectrum"
@@ -238,7 +239,7 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
       </div>
       {values?.showSpectrum && (
         <div className="flex items-center justify-between">
-          <div className="text-medium mr-6">频谱图颜色</div>
+          <div className="text-medium mr-6">{t("频谱图颜色")}</div>
           <Controller
             control={control}
             name="spectrumColor"
@@ -264,7 +265,7 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
       )}
 
       <div className="flex items-center justify-between">
-        <div className="text-medium mr-6">显示封面</div>
+        <div className="text-medium mr-6">{t("显示封面")}</div>
         <Controller
           control={control}
           name="showCover"
@@ -275,7 +276,7 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="text-medium mr-6">背景</div>
+        <div className="text-medium mr-6">{t("背景")}</div>
         <Controller
           control={control}
           name="backgroundMode"
@@ -285,25 +286,25 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
               size="sm"
               value={field.value}
               onValueChange={field.onChange}
-              aria-label="全屏播放器背景"
+              aria-label={t("全屏播放器背景")}
             >
-              <Radio value="blur">虚化封面</Radio>
+              <Radio value="blur">{t("虚化封面")}</Radio>
               <Radio value="custom" isDisabled={!customBackgroundUrl}>
-                自定义背景
+                {t("自定义背景")}
               </Radio>
-              <Radio value="color">纯色</Radio>
+              <Radio value="color">{t("纯色")}</Radio>
             </RadioGroup>
           )}
         />
       </div>
       {values?.backgroundMode === "custom" && !customBackgroundUrl && (
         <div className="text-default-500 text-right text-xs">
-          还没有设置自定义背景图，去「设置 → 常规设置 → 背景」里选一张
+          {t("还没有设置自定义背景图，去「设置 → 常规设置 → 背景」里选一张")}
         </div>
       )}
       {values?.backgroundMode === "color" && (
         <div className="flex items-center justify-between">
-          <div className="text-medium mr-6">背景颜色</div>
+          <div className="text-medium mr-6">{t("背景颜色")}</div>
           <Controller
             control={control}
             name="backgroundColor"
@@ -327,7 +328,7 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
       )}
       {values?.backgroundMode === "custom" && customBackgroundUrl && (
         <div className="text-default-500 text-right text-xs">
-          背景图的模糊与压暗跟随「设置 → 常规设置 → 背景」里的参数
+          {t("背景图的模糊与压暗跟随「设置 → 常规设置 → 背景」里的参数")}
         </div>
       )}
     </div>

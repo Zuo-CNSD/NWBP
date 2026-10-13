@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import { RiClosedCaptioningLine, RiClosedCaptioningFill } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
+
 import IconButton from "../icon-button";
 
 /**
@@ -45,8 +47,8 @@ const DesktopLyricsButton = () => {
 
   return (
     <IconButton
-      title={enabled ? "关闭桌面歌词" : "开启桌面歌词"}
-      tooltip={enabled ? "关闭桌面歌词" : "桌面歌词"}
+      title={enabled ? t("关闭桌面歌词") : t("开启桌面歌词")}
+      tooltip={enabled ? t("关闭桌面歌词") : t("桌面歌词")}
       onPress={toggle}
       className={enabled ? "text-primary" : undefined}
     >

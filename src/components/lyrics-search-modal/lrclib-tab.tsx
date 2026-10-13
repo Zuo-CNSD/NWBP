@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 
 import { Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, addToast } from "@heroui/react";
 
+import { t } from "@/common/i18n";
 import { formatDuration } from "@/common/utils/time";
 
 import type { AdoptLyricsHandler } from "./netease-tab";
@@ -27,7 +28,7 @@ const LrclibTab = ({ songs, loading, onAdoptLyrics }: LrclibTabProps) => {
   const handleSelect = useCallback((item: SearchSongByLrclibResponse) => {
     const text = item.syncedLyrics?.trim() || "";
     if (!text) {
-      addToast({ title: "未找到歌词内容", color: "warning" });
+      addToast({ title: t("未找到歌词内容"), color: "warning" });
       return;
     }
 
@@ -48,7 +49,7 @@ const LrclibTab = ({ songs, loading, onAdoptLyrics }: LrclibTabProps) => {
     <div className="h-[340px] overflow-auto">
       {loading ? (
         <div className="flex h-full items-center justify-center">
-          <Spinner color="primary" label="加载中" />
+          <Spinner color="primary" label={t("加载中")} />
         </div>
       ) : (
         <Table
@@ -64,12 +65,12 @@ const LrclibTab = ({ songs, loading, onAdoptLyrics }: LrclibTabProps) => {
           }}
         >
           <TableHeader>
-            <TableColumn width={200}>歌曲</TableColumn>
-            <TableColumn>专辑</TableColumn>
-            <TableColumn width={200}>歌手</TableColumn>
-            <TableColumn width={90}>时长</TableColumn>
+            <TableColumn width={200}>{t("歌曲")}</TableColumn>
+            <TableColumn>{t("专辑")}</TableColumn>
+            <TableColumn width={200}>{t("歌手")}</TableColumn>
+            <TableColumn width={90}>{t("时长")}</TableColumn>
           </TableHeader>
-          <TableBody emptyContent="暂无数据" items={songs}>
+          <TableBody emptyContent={t("暂无数据")} items={songs}>
             {item => (
               <TableRow key={item.id} onClick={() => handleSelect(item)} className="cursor-pointer">
                 <TableCell>{item.trackName || item.name || "--"}</TableCell>

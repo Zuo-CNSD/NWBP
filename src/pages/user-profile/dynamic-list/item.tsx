@@ -16,6 +16,7 @@ import moment from "moment";
 
 import type { WebDynamicItem } from "@/service/web-dynamic";
 
+import { t } from "@/common/i18n";
 import { formatNumber } from "@/common/utils/number";
 import { openBiliVideoLink } from "@/common/utils/url";
 import IconButton from "@/components/icon-button";
@@ -114,7 +115,7 @@ const DynamicItem = ({ item }: DynamicItemProps) => {
             onPress={handleThumb}
           >
             {isLike ? <RiThumbUpFill size={18} /> : <RiThumbUpLine size={18} />}
-            <span>{likeCount > 0 ? formatNumber(likeCount) : "点赞"}</span>
+            <span>{likeCount > 0 ? formatNumber(likeCount) : t("点赞")}</span>
           </Button>
           <Dropdown>
             <DropdownTrigger>
@@ -123,11 +124,11 @@ const DynamicItem = ({ item }: DynamicItemProps) => {
               </IconButton>
             </DropdownTrigger>
             <DropdownMenu
-              aria-label="用户动态操作"
+              aria-label={t("用户动态操作")}
               items={[
                 {
                   key: "open",
-                  label: "打开B站链接",
+                  label: t("打开B站链接"),
                   icon: <RiExternalLinkLine size={18} />,
                   onPress: () => {
                     if (!archive) return;
@@ -184,7 +185,7 @@ const DynamicItem = ({ item }: DynamicItemProps) => {
                   </h3>
                   <div className="text-default-500 line-clamp-1 text-xs">{archive.desc || ""}</div>
                 </div>
-                <span className="text-default-400 mt-1 text-xs">{archive.stat?.play || 0}观看</span>
+                <span className="text-default-400 mt-1 text-xs">{t("{0}观看", archive.stat?.play || 0)}</span>
               </div>
             </div>
           </div>

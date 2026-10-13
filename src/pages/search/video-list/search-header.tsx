@@ -5,6 +5,7 @@ import { RiPlayFill } from "@remixicon/react";
 
 import type { WebSearchTypeVideoParams } from "@/service/web-interface-search-type";
 
+import { t } from "@/common/i18n";
 import AsyncButton from "@/components/async-button";
 
 export type SortOrder = WebSearchTypeVideoParams["order"];
@@ -18,12 +19,12 @@ interface SearchHeaderProps {
   playAllDisabled?: boolean;
 }
 
-const sortOptions: { label: string; value: SortOrder }[] = [
-  { label: "综合排序", value: "totalrank" },
-  { label: "最多播放", value: "click" },
-  { label: "最新发布", value: "pubdate" },
-  { label: "最多弹幕", value: "dm" },
-  { label: "最多收藏", value: "stow" },
+const getSortOptions = (): { label: string; value: SortOrder }[] => [
+  { label: t("综合排序"), value: "totalrank" },
+  { label: t("最多播放"), value: "click" },
+  { label: t("最新发布"), value: "pubdate" },
+  { label: t("最多弹幕"), value: "dm" },
+  { label: t("最多收藏"), value: "stow" },
 ];
 
 export default function SearchHeader({
@@ -46,7 +47,7 @@ export default function SearchHeader({
         selectedKey={order}
         onSelectionChange={key => onOrderChange(key as SortOrder)}
       >
-        {sortOptions.map(option => (
+        {getSortOptions().map(option => (
           <Tab key={option.value} title={option.label} />
         ))}
       </Tabs>
@@ -60,10 +61,10 @@ export default function SearchHeader({
           onPress={onPlayAll}
           className="dark:text-black"
         >
-          全部播放
+          {t("全部播放")}
         </AsyncButton>
         <Switch isSelected={musicOnly} onValueChange={onMusicOnlyChange} size="sm">
-          仅音乐分区
+          {t("仅音乐分区")}
         </Switch>
       </div>
     </div>

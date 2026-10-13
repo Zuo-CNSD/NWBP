@@ -2,6 +2,7 @@ import React from "react";
 
 import type { FavMedia } from "@/service/fav-resource";
 
+import { t } from "@/common/i18n";
 import { formatSecondsToDate } from "@/common/utils/time";
 import MusicListItem from "@/components/music-list-item";
 import MusicListHeader from "@/components/music-list-item/header";
@@ -36,7 +37,7 @@ const FavoriteList: React.FC<FavoriteListProps> = ({
 
   return (
     <div className="w-full">
-      <MusicListHeader timeTitle="收藏时间" />
+      <MusicListHeader timeTitle={t("收藏时间")} />
       <VirtualPageList
         items={items}
         hasMore={hasMore}

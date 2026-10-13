@@ -1,7 +1,8 @@
 import React from "react";
 import { type Control, Controller } from "react-hook-form";
 
-import { DefaultMenuList, NeteaseMenuList } from "@/common/constants/menus";
+import { getDefaultMenuList, getNeteaseMenuList } from "@/common/constants/menus";
+import { t } from "@/common/i18n";
 import SelectAllCheckboxGroup from "@/components/select-all-checkbox-group";
 import { useFavoritesStore } from "@/store/favorite";
 import { useNetease } from "@/store/netease";
@@ -19,16 +20,18 @@ const MenuSettings: React.FC<MenuSettingsProps> = ({ control }) => {
 
   return (
     <div className="space-y-6">
-      <h2>设置侧边菜单项显示和隐藏</h2>
+      <h2>{t("设置侧边菜单项显示和隐藏")}</h2>
       <div className="w-full space-y-8">
         <div className="flex w-full items-start space-x-[100px]">
-          <div className="text-medium font-medium">系统默认菜单</div>
+          <div className="text-medium font-medium">{t("系统默认菜单")}</div>
           <div className="max-w-[480px]">
             <Controller
               control={control}
               name="hiddenMenuKeys"
               render={({ field }) => {
-                const groupKeys = DefaultMenuList.filter(i => i.href).map(i => i.href!);
+                const groupKeys = getDefaultMenuList()
+                  .filter(i => i.href)
+                  .map(i => i.href!);
                 const selectedKeys = groupKeys.filter(k => !field.value.includes(k));
 
                 const handleSelectionChange = (newSelectedKeys: string[]) => {
@@ -38,14 +41,16 @@ const MenuSettings: React.FC<MenuSettingsProps> = ({ control }) => {
                   field.onChange(nextHidden);
                 };
 
-                const items = DefaultMenuList.filter(i => (user?.isLogin ? true : !i.needLogin)).map(item => ({
-                  value: item.href!,
-                  label: item.title,
-                }));
+                const items = getDefaultMenuList()
+                  .filter(i => (user?.isLogin ? true : !i.needLogin))
+                  .map(item => ({
+                    value: item.href!,
+                    label: item.title,
+                  }));
 
                 return (
                   <SelectAllCheckboxGroup
-                    groupName="系统默认菜单"
+                    groupName={t("系统默认菜单")}
                     groupKeys={groupKeys}
                     selectedKeys={selectedKeys}
                     onSelectionChange={handleSelectionChange}
@@ -59,13 +64,15 @@ const MenuSettings: React.FC<MenuSettingsProps> = ({ control }) => {
 
         {/* 网易云分组：和上面那组共用同一个 hiddenMenuKeys，各管各的 key */}
         <div className="flex w-full items-start space-x-[100px]">
-          <div className="text-medium font-medium">网易云</div>
+          <div className="text-medium font-medium">{t("网易云")}</div>
           <div className="max-w-[480px]">
             <Controller
               control={control}
               name="hiddenMenuKeys"
               render={({ field }) => {
-                const groupKeys = NeteaseMenuList.filter(i => i.href).map(i => i.href!);
+                const groupKeys = getNeteaseMenuList()
+                  .filter(i => i.href)
+                  .map(i => i.href!);
                 const selectedKeys = groupKeys.filter(k => !field.value.includes(k));
 
                 const handleSelectionChange = (newSelectedKeys: string[]) => {
@@ -75,14 +82,16 @@ const MenuSettings: React.FC<MenuSettingsProps> = ({ control }) => {
                   field.onChange(Array.from(new Set([...outsideHidden, ...hiddenInGroup])));
                 };
 
-                const items = NeteaseMenuList.filter(i => (neteaseLoggedIn ? true : !i.needLogin)).map(item => ({
-                  value: item.href!,
-                  label: item.title,
-                }));
+                const items = getNeteaseMenuList()
+                  .filter(i => (neteaseLoggedIn ? true : !i.needLogin))
+                  .map(item => ({
+                    value: item.href!,
+                    label: item.title,
+                  }));
 
                 return (
                   <SelectAllCheckboxGroup
-                    groupName="网易云"
+                    groupName={t("网易云")}
                     groupKeys={groupKeys}
                     selectedKeys={selectedKeys}
                     onSelectionChange={handleSelectionChange}
@@ -97,7 +106,7 @@ const MenuSettings: React.FC<MenuSettingsProps> = ({ control }) => {
         {user?.isLogin && (
           <>
             <div className="flex w-full items-start space-x-[100px]">
-              <div className="text-medium font-medium">个人创建菜单</div>
+              <div className="text-medium font-medium">{t("个人创建菜单")}</div>
               <div className="max-w-[480px]">
                 <Controller
                   control={control}
@@ -121,7 +130,7 @@ const MenuSettings: React.FC<MenuSettingsProps> = ({ control }) => {
 
                     return (
                       <SelectAllCheckboxGroup
-                        groupName="个人创建菜单"
+                        groupName={t("个人创建菜单")}
                         groupKeys={groupKeys}
                         selectedKeys={selectedKeys}
                         onSelectionChange={handleSelectionChange}
@@ -134,7 +143,7 @@ const MenuSettings: React.FC<MenuSettingsProps> = ({ control }) => {
               </div>
             </div>
             <div className="flex w-full items-start space-x-[100px]">
-              <div className="text-medium font-medium">个人收藏菜单</div>
+              <div className="text-medium font-medium">{t("个人收藏菜单")}</div>
               <div className="max-w-[480px]">
                 <Controller
                   control={control}
@@ -158,7 +167,7 @@ const MenuSettings: React.FC<MenuSettingsProps> = ({ control }) => {
 
                     return (
                       <SelectAllCheckboxGroup
-                        groupName="个人收藏菜单"
+                        groupName={t("个人收藏菜单")}
                         groupKeys={groupKeys}
                         selectedKeys={selectedKeys}
                         onSelectionChange={handleSelectionChange}

@@ -4,6 +4,8 @@ import { Image as HeroImage } from "@heroui/react";
 import { RiEdit2Line } from "@remixicon/react";
 import { twMerge } from "tailwind-merge";
 
+import { t } from "@/common/i18n";
+
 import CropModal from "./crop-modal";
 
 export interface ImageUploadProps {
@@ -80,14 +82,14 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setError(null);
 
     if (!file.type.startsWith("image/") || !["image/jpeg", "image/png"].includes(file.type)) {
-      setError("仅支持 jpeg 或 png 格式的图片");
+      setError(t("仅支持 jpeg 或 png 格式的图片"));
       event.target.value = "";
       return;
     }
 
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
-      setError("图片大小需小于等于 5MB");
+      setError(t("图片大小需小于等于 5MB"));
       event.target.value = "";
       return;
     }
@@ -145,18 +147,18 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               className="rounded-medium h-full w-full object-cover"
             />
           ) : (
-            <span className="text-sm">点击上传图片</span>
+            <span className="text-sm">{t("点击上传图片")}</span>
           )}
           {previewUrl && !disabled && (
             <div className="rounded-medium absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100">
               <div className="flex flex-col items-center gap-2">
                 <RiEdit2Line size={28} />
-                <span className="text-sm">选择照片</span>
+                <span className="text-sm">{t("选择照片")}</span>
               </div>
             </div>
           )}
         </div>
-        <span className="text-tiny text-default-400">建议上传高清封面≥960×600，jpeg或png格式，图片≤5MB</span>
+        <span className="text-tiny text-default-400">{t("建议上传高清封面≥960×600，jpeg或png格式，图片≤5MB")}</span>
       </div>
 
       <input
