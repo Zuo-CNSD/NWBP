@@ -104,9 +104,26 @@ const scaleAlpha = (base: number, k: number) => Math.min(0.98, Math.max(0.02, ba
 export const GLASS_VARIABLES = [
   "--glass-blur",
   "--glass-saturate",
-  "--glass-rim",
-  "--glass-specular",
+  "--glass-brightness",
+  "--glass-contrast",
+  "--glass-edge-top",
+  "--glass-edge-side",
+  "--glass-edge-warm",
+  "--glass-edge-dark",
+  "--glass-edge-top-a",
+  "--glass-edge-side-a",
+  "--glass-edge-warm-a",
+  "--glass-edge-dark-a",
+  "--glass-hairline",
+  "--glass-hairline-a",
   "--glass-shadow",
+  "--glass-caustic-a",
+  "--glass-ambient-a",
+  "--glass-sheen-a",
+  "--glass-veil-top-a",
+  "--glass-veil-bottom-a",
+  "--glass-veil-ambient-a",
+  "--glass-sweep-a",
   "--glass-tint-a",
   "--glass-tint-b",
   "--glass-tint-c",
@@ -120,6 +137,67 @@ export const GLASS_VARIABLES = [
   "--glass-alpha-t1",
   "--glass-alpha-t2",
 ] as const;
+
+/**
+ * 玻璃的"边缘光"参数。
+ *
+ * 这一组数字的参照物是透镜 Lens 的 thick 材质（折射 .90 / 雾化 .24 / 色散 .65）。
+ * 它把「厚度」拆成四件事，我们按 CSS 能表达的逐个对应：
+ *   ① 一条 1px 的锐利边线，亮度**跟着光的方向**走 —— 正对光的一侧最亮，
+ *      背光一侧只有它的 52%（`opposite = directional * .52`）；
+ *   ② 紧贴边线往内的一条柔光（`innerEdge`，距边 3~4px）；
+ *   ③ 边缘内侧 3px 处的焦散带（`caustic`，光被玻璃聚回来的那圈）；
+ *   ④ 背光侧的边缘遮蔽（`-pow(edge,8) * dot(n2, vec2(.45,-.89))`），
+ *      方向是右下 —— 也就是「下缘比上缘暗」。
+ *
+ * 光从左上来（参考里 `vec2(-80., 150.)` 那个偏移，y 轴朝上）。
+ * 深色模式整体按一个比例压下去：面板本身是暗的，白边按浅色那组值会亮得发假。
+ */
+const EDGE_LIGHT = {
+  top: { color: "0 0% 100%", alpha: 0.95 },
+  side: { color: "0 0% 100%", alpha: 0.55 },
+  // 右边留一点暖色：真实玻璃的色散在背光侧偏暖（R 通道外扩）
+  warm: { color: "24 100% 86%", alpha: 0.3 },
+  dark: { color: "220 30% 20%", alpha: 0.07 },
+  /*
+   * 浅色下白边在浅背景上是"物理上"看不见的（对比度摆在那里），
+   * 所以面板边界主要靠这条**暗描边**撑起来 —— 0.14 时几乎不可见，
+   * 面板和背景糊成一片，这是"不像玻璃"的一大来源。
+   */
+  hairline: { color: "230 25% 30%", alpha: 0.2 },
+  shadow: "213 55% 23%",
+  caustic: 0.55,
+  ambient: 0.34,
+  sheen: 0.1,
+  veilTop: 0.4,
+  veilBottom: 0.14,
+  veilAmbient: 0.16,
+  sweep: 1,
+} as const;
+
+const EDGE_DARK = {
+  /*
+   * 深色下的边缘光原来只有 0.28 / 0.15 —— 2/3 的亮度都给了上边，
+   * 结果是暗面板**几乎看不到轮廓**，整块界面糊成一片深灰，
+   * 这正是"不像玻璃"的主因（玻璃之所以像玻璃，靠的就是那圈边）。
+   * 下面这几个值往苹果深色玻璃的方向抬了一档，边线在暗背景上要能看出一条亮痕。
+   */
+  top: { color: "0 0% 100%", alpha: 0.45 },
+  side: { color: "0 0% 100%", alpha: 0.26 },
+  warm: { color: "24 100% 80%", alpha: 0.14 },
+  // 深色模式的下缘遮蔽要更重：暗面板之间的分界本来就靠它
+  dark: { color: "220 40% 8%", alpha: 0.3 },
+  // 深色面板外描边改用一点点白：暗色背景上暗线是看不见的
+  hairline: { color: "0 0% 100%", alpha: 0.18 },
+  shadow: "213 60% 8%",
+  caustic: 0.24,
+  ambient: 0.14,
+  sheen: 0.06,
+  veilTop: 0.24,
+  veilBottom: 0.06,
+  veilAmbient: 0.07,
+  sweep: 0.52,
+} as const;
 
 /**
  * 把主色转成 HSL 通道串，失败时退回 HeroUI 默认绿
@@ -158,15 +236,25 @@ export const applyGlassTheme = (style: CSSStyleDeclaration, options: GlassOption
     return { active: false, tints: [] };
   }
 
-  // 模糊量刻意压小：毛玻璃是"糊掉背景"，液态玻璃是"让背景透过来"
-  style.setProperty("--glass-blur", "8px");
   /*
-   * 透过玻璃看到的背景不该"抢戏"：适度降饱和 + 轻微提亮，
-   * 而不是拉高饱和 —— 拉高会让背景比前景还鲜艳，文字就读不清了。
+   * 模糊量刻意压小。原来的 8px 是"毛玻璃"那一档的量级 ——
+   * 参考材质的 thick 档雾化值是 .24，落到实际采样半径只有约 2.4px，
+   * 也就是说**真正厚的玻璃反而糊得很少**：它靠边缘的折射（SVG 滤镜那层）
+   * 和边线的高光表达厚度，不靠把背景磨平。背景被糊掉之后，
+   * 前面那些边光、色散、焦散就都白做了。
    */
-  style.setProperty("--glass-saturate", isDark ? "135%" : "150%");
-  style.setProperty("--glass-brightness", isDark ? "1" : "1.03");
-  style.setProperty("--glass-contrast", isDark ? "1.04" : "1.02");
+  style.setProperty("--glass-blur", "6px");
+  /*
+   * 透过玻璃看到的背景不该"抢戏"。
+   *
+   * 原来是 150% —— 比背景本身还鲜艳，等于让背景盖过前景文字。
+   * 参考里的做法相反：只做 3.5% 的提饱和（着色器里 `mix(luma, c, 1.035)`），
+   * 因为它另外用折射采样真实环境来表达"玻璃感"。
+   * 我们没有那层折射采样，所以留一点点提饱和把模糊带来的发灰压回去，但远不到"增强"的程度。
+   */
+  style.setProperty("--glass-saturate", isDark ? "112%" : "118%");
+  style.setProperty("--glass-brightness", isDark ? "1" : "1.02");
+  style.setProperty("--glass-contrast", isDark ? "1.02" : "1.01");
 
   // 用户拖动的「玻璃透明度」在这里统一缩放所有面板透明度
   const k = opacityScale(glassOpacity);
@@ -183,15 +271,25 @@ export const applyGlassTheme = (style: CSSStyleDeclaration, options: GlassOption
   style.setProperty("--glass-alpha-t1", String(scaleAlpha(base.t1, k)));
   style.setProperty("--glass-alpha-t2", String(scaleAlpha(base.t2, k)));
 
-  if (isDark) {
-    style.setProperty("--glass-rim", "0 0% 100% / 0.16");
-    style.setProperty("--glass-specular", "0 0% 100% / 0.24");
-    style.setProperty("--glass-shadow", "0 0% 0% / 0.5");
-  } else {
-    style.setProperty("--glass-rim", "0 0% 100% / 0.7");
-    style.setProperty("--glass-specular", "0 0% 100% / 0.92");
-    style.setProperty("--glass-shadow", "240 24% 42% / 0.18");
-  }
+  const edge = isDark ? EDGE_DARK : EDGE_LIGHT;
+  style.setProperty("--glass-edge-top", edge.top.color);
+  style.setProperty("--glass-edge-side", edge.side.color);
+  style.setProperty("--glass-edge-warm", edge.warm.color);
+  style.setProperty("--glass-edge-dark", edge.dark.color);
+  style.setProperty("--glass-edge-top-a", String(edge.top.alpha));
+  style.setProperty("--glass-edge-side-a", String(edge.side.alpha));
+  style.setProperty("--glass-edge-warm-a", String(edge.warm.alpha));
+  style.setProperty("--glass-edge-dark-a", String(edge.dark.alpha));
+  style.setProperty("--glass-hairline", edge.hairline.color);
+  style.setProperty("--glass-hairline-a", String(edge.hairline.alpha));
+  style.setProperty("--glass-shadow", edge.shadow);
+  style.setProperty("--glass-caustic-a", String(edge.caustic));
+  style.setProperty("--glass-ambient-a", String(edge.ambient));
+  style.setProperty("--glass-sheen-a", String(edge.sheen));
+  style.setProperty("--glass-veil-top-a", String(edge.veilTop));
+  style.setProperty("--glass-veil-bottom-a", String(edge.veilBottom));
+  style.setProperty("--glass-veil-ambient-a", String(edge.veilAmbient));
+  style.setProperty("--glass-sweep-a", String(edge.sweep));
 
   // 壁纸色带：主色 + 左右各偏移，形成流动的彩色雾
   const [huePart, satPart] = safePrimary(primaryColor).split(" ");

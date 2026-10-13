@@ -9,20 +9,72 @@
   <body class="bg-background text-foreground">
     <div id="root"></div>
     <!--
-      液态玻璃的"折射"滤镜：用湍流噪声驱动位移贴图，把面板背后的内容轻微扭曲。
+      液态玻璃的"折射"滤镜：让面板背后的内容像真玻璃一样被弯折。
       这是"液态玻璃"和普通毛玻璃最本质的区别 ——
       毛玻璃只是把背景糊掉（奶白一片），液态玻璃是让背景透过并被玻璃弯折。
       backdrop-filter: url(#glass-refraction) 在 Chromium 里可用（已在 Electron 38 验证）。
+
+      ⚠️ 这里是**径向**位移场，不是噪声。
+      ------------------------------------------------------------------------
+      第一版用 feTurbulence 噪声直接驱动 feDisplacementMap，结果是「整块面板都在抖」——
+      背景纹理被搅成波浪，像隔着一层水面看东西，而不是透过一块有厚度的玻璃看。
+      参考材质（透镜 Lens）的着色器是 `edge = 1 + d/bevel`：**位移只发生在贴边那一圈，
+      玻璃中央几乎不动**。feDisplacementMap 的 scale 是个常量，做不到"边缘强中心无"，
+      所以这里手动造一个只在边缘有值的位移贴图：
+
+        1. 先用 feFlood 铺一层 0.5 灰（= 不位移）打底，这正是玻璃中央要的值；
+        2. 四条边各铺一条纯白/纯黑窄带，用 feComposite@over 盖在灰底上；
+           R 通道：左缘 1（向右位移 = 向心）、右缘 0（向左位移 = 向心）
+           G 通道：上缘 1、下缘 0 —— 四边都朝中心收，才是凸透镜；
+        3. feGaussianBlur 把硬边窄带糊成渐变，得到"贴边最强、往里衰减"的场。
+
+      feFlood 的百分比是相对 **filter region**（-20%/140%）的，不是元素本身：
+      元素左边缘落在 region 的 14.3% 处，所以窄带从 14.3% 起、宽 5.7%（≈ 元素宽度的 8%）。
+      改这里的数字时记住这个换算，否则窄带会跑到面板外面去。
+
+      另注：壁纸层自带 filter: blur(30px)（见 app.css），所以**默认壁纸下看不出折射** ——
+      那层本来就被糊成了柔和色块，没有可弯折的纹理。折射是给"自定义背景图"和
+      内容密集的页面上生效的；默认外观下的"玻璃感"主要靠 app.css 里那套边缘光。
     -->
     <svg aria-hidden="true" focusable="false" width="0" height="0" style="position: absolute; pointer-events: none">
       <defs>
         <filter id="glass-refraction" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-          <feTurbulence type="fractalNoise" baseFrequency="0.012 0.016" numOctaves="2" seed="11" result="noise" />
-          <feGaussianBlur in="noise" stdDeviation="1.6" result="softNoise" />
+          <!-- X 方向场：左缘向右、右缘向左，中间大片平坦在 0.5（不位移） -->
+          <feFlood flood-color="#808080" x="0%" y="0%" width="100%" height="100%" result="xBase" />
+          <feFlood flood-color="#ffffff" x="14.3%" y="14.3%" width="5.7%" height="71.4%" result="xLeft" />
+          <feFlood flood-color="#000000" x="80%" y="14.3%" width="5.7%" height="71.4%" result="xRight" />
+          <feComposite in="xLeft" in2="xBase" operator="over" result="x1" />
+          <feComposite in="xRight" in2="x1" operator="over" result="x2" />
+          <feGaussianBlur in="x2" stdDeviation="22" result="xSoft" />
+          <!-- 只保留 R 通道，alpha 强制回 1 -->
+          <feColorMatrix
+            in="xSoft"
+            type="matrix"
+            values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1"
+            result="xField"
+          />
+
+          <!-- Y 方向场：上缘向下、下缘向上 -->
+          <feFlood flood-color="#808080" x="0%" y="0%" width="100%" height="100%" result="yBase" />
+          <feFlood flood-color="#ffffff" x="14.3%" y="14.3%" width="71.4%" height="5.7%" result="yTop" />
+          <feFlood flood-color="#000000" x="14.3%" y="80%" width="71.4%" height="5.7%" result="yBottom" />
+          <feComposite in="yTop" in2="yBase" operator="over" result="y1" />
+          <feComposite in="yBottom" in2="y1" operator="over" result="y2" />
+          <feGaussianBlur in="y2" stdDeviation="22" result="ySoft" />
+          <!-- 只保留 G 通道 -->
+          <feColorMatrix
+            in="ySoft"
+            type="matrix"
+            values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 0 1"
+            result="yField"
+          />
+
+          <!-- R 来自横向场、G 来自纵向场，相加即得位移贴图 -->
+          <feComposite in="xField" in2="yField" operator="arithmetic" k2="1" k3="1" result="field" />
           <feDisplacementMap
             in="SourceGraphic"
-            in2="softNoise"
-            scale="34"
+            in2="field"
+            scale="44"
             xChannelSelector="R"
             yChannelSelector="G"
           />

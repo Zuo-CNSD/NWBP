@@ -69,9 +69,36 @@ body {
   overflow: hidden;
 }
 
+/*
+ * 弹层（遮罩 + 外壳）必须自己带窗口圆角 —— 这是「方块的直角顶出了圆角」的真正来源。
+ * --------------------------------------------------------------------------
+ * 上面那段把圆角放在 body 上，本意是想连 HeroUI 的 portal 弹层一起裁掉。
+ * 但那条思路对 **position: fixed** 的浮层是无效的：fixed 元素的包含块是**视口**，
+ * 不是 body，所以 body 的 border-radius / overflow: hidden 根本裁不到它。
+ *
+ * HeroUI 的 Modal 遮罩（@heroui/theme 的 modal.backdrop）在 backdrop 为
+ * opaque / blur 时就是 `w-screen h-screen fixed inset-0`，一旦打开就铺满整个视口；
+ * 因为它不受任何裁剪，窗口的四个圆角会被这层矩形**补齐成直角**。
+ * （Popover 的遮罩同理：`block w-full h-full fixed inset-0 -z-30`，
+ *   只是本项目里弹层大多用默认的 backdrop="transparent"，所以不出现。）
+ *
+ * 让遮罩自己带上同一套窗口圆角即可，四角重新变回透明。
+ *
+ * 外壳（wrapper）也一起给：它同样是 `w-screen h-[100dvh] fixed inset-0`，
+ * 而且带 overflow 滚动容器（正常态 overflow-x-auto、scrollBehavior="inside" 时
+ * overflow-y-hidden），本身就具备裁剪能力 —— 补上圆角后，
+ * 贴窗口边缘的抽屉面板（如播放列表 Drawer）也不会盖住窗口圆角。
+ */
+[data-slot='backdrop'],
+[data-slot='wrapper'] {
+  border-radius: var(--window-radius);
+}
+
 /* 最大化时保留圆角（与 macOS 原生窗口一致），全屏时收掉，否则四角会露出桌面 */
 html.window-fullscreen body,
-html.window-fullscreen .app-shell {
+html.window-fullscreen .app-shell,
+html.window-fullscreen [data-slot='backdrop'],
+html.window-fullscreen [data-slot='wrapper'] {
   border-radius: 0;
 }
 
@@ -189,14 +216,50 @@ html, body, #root {
    ========================================================================== */
 
 :root {
-  --glass-blur: 8px;
-  --glass-saturate: 150%;
-  --glass-brightness: 1.04;
-  --glass-contrast: 1.02;
-  --glass-rim: 0 0% 100% / 0.9;
-  --glass-specular: 0 0% 100% / 1;
-  --glass-hairline: 230 25% 35% / 0.14;
-  --glass-shadow: 240 24% 42% / 0.26;
+  /* 这些兜底值会被 glass.ts 覆盖；颜色变量一律只存「通道」，透明度写在用它的地方
+     （CSS Color 4 的 hsl() 只接受一个斜杠，`hsl(var(--x) / .5)` 里 --x 再带一个斜杠
+      会整条声明作废 —— 颜色变量保持纯通道能彻底避免这种坑）。 */
+  --glass-blur: 6px;
+  --glass-saturate: 118%;
+  --glass-brightness: 1.02;
+  --glass-contrast: 1.01;
+
+  /*
+   * 玻璃的"厚度"用四条边分别表达，而不是一圈均匀的白边。
+   *
+   * 参考材质（透镜 Lens，thick 档：折射 .90 / 雾化 .24 / 色散 .65）的做法是
+   * 一条 1px 的锐利边线 + 紧贴其内的一条柔光 + 3px 处的焦散带，
+   * 亮度**跟着光的方向走**：正对光的一侧最亮，背光一侧只有它的 52%。
+   * 它的 CSS 兜底版更直白：`inset 0 1px 0 #fff9, inset 1px 0 0 #fff3`
+   * —— 只有上边和左边，且左边明显更弱。
+   *
+   * 这里在此基础上补两条：右边留一点暖色（色散的余晖）、下边压一点暗
+   * （内阴影 = 玻璃有厚度，对应参考里 pow(edge,8) 那项底部遮蔽）。
+   * 光从左上来。
+   */
+  --glass-edge-top: 0 0% 100%;
+  --glass-edge-side: 0 0% 100%;
+  --glass-edge-warm: 24 100% 86%;
+  --glass-edge-dark: 220 30% 20%;
+  --glass-edge-top-a: 0.92;
+  --glass-edge-side-a: 0.5;
+  --glass-edge-warm-a: 0.3;
+  --glass-edge-dark-a: 0.07;
+  --glass-hairline: 230 25% 30%;
+  --glass-hairline-a: 0.14;
+  --glass-shadow: 213 55% 23%;
+
+  /* 内部柔光 / 焦散带 / 斜向反光的强度，同样由 glass.ts 按明暗主题给 */
+  --glass-caustic-a: 0.5;
+  --glass-ambient-a: 0.34;
+  --glass-sheen-a: 0.1;
+  --glass-veil-top-a: 0.4;
+  --glass-veil-bottom-a: 0.14;
+  --glass-veil-ambient-a: 0.16;
+
+  /* ::before 那圈方向性边缘反光的峰值亮度 */
+  --glass-sweep-a: 0.95;
+
   /* 这些兜底值会被 glass.ts 按「玻璃透明度」设置覆盖 */
   --glass-alpha-1: 0.3;
   --glass-alpha-2: 0.26;
@@ -213,22 +276,32 @@ html, body, #root {
 }
 
 /*
- * 透过玻璃看到的东西：轻微模糊 + 高饱和 + 提亮。
+ * 透过玻璃看到的东西：轻微模糊 + 少量调色。
  * 顺序有讲究 —— 折射(位移)放在模糊之后，
  * 这样噪波扭曲的是一张已经柔和的图，看起来像玻璃的厚薄不匀，而不是画面噪点。
+ *
+ * ⚠️ 这里的模糊量刻意压得很小。
+ * 参考材质里「thick」档的雾化是 .24，落到实际采样半径只有约 2.4px ——
+ * 也就是说**真正厚的玻璃反而糊得很少**：它靠边缘的折射和边光表达厚度，
+ * 不靠把背景磨平。我们原来是 8px，属于"毛玻璃"那一档的量级，
+ * 背景被糊成一片之后，前面那些边光、色散都白做了。
+ *
+ * 三档共用同一个旋钮 --glass-blur（glass.ts 设的那一个），倍率写在这里：
+ * - lite   ×0.5 ≈ 3px：只有模糊+调色。给数量可能很多的普通卡片用，
+ *                      位移滤镜虽然好看，但几十个元素同时跑 SVG 滤镜会拖性能。
+ * - 默认   ×1   ≈ 6px：模糊 + 折射。给侧栏/内容区/播放栏这类大块表面用。
+ * - strong ×1.7 ≈ 10px：更厚的模糊 + 折射。给弹层用，
+ *                      必须和后面的内容拉开层次，否则弹窗和底下的列表糊在一起分不清。
+ *
+ * 降饱和也一起改了：原来是 150%，比背景本身还鲜艳 —— 参考里的做法相反，
+ * 只做 3.5% 的提饱和（`mix(luma, c, 1.035)`），因为「透过玻璃看到的东西不该抢戏」。
  */
 :root {
-  /*
-   * 三档 backdrop-filter：
-   * - lite   ：只有模糊+调色。给数量可能很多的普通卡片用，
-   *            位移滤镜虽然好看，但几十个元素同时跑 SVG 滤镜会拖性能。
-   * - 默认    ：模糊 + 折射。给侧栏/内容区/播放栏这类大块表面用。
-   * - strong：更厚的模糊 + 折射。给弹层用，避免和后面的内容糊在一起分不清层次。
-   */
-  --glass-backdrop-lite: blur(var(--glass-blur)) saturate(var(--glass-saturate))
+  --glass-backdrop-lite: blur(calc(var(--glass-blur) * 0.5)) saturate(var(--glass-saturate))
+    brightness(var(--glass-brightness));
+  --glass-backdrop: url("#glass-refraction") blur(var(--glass-blur)) saturate(var(--glass-saturate))
     brightness(var(--glass-brightness)) contrast(var(--glass-contrast));
-  --glass-backdrop: url(#glass-refraction) var(--glass-backdrop-lite);
-  --glass-backdrop-strong: url(#glass-refraction) blur(calc(var(--glass-blur) + 7px))
+  --glass-backdrop-strong: url("#glass-refraction") blur(calc(var(--glass-blur) * 1.7))
     saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast));
 }
 
@@ -243,19 +316,20 @@ html, body, #root {
   inset: -22%;
   z-index: -1;
   pointer-events: none;
+
   /*
    * 玻璃能不能"看出来"取决于背后有没有层次：
    * 所以这里刻意用较小、较浓、带明确边界的光斑，
    * 而不是一整片平滑渐变——平滑渐变被模糊后和原来长得一样。
    */
   background:
-    radial-gradient(22% 20% at 14% 18%, hsl(var(--glass-tint-a) / 1), transparent 62%),
-    radial-gradient(18% 18% at 42% 8%, hsl(var(--glass-tint-b) / 0.95), transparent 60%),
-    radial-gradient(20% 22% at 86% 22%, hsl(var(--glass-tint-b) / 0.9), transparent 62%),
-    radial-gradient(26% 24% at 68% 62%, hsl(var(--glass-tint-c) / 0.9), transparent 64%),
-    radial-gradient(24% 26% at 30% 74%, hsl(var(--glass-tint-a) / 0.88), transparent 64%),
-    radial-gradient(20% 20% at 92% 84%, hsl(var(--glass-tint-c) / 0.88), transparent 62%),
-    radial-gradient(16% 16% at 54% 40%, hsl(var(--glass-tint-b) / 0.75), transparent 60%);
+    radial-gradient(22% 20% at 14% 18%, hsl(var(--glass-tint-a) / 100%), transparent 62%),
+    radial-gradient(18% 18% at 42% 8%, hsl(var(--glass-tint-b) / 95%), transparent 60%),
+    radial-gradient(20% 22% at 86% 22%, hsl(var(--glass-tint-b) / 90%), transparent 62%),
+    radial-gradient(26% 24% at 68% 62%, hsl(var(--glass-tint-c) / 90%), transparent 64%),
+    radial-gradient(24% 26% at 30% 74%, hsl(var(--glass-tint-a) / 88%), transparent 64%),
+    radial-gradient(20% 20% at 92% 84%, hsl(var(--glass-tint-c) / 88%), transparent 62%),
+    radial-gradient(16% 16% at 54% 40%, hsl(var(--glass-tint-b) / 75%), transparent 60%);
   filter: blur(30px) saturate(170%);
   will-change: transform;
   animation: glass-drift 34s ease-in-out infinite alternate;
@@ -268,9 +342,9 @@ html, body, #root {
   inset: 0;
   background: linear-gradient(
     155deg,
-    hsl(var(--heroui-background) / 0.3),
-    hsl(var(--heroui-background) / 0.06) 42%,
-    hsl(var(--heroui-background) / 0.36)
+    hsl(var(--heroui-background) / 30%),
+    hsl(var(--heroui-background) / 6%) 42%,
+    hsl(var(--heroui-background) / 36%)
   );
 }
 
@@ -285,9 +359,9 @@ html, body, #root {
    */
   background: linear-gradient(
     155deg,
-    hsl(var(--heroui-background) / 0.78),
-    hsl(var(--heroui-background) / 0.56) 45%,
-    hsl(var(--heroui-background) / 0.84)
+    hsl(var(--heroui-background) / 78%),
+    hsl(var(--heroui-background) / 56%) 45%,
+    hsl(var(--heroui-background) / 84%)
   );
 }
 
@@ -295,9 +369,11 @@ html, body, #root {
   0% {
     transform: translate3d(-2%, -1.5%, 0) scale(1.04) rotate(0deg);
   }
+
   50% {
     transform: translate3d(2.5%, 1.5%, 0) scale(1.1) rotate(4deg);
   }
+
   100% {
     transform: translate3d(-1%, 2.5%, 0) scale(1.06) rotate(-3deg);
   }
@@ -324,7 +400,8 @@ html, body, #root {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: blur(var(--background-blur, 0px));
+  filter: blur(var(--background-blur, 0));
+
   /* 模糊会让边缘露出底色，稍微放大一点把边补上 */
   transform: scale(calc(1 + var(--background-blur, 0px) / 900));
   will-change: transform;
@@ -335,7 +412,7 @@ html, body, #root {
   content: '';
   position: absolute;
   inset: 0;
-  background: hsl(0 0% 0% / var(--background-dim, 0.25));
+  background: hsl(0deg 0% 0% / var(--background-dim, 0.25));
 }
 
 /*
@@ -345,7 +422,7 @@ html, body, #root {
  * 只对深色生效 —— 浅色模式文字是深的，把背景压暗反而更糟。
  */
 html.dark.liquid-glass .glass-image::after {
-  background: hsl(0 0% 0% / max(var(--background-dim, 0.25), 0.5));
+  background: hsl(0deg 0% 0% / max(var(--background-dim, 0.25), 0.5));
 }
 
 /*
@@ -359,13 +436,13 @@ html.dark.liquid-glass .glass-image::after {
  * 不影响正常实心模式下已经够用的观感（那种情况下亮芯一样看得见）。
  */
 html.liquid-glass [data-slot='track'] {
-  background-color: hsl(var(--heroui-foreground) / 0.45);
-  box-shadow: 0 0 0 1px hsl(var(--heroui-background) / 0.5);
+  background-color: hsl(var(--heroui-foreground) / 45%);
+  box-shadow: 0 0 0 1px hsl(var(--heroui-background) / 50%);
 }
 
 /* 滑块（圆点）本身是主色，落在浅色背景上容易糊，补一圈暗边 */
 html.liquid-glass [data-slot='thumb'] {
-  box-shadow: 0 0 0 1.5px hsl(var(--heroui-background) / 0.55);
+  box-shadow: 0 0 0 1.5px hsl(var(--heroui-background) / 55%);
 }
 
 /* ---- 核心：给 HeroUI 面板换上半透明背板 + 毛玻璃 + 玻璃厚度感 ---- */
@@ -397,27 +474,50 @@ html.liquid-glass [data-slot='thumb'] {
   background-color: hsl(var(--heroui-overlay) / var(--glass-alpha-overlay));
 }
 
-.liquid-glass .bg-content1,
+/*
+ * 边缘光：四条边分别给，而不是一圈均匀的白边。
+ *
+ * 参考里的判定标准很明确：「避免环绕一圈的高亮白边」。一圈白边的问题有两个 ——
+ * 一是它不表达任何方向（光从哪来？），二是它在浅色背景上会把面板"圈"出来，
+ * 看着像贴纸而不是玻璃。所以这里：
+ *   上边最亮（正对光）、左边次之、右边留一点暖色（色散余晖）、下边压暗。
+ * 厚度也顺带由这条暗边表达出来 —— 玻璃有厚度，下缘必然比上缘暗。
+ *
+ * 四条边的深浅全部来自 --glass-edge-*-a：玻璃.ts 按明暗主题给两组值，
+ * 所以这一条规则同时管浅色和深色，不需要再来一份 dark 副本。
+ *
+ * 这一条只管 bg-content2 / bg-content3（次级面板：输入框、列表行、内层容器）。
+ * bg-content1 是最外层的主面板，单独在下面给一套更完整的（多一层焦散带和远景投影）。
+ * CSS 的 box-shadow 不能按层叠加，所以两边必须各写一份完整列表，
+ * 不能让 content1 去"继承"这一条 —— 那就等于声明了一份永远不生效的死规则。
+ */
 .liquid-glass .bg-content2,
 .liquid-glass .bg-content3 {
   -webkit-backdrop-filter: var(--glass-backdrop-lite);
   backdrop-filter: var(--glass-backdrop-lite);
-  /* 外圈亮边 + 顶部高光 + 底部暗边 = 玻璃的"厚度" */
   box-shadow:
-    inset 0 0 0 1px hsl(var(--glass-rim)),
-    inset 0 1px 0 0 hsl(var(--glass-specular)),
-    inset 0 -1px 0 0 hsl(var(--glass-shadow) / 0.55);
+    inset 0 1px 0 0 hsl(var(--glass-edge-top) / var(--glass-edge-top-a)),
+    inset 1px 0 0 0 hsl(var(--glass-edge-side) / var(--glass-edge-side-a)),
+    inset -1px 0 0 0 hsl(var(--glass-edge-warm) / var(--glass-edge-warm-a)),
+    inset 0 -1px 0 0 hsl(var(--glass-edge-dark) / var(--glass-edge-dark-a)),
+    inset 0 2px 3px -2px hsl(0deg 0% 100% / var(--glass-caustic-a)),
+    0 1px 2px -1px hsl(var(--glass-shadow) / 50%),
+    0 10px 24px -16px hsl(var(--glass-shadow) / 60%);
 }
 
 /*
- * 玻璃厚度感：边缘一圈向内渐隐的高光。
- * 液态玻璃的"镜面反射"主要在边缘最亮、中间几乎透明，
- * 所以用环形渐变模拟折射边缘，而不是整块加白。
+ * 内部柔光：贴边的两三条固定高度的亮带。
  *
- * 只加在自己控制的分区面板上：.bg-content1 可能落在 absolute/fixed 的元素上
- * （例如顶栏搜索的下拉），强行套 ::before 会把它撑成相对定位而跑位。
+ * 注意「固定高度」不是随手写的 —— 原来上缘那条写的是 `0% → 14%`，
+ * 在整屏大小的面板上 14% 就是一百多像素的一大片白，中间那点透光全被盖掉了。
+ * 参考里的对应项（innerEdge / caustic）都是**几个像素**的带子
+ * （`exp(-pow((d+4)/3,2))`，也就是距边 3~4px 那一圈），
+ * 所以这里改成 px，面板大小再怎么变，它都只是贴着边的一细条。
+ *
+ * 挂到 ::after 上是因为 ::before 让给下面那圈"方向性边缘反光"了。
+ * .glass-panel 自带 position: relative，两个伪元素都不会改变任何布局。
  */
-.liquid-glass .glass-panel::before {
+.liquid-glass .glass-panel::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -425,34 +525,90 @@ html.liquid-glass [data-slot='thumb'] {
   pointer-events: none;
   z-index: 0;
   background:
-    linear-gradient(180deg, hsl(0 0% 100% / 0.5) 0%, hsl(0 0% 100% / 0) 14%),
-    linear-gradient(0deg, hsl(0 0% 100% / 0.24) 0%, hsl(0 0% 100% / 0) 12%),
-    radial-gradient(140% 120% at 12% -10%, hsl(0 0% 100% / 0.34), hsl(0 0% 100% / 0) 46%);
+    linear-gradient(180deg, hsl(0deg 0% 100% / var(--glass-veil-top-a)) 0, hsl(0deg 0% 100% / 0%) 64px),
+    linear-gradient(0deg, hsl(0deg 0% 100% / var(--glass-veil-bottom-a)) 0, hsl(0deg 0% 100% / 0%) 48px),
+    /* 左上角一团很弱的环境反射，用来撑"厚度"。参考里这一项的强度是 0.045 级别，
+       原来这里是 0.34 —— 相当于在玻璃中间刷了一层白，中央就不透光了。 */
+    radial-gradient(
+      120% 100% at 10% -8%,
+      hsl(0deg 0% 100% / var(--glass-veil-ambient-a)),
+      hsl(0deg 0% 100% / 0%) 52%
+    );
 }
 
-.liquid-glass.liquid-glass-dark .glass-panel::before {
-  background:
-    linear-gradient(180deg, hsl(0 0% 100% / 0.24) 0%, hsl(0 0% 100% / 0) 14%),
-    linear-gradient(0deg, hsl(0 0% 100% / 0.1) 0%, hsl(0 0% 100% / 0) 12%),
-    radial-gradient(140% 120% at 12% -10%, hsl(0 0% 100% / 0.16), hsl(0 0% 100% / 0) 46%);
+/*
+ * 方向性边缘反光（只在整块应用面板上用）。
+ *
+ * 做法借自参考里的 `.lg-optic-rim`：把一圈 conic-gradient 用 mask 裁成
+ * 「只有 1.5px 边框那么宽」的一环，于是环上不同角度的亮度可以不一样 ——
+ * 正对光的一侧最亮、背光的一侧几乎消失，中间还夹着一点暖色和冷色的偏移。
+ * 这一环是**连续**的，比四条直边更接近真实玻璃边缘的高光走向。
+ *
+ * - `at 32% 18%` 把圆心挪到左上：光从那里来，靠近它的那一段环自然更紧更亮。
+ * - 亮度的绝对值全部是 `--glass-sweep-a` 的倍数（玻璃.ts 给明暗两组），
+ *   所以浅色/深色共用这一条规则，改峰值只要动那一个变量。
+ * - 暖色停在右下方（色散余晖），冷色停在左下方，是对参考里
+ *   「R 通道外扩、B 通道内收」那种色散的一个廉价近似。
+ *
+ * mask-composite 是这条规则的前提。不支持时整段不生效，
+ * ::before 保持不存在，::after 的贴边柔光照常工作 —— 不会画出一整片彩光。
+ */
+@supports ((mask-composite: exclude) or (-webkit-mask-composite: xor)) {
+  .liquid-glass .glass-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    pointer-events: none;
+    z-index: 0;
+    background: conic-gradient(
+      from 0deg at 32% 18%,
+      hsl(0deg 0% 100% / calc(var(--glass-sweep-a) * 0.82)) 0deg,
+      hsl(0deg 0% 100% / calc(var(--glass-sweep-a) * 0.48)) 45deg,
+      hsl(0deg 0% 100% / calc(var(--glass-sweep-a) * 0.15)) 90deg,
+      hsl(var(--glass-edge-warm) / calc(var(--glass-sweep-a) * 0.1)) 140deg,
+      hsl(0deg 0% 100% / calc(var(--glass-sweep-a) * 0.05)) 180deg,
+      hsl(205deg 90% 82% / calc(var(--glass-sweep-a) * 0.1)) 222deg,
+      hsl(0deg 0% 100% / calc(var(--glass-sweep-a) * 0.21)) 250deg,
+      hsl(0deg 0% 100% / calc(var(--glass-sweep-a) * 0.61)) 275deg,
+      hsl(0deg 0% 100% / var(--glass-sweep-a)) 318deg,
+      hsl(0deg 0% 100% / calc(var(--glass-sweep-a) * 0.82)) 360deg
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+  }
 }
 
-/* 主面板（卡片 / 弹窗内容）：极淡的斜向反光 + 外投影，营造玻璃厚度 */
+/* 主面板（卡片 / 弹窗内容）：最完整的一层玻璃 —— 四条边光 + 焦散带 + 分层投影 */
 .liquid-glass .bg-content1 {
-  background-image: linear-gradient(135deg, hsl(0 0% 100% / 0.12), hsl(0 0% 100% / 0) 52%);
-  box-shadow:
-    inset 0 0 0 1px hsl(var(--glass-rim)),
-    inset 0 1px 0 0 hsl(var(--glass-specular)),
-    /* 上缘往内的柔光，替代"整块刷白" */
-    inset 0 26px 40px -34px hsl(0 0% 100% / 0.9),
-    /* 外圈再补一条极细的暗描边：纯白边在浅色背景上是看不见的 */
-    0 0 0 0.5px hsl(var(--glass-hairline)),
-    0 20px 48px -24px hsl(var(--glass-shadow)),
-    0 6px 20px -14px hsl(var(--glass-shadow));
-}
+  -webkit-backdrop-filter: var(--glass-backdrop-lite);
+  backdrop-filter: var(--glass-backdrop-lite);
 
-.liquid-glass.liquid-glass-dark .bg-content1 {
-  background-image: linear-gradient(135deg, hsl(0 0% 100% / 0.07), hsl(0 0% 100% / 0) 52%);
+  /* 极淡的斜向反光。方向跟着光走（左上→右下），强度只有几个百分点 */
+  background-image: linear-gradient(135deg, hsl(0deg 0% 100% / var(--glass-sheen-a)), hsl(0deg 0% 100% / 0%) 52%);
+  box-shadow:
+    /* 1px 锐利边线，亮度跟着光的方向走（上 > 左 > 右暖 > 下暗） */
+    inset 0 1px 0 0 hsl(var(--glass-edge-top) / var(--glass-edge-top-a)),
+    inset 1px 0 0 0 hsl(var(--glass-edge-side) / var(--glass-edge-side-a)),
+    inset -1px 0 0 0 hsl(var(--glass-edge-warm) / var(--glass-edge-warm-a)),
+    inset 0 -1px 0 0 hsl(var(--glass-edge-dark) / var(--glass-edge-dark-a)),
+    /* 焦散带：透镜把光聚在边缘内侧，紧贴上缘的一条细亮带（参考里是距边 3px 那圈） */
+    inset 0 2px 3px -2px hsl(0deg 0% 100% / var(--glass-caustic-a)),
+    /* 宽而很弱的环境反射，撑厚度；强度必须小，否则中间就不透光了 */
+    inset 0 18px 34px -30px hsl(0deg 0% 100% / var(--glass-ambient-a)),
+    /* 外圈再补一条极细的暗描边：纯白边在浅色背景上是看不见的 */
+    0 0 0 0.5px hsl(var(--glass-hairline) / var(--glass-hairline-a)),
+    /* 分层投影：近→远三段，比单条大阴影更像真的悬空 */
+    0 1px 2px -1px hsl(var(--glass-shadow) / 50%),
+    0 10px 22px -14px hsl(var(--glass-shadow) / 60%),
+    0 24px 52px -30px hsl(var(--glass-shadow) / 80%);
 }
 
 /* 弹层用更厚的玻璃 */
@@ -484,6 +640,11 @@ html.liquid-glass [data-slot='thumb'] {
 /* 整块应用面板（侧栏 + 内容区 + 播放栏都在它里面） */
 .liquid-glass .glass-panel {
   position: relative;
+  box-shadow:
+    /* 大面板的边光交给 ::before 那圈 conic 反光，这里只留一条 1px 的兜底边线 */
+    inset 0 1px 0 0 hsl(var(--glass-edge-top) / var(--glass-edge-top-a)),
+    0 0 0 0.5px hsl(var(--glass-hairline) / var(--glass-hairline-a)),
+    0 24px 60px -34px hsl(var(--glass-shadow) / 80%);
 }
 
 /*
@@ -509,18 +670,38 @@ html.liquid-glass [data-slot='thumb'] {
 
 .liquid-glass .glass-fill {
   background-color: hsl(var(--heroui-content1) / var(--glass-alpha-2));
+
   /* 极淡的主色染色：让玻璃是"有色的玻璃"而不是一块白塑料 */
-  background-image: linear-gradient(160deg, hsl(var(--heroui-primary) / 0.09), hsl(var(--heroui-primary) / 0) 62%);
+  background-image: linear-gradient(160deg, hsl(var(--heroui-primary) / 9%), hsl(var(--heroui-primary) / 0%) 62%);
   -webkit-backdrop-filter: var(--glass-backdrop);
   backdrop-filter: var(--glass-backdrop);
 }
 
-.liquid-glass .glass-panel {
-  box-shadow:
-    inset 0 0 0 1px hsl(var(--glass-rim)),
-    inset 0 1px 0 0 hsl(var(--glass-specular)),
-    0 0 0 0.5px hsl(var(--glass-hairline)),
-    0 18px 44px -26px hsl(var(--glass-shadow));
+/*
+ * 兜底：浏览器不支持 backdrop-filter 时，面板必须自己变"实"。
+ *
+ * 参考里也是这么做的（`.fallback .lg-surface{background:#f5f8fbd9}`）——
+ * 模糊和折射都没有了，还按玻璃的透明度走，文字就等于直接压在背景图上。
+ * 整段放在这一节的最末尾：@supports 不参与特异性比较，只靠**顺序**覆盖上面
+ * 那些按滑杆算出来的 --glass-alpha-*，所以位置不能提前。
+ * Electron / Chromium 永远走不到这里，但 dist/web 那份可能被别的浏览器打开。
+ */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .liquid-glass .bg-content1 {
+    background-color: hsl(var(--heroui-content1) / 92%);
+  }
+
+  .liquid-glass .bg-content2 {
+    background-color: hsl(var(--heroui-content2) / 90%);
+  }
+
+  .liquid-glass .bg-content3 {
+    background-color: hsl(var(--heroui-content3) / 88%);
+  }
+
+  .liquid-glass .glass-fill {
+    background-color: hsl(var(--heroui-content1) / 90%);
+  }
 }
 
 /*
@@ -555,15 +736,15 @@ html.is-scrolling .glass-wallpaper {
 
 /* 滚动条也做成玻璃质感 */
 .liquid-glass .os-scrollbar {
-  --os-handle-bg: hsl(0 0% 100% / 0.5);
-  --os-handle-bg-hover: hsl(0 0% 100% / 0.68);
-  --os-handle-bg-active: hsl(0 0% 100% / 0.82);
+  --os-handle-bg: hsl(0deg 0% 100% / 50%);
+  --os-handle-bg-hover: hsl(0deg 0% 100% / 68%);
+  --os-handle-bg-active: hsl(0deg 0% 100% / 82%);
 }
 
 .liquid-glass.liquid-glass-dark .os-scrollbar {
-  --os-handle-bg: hsl(0 0% 100% / 0.22);
-  --os-handle-bg-hover: hsl(0 0% 100% / 0.34);
-  --os-handle-bg-active: hsl(0 0% 100% / 0.46);
+  --os-handle-bg: hsl(0deg 0% 100% / 22%);
+  --os-handle-bg-hover: hsl(0deg 0% 100% / 34%);
+  --os-handle-bg-active: hsl(0deg 0% 100% / 46%);
 }
 
 
@@ -585,10 +766,11 @@ html.is-scrolling .glass-wallpaper {
 .page-switch {
   position: absolute;
   inset: 0;
+
   /* 只在 .glass-content 这个 stacking context 内有效，盖不到播放栏，更盖不到弹层 */
   z-index: 9999;
   pointer-events: none;
-  background-color: hsl(var(--heroui-background) / 0.4);
+  background-color: hsl(var(--heroui-background) / 40%);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   animation: page-switch-veil 220ms ease-out forwards;
@@ -598,6 +780,7 @@ html.is-scrolling .glass-wallpaper {
   from {
     opacity: 1;
   }
+
   to {
     opacity: 0;
   }
@@ -618,9 +801,9 @@ html.is-scrolling .glass-wallpaper {
     90deg,
     hsl(var(--heroui-primary)) 0%,
     hsl(var(--heroui-primary)) 74%,
-    hsl(var(--heroui-primary) / 0.12) 100%
+    hsl(var(--heroui-primary) / 12%) 100%
   );
-  box-shadow: 0 0 8px hsl(var(--heroui-primary) / 0.45);
+  box-shadow: 0 0 8px hsl(var(--heroui-primary) / 45%);
   animation: page-switch-line 320ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
 
@@ -629,9 +812,11 @@ html.is-scrolling .glass-wallpaper {
     transform: scaleX(0);
     opacity: 0.4;
   }
+
   30% {
     opacity: 1;
   }
+
   100% {
     transform: scaleX(1);
     opacity: 0;
@@ -650,6 +835,7 @@ html.is-scrolling .glass-wallpaper {
     opacity: 0;
     transform: translateY(0.3em);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -719,7 +905,7 @@ html.is-scrolling .glass-wallpaper {
   position: absolute;
   width: 124px;
   height: 124px;
-  border: 2px solid currentColor;
+  border: 2px solid currentcolor;
   border-radius: 9999px;
   opacity: 0;
   animation: app-launch-ring 1200ms ease-out both;
@@ -733,6 +919,7 @@ html.is-scrolling .glass-wallpaper {
   text-align: center;
   font-size: 12px;
   opacity: 0;
+
   /* 延迟一点出现：一开始就写「跳过」会抢开场动画的注意力 */
   animation: app-launch-hint-in 500ms ease-out 700ms both;
 }
@@ -741,20 +928,23 @@ html.is-scrolling .glass-wallpaper {
   from {
     opacity: 1;
   }
+
   to {
     opacity: 0;
   }
 }
 
 @keyframes app-launch-mark-in {
-  from {
+  0% {
     opacity: 0;
     transform: translateY(16px) scale(0.86);
   }
+
   60% {
     opacity: 1;
   }
-  to {
+
+  100% {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
@@ -766,17 +956,21 @@ html.is-scrolling .glass-wallpaper {
     opacity: 0;
     transform: scale(0.72);
   }
+
   30% {
     opacity: 1;
     transform: scale(1.02);
   }
+
   50% {
     transform: scale(0.97);
   }
+
   70% {
     opacity: 1;
     transform: scale(1.1);
   }
+
   100% {
     opacity: 0;
     transform: scale(1.36);
@@ -788,6 +982,7 @@ html.is-scrolling .glass-wallpaper {
     opacity: 0.4;
     transform: scale(0.7);
   }
+
   100% {
     opacity: 0;
     transform: scale(2.2);
@@ -798,6 +993,7 @@ html.is-scrolling .glass-wallpaper {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 0.42;
   }
@@ -832,6 +1028,7 @@ html.is-scrolling .glass-wallpaper {
     opacity: 0;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -857,26 +1054,26 @@ html.is-scrolling .glass-wallpaper {
 .home-outlined {
   color: #fff;
   text-shadow:
-    0 0 1px rgb(0 0 0 / 0.95),
-    0 0 4px rgb(0 0 0 / 0.55),
-    1px 0 0 rgb(0 0 0 / 0.9),
-    -1px 0 0 rgb(0 0 0 / 0.9),
-    0 1px 0 rgb(0 0 0 / 0.9),
-    0 -1px 0 rgb(0 0 0 / 0.9),
-    1px 1px 0 rgb(0 0 0 / 0.85),
-    -1px 1px 0 rgb(0 0 0 / 0.85),
-    1px -1px 0 rgb(0 0 0 / 0.85),
-    -1px -1px 0 rgb(0 0 0 / 0.85);
+    0 0 1px rgb(0 0 0 / 95%),
+    0 0 4px rgb(0 0 0 / 55%),
+    1px 0 0 rgb(0 0 0 / 90%),
+    -1px 0 0 rgb(0 0 0 / 90%),
+    0 1px 0 rgb(0 0 0 / 90%),
+    0 -1px 0 rgb(0 0 0 / 90%),
+    1px 1px 0 rgb(0 0 0 / 85%),
+    -1px 1px 0 rgb(0 0 0 / 85%),
+    1px -1px 0 rgb(0 0 0 / 85%),
+    -1px -1px 0 rgb(0 0 0 / 85%);
 }
 
 /* 11–12px 的小字要轻一点：同样的描边宽度会把笔画之间的空隙填掉，糊成一团 */
 .home-outlined-sm {
   color: #fff;
   text-shadow:
-    0 0 2px rgb(0 0 0 / 0.85),
-    0 0 5px rgb(0 0 0 / 0.45),
-    1px 1px 0 rgb(0 0 0 / 0.8),
-    -1px -1px 0 rgb(0 0 0 / 0.8),
-    1px -1px 0 rgb(0 0 0 / 0.8),
-    -1px 1px 0 rgb(0 0 0 / 0.8);
+    0 0 2px rgb(0 0 0 / 85%),
+    0 0 5px rgb(0 0 0 / 45%),
+    1px 1px 0 rgb(0 0 0 / 80%),
+    -1px -1px 0 rgb(0 0 0 / 80%),
+    1px -1px 0 rgb(0 0 0 / 80%),
+    -1px 1px 0 rgb(0 0 0 / 80%);
 }
