@@ -27,8 +27,8 @@
 <table>
   <tr>
     <td width="50%" align="center">
-      <img src="./screenshots/nwbp-main.png" alt="NWBP 主页" width="100%">
-      <sub>主页：问候语、时钟、最近播放、最新动态与播放栏</sub>
+      <img src="./screenshots/nwbp-main.png" alt="NWBP 推荐音乐" width="100%">
+      <sub>推荐音乐：封面、标题、播放量与底部播放栏</sub>
     </td>
     <td width="50%" align="center">
       <img src="./screenshots/nwbp-settings.png" alt="NWBP 设置" width="100%">
