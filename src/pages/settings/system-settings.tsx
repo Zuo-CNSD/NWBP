@@ -225,35 +225,6 @@ export const SystemSettingsTab = ({ appVersion, audioQuality, control, setValue 
         </div>
       </div>
 
-      {/* 页面切换动画 FIXME:暂时移除，该功能会导致页面切换时重复渲染，数据请求double */}
-      {/* <div className="flex w-full items-center justify-between">
-        <div className="mr-6 space-y-1">
-          <div className="text-medium font-medium">页面切换动画</div>
-          <div className="text-sm text-default-500">选择页面切换时的过渡效果</div>
-        </div>
-        <div className="w-[180px]">
-          <Controller
-            control={control}
-            name="pageTransition"
-            render={({ field }) => (
-              <Select
-                aria-label="页面切换动画"
-                selectedKeys={field.value ? new Set([field.value]) : new Set()}
-                onSelectionChange={keys => {
-                  const value = Array.from(keys)[0] as PageTransition;
-                  field.onChange(value);
-                }}
-              >
-                <SelectItem key="none">无动画</SelectItem>
-                <SelectItem key="fade">淡入淡出</SelectItem>
-                <SelectItem key="slide">滑动</SelectItem>
-                <SelectItem key="scale">缩放</SelectItem>
-                <SelectItem key="slideUp">上浮</SelectItem>
-              </Select>
-            )}
-          />
-        </div>
-      </div> */}
       {/* 全局圆角设置 */}
       <div className="flex w-full items-center justify-between">
         <div className="mr-6 space-y-1">

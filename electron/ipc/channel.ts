@@ -114,6 +114,27 @@ export const channel = {
     scan: "local-music:scan",
     deleteFile: "local-music:delete-file",
   },
+  plugin: {
+    /** 插件清单，设置页列表用 */
+    list: "plugin:list",
+    /** 启用中的插件，含要注入界面的 CSS 与脚本源码 */
+    getBundle: "plugin:get-bundle",
+    listCommands: "plugin:list-commands",
+    setEnabled: "plugin:set-enabled",
+    /** 重扫目录并重启全部插件 */
+    reload: "plugin:reload",
+    runCommand: "plugin:run-command",
+    /** 界面 → 插件主进程的自定义通道 */
+    invoke: "plugin:invoke",
+    /** 往插件目录写一份示例插件 */
+    installSample: "plugin:install-sample",
+    openDir: "plugin:open-dir",
+    reveal: "plugin:reveal",
+    /** 界面脚本抛错时回传给主进程，记到列表上 */
+    reportError: "plugin:report-error",
+    /** 主进程 → 界面：插件自定义事件 / 加载状态变化 */
+    event: "plugin:event",
+  },
   window: {
     toggleMini: "window:toggle-mini",
     minimize: "window:minimize",

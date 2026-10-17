@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { addToast, Spinner } from "@heroui/react";
+import { addToast } from "@heroui/react";
 
 import { t } from "@/common/i18n";
 import { formatUrlProtocol } from "@/common/utils/url";
 import Empty from "@/components/empty";
+import ListSkeleton from "@/components/skeleton";
 import { getWebInterfaceWbiSearchType, type SearchVideoItem } from "@/service/web-interface-search-type";
 import { useModalStore } from "@/store/modal";
 import { usePlayList } from "@/store/play-list";
@@ -174,11 +175,7 @@ export default function SearchVideo({ keyword, getScrollElement }: SearchVideoPr
         onPlayAll={handlePlayAll}
         playAllDisabled={initialLoading || list.length === 0}
       />
-      {initialLoading && (
-        <div className="flex min-h-[280px] items-center justify-center">
-          <Spinner label={t("加载中")} />
-        </div>
-      )}
+      {initialLoading && <ListSkeleton rows={5} cover={56} />}
       {!initialLoading && !list?.length && <Empty className="min-h-[280px]" />}
       {!initialLoading && list?.length > 0 && (
         <>

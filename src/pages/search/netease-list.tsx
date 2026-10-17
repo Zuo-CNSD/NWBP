@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { addToast, Spinner } from "@heroui/react";
+import { addToast } from "@heroui/react";
 
 import { t } from "@/common/i18n";
 import Empty from "@/components/empty";
 import NeteaseTrackList from "@/components/netease/track-list";
+import ListSkeleton from "@/components/skeleton";
 
 interface Props {
   keyword: string;
@@ -92,11 +93,7 @@ export default function SearchNetease({ keyword, getScrollElement }: Props) {
         summary={initialLoading ? t("正在搜索网易云…") : total > 0 ? t("网易云 · 共 {0} 首", total) : t("网易云")}
       />
 
-      {initialLoading && (
-        <div className="flex min-h-[200px] items-center justify-center">
-          <Spinner label={t("加载中")} />
-        </div>
-      )}
+      {initialLoading && <ListSkeleton rows={4} />}
 
       {!initialLoading && list.length === 0 && <Empty className="min-h-[280px]" />}
     </div>

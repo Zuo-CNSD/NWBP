@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { addToast, Button, Spinner } from "@heroui/react";
+import { addToast, Button } from "@heroui/react";
 import { RiDeleteBinLine } from "@remixicon/react";
 
 import { t } from "@/common/i18n";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
+import ListSkeleton from "@/components/skeleton";
 import { postHistoryToViewDel } from "@/service/history-toview-del";
 import {
   getHistoryToViewList,
@@ -227,11 +228,7 @@ const Later = () => {
       </div>
 
       <>
-        {initialLoading && (
-          <div className="flex h-[40vh] items-center justify-center">
-            <Spinner size="lg" label="Loading..." />
-          </div>
-        )}
+        {initialLoading && <ListSkeleton rows={6} />}
 
         {/* 空状态 */}
         {isEmpty && (

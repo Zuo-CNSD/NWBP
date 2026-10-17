@@ -37,7 +37,15 @@ export const useSearchHistory = create<SearchHistoryState & SearchHistoryAction>
     }),
     {
       name: "search-history",
-      partialize: state => ({ keyword: state.keyword, items: state.items }),
+      // keyword 只在**当前会话内**有意义，不进 localStorage ——
+      // 否则下次启动搜索框会被上次搜的词预填，还得手动清。
+      // v0 的老数据里带着 keyword，靠 migrate 丢掉。
+      version: 1,
+      partialize: state => ({ items: state.items }),
+      migrate: (persisted, version) =>
+        version < 1
+          ? { items: (persisted as { items?: SearchItem[] } | undefined)?.items ?? [] }
+          : (persisted as { items: SearchItem[] }),
     },
   ),
 );

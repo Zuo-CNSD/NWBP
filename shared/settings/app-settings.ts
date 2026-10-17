@@ -26,8 +26,7 @@ export const defaultAppSettings: AppSettings = {
   hiddenMenuKeys: [],
   displayMode: "list",
   ffmpegPath: "",
-  themeMode: "system",
-  pageTransition: "none",
+  themeMode: "light",
   /*
    * app 打开动画：启动时盖住整窗的开场画面。
    * 默认开（logo 淡入），想直接进界面就在设置里选「无动画」。

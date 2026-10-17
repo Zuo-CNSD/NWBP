@@ -38,7 +38,7 @@ const Logo = ({ isCollapsed }: LogoProps) => {
   return (
     <div
       className={twMerge(
-        "window-drag text-primary relative flex flex-none items-center py-3 pr-3 pl-4",
+        "window-drag text-foreground relative flex flex-none items-center py-3 pr-3 pl-4",
         isMac && !isFullScreen && "pt-8",
       )}
     >

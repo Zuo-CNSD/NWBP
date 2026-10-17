@@ -192,6 +192,29 @@ declare global {
     scanLocalMusic: (dirs: string[]) => Promise<LocalMusicItem[]>;
     /** 删除本地音乐文件 */
     deleteLocalMusicFile: (filePath: string) => Promise<boolean>;
+
+    /** 插件系统 */
+    plugin: {
+      /** 插件清单 */
+      list: () => Promise<PluginInfo[]>;
+      /** 启用中的插件，含要注入界面的 CSS 与脚本 */
+      getBundle: () => Promise<PluginRenderBundle[]>;
+      listCommands: () => Promise<PluginCommandInfo[]>;
+      setEnabled: (id: string, enabled: boolean) => Promise<PluginInfo[]>;
+      /** 重扫目录并重启全部插件 */
+      reload: () => Promise<PluginInfo[]>;
+      runCommand: (pluginId: string, commandId: string) => Promise<unknown>;
+      /** 界面 → 插件主进程的自定义通道 */
+      invoke: (pluginId: string, subChannel: string, payload?: unknown) => Promise<unknown>;
+      /** 往插件目录写一份示例插件 */
+      installSample: () => Promise<{ folder: string; created: boolean }>;
+      openDir: () => Promise<string>;
+      reveal: (id: string) => Promise<void>;
+      /** 界面脚本抛错时回传，主进程记到列表上 */
+      reportError: (id: string, message: string) => Promise<void>;
+      /** 监听插件事件（自定义事件 + 加载状态变化） */
+      onEvent: (cb: (payload: PluginEventPayload) => void) => VoidFunction;
+    };
   }
 
   interface Window {

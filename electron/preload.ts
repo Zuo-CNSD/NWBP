@@ -70,6 +70,25 @@ const api: ElectronAPI = {
   setProxySettings: proxySettings => ipcRenderer.invoke(channel.app.setProxySettings, proxySettings),
   scanLocalMusic: dirs => ipcRenderer.invoke(channel.localMusic.scan, dirs),
   deleteLocalMusicFile: filePath => ipcRenderer.invoke(channel.localMusic.deleteFile, filePath),
+  // 插件系统
+  plugin: {
+    list: () => ipcRenderer.invoke(channel.plugin.list),
+    getBundle: () => ipcRenderer.invoke(channel.plugin.getBundle),
+    listCommands: () => ipcRenderer.invoke(channel.plugin.listCommands),
+    setEnabled: (id, enabled) => ipcRenderer.invoke(channel.plugin.setEnabled, id, enabled),
+    reload: () => ipcRenderer.invoke(channel.plugin.reload),
+    runCommand: (pluginId, commandId) => ipcRenderer.invoke(channel.plugin.runCommand, pluginId, commandId),
+    invoke: (pluginId, subChannel, payload) => ipcRenderer.invoke(channel.plugin.invoke, pluginId, subChannel, payload),
+    installSample: () => ipcRenderer.invoke(channel.plugin.installSample),
+    openDir: () => ipcRenderer.invoke(channel.plugin.openDir),
+    reveal: id => ipcRenderer.invoke(channel.plugin.reveal, id),
+    reportError: (id, message) => ipcRenderer.invoke(channel.plugin.reportError, id, message),
+    onEvent: (cb: (payload: PluginEventPayload) => void) => {
+      const handler = (_: Electron.IpcRendererEvent, payload: PluginEventPayload) => cb(payload);
+      ipcRenderer.on(channel.plugin.event, handler);
+      return () => ipcRenderer.removeListener(channel.plugin.event, handler);
+    },
+  },
   // 监听来自主进程的导航事件，并将路径回调给渲染端
   navigate: cb => {
     const navigateHandler = (_: Electron.IpcRendererEvent, path: string) => {

@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { Spinner, addToast } from "@heroui/react";
+import { addToast } from "@heroui/react";
 
 import { t } from "@/common/i18n";
+import ListSkeleton from "@/components/skeleton";
 import VirtualGridPageList from "@/components/virtual-grid-page-list";
 import { getRelationRelations } from "@/service/relation-relations";
 import { getWebInterfaceWbiSearchType, type SearchUserItem } from "@/service/web-interface-search-type";
@@ -104,11 +105,7 @@ export default function UserList({ keyword, getScrollElement }: UserListProps) {
   }, [retryInitial]);
 
   if (initialLoading) {
-    return (
-      <div className="flex min-h-[280px] items-center justify-center">
-        <Spinner label={t("加载中")} />
-      </div>
-    );
+    return <ListSkeleton rows={5} cover={48} />;
   }
 
   const renderItem = (u: SearchUserItemWithRelation) => <UserCard key={u.mid} u={u} />;

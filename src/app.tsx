@@ -12,6 +12,7 @@ import { toggleMiniMode } from "./common/utils/mini-player";
 import { mapKeyToElectronAccelerator } from "./common/utils/shortcut";
 import AppLaunchAnimation from "./components/app-launch-animation";
 import Theme from "./components/theme";
+import { setupPlugins } from "./plugin/runtime";
 import routes from "./routes";
 import { useLyrics } from "./store/lyrics";
 import { usePlayList } from "./store/play-list";
@@ -60,6 +61,16 @@ export function App() {
 
   useEffect(() => {
     getCookitFromBSite();
+  }, []);
+
+  /*
+   * 插件：把启用中的插件装进界面，并订阅「插件变了」以便热重载。
+   * 放在 App 上而不是路由里 —— 插件是全局的，跟用户停在哪个页面无关。
+   */
+  useEffect(() => {
+    if (isAuxiliaryWindow()) return;
+
+    setupPlugins();
   }, []);
 
   /*
@@ -242,7 +253,15 @@ export function App() {
         placement="bottom-right"
         toastOffset={90}
         maxVisibleToasts={3}
-        toastProps={{ timeout: 2000, color: "primary" }}
+        /*
+         * `toastProps` 里**不要**再给 `color: "primary"`。
+         *
+         * 主色是运行期写进 `--heroui-primary` 的，Tailwind 只生成了 DEFAULT 那一档，
+         * 没有 `bg-primary-50` / `text-primary-600` 这些档位类。带上 color="primary"
+         * 时 HeroUI 会去套那几档类名，结果一个都不生效 —— 提示框变成「没有底色 +
+         * 一圈黑色 currentColor 边框」。用默认配色（content1 + divider）才是能看的。
+         */
+        toastProps={{ timeout: 2000 }}
         regionProps={{
           classNames: {
             base: "z-[99999]",

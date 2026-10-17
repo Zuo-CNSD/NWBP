@@ -310,8 +310,16 @@ html, body, #root {
   display: none;
 }
 
+/*
+ * 纯色背景（2026-10-17 起）：浅色纯白、深色纯黑，这一层直接关掉。
+ *
+ * 原来这里是 7 团 radial-gradient 色雾，作用是「让玻璃背后有东西可折射」。
+ * 关掉之后玻璃面板的**折射就看不见了**（背后没有可位移的内容），
+ * 但描边、边光、投影都还在，面板的层次仍然成立 —— 只是回到更干净的黑白观感。
+ * 想恢复色雾，把下面这行改回 display: block 即可。
+ */
 .liquid-glass .glass-wallpaper {
-  display: block;
+  display: none;
   position: absolute;
   inset: -22%;
   z-index: -1;
@@ -330,21 +338,27 @@ html, body, #root {
     radial-gradient(24% 26% at 30% 74%, hsl(var(--glass-tint-a) / 88%), transparent 64%),
     radial-gradient(20% 20% at 92% 84%, hsl(var(--glass-tint-c) / 88%), transparent 62%),
     radial-gradient(16% 16% at 54% 40%, hsl(var(--glass-tint-b) / 75%), transparent 60%);
-  filter: blur(30px) saturate(170%);
+  filter: blur(32px) saturate(122%);
   will-change: transform;
   animation: glass-drift 34s ease-in-out infinite alternate;
 }
 
 .liquid-glass .glass-wallpaper::after {
-  /* 只压很薄一层中性底色：既保住文字可读性，又让彩色底色透出来 */
+  /*
+   * 只压一层中性底色：既保住文字可读性，又让彩色底色透出来。
+   *
+   * 中间那档原本只有 6% —— 色雾又开着 saturate(170%)，浅色下中部那片绿/青
+   * 直接把空状态的灰字（「还没有播放记录」这类 text-default-500）压得看不清。
+   * 现在中间提到 24%、两端 44%/48%，色雾仍在，但不再盖过文字。
+   */
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
     155deg,
-    hsl(var(--heroui-background) / 30%),
-    hsl(var(--heroui-background) / 6%) 42%,
-    hsl(var(--heroui-background) / 36%)
+    hsl(var(--heroui-background) / 44%),
+    hsl(var(--heroui-background) / 24%) 42%,
+    hsl(var(--heroui-background) / 48%)
   );
 }
 
@@ -1076,4 +1090,37 @@ html.is-scrolling .glass-wallpaper {
     -1px -1px 0 rgb(0 0 0 / 80%),
     1px -1px 0 rgb(0 0 0 / 80%),
     -1px 1px 0 rgb(0 0 0 / 80%);
+}
+
+/* ---------- 骨架屏 ----------
+ * 列表首次加载时用整块占位替代居中转圈：高度贴着真实行，加载完不跳版。
+ * 底色走 HeroUI 的 default-200，深浅两套主题自动跟随。
+ */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: hsl(var(--heroui-default-200) / 60%);
+}
+
+/* 一条从左扫到右的高光，只扫一次循环；深浅色下都用低透明度的白，暗色下自然变暗 */
+.skeleton::after {
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, hsl(0deg 0% 100% / 18%), transparent);
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  content: "";
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* 开了「减少动态效果」就不扫光，留静态灰块 */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after {
+    animation: none;
+  }
 }

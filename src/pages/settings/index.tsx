@@ -14,6 +14,7 @@ import DesktopLyricsSettings from "./desktop-lyrics-settings";
 import Developers from "./developers";
 import MenuSettings from "./menu-settings";
 import NeteaseSettings from "./netease-settings";
+import PluginSettings from "./plugin-settings";
 import ProxySettings from "./proxy-settings";
 import ShortcutSettingsPage from "./shortcut-settings";
 import { SystemSettingsTab } from "./system-settings";
@@ -41,7 +42,6 @@ const useSystemSettingsForm = () => {
     displayMode,
     ffmpegPath,
     themeMode,
-    pageTransition,
     appLaunchAnimation,
     appLaunchAnimationDuration,
     appLaunchAnimationVideo,
@@ -71,7 +71,6 @@ const useSystemSettingsForm = () => {
       displayMode: s.displayMode,
       ffmpegPath: s.ffmpegPath,
       themeMode: s.themeMode,
-      pageTransition: s.pageTransition,
       appLaunchAnimation: s.appLaunchAnimation,
       appLaunchAnimationDuration: s.appLaunchAnimationDuration,
       appLaunchAnimationVideo: s.appLaunchAnimationVideo,
@@ -105,7 +104,6 @@ const useSystemSettingsForm = () => {
       displayMode,
       ffmpegPath,
       themeMode,
-      pageTransition,
       appLaunchAnimation,
       appLaunchAnimationDuration,
       appLaunchAnimationVideo,
@@ -169,6 +167,9 @@ const SettingsPage = () => {
             </Tab>
             <Tab key="shortcut" title={t("快捷键设置")}>
               <ShortcutSettingsPage />
+            </Tab>
+            <Tab key="plugin" title={t("插件")}>
+              <PluginSettings />
             </Tab>
             <Tab key="proxy" title={t("代理设置")}>
               <ProxySettings control={system.control} />

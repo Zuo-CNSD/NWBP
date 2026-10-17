@@ -1,5 +1,6 @@
 import type { IpcHandlerProps } from "./types";
 
+import { registerPluginHandlers } from "../plugin";
 import { registerAppHandlers } from "./app";
 import { registerCookieIpcHandlers } from "./cookie";
 import { registerDialogHandlers } from "./dialog";
@@ -24,4 +25,6 @@ export function registerIpcHandlers(props: IpcHandlerProps) {
   registerLyricsHandlers();
   registerNeteaseHandlers();
   registerLocalMusicHandlers();
+  // 插件放最后：它启动时要读设置、要拿主窗口，前面那些得先就位
+  registerPluginHandlers(props);
 }

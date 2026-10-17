@@ -96,7 +96,6 @@ export const useSettings = create<AppSettings & SettingsActions>()(
           displayMode: state.displayMode,
           ffmpegPath: state.ffmpegPath,
           themeMode: state.themeMode,
-          pageTransition: state.pageTransition,
           appLaunchAnimation: state.appLaunchAnimation,
           appLaunchAnimationDuration: state.appLaunchAnimationDuration,
           appLaunchAnimationVideo: state.appLaunchAnimationVideo,

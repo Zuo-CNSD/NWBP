@@ -8,7 +8,6 @@ type Language = "zh-CN" | "en" | "ja" | "ko";
 
 type AudioQuality = "auto" | "lossless" | "high" | "medium" | "low";
 type ThemeMode = "system" | "light" | "dark";
-type PageTransition = "none" | "fade" | "slide" | "scale" | "slideUp";
 
 /**
  * 歌曲音源：搜索和播放走哪一家。
@@ -70,7 +69,6 @@ interface AppSettings {
   displayMode: "card" | "list" | "compact";
   ffmpegPath?: string;
   themeMode: ThemeMode;
-  pageTransition: PageTransition;
   /** app 打开动画（启动时盖住整窗的开场画面） */
   appLaunchAnimation: AppLaunchAnimation;
   /**

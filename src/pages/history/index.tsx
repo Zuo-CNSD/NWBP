@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { addToast, Spinner, Switch } from "@heroui/react";
+import { addToast, Switch } from "@heroui/react";
 import { RiDeleteBinLine } from "@remixicon/react";
 import { useShallow } from "zustand/react/shallow";
 
 import { t } from "@/common/i18n";
 import IconButton from "@/components/icon-button";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
+import ListSkeleton from "@/components/skeleton";
 import { postHistoryClear } from "@/service/history-clear";
 import { postHistoryDelete } from "@/service/history-delete";
 import {
@@ -278,9 +279,7 @@ const History = () => {
       </div>
 
       {loading && list.length === 0 ? (
-        <div className="flex h-[40vh] items-center justify-center">
-          <Spinner />
-        </div>
+        <ListSkeleton rows={6} />
       ) : isEmpty ? (
         <div className="flex h-[40vh] items-center justify-center text-gray-500">{t("暂无历史记录")}</div>
       ) : displayMode === "card" ? (

@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { addToast, Spinner, Tab, Tabs } from "@heroui/react";
+import { addToast, Tab, Tabs } from "@heroui/react";
 import { RiPlayFill } from "@remixicon/react";
 
 import { t } from "@/common/i18n";
 import AsyncButton from "@/components/async-button";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
+import ListSkeleton from "@/components/skeleton";
 import { getMusicComprehensiveWebRank, type Data as MusicItem } from "@/service/music-comprehensive-web-rank";
 import { getRegionFeedRcmd, type Archive } from "@/service/web-interface-region-feed-rcmd";
 import { useModalStore } from "@/store/modal";
@@ -316,11 +317,7 @@ const MusicRecommend = () => {
             onMenuAction={handleMenuAction}
           />
         )}
-        {initialLoading && list.length === 0 && (
-          <div className="flex h-[40vh] items-center justify-center">
-            <Spinner size="lg" />
-          </div>
-        )}
+        {initialLoading && list.length === 0 && <ListSkeleton rows={6} />}
       </div>
     </ScrollContainer>
   );
