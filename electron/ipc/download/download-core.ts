@@ -45,6 +45,10 @@ export class DownloadCore extends EventEmitter {
   public downloadProgress: number = 0;
   public mergeProgress: number = 0;
   public convertProgress: number = 0;
+  /** 目标音频格式；不填 = 原始资源 */
+  public targetFormat?: MediaDownloadTargetFormat;
+  /** 是否真的做过转码（false = 原始资源，界面上要能区分） */
+  public converted: boolean = false;
   public status: MediaDownloadStatus = "waiting";
   public fileName?: string;
   public saveDir: string;
@@ -276,9 +280,25 @@ export class DownloadCore extends EventEmitter {
     this.status = "converting";
     this.emitUpdate();
     const sanitizedTitle = sanitizeFilename(this.title);
+
+    /*
+     * 只有「用户明确要了某个格式」且「源本来不是那个格式」才真转码。
+     * 选了 original、或源已经是 mp3 又要 mp3 的，都走 `-c:a copy` ——
+     * 不白花 CPU，也绝不在没必要的时候碰音质。
+     */
+    const sourceCodec = (this.audioCodecs ?? "").toLowerCase();
+    const requested = this.targetFormat ?? "original";
+    const needTranscode =
+      this.outputFileType === "audio" && requested !== "original" && !sourceCodec.includes(requested);
+    this.converted = needTranscode;
+
     this.fileName = `${sanitizedTitle}${this.getAudioExt()}`;
+    if (needTranscode) {
+      this.fileName = `${sanitizedTitle}.${requested}`;
+    }
     if (this.outputFileType === "video") {
       this.fileName = `${sanitizedTitle}${this.getVideoExt()}`;
+      this.converted = false;
     }
     await ensureDir(this.saveDir);
     this.savePath = path.join(this.saveDir, this.fileName);
@@ -287,6 +307,7 @@ export class DownloadCore extends EventEmitter {
       audioTempPath: this.audioTempPath,
       videoTempPath: this.videoTempPath,
       outputPath: this.savePath,
+      audioFormat: needTranscode ? (requested as "mp3" | "flac") : undefined,
       onProgress: (percent: number) => {
         this.convertProgress = percent;
         this.emitUpdate();

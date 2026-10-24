@@ -21,7 +21,12 @@ const MusicDownloadButton = () => {
    * 网易云曲目的直链要在这里先换出来（主进程没有网易云接口），
    * 换不到就明确报错，别丢一个「必然失败」的任务进下载页。
    */
-  const downloadAudio = async () => {
+  /*
+   * `targetFormat` 默认 `original`：能拿到什么就存什么，不转码。
+   * 只有用户在菜单里明确点了 MP3 / FLAC，才会在下载完成后跑一次 ffmpeg ——
+   * 转码只会损失信息，默认就不该走这条路。
+   */
+  const downloadAudio = async (targetFormat: MediaDownloadTargetFormat = "original") => {
     if (!playItem) return;
 
     const resolved = await resolveDownloadSource(playItem, toNeteaseLevel(useSettings.getState().audioQuality));
@@ -39,11 +44,12 @@ const MusicDownloadButton = () => {
       outputFileType: "audio",
       title: playItem?.pageTitle || playItem?.title || `audio-${Date.now()}`,
       cover: playItem?.pageCover || playItem?.cover,
+      targetFormat,
       ...resolved.source,
     });
 
     addToast({
-      title: t("已添加下载任务"),
+      title: targetFormat === "original" ? t("已添加下载任务") : t("已添加下载任务（下载完成后转码）"),
       color: "success",
     });
   };
@@ -114,7 +120,7 @@ const MusicDownloadButton = () => {
 
   if (playItem?.sid) {
     return (
-      <AsyncButton isIconOnly size="sm" variant="light" className="hover:text-primary" onPress={downloadAudio}>
+      <AsyncButton isIconOnly size="sm" variant="light" className="hover:text-primary" onPress={() => downloadAudio()}>
         <RiDownload2Fill size={18} />
       </AsyncButton>
     );
@@ -140,6 +146,10 @@ const MusicDownloadButton = () => {
           onAction={key => {
             if (key === "audio") {
               void downloadAudio();
+            } else if (key === "audio-mp3") {
+              void downloadAudio("mp3");
+            } else if (key === "audio-flac") {
+              void downloadAudio("flac");
             } else if (key === "video") {
               void downloadVideo();
             } else if (key === "cover") {
@@ -154,7 +164,25 @@ const MusicDownloadButton = () => {
             textValue={t("下载音频")}
             startContent={<RiFileMusicLine size={16} />}
           >
-            {t("下载音频")}
+            {t("下载音频（原始音源）")}
+          </ListboxItem>
+          <ListboxItem
+            className="rounded-medium"
+            key="audio-mp3"
+            textValue={t("转码为 MP3 320k")}
+            description={t("转换会损失音质，仅在设备不认原始格式时用")}
+            startContent={<RiFileMusicLine size={16} />}
+          >
+            {t("转码为 MP3 320k")}
+          </ListboxItem>
+          <ListboxItem
+            className="rounded-medium"
+            key="audio-flac"
+            textValue={t("转码为 FLAC")}
+            description={t("源本身有损时，转 FLAC 不会变好，只是文件更大")}
+            startContent={<RiFileMusicLine size={16} />}
+          >
+            {t("转码为 FLAC")}
           </ListboxItem>
           <ListboxItem
             className="rounded-medium"

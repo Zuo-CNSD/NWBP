@@ -14,6 +14,7 @@
 import { addToast } from "@heroui/react";
 
 import { usePlayList } from "@/store/play-list";
+import { inspectRequest } from "@shared/security/net-guard";
 
 /** 界面侧注册的命令，设置页会把这些和主进程注册的合并显示 */
 interface RendererCommand {
@@ -231,6 +232,80 @@ const createApi = (bundle: PluginRenderBundle): Record<string, unknown> => {
   return api;
 };
 
+/**
+ * 插件脚本的执行环境。
+ *
+ * 做法是**遮蔽而不是隔离**：把 `window` / `document` / `fetch` 这几个入口换成
+ * 一层代理，插件拿到的作用域里看不到 `window.electron`、读不到 `document.cookie`、
+ * 网络请求先过一遍出口管控。
+ *
+ * 要说清楚的是：**这不是沙箱**。插件里 `Function("return this")()` 仍然能摸到真身。
+ * 这套东西的价值在于两件事：
+ *   1. 凭据从正常 API 面里被彻底拿走 —— 插件没法「顺手」拿到，只能明目张胆地绕；
+ *   2. 顺手绕的代码会被静态扫描标出来，装之前就看得见。
+ */
+const HIDDEN_WINDOW_KEYS = new Set([
+  "electron",
+  "require",
+  "process",
+  "module",
+  "globalThis",
+  "localStorage",
+  "sessionStorage",
+  "indexedDB",
+  "caches",
+  "XMLHttpRequest",
+  "WebSocket",
+  "EventSource",
+  "fetch",
+]);
+
+const buildSandbox = (pluginId: string) => {
+  const warn = (what: string) => console.warn(`[plugin:${pluginId}] 不允许访问 ${what}`);
+
+  const guardedFetch = (input: RequestInfo | URL, init?: RequestInit) => {
+    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    const verdict = inspectRequest(url, init);
+    if (!verdict.allowed) {
+      warn(`网络请求 ${verdict.target}（${verdict.reason}）`);
+      return Promise.reject(new Error(`请求被拦截：${verdict.reason}`));
+    }
+    return window.fetch(input, init);
+  };
+
+  const sandboxWindow = new Proxy(window, {
+    get(target, prop, receiver) {
+      if (typeof prop === "string" && HIDDEN_WINDOW_KEYS.has(prop)) {
+        warn(`window.${prop}`);
+        return undefined;
+      }
+      const value = Reflect.get(target, prop, receiver);
+      // 绑定到真身：`window.addEventListener` 这类方法在代理上调用会抛非法调用
+      return typeof value === "function" ? value.bind(target) : value;
+    },
+  });
+
+  const sandboxDocument = new Proxy(document, {
+    get(target, prop, receiver) {
+      if (prop === "cookie") {
+        warn("document.cookie");
+        return "";
+      }
+      const value = Reflect.get(target, prop, receiver);
+      return typeof value === "function" ? value.bind(target) : value;
+    },
+    set(target, prop, value) {
+      if (prop === "cookie") {
+        warn("document.cookie");
+        return true;
+      }
+      return Reflect.set(target, prop, value);
+    },
+  });
+
+  return { sandboxWindow, sandboxDocument, guardedFetch };
+};
+
 const clearInjected = () => {
   while (ACTIVE.length) {
     const plugin = ACTIVE.pop();
@@ -272,8 +347,16 @@ export const bootPlugins = async () => {
       if (!bundle.code.trim()) continue;
       const api = createApi(bundle);
       try {
-        const run = new Function("nwbp", `"use strict";\n${bundle.code}\n`);
-        run(api);
+        const { sandboxWindow, sandboxDocument, guardedFetch } = buildSandbox(bundle.id);
+        const run = new Function(
+          "nwbp",
+          "window",
+          "document",
+          "globalThis",
+          "fetch",
+          `"use strict";\n${bundle.code}\n`,
+        );
+        run(api, sandboxWindow, sandboxDocument, sandboxWindow, guardedFetch);
       } catch (error) {
         const message = error instanceof Error ? (error.stack ?? error.message) : String(error);
         console.error(`[plugin:${bundle.id}] 注入脚本执行失败`, error);

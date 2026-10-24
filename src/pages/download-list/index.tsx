@@ -192,6 +192,16 @@ const DownloadList = () => {
                                 {quality}
                               </Chip>
                             )}
+                            {/*
+                              明确区分「原始音源」和「转过码的」。
+                              用户很容易以为选了 flac 就提升了音质 —— 实际只会损失，
+                              所以完成之后必须让他一眼看出这条是哪一种。
+                            */}
+                            {item.outputFileType === "audio" && (item.status === "completed" || item.converted) && (
+                              <Chip size="sm" radius="sm" variant="dot" color={item.converted ? "warning" : "success"}>
+                                {item.converted ? t("已转码") : t("原始音源")}
+                              </Chip>
+                            )}
                           </div>
                         </div>
                       </TableCell>

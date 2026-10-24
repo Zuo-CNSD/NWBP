@@ -6,4 +6,5 @@ export enum StoreNameMap {
   LyricsCache = "lyrics-cache",
   NeteaseAccount = "netease-account",
   LyricsMatch = "lyrics-match",
+  PluginAi = "plugin-ai",
 }

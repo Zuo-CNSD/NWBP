@@ -69,6 +69,7 @@ export class DownloadQueue {
       cid: mediaInfo.cid,
       sid: mediaInfo.sid,
       audioUrl: mediaInfo.audioUrl,
+      targetFormat: mediaInfo.targetFormat,
       createdTime: Date.now(),
       status: "waiting",
       abortSignal: controller.signal,
@@ -210,6 +211,8 @@ export class DownloadQueue {
       downloadProgress: core.downloadProgress,
       mergeProgress: core.mergeProgress,
       convertProgress: core.convertProgress,
+      targetFormat: core.targetFormat,
+      converted: core.converted,
       createdTime: core.createdTime,
       error: core.error,
     }));
@@ -253,6 +256,8 @@ export class DownloadQueue {
         downloadProgress: core.downloadProgress,
         mergeProgress: core.mergeProgress,
         convertProgress: core.convertProgress,
+        targetFormat: core.targetFormat,
+        converted: core.converted,
         status: ["downloading", "waiting"].includes(core.status)
           ? "downloadPaused"
           : core.status === "merging"

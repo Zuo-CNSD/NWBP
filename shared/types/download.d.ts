@@ -11,6 +11,15 @@ type MediaDownloadStatus =
 
 type MediaDownloadOutputFileType = "audio" | "video";
 
+/**
+ * 目标音频格式。
+ *
+ * `original` 是**推荐值**：能拿到什么就存什么，不经过转码，音质和下载速度都最好。
+ * 其余两项要在下载完成后用 ffmpeg 真转码 —— 转了只会**损失**信息，不会变好听，
+ * 之所以提供，纯粹是为了照顾「某些设备只认 mp3」这类兼容需求。
+ */
+type MediaDownloadTargetFormat = "original" | "mp3" | "flac";
+
 interface MediaDownloadInfo {
   /** 文件类型 */
   outputFileType: MediaDownloadOutputFileType;
@@ -32,6 +41,11 @@ interface MediaDownloadInfo {
    * 带上它就跳过 `setDownloadUrl()` 的解析步骤。
    */
   audioUrl?: string;
+  /**
+   * 目标音频格式。不填等于 `original`（原始资源直接落地，不转码）。
+   * 只有明确要 mp3/flac 时才需要 ffmpeg，否则连转换这一步都不会走。
+   */
+  targetFormat?: MediaDownloadTargetFormat;
 }
 
 interface MediaDownloadTask extends MediaDownloadInfo {
@@ -61,6 +75,12 @@ interface MediaDownloadTask extends MediaDownloadInfo {
   convertProgress?: number;
   /** 下载错误信息 */
   error?: string;
+  /**
+   * 是否真的做过转码。
+   * `false` 表示文件是原始资源（最多重新封装），界面上要能看出这个区别 ——
+   * 用户不该以为「选了 flac 就提升了音质」。
+   */
+  converted?: boolean;
 }
 
 interface MediaDownloadBroadcastPayload {

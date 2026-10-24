@@ -208,10 +208,28 @@ declare global {
       invoke: (pluginId: string, subChannel: string, payload?: unknown) => Promise<unknown>;
       /** 往插件目录写一份示例插件 */
       installSample: () => Promise<{ folder: string; created: boolean }>;
+      /** 从本地 zip 安装；用户取消文件选择时返回 null */
+      installFromFile: () => Promise<PluginInstallResult | null>;
+      /** 从链接安装（下载 zip 后走同一条安装路径） */
+      installFromUrl: (url: string) => Promise<PluginInstallResult>;
       openDir: () => Promise<string>;
       reveal: (id: string) => Promise<void>;
       /** 界面脚本抛错时回传，主进程记到列表上 */
       reportError: (id: string, message: string) => Promise<void>;
+      /** 用户明知风险仍放行被扫描拦截的插件 */
+      setOverride: (id: string, overridden: boolean) => Promise<PluginInfo[]>;
+      /** 插件的网络 / 敏感操作审计记录（内存态，重启清空） */
+      getAudit: (id?: string) => Promise<PluginAuditEntry[]>;
+      clearAudit: (id?: string) => Promise<void>;
+      /** 安全模式状态：崩过两次就会自动进 */
+      safeMode: () => Promise<{ active: boolean; reason: "crash-loop" | "flag" | "manual" | null }>;
+      /** enable=true 表示「下次启动禁用全部插件」 */
+      setSafeMode: (enable: boolean) => Promise<{ active: boolean; reason: "crash-loop" | "flag" | "manual" | null }>;
+      /** AI 检测端点：不传 patch 就是读；返回值里没有 apiKey，只有 hasKey */
+      aiConfig: (patch?: Partial<PluginAiState>) => Promise<PluginAiConfig>;
+      aiClearKey: () => Promise<PluginAiConfig>;
+      /** 对某个插件跑一次 AI 检测；force=true 跳过缓存 */
+      aiScan: (id: string, force?: boolean) => Promise<PluginAiScanResult>;
       /** 监听插件事件（自定义事件 + 加载状态变化） */
       onEvent: (cb: (payload: PluginEventPayload) => void) => VoidFunction;
     };

@@ -108,3 +108,22 @@ export const lyricsMatchStore = new Store<Record<string, LyricsMatchRecord>>({
   cwd: getUserDataPath(),
   defaults: {},
 });
+
+/**
+ * AI 插件安全检测的端点配置。
+ *
+ * 单独一个 store 而不是塞进 AppSettings，两个理由：
+ *  1. `apiKey` 等同于凭据，不该混在界面上随便能读的设置里 —— 这里开了加密；
+ *  2. 渲染端只需要知道「填没填 key」，真 key 永远不出主进程。
+ */
+export const pluginAiStore = new Store<PluginAiState>({
+  name: StoreNameMap.PluginAi,
+  cwd: getUserDataPath(),
+  encryptionKey: StoreNameMap.PluginAi,
+  defaults: {
+    enabled: false,
+    baseUrl: "",
+    model: "",
+    apiKey: "",
+  },
+});

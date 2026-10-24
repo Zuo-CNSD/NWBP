@@ -128,10 +128,27 @@ export const channel = {
     invoke: "plugin:invoke",
     /** 往插件目录写一份示例插件 */
     installSample: "plugin:install-sample",
+    /** 从本地 zip 安装（会弹文件选择框） */
+    installFromFile: "plugin:install-from-file",
+    /** 从链接安装（下载 zip 后走同一条安装路径） */
+    installFromUrl: "plugin:install-from-url",
     openDir: "plugin:open-dir",
     reveal: "plugin:reveal",
     /** 界面脚本抛错时回传给主进程，记到列表上 */
     reportError: "plugin:report-error",
+    /** 用户明知风险仍放行被扫描拦截的插件 */
+    setOverride: "plugin:set-override",
+    /** 某个插件的网络/敏感操作审计记录 */
+    getAudit: "plugin:get-audit",
+    clearAudit: "plugin:clear-audit",
+    /** 安全模式状态 / 设置 */
+    safeMode: "plugin:safe-mode",
+    setSafeMode: "plugin:set-safe-mode",
+    /** AI 检测端点配置（读 / 写 / 清空 key） */
+    aiConfig: "plugin:ai-config",
+    aiClearKey: "plugin:ai-clear-key",
+    /** 对某个插件跑一次 AI 检测 */
+    aiScan: "plugin:ai-scan",
     /** 主进程 → 界面：插件自定义事件 / 加载状态变化 */
     event: "plugin:event",
   },

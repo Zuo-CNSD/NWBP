@@ -10,6 +10,11 @@ interface ConvertOptions {
   audioTempPath?: string;
   videoTempPath?: string;
   outputPath: string;
+  /**
+   * 目标音频格式。不填 = `-c:a copy`（原始流直接封装，无损无耗时）。
+   * 填了才真转码 —— 这是唯一会损失音质的路径，所以默认不走。
+   */
+  audioFormat?: "mp3" | "flac";
   onProgress?: (percent: number) => void;
   signal?: AbortSignal;
 }
@@ -34,6 +39,7 @@ export const convert = async ({
   videoTempPath,
   outputPath,
   outputFileType,
+  audioFormat,
   onProgress,
   signal,
 }: ConvertOptions): Promise<string> => {
@@ -70,9 +76,16 @@ export const convert = async ({
       if (!audioTempPath) {
         return reject(new Error("Audio conversion requires audio temp path"));
       }
-      // ffmpeg -i audio -c:a copy output
       command.input(audioTempPath);
-      command.outputOptions(["-c:a copy"]);
+      if (audioFormat === "mp3") {
+        // 320k 是 mp3 的实际上限，再高只会让文件更大
+        command.outputOptions(["-c:a", "libmp3lame", "-b:a", "320k"]);
+      } else if (audioFormat === "flac") {
+        command.outputOptions(["-c:a", "flac"]);
+      } else {
+        // 默认：原始音频流直接复制，不重新编码
+        command.outputOptions(["-c:a copy"]);
+      }
     }
 
     command.on("progress", progress => {

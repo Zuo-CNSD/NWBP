@@ -1,7 +1,7 @@
 <h1 align="center">NWBP</h1>
 
 <p align="center">
-  <b>Beta 5</b>
+  <b>Beta 7</b>
 </p>
 <p align="center">
   一个基于哔哩哔哩公开接口的跨平台桌面音乐播放器，另集成网易云音乐音源 🎧
@@ -21,6 +21,17 @@
 </p>
 
 ⸻
+
+## ⬇️ 下载
+
+两个渠道放的是**同一批文件**，内容完全一致，按网络情况选一个：
+
+| 渠道 | 地址 | 说明 |
+| --- | --- | --- |
+| **国内渠道（推荐）** | https://nas.qicwken.top/@s/nwbp | NAS 网盘，国内网络直连 |
+| GitHub Releases | https://github.com/Zuo-CNSD/NWBP/releases | 海外 / 给拿不到国内网盘的人 |
+
+> 本版**没有自动更新**：升级方式是下载新安装包覆盖安装（应用数据会保留）。
 
 ## 📸 Preview
 
@@ -223,6 +234,27 @@ NWBP 不只是简单修改主题，而是在上游项目的基础上进行了较
 
 桌面歌词增加可选频谱条，并与全屏播放器共享同一套频谱模块。
 
+### 🧩 插件系统（新增）
+
+一个文件夹就是一个插件：目录里放 `manifest.json` 加可选的 `main.js` / `index.js` / `style.css`，
+**放进目录即启用**，删掉文件夹等于卸载。界面注入、播放器控制、主进程能力（文件 / 网络 / 通知）、
+自定义 IPC 通道都能用；改完点「重新加载」即可，不必重启。
+
+Beta 7 补的是安全的那一半：
+
+* **凭据不可及** —— 插件侧 `document.cookie` 读到空串、`window.electron` 为 `undefined`，
+  网易云 Cookie 只活在主进程里
+* **静态扫描** —— 装之前与每次启动都扫一遍源码（只读文本、不执行）；读文件系统 / 起子进程 /
+  扒密码 / 运行时远程加载代码三条硬规则命中即**不加载**
+* **组合判定** —— 单看 `fetch` 或单看读 cookie 都可能无害，同一插件里两者同现才判「凭据外传」，
+  避免把换肤插件误标成高危
+* **AI 检测（可选）** —— 用 OpenAI 兼容接口让模型讲清「读了什么、发到哪、风险在哪」，
+  不给分数；不配置就完全不联网，Key 存在主进程
+* **安全模式** —— 连续两次没正常启动或用户手动触发时，下次启动不加载任何插件
+* **安装与来源** —— 支持从 zip / 链接安装，装前先扫，来源与安装日期都记录并展示
+
+开发文档：[`docs/plugin-development.md`](docs/plugin-development.md)
+
 ### 🎬 启动动画
 
 新增应用启动动画系统，并支持自定义视频。
@@ -371,9 +403,9 @@ pnpm build
 
 ## 🏷 版本号
 
-`package.json` 的 `version` 必须是合法 semver（Electron Builder 依赖它命名产物），当前为 `0.1.0-beta.5`。
+`package.json` 的 `version` 必须是合法 semver（Electron Builder 依赖它命名产物），当前为 `0.1.0-beta.7`。
 
-界面上的「**Beta 5**」由 `src/common/utils/version.ts` 的 `formatAppVersion()` 转换而来 —— 显示的是**预发布序号**，所以发新版时要把 `beta` 后面的数字往上加（`-beta.5` → `-beta.6` …）。
+界面上的「**Beta 7**」由 `src/common/utils/version.ts` 的 `formatAppVersion()` 转换而来 —— 显示的是**预发布序号**，所以发新版时要把 `beta` 后面的数字往上加（`-beta.6` → `-beta.7` …）。
 
 点分的版本核心（`0.1.0`）不带预发布标记，会被 `plugins/electron-build.ts` 写进 macOS 的 `CFBundleVersion` 与 Windows 的 `FileVersion` / `ProductVersion`。
 

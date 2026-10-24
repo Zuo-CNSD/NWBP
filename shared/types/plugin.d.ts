@@ -67,6 +67,12 @@ interface PluginInfo {
   /** 样式文件名列表 */
   styles: string[];
   permissions: PluginPermission[];
+  /** 静态扫描结论。扫过的插件都有，解析失败时没有 */
+  security?: PluginScanResult;
+  /** 用户明知风险仍要启用（放行被拦的插件） */
+  overridden?: boolean;
+  /** 来源信息：本地放入 / 压缩包 / 链接安装 */
+  source?: PluginSourceInfo;
 }
 
 /** 给渲染端跑的那一份（只有启用中的插件才会下发） */

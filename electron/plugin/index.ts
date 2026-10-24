@@ -1,12 +1,26 @@
-import { app, BrowserWindow, ipcMain, Notification, shell } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, Notification, shell } from "electron";
 import log from "electron-log";
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
+import { inspectRequest } from "@shared/security/net-guard";
+
 import { channel } from "../ipc/channel";
 import { getUserDataPath } from "../utils";
+import { downloadArchive, forgetSource, installFromArchive, readSourceMap } from "./install";
 import { SAMPLE_PLUGIN_FILES } from "./sample";
+import { clearAiKey, readAiConfig, runAiScan, writeAiConfig } from "./security/ai-scan";
+import { clearAudit, getAudit, recordAudit } from "./security/audit";
+import {
+  beginBoot,
+  clearSafeMode,
+  isSafeMode,
+  markStable,
+  requestSafeModeNextBoot,
+  safeModeReason,
+} from "./security/safe-mode";
+import { scanPluginFolder } from "./security/scan";
 
 /** 当前应用支持的插件 API 版本。manifest 里写了更高版本就只提示、不加载。 */
 export const PLUGIN_API_VERSION = 1;
@@ -32,7 +46,11 @@ interface LoadedPlugin {
   commands: { id: string; title: string; run: () => unknown }[];
 }
 
-type PluginState = { enabled: Record<string, boolean> };
+type PluginState = {
+  enabled: Record<string, boolean>;
+  /** 用户明知被扫描拦截仍要放行的插件，记在这里（相当于签了知情书） */
+  overrides?: Record<string, boolean>;
+};
 
 const isFile = (p: string) => {
   try {
@@ -56,6 +74,15 @@ const readText = (p: string): string | null => {
     return fs.readFileSync(p, "utf-8");
   } catch {
     return null;
+  }
+};
+
+/** 目录创建时间，用来在界面上回答「这个插件什么时候进来的」 */
+const folderBirthTime = (folder: string): number | undefined => {
+  try {
+    return Math.round(fs.statSync(folder).birthtimeMs) || undefined;
+  } catch {
+    return undefined;
   }
 };
 
@@ -109,7 +136,10 @@ export class PluginManager {
     if (!raw) return { enabled: {} };
     try {
       const parsed = JSON.parse(raw) as PluginState;
-      return { enabled: parsed?.enabled && typeof parsed.enabled === "object" ? parsed.enabled : {} };
+      return {
+        enabled: parsed?.enabled && typeof parsed.enabled === "object" ? parsed.enabled : {},
+        overrides: parsed?.overrides && typeof parsed.overrides === "object" ? parsed.overrides : {},
+      };
     } catch {
       return { enabled: {} };
     }
@@ -135,6 +165,8 @@ export class PluginManager {
       .map(item => item.name);
 
     const next = new Map<string, LoadedPlugin>();
+    // 通过安装器进来的插件有记录（zip / 链接 + 安装时间）；自己放进目录的没有，按 local 显示
+    const installedSources = readSourceMap();
 
     for (const folderName of folders) {
       const folder = path.join(this.dir, folderName);
@@ -174,6 +206,18 @@ export class PluginManager {
 
       const styles = (manifest.styles ?? []).filter(s => isFile(path.join(folder, String(s))));
 
+      /*
+       * 静态扫描放在「读清单」之后、「启动」之前 ——
+       * 只读文本、不执行任何插件代码，所以一个专门用来偷凭据的插件
+       * 在被判定拦截之前，一次都不会跑起来。
+       */
+      const security = scanPluginFolder(folder, [
+        { name: MANIFEST_FILE, kind: "manifest" },
+        ...(hasMain && manifest.main ? [{ name: String(manifest.main), kind: "main" as const }] : []),
+        ...(hasRenderer && manifest.renderer ? [{ name: String(manifest.renderer), kind: "renderer" as const }] : []),
+        ...styles.map(name => ({ name, kind: "styles" as const })),
+      ]);
+
       next.set(id, {
         info: {
           id,
@@ -186,6 +230,10 @@ export class PluginManager {
           hasRenderer,
           styles,
           permissions,
+          security,
+          overridden: state.overrides?.[id] === true,
+          // 通过安装器装的带来源记录；用户自己拷进来的按「本地」显示，并带上目录创建时间
+          source: installedSources[id] ?? { kind: "local", from: folder, installedAt: folderBirthTime(folder) },
         },
         css: [],
         code: "",
@@ -196,8 +244,12 @@ export class PluginManager {
 
     // 已经卸载的插件从状态文件里顺手清掉，免得越攒越多
     const alive = new Set(next.keys());
+    for (const key of Object.keys(installedSources)) {
+      if (!alive.has(key)) forgetSource(key);
+    }
     const pruned = Object.fromEntries(Object.entries(state.enabled).filter(([id]) => alive.has(id)));
-    this.writeState({ enabled: pruned });
+    const prunedOverrides = Object.fromEntries(Object.entries(state.overrides ?? {}).filter(([id]) => alive.has(id)));
+    this.writeState({ enabled: pruned, overrides: prunedOverrides });
 
     this.plugins.clear();
     for (const [id, plugin] of next) this.plugins.set(id, plugin);
@@ -307,6 +359,19 @@ export class PluginManager {
       net: {
         fetch: (url: string, init?: RequestInit) => {
           assertPermission("net");
+          // 每个请求都过一遍出口管控，并留一条审计（只记 host+path，丢掉 query）
+          const verdict = inspectRequest(url, init);
+          recordAudit({
+            at: Date.now(),
+            pluginId: id,
+            kind: "net",
+            target: verdict.target,
+            blocked: !verdict.allowed,
+            reason: verdict.reason,
+          });
+          if (!verdict.allowed) {
+            throw new Error(`请求被拦截：${verdict.reason}（${verdict.target}）`);
+          }
           return fetch(url, init);
         },
       },
@@ -370,6 +435,35 @@ export class PluginManager {
   async start(id: string) {
     const plugin = this.plugins.get(id);
     if (!plugin || plugin.info.running || plugin.info.error) return;
+
+    /*
+     * 安全模式：一个插件都不启动。
+     * 注意这里**不动**插件的 enabled 状态 —— 安全模式是临时的，
+     * 用户解除之后该开的还开着，不该借机把别人的配置改掉。
+     */
+    if (isSafeMode()) {
+      plugin.info.runtimeError = "安全模式下未加载";
+      return;
+    }
+
+    /*
+     * 扫描判定必须拦截的：直接不启动。
+     * 这是「直接阻止危险操作」而不是「弹个警告让用户点确定」——
+     * 读账号凭据还要往外发的插件，没有需要用户权衡的地方。
+     * 用户确实信任它时，可以在设置页显式放行（overridden），那是有记录的。
+     */
+    if (plugin.info.security?.blocked && !plugin.info.overridden) {
+      plugin.info.runtimeError = "已被安全扫描拦截，未加载";
+      recordAudit({
+        at: Date.now(),
+        pluginId: id,
+        kind: "credential",
+        target: plugin.info.security.findings.find(f => f.blocking)?.rule ?? "blocked",
+        blocked: true,
+        reason: "静态扫描判定为高风险，拒绝加载",
+      });
+      return;
+    }
 
     this.readAssets(plugin);
     plugin.info.runtimeError = undefined;
@@ -542,6 +636,58 @@ export class PluginManager {
     log.error(`[plugin:${pluginId}] 渲染端脚本出错:`, message);
   }
 
+  /**
+   * 用户显式放行 / 撤销放行一个被拦截的插件。
+   *
+   * 这是整套机制里唯一的「逃生口」。做了两道限制：
+   *  - 只有界面上明确的二次确认才会调到这里（见设置页）；
+   *  - 放行状态记进 `.state.json`，属于可查的决定，不是一次性的。
+   */
+  async setOverride(id: string, overridden: boolean) {
+    const plugin = this.plugins.get(id);
+    if (!plugin) return;
+
+    plugin.info.overridden = overridden;
+    const state = this.readState();
+    const overrides = { ...(state.overrides ?? {}) };
+    if (overridden) overrides[id] = true;
+    else delete overrides[id];
+    this.writeState({ ...state, overrides });
+
+    if (overridden) {
+      if (plugin.info.enabled && !plugin.info.error) await this.start(id);
+    } else if (plugin.info.running) {
+      await this.stop(id);
+    }
+    this.notifyRenderer();
+  }
+
+  /**
+   * 从压缩包安装。装完立刻重扫并刷新界面 —— 用户点完按钮就该看到它出现。
+   *
+   * 被扫描拦截的插件**也会落地**，但默认停用：让用户看得见、能删、能查证据，
+   * 比「静默拒装、什么都不说」更有用。
+   */
+  async install(archivePath: string, source: PluginSourceInfo) {
+    const result = await installFromArchive({ archivePath, pluginsDir: this.dir, source });
+    await this.reload();
+    if (result.disabled) await this.setEnabled(result.id, false);
+    return result;
+  }
+
+  safeModeInfo() {
+    return { active: isSafeMode(), reason: safeModeReason() };
+  }
+
+  /** 下次启动进安全模式（用于「当前已经卡到没法操作」的场景） */
+  requestSafeMode() {
+    requestSafeModeNextBoot();
+  }
+
+  clearSafeModeFlag() {
+    clearSafeMode();
+  }
+
   private notifyRenderer() {
     const win = this.getMainWindow();
     if (!win || win.isDestroyed()) return;
@@ -585,15 +731,84 @@ export function registerPluginHandlers(props: { getMainWindow: () => BrowserWind
     if (result.created) await manager!.reload();
     return result;
   });
+  ipcMain.handle(channel.plugin.installFromFile, async () => {
+    const win = props.getMainWindow();
+    const options = {
+      title: "选择插件安装包",
+      filters: [{ name: "插件包", extensions: ["zip"] }],
+      properties: ["openFile" as const],
+    };
+    const picked = win ? await dialog.showOpenDialog(win, options) : await dialog.showOpenDialog(options);
+    if (picked.canceled || !picked.filePaths[0]) return null;
+
+    const filePath = picked.filePaths[0];
+    return manager!.install(filePath, { kind: "zip", from: filePath });
+  });
+  ipcMain.handle(channel.plugin.installFromUrl, async (_e, url: string) => {
+    const archive = await downloadArchive(url);
+    try {
+      // source.from 记的是**原始链接**，不是临时文件路径 —— 用户要能顺藤摸瓜找到出处
+      return await manager!.install(archive, { kind: "url", from: url });
+    } finally {
+      fs.rm(archive, { force: true }, () => {
+        /* 临时文件删不掉也不影响安装结果 */
+      });
+    }
+  });
   ipcMain.handle(channel.plugin.openDir, () => manager!.openDir());
   ipcMain.handle(channel.plugin.reveal, (_e, id: string) => manager!.reveal(id));
   ipcMain.handle(channel.plugin.reportError, (_e, id: string, message: string) =>
     manager!.reportRuntimeError(id, message),
   );
+  ipcMain.handle(channel.plugin.setOverride, async (_e, id: string, overridden: boolean) => {
+    await manager!.setOverride(id, overridden);
+    return manager!.list();
+  });
+  ipcMain.handle(channel.plugin.getAudit, (_e, id?: string) => getAudit(id));
+  ipcMain.handle(channel.plugin.clearAudit, (_e, id?: string) => clearAudit(id));
+  ipcMain.handle(channel.plugin.safeMode, () => manager!.safeModeInfo());
+  ipcMain.handle(channel.plugin.setSafeMode, (_e, enable: boolean) => {
+    if (enable) manager!.requestSafeMode();
+    else manager!.clearSafeModeFlag();
+    return manager!.safeModeInfo();
+  });
+  ipcMain.handle(channel.plugin.aiConfig, (_e, patch?: Partial<PluginAiState>) =>
+    patch ? writeAiConfig(patch) : readAiConfig(),
+  );
+  ipcMain.handle(channel.plugin.aiClearKey, () => clearAiKey());
+  ipcMain.handle(channel.plugin.aiScan, async (_e, id: string, force?: boolean) => {
+    const info = manager!.list().find(item => item.id === id);
+    if (!info?.security) throw new Error("插件不存在或尚未扫描");
 
+    // 只把插件自己的入口文件发出去 —— 不碰用户数据
+    const sources: { name: string; text: string }[] = [];
+    const push = (name?: string | null) => {
+      if (!name) return;
+      const text = readText(path.join(info.folder, name));
+      if (text) sources.push({ name, text });
+    };
+    push(info.manifest?.main);
+    push(info.manifest?.renderer);
+    for (const style of info.styles) push(style);
+
+    return runAiScan({
+      pluginId: id,
+      digest: info.security.digest,
+      manifest: readText(path.join(info.folder, MANIFEST_FILE)) ?? "{}",
+      sources,
+      force: force === true,
+    });
+  });
+
+  /*
+   * 启动顺序很重要：先判安全模式，再扫目录，最后才起插件。
+   * 扫描要在启动之前 —— 扫描只读文本，被判定拦截的插件连 import 都不会发生。
+   */
+  const safeModeAtBoot = beginBoot();
   manager.ensureDir();
   manager.scan();
-  void manager.startAll();
+  if (!safeModeAtBoot) void manager.startAll();
+  markStable();
 
   app.on("before-quit", () => {
     void manager?.stopAll();

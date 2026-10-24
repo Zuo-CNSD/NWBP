@@ -80,9 +80,19 @@ const api: ElectronAPI = {
     runCommand: (pluginId, commandId) => ipcRenderer.invoke(channel.plugin.runCommand, pluginId, commandId),
     invoke: (pluginId, subChannel, payload) => ipcRenderer.invoke(channel.plugin.invoke, pluginId, subChannel, payload),
     installSample: () => ipcRenderer.invoke(channel.plugin.installSample),
+    installFromFile: () => ipcRenderer.invoke(channel.plugin.installFromFile),
+    installFromUrl: (url: string) => ipcRenderer.invoke(channel.plugin.installFromUrl, url),
     openDir: () => ipcRenderer.invoke(channel.plugin.openDir),
     reveal: id => ipcRenderer.invoke(channel.plugin.reveal, id),
     reportError: (id, message) => ipcRenderer.invoke(channel.plugin.reportError, id, message),
+    setOverride: (id: string, overridden: boolean) => ipcRenderer.invoke(channel.plugin.setOverride, id, overridden),
+    getAudit: (id?: string) => ipcRenderer.invoke(channel.plugin.getAudit, id),
+    clearAudit: (id?: string) => ipcRenderer.invoke(channel.plugin.clearAudit, id),
+    safeMode: () => ipcRenderer.invoke(channel.plugin.safeMode),
+    setSafeMode: (enable: boolean) => ipcRenderer.invoke(channel.plugin.setSafeMode, enable),
+    aiConfig: (patch?: Partial<PluginAiState>) => ipcRenderer.invoke(channel.plugin.aiConfig, patch),
+    aiClearKey: () => ipcRenderer.invoke(channel.plugin.aiClearKey),
+    aiScan: (id: string, force?: boolean) => ipcRenderer.invoke(channel.plugin.aiScan, id, force),
     onEvent: (cb: (payload: PluginEventPayload) => void) => {
       const handler = (_: Electron.IpcRendererEvent, payload: PluginEventPayload) => cb(payload);
       ipcRenderer.on(channel.plugin.event, handler);
