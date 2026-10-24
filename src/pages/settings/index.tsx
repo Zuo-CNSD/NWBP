@@ -13,11 +13,13 @@ import { normalizeLanguage } from "@shared/i18n";
 import DesktopLyricsSettings from "./desktop-lyrics-settings";
 import Developers from "./developers";
 import MenuSettings from "./menu-settings";
+import MusicSourceSettings from "./music-source-settings";
 import NeteaseSettings from "./netease-settings";
 import PluginSettings from "./plugin-settings";
 import ProxySettings from "./proxy-settings";
 import ShortcutSettingsPage from "./shortcut-settings";
 import { SystemSettingsTab } from "./system-settings";
+import UpdateSettings from "./update-settings";
 
 const useSystemSettingsForm = () => {
   const [appVersion, setAppVersion] = useState<string>("");
@@ -156,6 +158,9 @@ const SettingsPage = () => {
             <Tab key="system" title={t("常规设置")}>
               <SystemSettingsTab {...system} />
             </Tab>
+            <Tab key="source" title={t("音乐源与页面")}>
+              <MusicSourceSettings control={system.control} />
+            </Tab>
             <Tab key="lyrics" title={t("歌词设置")}>
               <DesktopLyricsSettings />
             </Tab>
@@ -173,6 +178,9 @@ const SettingsPage = () => {
             </Tab>
             <Tab key="proxy" title={t("代理设置")}>
               <ProxySettings control={system.control} />
+            </Tab>
+            <Tab key="update" title={t("关于与更新")}>
+              <UpdateSettings appVersion={system.appVersion} />
             </Tab>
           </Tabs>
           {/* 署名放在 Tabs 外面，切到哪个 Tab 滑到底都能看到 */}

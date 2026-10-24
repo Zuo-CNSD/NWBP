@@ -658,4 +658,4 @@ export default function activate(ctx) {
 
 ---
 
-*插件 API v1 · NWBP Beta 6 · 有想要的扩展点，去 GitHub Issues 提。*
+*插件 API v1 · NWBP Beta 8 · 有想要的扩展点，去 GitHub Issues 提。*

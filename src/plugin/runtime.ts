@@ -274,24 +274,30 @@ const buildSandbox = (pluginId: string) => {
   };
 
   const sandboxWindow = new Proxy(window, {
-    get(target, prop, receiver) {
+    get(target, prop) {
       if (typeof prop === "string" && HIDDEN_WINDOW_KEYS.has(prop)) {
         warn(`window.${prop}`);
         return undefined;
       }
-      const value = Reflect.get(target, prop, receiver);
-      // 绑定到真身：`window.addEventListener` 这类方法在代理上调用会抛非法调用
+      /*
+       * receiver 必须传 `target` 本身，**不能传代理**。
+       * 像 `window.location`、`window.document` 这些是带 brand check 的访问器，
+       * 用代理当 receiver 会抛 `TypeError: Illegal invocation` —— Beta 8 走查时实测到。
+       */
+      const value = Reflect.get(target, prop, target);
+      // 方法同样绑到真身：`window.addEventListener` 在代理上调用也会抛非法调用
       return typeof value === "function" ? value.bind(target) : value;
     },
   });
 
   const sandboxDocument = new Proxy(document, {
-    get(target, prop, receiver) {
+    get(target, prop) {
       if (prop === "cookie") {
         warn("document.cookie");
         return "";
       }
-      const value = Reflect.get(target, prop, receiver);
+      // 同 window 那处：receiver 用真身，否则 `document.body` 之类会抛非法调用
+      const value = Reflect.get(target, prop, target);
       return typeof value === "function" ? value.bind(target) : value;
     },
     set(target, prop, value) {

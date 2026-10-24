@@ -63,7 +63,15 @@ interface AppSettings {
   closeWindowOption: "hide" | "exit";
   autoStart: boolean;
   audioQuality: AudioQuality;
-  /** 歌曲音源：搜索与播放走 B 站还是网易云 */
+  /**
+   * **首选音乐源**（Beta 8 起含义扩大）。
+   *
+   * 原来只决定搜索与播放走哪家，现在还负责：
+   * ① 侧栏两个平台分组的先后顺序；
+   * ② 「我喜欢的音乐」进哪一家的收藏页；
+   * ③ 新手引导里选的那一项就是它。
+   * **不影响**侧栏是否显示某个分组 —— 两组始终并存，只调顺序。
+   */
   musicSource: MusicSource;
   hiddenMenuKeys: string[];
   displayMode: "card" | "list" | "compact";
@@ -79,6 +87,8 @@ interface AppSettings {
   /** 自定义开场视频的本地路径（空字符串 = 还没选） */
   appLaunchAnimationVideo: string;
   showSearchHistory: boolean;
+  /** 首次启动的新手引导是否已看过（跳过也算看过） */
+  onboardingDone: boolean;
   proxySettings: ProxySettings;
   sideMenuCollapsed: boolean;
   sideMenuWidth: number;

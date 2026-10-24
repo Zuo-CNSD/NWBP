@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { addToast, Button, Chip, Input, Switch } from "@heroui/react";
 import {
   RiAddLine,
+  RiBookOpenLine,
   RiFileZipLine,
   RiFolderOpenLine,
   RiLinkM,
@@ -12,6 +13,9 @@ import {
 
 import { t } from "@/common/i18n";
 import { getRendererCommands, runRendererCommand } from "@/plugin/runtime";
+
+/** 插件开发文档（跟着仓库走，官网也指向这里，别在两处写不同的地址） */
+const PLUGIN_DOC_URL = "https://github.com/Zuo-CNSD/NWBP/blob/main/docs/plugin-development.md";
 
 /** 权限 → 中文标签。清单里没声明的一律不给对应能力，所以这里要显示清楚。 */
 const PERMISSION_LABELS: Record<PluginPermission, string> = {
@@ -591,6 +595,15 @@ const PluginSettings = () => {
             onPress={reloadAll}
           >
             {t("重新加载")}
+          </Button>
+          {/* 文档在仓库里，界面里至少给一个能点到的地方 —— 否则只有看过 README 的人才知道有它 */}
+          <Button
+            size="sm"
+            variant="light"
+            startContent={<RiBookOpenLine size={14} />}
+            onPress={() => window.electron.openExternal(PLUGIN_DOC_URL)}
+          >
+            {t("开发文档")}
           </Button>
         </div>
       </div>

@@ -100,6 +100,7 @@ export const useSettings = create<AppSettings & SettingsActions>()(
           appLaunchAnimationDuration: state.appLaunchAnimationDuration,
           appLaunchAnimationVideo: state.appLaunchAnimationVideo,
           showSearchHistory: state.showSearchHistory,
+          onboardingDone: state.onboardingDone,
           proxySettings: state.proxySettings,
           sideMenuCollapsed: state.sideMenuCollapsed,
           sideMenuWidth: state.sideMenuWidth,

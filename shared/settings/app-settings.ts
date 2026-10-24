@@ -35,6 +35,8 @@ export const defaultAppSettings: AppSettings = {
   appLaunchAnimationDuration: 1200,
   appLaunchAnimationVideo: "",
   showSearchHistory: true,
+  /** 新手引导只在第一次启动弹，看完/跳过都写 true */
+  onboardingDone: false,
   proxySettings: {
     type: "none",
     host: "",

@@ -1,15 +1,16 @@
 import { useEffect } from "react";
 import { useHref, useNavigate, useRoutes } from "react-router";
 
-import { HeroUIProvider, ToastProvider } from "@heroui/react";
+import { HeroUIProvider, ToastProvider, addToast } from "@heroui/react";
 import moment from "moment";
 
-import { getLanguage, useLanguage } from "./common/i18n";
+import { getLanguage, t, useLanguage } from "./common/i18n";
 import { getCookitFromBSite } from "./common/utils/cookie";
 import { startDesktopLyricsBroadcast, stopDesktopLyricsBroadcast } from "./common/utils/desktop-lyrics-channel";
 import { isAuxiliaryWindow } from "./common/utils/lyrics-render";
 import { toggleMiniMode } from "./common/utils/mini-player";
 import { mapKeyToElectronAccelerator } from "./common/utils/shortcut";
+import { formatAppVersion } from "./common/utils/version";
 import AppLaunchAnimation from "./components/app-launch-animation";
 import Theme from "./components/theme";
 import { setupPlugins } from "./plugin/runtime";
@@ -19,6 +20,7 @@ import { usePlayList } from "./store/play-list";
 import { usePlayProgress } from "./store/play-progress";
 import { useSettings } from "./store/settings";
 import { useShortcutSettings } from "./store/shortcuts";
+import { useUpdateStore } from "./store/update";
 
 /*
  * 四种语言各自 moment 的 locale 包。必须显式 import ——
@@ -236,6 +238,39 @@ export function App() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
+
+  /*
+   * 启动后延迟查一次更新。
+   *
+   * 延迟 6s 是为了别和首屏抢网络 —— 启动那几秒还有歌词、订阅、插件在跑。
+   * 这里**不写「检查过了」的标记**：React 19 的 StrictMode 会双挂载，
+   * 第一轮写标记 + 挂 timer、清理时 clear，第二轮看到标记就直接 return，
+   * 结果永远不查（新手引导踩过一模一样的坑）。
+   * 检查失败不弹提示 —— 用户没主动要，失败就安静地放着，设置页里能看到原因。
+   */
+  const autoCheckUpdate = useUpdateStore(s => s.autoCheck);
+
+  useEffect(() => {
+    if (isAuxiliaryWindow() || !autoCheckUpdate) return;
+
+    const timer = window.setTimeout(() => {
+      void useUpdateStore
+        .getState()
+        .check()
+        .then(result => {
+          if (!result?.ok || !result.hasUpdate || !result.release) return;
+          addToast({
+            title: t("发现新版本 {0}", formatAppVersion(result.release.version)),
+            description: t("在「设置 → 关于与更新」里查看更新说明与下载入口"),
+          });
+        })
+        .catch(() => {
+          // 静默失败：更新检查不是用户此刻要办的事
+        });
+    }, 6000);
+
+    return () => window.clearTimeout(timer);
+  }, [autoCheckUpdate]);
 
   return (
     /*

@@ -1,3 +1,5 @@
+import type { UpdateCheckResult } from "../update";
+
 declare global {
   type AppPlatForm = "macos" | "windows" | "linux";
 
@@ -30,6 +32,10 @@ declare global {
     openDirectory: (path?: string) => Promise<boolean>;
     /** 在外部浏览器打开链接 */
     openExternal: (url: string) => Promise<boolean>;
+    /** 检查更新；force=true 时跳过 30 分钟缓存 */
+    checkUpdate: (force?: boolean) => Promise<UpdateCheckResult>;
+    /** 打开更新包的下载链接（主进程只放行 https） */
+    openUpdateDownload: (url: string) => Promise<boolean>;
     /** 获取本地安装的字体列表 */
     getFonts: () => Promise<IFontInfo[]>;
     /** 导航到指定路由 */

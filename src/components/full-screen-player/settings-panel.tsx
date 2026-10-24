@@ -9,6 +9,8 @@ import { isHex } from "@/common/utils/color";
 import ColorPicker from "@/components/color-picker";
 import { useBackgroundImage } from "@/store/background-image";
 import {
+  DEFAULT_BACKGROUND_COLOR,
+  resolveBackgroundColor,
   resolveBackgroundMode,
   resolveLyricsPositionH,
   resolveLyricsPositionV,
@@ -44,7 +46,7 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
       backgroundMode: resolveBackgroundMode(s),
       lyricsPositionH: resolveLyricsPositionH(s),
       lyricsPositionV: resolveLyricsPositionV(s),
-      backgroundColor: s.backgroundColor,
+      backgroundColor: resolveBackgroundColor(s),
       spectrumColor: s.spectrumColor,
       lyricsColor: s.lyricsColor,
       update: s.update,
@@ -130,7 +132,8 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
     if (!values || typeof values !== "object") return;
     const sanitizeLyricsColor = (v?: string) => (isHex(v) ? v! : "#ffffff");
     const sanitizeSpectrumColor = (v?: string) => (v === "currentColor" || isHex(v) ? v! : "currentColor");
-    const sanitizeBackgroundColor = (v?: string) => (isHex(v) ? v! : "#ffffff");
+    // 兜底色交给 resolveBackgroundColor —— 这里再编一个 #ffffff 出来就会白底白字
+    const sanitizeBackgroundColor = (v?: string) => (isHex(v) ? v! : DEFAULT_BACKGROUND_COLOR);
     const id = window.setTimeout(() => {
       update({
         spectrumColor: sanitizeSpectrumColor(values.spectrumColor),
@@ -297,6 +300,11 @@ const FullScreenPlayerSettingsPanel = ({ isUiVisible = true }: { isUiVisible?: b
           )}
         />
       </div>
+      {values?.backgroundMode === "blur" && (
+        <div className="text-default-500 text-right text-xs">
+          {t("封面虚化铺满背景，颜色随封面走，换歌时淡入淡出、播放时缓慢流动")}
+        </div>
+      )}
       {values?.backgroundMode === "custom" && !customBackgroundUrl && (
         <div className="text-default-500 text-right text-xs">
           {t("还没有设置自定义背景图，去「设置 → 常规设置 → 背景」里选一张")}

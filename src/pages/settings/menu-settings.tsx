@@ -1,7 +1,7 @@
 import React from "react";
 import { type Control, Controller } from "react-hook-form";
 
-import { getDefaultMenuList, getNeteaseMenuList } from "@/common/constants/menus";
+import { getBilibiliMenuList, getCommonMenuList, getNeteaseMenuList, type AppMenuItem } from "@/common/constants/menus";
 import { t } from "@/common/i18n";
 import SelectAllCheckboxGroup from "@/components/select-all-checkbox-group";
 import { useFavoritesStore } from "@/store/favorite";
@@ -12,96 +12,69 @@ interface MenuSettingsProps {
   control: Control<AppSettings>;
 }
 
+/**
+ * 菜单显隐设置。
+ *
+ * 三个「固定菜单组」+ 两组「用户自建」（B 站收藏夹）共用同一个 `hiddenMenuKeys` 数组：
+ * 每个分组只管自己那批 key，改动时把别的分组的隐藏项原样留着，否则一保存就把别处恢复显示。
+ */
 const MenuSettings: React.FC<MenuSettingsProps> = ({ control }) => {
   const user = useUser(state => state.user);
   const neteaseLoggedIn = useNetease(state => Boolean(state.account?.loggedIn));
   const createdFavorites = useFavoritesStore(state => state.createdFavorites);
   const collectedFavorites = useFavoritesStore(state => state.collectedFavorites);
 
+  const groups: { key: string; label: string; list: () => AppMenuItem[]; loggedIn: boolean }[] = [
+    { key: "common", label: t("通用"), list: getCommonMenuList, loggedIn: true },
+    { key: "bilibili", label: t("哔哩哔哩"), list: getBilibiliMenuList, loggedIn: Boolean(user?.isLogin) },
+    { key: "netease", label: t("网易云"), list: getNeteaseMenuList, loggedIn: neteaseLoggedIn },
+  ];
+
   return (
     <div className="space-y-6">
       <h2>{t("设置侧边菜单项显示和隐藏")}</h2>
       <div className="w-full space-y-8">
-        <div className="flex w-full items-start space-x-[100px]">
-          <div className="text-medium font-medium">{t("系统默认菜单")}</div>
-          <div className="max-w-[480px]">
-            <Controller
-              control={control}
-              name="hiddenMenuKeys"
-              render={({ field }) => {
-                const groupKeys = getDefaultMenuList()
-                  .filter(i => i.href)
-                  .map(i => i.href!);
-                const selectedKeys = groupKeys.filter(k => !field.value.includes(k));
+        {groups.map(group => (
+          <div key={group.key} className="flex w-full items-start space-x-[100px]">
+            <div className="text-medium font-medium">{group.label}</div>
+            <div className="max-w-[480px]">
+              <Controller
+                control={control}
+                name="hiddenMenuKeys"
+                render={({ field }) => {
+                  const groupKeys = group
+                    .list()
+                    .filter(i => i.href)
+                    .map(i => i.href!);
+                  const selectedKeys = groupKeys.filter(k => !field.value.includes(k));
 
-                const handleSelectionChange = (newSelectedKeys: string[]) => {
-                  const outsideHidden = field.value.filter(k => !groupKeys.includes(k));
-                  const hiddenInGroup = groupKeys.filter(k => !newSelectedKeys.includes(k));
-                  const nextHidden = Array.from(new Set([...outsideHidden, ...hiddenInGroup]));
-                  field.onChange(nextHidden);
-                };
+                  const handleSelectionChange = (newSelectedKeys: string[]) => {
+                    const outsideHidden = field.value.filter(k => !groupKeys.includes(k));
+                    const hiddenInGroup = groupKeys.filter(k => !newSelectedKeys.includes(k));
+                    field.onChange(Array.from(new Set([...outsideHidden, ...hiddenInGroup])));
+                  };
 
-                const items = getDefaultMenuList()
-                  .filter(i => (user?.isLogin ? true : !i.needLogin))
-                  .map(item => ({
-                    value: item.href!,
-                    label: item.title,
-                  }));
+                  const items = group
+                    .list()
+                    .filter(i => i.href)
+                    .filter(i => (group.loggedIn ? true : !i.needLogin))
+                    .map(item => ({ value: item.href!, label: item.title }));
 
-                return (
-                  <SelectAllCheckboxGroup
-                    groupName={t("系统默认菜单")}
-                    groupKeys={groupKeys}
-                    selectedKeys={selectedKeys}
-                    onSelectionChange={handleSelectionChange}
-                    items={items}
-                  />
-                );
-              }}
-            />
+                  return (
+                    <SelectAllCheckboxGroup
+                      groupName={group.label}
+                      groupKeys={groupKeys}
+                      selectedKeys={selectedKeys}
+                      onSelectionChange={handleSelectionChange}
+                      disabled={!groupKeys.length}
+                      items={items}
+                    />
+                  );
+                }}
+              />
+            </div>
           </div>
-        </div>
-
-        {/* 网易云分组：和上面那组共用同一个 hiddenMenuKeys，各管各的 key */}
-        <div className="flex w-full items-start space-x-[100px]">
-          <div className="text-medium font-medium">{t("网易云")}</div>
-          <div className="max-w-[480px]">
-            <Controller
-              control={control}
-              name="hiddenMenuKeys"
-              render={({ field }) => {
-                const groupKeys = getNeteaseMenuList()
-                  .filter(i => i.href)
-                  .map(i => i.href!);
-                const selectedKeys = groupKeys.filter(k => !field.value.includes(k));
-
-                const handleSelectionChange = (newSelectedKeys: string[]) => {
-                  // 只处理本组的增删，其它分组已隐藏的 key 原样保留
-                  const outsideHidden = field.value.filter(k => !groupKeys.includes(k));
-                  const hiddenInGroup = groupKeys.filter(k => !newSelectedKeys.includes(k));
-                  field.onChange(Array.from(new Set([...outsideHidden, ...hiddenInGroup])));
-                };
-
-                const items = getNeteaseMenuList()
-                  .filter(i => (neteaseLoggedIn ? true : !i.needLogin))
-                  .map(item => ({
-                    value: item.href!,
-                    label: item.title,
-                  }));
-
-                return (
-                  <SelectAllCheckboxGroup
-                    groupName={t("网易云")}
-                    groupKeys={groupKeys}
-                    selectedKeys={selectedKeys}
-                    onSelectionChange={handleSelectionChange}
-                    items={items}
-                  />
-                );
-              }}
-            />
-          </div>
-        </div>
+        ))}
 
         {user?.isLogin && (
           <>

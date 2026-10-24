@@ -11,6 +11,7 @@ import { registerLyricsHandlers } from "./lyrics";
 import { registerNeteaseHandlers } from "./netease";
 import { registerShortcutHandlers } from "./shortcut";
 import { registerStoreHandlers } from "./store";
+import { registerUpdateHandlers } from "./update";
 import { registerWindowHandlers } from "./window";
 
 export function registerIpcHandlers(props: IpcHandlerProps) {
@@ -25,6 +26,7 @@ export function registerIpcHandlers(props: IpcHandlerProps) {
   registerLyricsHandlers();
   registerNeteaseHandlers();
   registerLocalMusicHandlers();
+  registerUpdateHandlers();
   // 插件放最后：它启动时要读设置、要拿主窗口，前面那些得先就位
   registerPluginHandlers(props);
 }

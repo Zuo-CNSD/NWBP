@@ -1,6 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+/** 纯色模式的兜底背景色 —— 见 resolveBackgroundColor 的说明 */
+export const DEFAULT_BACKGROUND_COLOR = "#101014";
+
 /** 全屏播放器的背景来源 */
 export type FullScreenBackgroundMode = "blur" | "custom" | "color";
 
@@ -42,9 +45,23 @@ const defaultSettings: FullScreenPlayerSettingsState = {
   // 同样留空：没选过时按"有封面就靠右、没封面就居中"推导，保持原观感
   lyricsPositionH: undefined,
   lyricsPositionV: undefined,
-  backgroundColor: undefined,
+  backgroundColor: DEFAULT_BACKGROUND_COLOR,
   spectrumColor: "currentColor",
   lyricsColor: "#ffffff",
+};
+
+/**
+ * 解析「纯色」模式的背景色。
+ *
+ * 这个值以前是 `undefined`，面板上的颜色选择器又没有"未选"这一档，
+ * 于是它被顺手写成了 `#ffffff`，而歌词默认色也是白色 ——
+ * 谁点「纯色」谁就得到一整屏白底白字，什么都看不见。
+ * 纯白在这里一律当成"没选过"，退回深色底。
+ */
+export const resolveBackgroundColor = (state: Pick<FullScreenPlayerSettingsState, "backgroundColor">): string => {
+  const v = state.backgroundColor?.trim().toLowerCase();
+  if (!v || v === "#ffffff" || v === "#fff") return DEFAULT_BACKGROUND_COLOR;
+  return state.backgroundColor as string;
 };
 
 /**

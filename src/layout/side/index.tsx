@@ -10,6 +10,7 @@ import ScrollContainer from "@/components/scroll-container";
 import { useSettings } from "@/store/settings";
 
 import Collection from "./collection";
+import CommonMenus from "./common-menu";
 import DefaultMenus from "./default-menu";
 import Logo from "./logo";
 import NeteaseMenus from "./netease-menu";
@@ -20,6 +21,7 @@ const MAX_WIDTH = 480;
 
 const SideNav = () => {
   const sideMenuCollapsed = useSettings(state => state.sideMenuCollapsed);
+  const preferredSource = useSettings(state => state.musicSource);
   const sideMenuWidth = useSettings(state => state.sideMenuWidth);
   const updateSettings = useSettings(state => state.update);
 
@@ -163,17 +165,42 @@ const SideNav = () => {
               "overflow-hidden": isDragging,
             })}
           >
-            <DefaultMenus isCollapsed={isCollapsedVisual} onOpenAddFavorite={handleOpenAddFavorite} />
-            <Collection
-              isCollapsed={isCollapsedVisual}
-              onOpenAddFavorite={handleOpenAddFavorite}
-              onOpenEditFavorite={handleOpenEditFavorite}
-            />
             {/*
-              网易云分组放在最后：前面的「哔哩哔哩 + 收藏夹」是一整块，
-              插在中间会把 B 站那组切开。两组并存，不随搜索页的音源开关变化。
+              三段式信息架构（Beta 8）：
+                1. 通用 —— 主页 / 搜索 / 我喜欢的音乐 / 播放历史 / 本地音乐 / 下载记录
+                2. 平台专属 —— 「哔哩哔哩（含收藏夹）」与「网易云」各成一整块
+              两个平台块的先后顺序跟「首选音乐源」走，但**两块始终都在** ——
+              隐藏某一组会让只登录了另一家的用户找不到自己的东西。
+              收藏夹必须和 B 站菜单待在同一块里：它属于 B 站的收藏模型，
+              被网易云那块隔开的话，"我的收藏"看起来就像跨音源的了。
             */}
-            <NeteaseMenus isCollapsed={isCollapsedVisual} />
+            <CommonMenus isCollapsed={isCollapsedVisual} />
+
+            <div className="bg-divider/30 mx-2 my-2 h-px" />
+
+            {preferredSource === "netease" ? (
+              <>
+                <NeteaseMenus isCollapsed={isCollapsedVisual} />
+                <div className="bg-divider/30 mx-2 my-2 h-px" />
+                <DefaultMenus isCollapsed={isCollapsedVisual} onOpenAddFavorite={handleOpenAddFavorite} />
+                <Collection
+                  isCollapsed={isCollapsedVisual}
+                  onOpenAddFavorite={handleOpenAddFavorite}
+                  onOpenEditFavorite={handleOpenEditFavorite}
+                />
+              </>
+            ) : (
+              <>
+                <DefaultMenus isCollapsed={isCollapsedVisual} onOpenAddFavorite={handleOpenAddFavorite} />
+                <Collection
+                  isCollapsed={isCollapsedVisual}
+                  onOpenAddFavorite={handleOpenAddFavorite}
+                  onOpenEditFavorite={handleOpenEditFavorite}
+                />
+                <div className="bg-divider/30 mx-2 my-2 h-px" />
+                <NeteaseMenus isCollapsed={isCollapsedVisual} />
+              </>
+            )}
           </ScrollContainer>
           <div className="flex flex-none justify-center px-2 pb-2">
             <Button

@@ -9,9 +9,11 @@ import Fallback from "@/components/error-fallback";
 import FavoritesSelectModal from "@/components/favorites-select-modal";
 import FullScreenPlayer from "@/components/full-screen-player";
 import PlayListDrawer from "@/components/music-playlist-drawer";
+import Onboarding from "@/components/onboarding";
 import PageTransition from "@/components/page-transition";
 import VideoPagesDownloadSelectModal from "@/components/video-pages-download-select-modal";
 import PlayBar from "@/layout/playbar";
+import { useOnboardingStore } from "@/store/modal/onboarding";
 import { useNetease } from "@/store/netease";
 import { useSettings } from "@/store/settings";
 import { useUser } from "@/store/user";
@@ -22,6 +24,8 @@ import SideNav from "./side";
 
 const Layout = () => {
   const playbarSpectrum = useSettings(state => state.playbarSpectrum);
+  const onboardingDone = useSettings(state => state.onboardingDone);
+  const openOnboarding = useOnboardingStore(state => state.open);
   const updateUser = useUser(state => state.updateUser);
   const refreshNeteaseAccount = useNetease(state => state.refresh);
   const location = useLocation();
@@ -31,6 +35,23 @@ const Layout = () => {
     // 侧栏「网易云」分组要按登录态显示，所以启动时也问一次
     void refreshNeteaseAccount();
   }, []);
+
+  /*
+   * 首次启动弹新手引导。
+   *
+   * 延迟一拍再弹：刚启动时主页还在拉数据，立刻盖一层模态框会让人觉得"卡住了"。
+   *
+   * 这里**只负责弹**，不负责标记「看过」—— 标记在引导组件关闭时写。
+   * 之前图省事在这个 effect 里先写 `onboardingDone: true` 再挂 timer，
+   * 结果开发模式下 React 19 的 StrictMode 会「挂载→卸载→再挂载」：
+   * 第一轮把标记写成 true 并挂上 timer，清理时 timer 被 clear，
+   * 第二轮因为标记已是 true 直接 return —— 引导永远不出现。
+   */
+  useEffect(() => {
+    if (onboardingDone) return;
+    const timer = window.setTimeout(() => openOnboarding(), 900);
+    return () => window.clearTimeout(timer);
+  }, [onboardingDone, openOnboarding]);
 
   return (
     <ErrorBoundary
@@ -93,6 +114,7 @@ const Layout = () => {
       <VideoPagesDownloadSelectModal />
       <PlayListDrawer />
       <FullScreenPlayer />
+      <Onboarding />
     </ErrorBoundary>
   );
 };

@@ -399,6 +399,32 @@ html, body, #root {
   }
 }
 
+/*
+ * 全屏播放器的虚化封面背景。
+ * 不能复用 glass-drift：那组关键帧的 0% 和 100% 不是同一组数值，
+ * 每一轮循环结束都会"跳"一下，铺满整屏的背景下特别明显。
+ */
+@keyframes fs-cover-drift {
+  0%,
+  100% {
+    transform: translate3d(-1.5%, -1%, 0) scale(1.12) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(1.5%, 1.2%, 0) scale(1.18) rotate(1.2deg);
+  }
+}
+
+.fs-cover-drift {
+  animation: fs-cover-drift 36s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fs-cover-drift {
+    animation: none;
+  }
+}
+
 /* 玻璃模式下让 html/body 透出底衬（index.html 上带着 bg-background） */
 .liquid-glass,
 .liquid-glass body {
@@ -459,8 +485,7 @@ html.liquid-glass [data-slot='thumb'] {
   box-shadow: 0 0 0 1.5px hsl(var(--heroui-background) / 55%);
 }
 
-/* ---- 核心：给 HeroUI 面板换上半透明背板 + 毛玻璃 + 玻璃厚度感 ---- */
-.liquid-glass .bg-content1 {
+/* ---- 核心：给 HeroUI 面板换上半透明背板 + 毛玻璃 + 玻璃厚度感 ---- */.liquid-glass .bg-content1 {
   background-color: hsl(var(--heroui-content1) / var(--glass-alpha-1));
 }
 
@@ -761,6 +786,35 @@ html.is-scrolling .glass-wallpaper {
   --os-handle-bg-active: hsl(0deg 0% 100% / 46%);
 }
 
+
+/* ------------------------------------------------------------ 统一的交互过渡 */
+
+/*
+ * 悬停反馈原本各写各的：有的元素带 `transition-colors`，有的靠 HeroUI 自带的，
+ * 还有一批纯 Tailwind `hover:bg-*` 根本没有过渡 —— 鼠标划过时一半是渐变、
+ * 一半是硬跳色，放在一起看很明显。
+ *
+ * 这里只补「颜色 / 描边 / 阴影 / 透明度 / 滤镜」这几类，**刻意不碰 transform**：
+ * 展开箭头、抽屉、列表项自己带动画，统一给 transform 会让它们变钝。
+ * 160ms 比 HeroUI 默认的 150ms 略长一点点，肉眼上跟弹层的 200ms 是一档的。
+ */
+button,
+a,
+summary,
+[role='button'] {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, filter;
+  transition-duration: 160ms;
+  transition-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button,
+  a,
+  summary,
+  [role='button'] {
+    transition-duration: 0ms;
+  }
+}
 
 /* ------------------------------------------------------ 切换页面的加载反馈 */
 

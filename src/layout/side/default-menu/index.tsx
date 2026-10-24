@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 
 import { RiApps2AddFill, RiApps2AddLine } from "@remixicon/react";
 
-import { getDefaultMenuList } from "@/common/constants/menus";
+import { getBilibiliMenuList } from "@/common/constants/menus";
 import { t } from "@/common/i18n";
 import MenuGroup from "@/components/menu/menu-group";
 import { useSettings } from "@/store/settings";
@@ -18,7 +18,7 @@ const DefaultMenus = ({ isCollapsed, onOpenAddFavorite }: Props) => {
   const hiddenMenuKeys = useSettings(state => state.hiddenMenuKeys);
 
   const items = useMemo(() => {
-    const filtered = getDefaultMenuList()
+    const filtered = getBilibiliMenuList()
       .filter(item => (item.needLogin ? user?.isLogin : true))
       .filter(item => item.href && !hiddenMenuKeys.includes(item.href));
 

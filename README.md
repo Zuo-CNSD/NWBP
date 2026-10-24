@@ -1,7 +1,7 @@
 <h1 align="center">NWBP</h1>
 
 <p align="center">
-  <b>Beta 7</b>
+  <b>Beta 8</b>
 </p>
 <p align="center">
   一个基于哔哩哔哩公开接口的跨平台桌面音乐播放器，另集成网易云音乐音源 🎧
@@ -240,7 +240,7 @@ NWBP 不只是简单修改主题，而是在上游项目的基础上进行了较
 **放进目录即启用**，删掉文件夹等于卸载。界面注入、播放器控制、主进程能力（文件 / 网络 / 通知）、
 自定义 IPC 通道都能用；改完点「重新加载」即可，不必重启。
 
-Beta 7 补的是安全的那一半：
+这些能力都配了安全层：
 
 * **凭据不可及** —— 插件侧 `document.cookie` 读到空串、`window.electron` 为 `undefined`，
   网易云 Cookie 只活在主进程里
@@ -403,11 +403,14 @@ pnpm build
 
 ## 🏷 版本号
 
-`package.json` 的 `version` 必须是合法 semver（Electron Builder 依赖它命名产物），当前为 `0.1.0-beta.7`。
+`package.json` 的 `version` 必须是合法 semver（Electron Builder 依赖它命名产物），当前为 `0.1.0-beta.8`。
 
-界面上的「**Beta 7**」由 `src/common/utils/version.ts` 的 `formatAppVersion()` 转换而来 —— 显示的是**预发布序号**，所以发新版时要把 `beta` 后面的数字往上加（`-beta.6` → `-beta.7` …）。
+界面上的「**Beta 8**」由 `src/common/utils/version.ts` 的 `formatAppVersion()` 转换而来 —— 显示的是**预发布序号**，所以发新版时要把 `beta` 后面的数字往上加（`-beta.7` → `-beta.8` …）。
 
 点分的版本核心（`0.1.0`）不带预发布标记，会被 `plugins/electron-build.ts` 写进 macOS 的 `CFBundleVersion` 与 Windows 的 `FileVersion` / `ProductVersion`。
+
+发版时还有一处**必须跟着改**：仓库根目录的 [`latest.json`](latest.json) —— 应用内的「检查更新」和「公告」都读它。
+字段与检查清单见 [`docs/update-manifest.md`](docs/update-manifest.md)。改完源码要一起推上来，否则应用里永远显示「已是最新」。
 
 ⸻
 

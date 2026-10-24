@@ -12,8 +12,14 @@ export function startElectronDev() {
   let restartTimer: NodeJS.Timeout | null = null;
 
   const spawnElectron = () => {
+    /*
+     * 开发期附加参数，用空格分隔。
+     * 主要用途：给走查开远程调试（`NWBP_DEV_ARGS="--remote-debugging-port=9223"`）、
+     * 或者换一份 userData（`--user-data-dir=/tmp/xxx`）免得动到真实的用户配置。
+     */
+    const extraArgs = (process.env.NWBP_DEV_ARGS ?? "").split(/\s+/).filter(Boolean);
     // @ts-expect-error electron type not match string
-    electronProcess = childProcess.spawn(electron, ["."], {
+    electronProcess = childProcess.spawn(electron, [".", ...extraArgs], {
       stdio: "inherit",
       windowsHide: false,
     });

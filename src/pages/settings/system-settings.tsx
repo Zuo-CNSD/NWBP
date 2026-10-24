@@ -421,28 +421,11 @@ export const SystemSettingsTab = ({ appVersion, audioQuality, control, setValue 
       </div>
       <Divider />
       <h2>{t("搜索")}</h2>
-      {/* 歌曲音源 */}
-      <div className="flex w-full items-center justify-between">
-        <div className="mr-6 space-y-1">
-          <div className="text-medium font-medium">{t("歌曲音源")}</div>
-          <div className="text-default-500 text-sm">
-            {t("搜索和播放走哪家。B 站能搜视频/音频（含收藏夹这些账号数据），网易云只能搜单曲")}
-          </div>
-        </div>
-        <div className="w-[200px] flex-none">
-          <Controller
-            control={control}
-            name="musicSource"
-            render={({ field }) => (
-              <RadioGroup orientation="horizontal" value={field.value ?? "bilibili"} onValueChange={field.onChange}>
-                <Radio value="bilibili">{t("B站")}</Radio>
-                <Radio value="netease">{t("网易云")}</Radio>
-              </RadioGroup>
-            )}
-          />
-        </div>
-      </div>
-
+      {/*
+        「歌曲音源」原来在这里。
+        Beta 8 把它提升成「首选音乐源」，还管侧栏顺序和「我喜欢的音乐」，
+        继续塞在搜索分节里会让人以为它只影响搜索 → 挪到独立的「音乐源与页面」页。
+      */}
       {/* 显示搜索历史 */}
       <div className="flex w-full items-center justify-between">
         <div className="mr-6 space-y-1">

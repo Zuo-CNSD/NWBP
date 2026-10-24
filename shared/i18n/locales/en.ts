@@ -861,6 +861,83 @@ const en: Record<string, string> = {
   本地放入: "placed locally",
   压缩包安装: "installed from zip",
   链接安装: "installed from link",
+  主页: "Home",
+  播放历史: "Play history",
+  通用: "General",
+  音乐源与页面: "Sources & pages",
+  首选音乐源: "Preferred music source",
+  "决定「我喜欢的音乐」进哪一家、导航里哪个平台排在前面，以及搜索默认走哪一家。两个平台的功能都会保留，只是先后顺序不同。":
+    "It decides which service “My Favorites” opens, which platform comes first in the sidebar, and which one search uses by default. Both platforms stay fully available — only the order changes.",
+  "不登录也能听；收藏按收藏夹管理，可以有多个": "Works without signing in; favorites are managed as multiple folders",
+  "需要登录；收藏只有一组「我喜欢的音乐」": "Requires signing in; there is a single “My Favorites” list",
+  新手引导: "Getting started",
+  "介绍界面布局、音乐源、收藏与背景展示模式。首次启动会自动弹出一次，也可以在这里重新看。":
+    "Covers the layout, music sources, favorites and the background display mode. It appears once on first launch, and you can replay it here.",
+  重新查看新手引导: "Replay getting started",
+  "界面分三块，先认路": "Three areas to get oriented",
+  "左边是导航，上方是搜索与窗口按钮，底部始终是播放栏 —— 在哪个页面都能控制播放。":
+    "Navigation on the left, search and window controls on top, and the player bar always at the bottom — playback stays in reach on every page.",
+  "导航最上面一组是与音源无关的通用功能，下面两组分别是哔哩哔哩和网易云":
+    "The top group holds source-independent features; the two below are bilibili and NetEase Cloud Music.",
+  "播放栏左边的封面点一下，会进入沉浸式背景展示视图":
+    "Click the cover on the left of the player bar to enter the immersive background view.",
+  选一个首选音乐源: "Pick a preferred source",
+  "它会决定「我喜欢的音乐」进哪一家、导航里哪个平台排在前面，以及搜索默认走哪家。随时可以在设置里改。":
+    "It decides where “My Favorites” opens, which platform leads the sidebar, and which one search uses. You can change it anytime in Settings.",
+  收藏是分开存的: "Favorites stay separate",
+  "两家的收藏模型不一样，所以不会混在一起：网易云是一个「我喜欢的音乐」，哔哩哔哩是一堆收藏夹。":
+    "The two services model favorites differently, so they are never mixed: NetEase has one “My Favorites”, bilibili has a set of folders.",
+  "导航里的「我喜欢的音乐」按首选音源跳转，不用记路径":
+    "“My Favorites” in the sidebar follows the preferred source — no need to remember paths.",
+  "搜索页右上角可以临时切音源，只影响这一次找歌":
+    "You can switch sources temporarily from the search page — it only affects that search.",
+  "下载记录与本地音乐放在通用分组里，跟音源无关":
+    "Downloads and local music live in the general group — they are source-independent.",
+  还有一个背景展示模式: "There is also a background display mode",
+  "点播放栏左侧的封面进入：整屏展示动态背景与专辑封面，只留必要的歌曲信息和播放控制。":
+    "It opens from the cover on the player bar: full-screen dynamic background and artwork, keeping only essential track info and controls.",
+  "进出这个模式不会打断播放，进度、队列、歌词都接着走":
+    "Entering or leaving never interrupts playback — progress, queue and lyrics continue.",
+  "右上角齿轮可以调背景样式、歌词显示与频谱":
+    "The gear at the top right adjusts background style, lyrics and the spectrum.",
+  上一步: "Back",
+  下一步: "Next",
+  跳过引导: "Skip",
+  开始使用: "Get started",
+  请先登录哔哩哔哩账号: "Sign in to bilibili first",
+  "还没有收藏夹，先去哔哩哔哩创建一个": "No favorite folder yet — create one on bilibili first",
+  国内下载渠道: "China download mirror",
+  开发文档: "Developer docs",
+  "封面虚化铺满背景，颜色随封面走，换歌时淡入淡出、播放时缓慢流动":
+    "The artwork is blurred across the whole background. Its colours follow the cover, cross-fade on track change, and drift slowly while playing",
+  "这个链接打不开，地址可能已经失效": "This link won't open — the address may be out of date",
+  公告: "Announcements",
+  打开链接: "Open link",
+  知道了: "Got it",
+  关于与更新: "About & updates",
+  "数据来自 {0}": "Data from {0}",
+  检查更新: "Check for updates",
+  有新版本: "Update available",
+  已知问题: "Known issues",
+  国内渠道下载: "China mirror",
+  前往下载: "Go to download",
+  "GitHub Releases": "GitHub Releases",
+  "下载地址来自本项目的发布清单，安装包请以官网或仓库为准；下载后可用 Release 里的 SHA-256 自行核对。":
+    "Download links come from this project's own release manifest. Always download from the official site or the repository, and verify the SHA-256 listed in the release if you want to be sure.",
+  已经是最新版本: "You're on the latest version",
+  "远端版本 {0}": "Latest: {0}",
+  "检查失败：{0}": "Check failed: {0}",
+  网络请求失败: "Network request failed",
+  "可以到 GitHub Releases 手动查看最新版本。": "You can still check the latest version manually on GitHub Releases.",
+  启动时自动检查更新: "Check for updates on startup",
+  "只做检测和提示，不会自动替换程序文件；关掉后仍可在这里手动检查。":
+    "Only checks and notifies — it never replaces the app files. Turn it off and you can still check manually here.",
+  "检查更新只会访问本项目仓库的发布清单，不会上传任何本地信息。":
+    "Checking for updates only fetches this project's release manifest; nothing local is uploaded.",
+  "检查失败，稍后再试或者去 Releases 看看": "Check failed — try again later or look at Releases",
+  "发现新版本 {0}": "New version available: {0}",
+  "在「设置 → 关于与更新」里查看更新说明与下载入口":
+    "See Settings → About & updates for release notes and download links",
 };
 
 export default en;

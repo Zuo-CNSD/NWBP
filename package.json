@@ -1,6 +1,6 @@
 {
   "name": "nwbp",
-  "version": "0.1.0-beta.7",
+  "version": "0.1.0-beta.8",
   "private": true,
   "engines": {
     "node": "22.17.1"

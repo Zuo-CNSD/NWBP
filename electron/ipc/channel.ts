@@ -110,6 +110,12 @@ export const channel = {
     get: "cookie:get",
     set: "cookie:set",
   },
+  update: {
+    /** 检查更新（force=true 时不走 30 分钟缓存） */
+    check: "update:check",
+    /** 打开下载链接（只放行 https） */
+    openDownload: "update:open-download",
+  },
   localMusic: {
     scan: "local-music:scan",
     deleteFile: "local-music:delete-file",

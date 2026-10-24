@@ -12,10 +12,12 @@ import type { FullScreenBackgroundMode } from "@/store/full-screen-player-settin
 import { Themes } from "@/common/constants/theme";
 import { t } from "@/common/i18n";
 import { hexToHsl, resolveTheme, isHex } from "@/common/utils/color";
+import { isNeteaseTrack } from "@/common/utils/favorite";
 import AudioWaveform from "@/components/audio-waveform";
 import Lyrics from "@/components/lyrics";
 import { useBackgroundImage } from "@/store/background-image";
 import {
+  resolveBackgroundColor,
   resolveBackgroundMode,
   resolveLyricsPositionH,
   resolveLyricsPositionV,
@@ -67,7 +69,7 @@ const FullScreenPlayer = () => {
       backgroundMode: resolveBackgroundMode(s),
       lyricsPositionH: resolveLyricsPositionH(s),
       lyricsPositionV: resolveLyricsPositionV(s),
-      backgroundColor: s.backgroundColor,
+      backgroundColor: resolveBackgroundColor(s),
       spectrumColor: s.spectrumColor,
       lyricsColor: s.lyricsColor,
     })),
@@ -81,13 +83,20 @@ const FullScreenPlayer = () => {
       backgroundImageDim: s.backgroundImageDim,
     })),
   );
-  // 选的是自定义背景但没设图时，退回纯色，避免全屏变白板
+  /*
+   * 选的是自定义背景但图已经被删掉时，退回「虚化封面」。
+   * 以前退回「纯色」，而纯色的底色过去是未设置的 —— 结果全屏变成一块白板，
+   * 默认白色歌词直接看不见。
+   */
   const backgroundMode: FullScreenBackgroundMode =
-    rawBackgroundMode === "custom" && !customBackgroundUrl ? "color" : rawBackgroundMode;
+    rawBackgroundMode === "custom" && !customBackgroundUrl ? "blur" : rawBackgroundMode;
   const isBlurredBackground = backgroundMode === "blur";
 
   const playItem = list.find(item => item.id === playId);
   const isLocal = playItem?.source === "local";
+  // 第二行「艺人 · 来源」：本地曲目没有艺人概念，只写来源避免出现两个「本地音乐」
+  const sourceLabel = isLocal ? t("本地音乐") : isNeteaseTrack(playItem) ? t("网易云音乐") : t("哔哩哔哩");
+  const artistLine = isLocal ? sourceLabel : [playItem?.ownerName, sourceLabel].filter(Boolean).join(" · ");
 
   /*
    * 歌词位置。
@@ -156,6 +165,29 @@ const FullScreenPlayer = () => {
       setIsSettingsOpen(false);
     }
   }, [isUiVisible, isSettingsOpen]);
+
+  /*
+   * 弹层设了 isDismissable={false}（避免点一下背景就把整屏关掉），
+   * 但沉浸视图里除了左上角那个小箭头没有别的出口，Esc 关掉更符合直觉。
+   * 有弹层开着时先关弹层 —— 一级一级退出去，别一下子把整屏都关了。
+   */
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (isSettingsOpen) {
+        setIsSettingsOpen(false);
+        return;
+      }
+      if (isPageListOpen) {
+        setIsPageListOpen(false);
+        return;
+      }
+      close();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, isSettingsOpen, isPageListOpen, close]);
 
   const handleMouseEnter = () => {
     if (hideUiTimeoutRef.current) {
@@ -305,7 +337,10 @@ const FullScreenPlayer = () => {
                   >
                     {bgLayerA.coverSrc && (
                       <div
-                        className="absolute inset-0 scale-[1.15] bg-cover bg-center"
+                        className={clsx(
+                          "absolute inset-0 scale-[1.15] bg-cover bg-center",
+                          effectsProfile.enableFullEffects && "fs-cover-drift",
+                        )}
                         style={{
                           backgroundImage: `url(${bgLayerA.coverSrc})`,
                           filter: `blur(${effectsProfile.blurPx}px)`,
@@ -333,7 +368,10 @@ const FullScreenPlayer = () => {
                   >
                     {bgLayerB.coverSrc && (
                       <div
-                        className="absolute inset-0 scale-[1.15] bg-cover bg-center"
+                        className={clsx(
+                          "absolute inset-0 scale-[1.15] bg-cover bg-center",
+                          effectsProfile.enableFullEffects && "fs-cover-drift",
+                        )}
                         style={{
                           backgroundImage: `url(${bgLayerB.coverSrc})`,
                           filter: `blur(${effectsProfile.blurPx}px)`,
@@ -360,7 +398,13 @@ const FullScreenPlayer = () => {
                   <IconButton title={t("关闭弹窗")} onPress={onClose} className="">
                     <RiArrowDownSLine size={28} />
                   </IconButton>
-                  <h2 className="truncate text-xl select-none">{playItem.pageTitle || playItem.title}</h2>
+                  <div className="min-w-0">
+                    {/* 沉浸视图里只剩这一个地方能说明"在放什么"，标题之外补上艺人与来源 */}
+                    <div className="truncate text-lg leading-tight font-medium select-none">
+                      {playItem.pageTitle || playItem.title}
+                    </div>
+                    <div className="text-foreground-500 mt-0.5 truncate text-xs select-none">{artistLine}</div>
+                  </div>
                   <Popover
                     isOpen={isSettingsOpen && isUiVisible}
                     onOpenChange={open => {
@@ -380,7 +424,8 @@ const FullScreenPlayer = () => {
                         <RiSettings3Line size={22} />
                       </IconButton>
                     </PopoverTrigger>
-                    <PopoverContent className="p-4">
+                    {/* 面板比屏幕高时（小窗口 / 缩放下）自己滚，不然最后几行会被裁掉 */}
+                    <PopoverContent className="max-h-[76vh] overflow-y-auto p-4">
                       <FullScreenPlayerSettingsPanel isUiVisible={isUiVisible} />
                     </PopoverContent>
                   </Popover>
