@@ -23,6 +23,11 @@ export const defaultAppSettings: AppSettings = {
    * 歌词直接取网易云那份（含逐字时间轴）。
    */
   musicSource: "bilibili",
+  /*
+   * 展示模式：默认「融合」—— 和 Beta 8 之前的行为一致（两家菜单都在）。
+   * 单选模式只是把不相关的那一组收起来，不动任何数据。
+   */
+  sourceMode: "mixed",
   hiddenMenuKeys: [],
   displayMode: "list",
   ffmpegPath: "",

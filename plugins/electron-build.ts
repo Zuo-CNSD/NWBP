@@ -38,8 +38,11 @@ export async function buildElectron() {
       extraResources: [{ from: ELECTRON_ICON_BASE_PATH, to: ELECTRON_ICON_BASE_PATH }],
       /*
        * electron-builder 打包的是 node_modules 的**实际内容**，不看 package.json 里有没有，
-       * 所以从依赖里删掉的包仍然会被塞进来。检查更新功能已整体移除，这里显式排掉
-       * electron-updater（连同它的 source map），省得把死代码打进安装包。
+       * 所以从依赖里删掉的包仍然会被塞进来。这里显式排掉 electron-updater（连同它的 source map）。
+       *
+       * 注意：Beta 8 起「检查更新」是有的，但它走的是自己的实现（`electron/ipc/update.ts`
+       * 用 `net.fetch` 读仓库里的 `latest.json`），跟 electron-updater 无关 ——
+       * 那个包只会在安装包里塞进一整套用不上的自动替换逻辑，继续排掉。
        */
       files: [`${ELECTRON_OUT_DIRNAME}/**`, "dist/web/**", "!**/electron-updater/**"],
       win: {

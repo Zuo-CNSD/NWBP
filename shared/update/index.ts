@@ -62,9 +62,9 @@ export interface UpdateCheckResult {
 /**
  * 版本比较。
  *
- * 只覆盖本项目实际会用到的形式：`0.1.0-beta.8`、`0.1.0`、`1.2.3-rc.1`。
+ * 只覆盖本项目实际会用到的形式：`0.1.0-beta.8`、`0.1.0-beta.8-hotfix`、`0.1.0`、`1.2.3-rc.1`。
  * 规则按 semver 的口径：先比核心三段，核心相同则**正式版大于预发布版**，
- * 都是预发布时先比标记名再比序号。
+ * 都是预发布时先比标记名再比序号，最后比序号后面挂的限定词（`hotfix` 算补丁，比原版新）。
  *
  * 返回 -1 / 0 / 1。读不出来的段一律当 0，绝不抛错 ——
  * 更新检查失败只是少个提示，不值得让设置页崩掉。
@@ -80,11 +80,19 @@ const parseVersion = (version: string) => {
   });
   while (nums.length < 3) nums.push(0);
 
-  const tag = pre.replace(/[0-9.]/g, "");
-  const serialMatch = /(\d+)\s*$/.exec(pre);
+  /*
+   * 预发布段后面还能再挂一段限定词（`beta.8-hotfix`）。
+   * 不拆出来的话 tag 会变成 `beta-hotfix`，字符串比较就会得出
+   * 「`beta.9` 比 `beta.8-hotfix` 旧」这种明显不对的结论。
+   */
+  const [preBase, ...qualParts] = pre.split("-");
+  const qualifier = qualParts.join("-");
+
+  const tag = preBase.replace(/[0-9.]/g, "");
+  const serialMatch = /(\d+)\s*$/.exec(preBase);
   const serial = serialMatch ? Number.parseInt(serialMatch[1], 10) : 0;
 
-  return { nums: nums.slice(0, 3), isPre: Boolean(pre), tag, serial };
+  return { nums: nums.slice(0, 3), isPre: Boolean(pre), tag, serial, qualifier };
 };
 
 export const compareVersions = (a: string, b: string): -1 | 0 | 1 => {
@@ -100,6 +108,12 @@ export const compareVersions = (a: string, b: string): -1 | 0 | 1 => {
   if (left.isPre && right.isPre) {
     if (left.tag !== right.tag) return left.tag > right.tag ? 1 : -1;
     if (left.serial !== right.serial) return left.serial > right.serial ? 1 : -1;
+    if (left.qualifier !== right.qualifier) {
+      // 同一版号上挂限定词的算补丁，比这一版本身新：`beta.8-hotfix` > `beta.8`
+      if (!left.qualifier) return -1;
+      if (!right.qualifier) return 1;
+      return left.qualifier > right.qualifier ? 1 : -1;
+    }
   }
 
   return 0;

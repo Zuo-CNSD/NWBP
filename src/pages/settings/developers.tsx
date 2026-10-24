@@ -6,7 +6,7 @@ import deepseekAvatar from "@/assets/images/developers/deepseek.png";
 import kayokoAvatar from "@/assets/images/developers/kayoko.png";
 // 「?url」是必须的：项目里的 svgr 把 *.svg 转成了 React 组件（只导出 ReactComponent），
 // 直接 default import 拿到的是 undefined，构建期报 ESModulesLinkingError。
-import qicwkenAvatar from "@/assets/images/developers/qicwken.svg?url";
+import qicwkenAvatar from "@/assets/images/developers/qicwken.jpg?url";
 import wumiuAvatar from "@/assets/images/developers/wumiu.png";
 import { t } from "@/common/i18n";
 

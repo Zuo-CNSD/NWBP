@@ -92,6 +92,7 @@ export const useSettings = create<AppSettings & SettingsActions>()(
           windowTransparent: state.windowTransparent,
           audioQuality: state.audioQuality,
           musicSource: state.musicSource,
+          sourceMode: state.sourceMode,
           hiddenMenuKeys: state.hiddenMenuKeys,
           displayMode: state.displayMode,
           ffmpegPath: state.ffmpegPath,

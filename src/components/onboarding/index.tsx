@@ -33,12 +33,13 @@ interface StepProps {
  * 首次启动的新手引导。
  *
  * 四步，只讲「进来之后怎么用」，不堆功能清单：
- * 布局 → 首选音源 → 音乐库 → 沉浸视图。
+ * 布局 → 界面模式 → 音乐库 → 沉浸视图。
  * 设置页随时能重新打开（`onboardingDone` 只控制自动弹出的那一次）。
  */
 const Onboarding = () => {
   const isOpen = useOnboardingStore(s => s.isOnboardingOpen);
   const close = useOnboardingStore(s => s.close);
+  const sourceMode = useSettings(s => s.sourceMode ?? "mixed");
   const musicSource = useSettings(s => s.musicSource);
   const updateSettings = useSettings(s => s.update);
   const [step, setStep] = useState(0);
@@ -59,43 +60,79 @@ const Onboarding = () => {
       title: t("界面分三块，先认路"),
       desc: t("左边是导航，上方是搜索与窗口按钮，底部始终是播放栏 —— 在哪个页面都能控制播放。"),
       points: [
-        { icon: RiPlayListLine, text: t("导航最上面一组是与音源无关的通用功能，下面两组分别是哔哩哔哩和网易云") },
+        { icon: RiPlayListLine, text: t("导航最上面一组是与音源无关的通用功能，音源相关的分组按你的界面模式出现") },
         { icon: RiPlayListLine, text: t("播放栏左边的封面点一下，会进入沉浸式背景展示视图") },
       ],
     },
     {
       icon: RiMusic2Line,
-      title: t("选一个首选音乐源"),
-      desc: t("它会决定「我喜欢的音乐」进哪一家、导航里哪个平台排在前面，以及搜索默认走哪家。随时可以在设置里改。"),
+      title: t("先定界面模式"),
+      desc: t(
+        "模式决定侧栏里放哪几家的内容：只用一个音源就选它，两边都用就选融合。随时可以在设置里改，换模式不会动播放队列。",
+      ),
       extra: (
-        <div className="mt-4 grid grid-cols-2 gap-3">
-          {(
-            [
-              { value: "bilibili" as const, label: t("哔哩哔哩"), hint: t("不登录也能听，收藏按收藏夹管理") },
-              { value: "netease" as const, label: t("网易云音乐"), hint: t("需要登录，收藏是单一的「我喜欢的音乐」") },
-            ] satisfies { value: MusicSource; label: string; hint: string }[]
-          ).map(option => {
-            const active = musicSource === option.value;
-            return (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => updateSettings({ musicSource: option.value })}
-                className={clx(
-                  "rounded-medium relative flex flex-col gap-1 border-1 p-4 text-left transition-colors",
-                  active ? "border-primary bg-primary/10" : "border-divider/40 hover:border-default-400 bg-content2/40",
-                )}
-              >
-                <span className="text-sm font-semibold">{option.label}</span>
-                <span className="text-default-500 text-xs leading-relaxed">{option.hint}</span>
-                {active && (
-                  <span className="bg-primary text-primary-foreground absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full">
-                    <RiCheckLine size={11} />
-                  </span>
-                )}
-              </button>
-            );
-          })}
+        <div className="mt-4 space-y-3">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            {(
+              [
+                { value: "netease" as const, label: t("网易云模式"), hint: t("侧栏只留网易云") },
+                { value: "bilibili" as const, label: t("哔哩哔哩模式"), hint: t("侧栏只留哔哩哔哩") },
+                { value: "mixed" as const, label: t("融合模式"), hint: t("两家都在，各成一组") },
+              ] satisfies { value: SourceMode; label: string; hint: string }[]
+            ).map(option => {
+              const active = sourceMode === option.value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => updateSettings({ sourceMode: option.value })}
+                  className={clx(
+                    "rounded-medium relative flex flex-col gap-1 border-1 p-3 text-left transition-colors",
+                    active
+                      ? "border-primary bg-primary/10"
+                      : "border-divider/40 hover:border-default-400 bg-content2/40",
+                  )}
+                >
+                  <span className="text-sm font-semibold">{option.label}</span>
+                  <span className="text-default-500 text-xs leading-relaxed">{option.hint}</span>
+                  {active && (
+                    <span className="bg-primary text-primary-foreground absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full">
+                      <RiCheckLine size={11} />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {sourceMode === "mixed" && (
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-default-500 text-xs">{t("融合模式下默认进入")}</span>
+              {(
+                [
+                  { value: "bilibili" as const, label: t("哔哩哔哩") },
+                  { value: "netease" as const, label: t("网易云音乐") },
+                ] satisfies { value: MusicSource; label: string }[]
+              ).map(option => {
+                const active = musicSource === option.value;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => updateSettings({ musicSource: option.value })}
+                    className={clx(
+                      "rounded-full border-1 px-3 py-1 text-xs transition-colors",
+                      active
+                        ? "border-primary bg-primary/10 text-primary font-medium"
+                        : "border-divider/40 text-default-500 hover:border-default-400",
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       ),
     },
@@ -104,8 +141,8 @@ const Onboarding = () => {
       title: t("收藏是分开存的"),
       desc: t("两家的收藏模型不一样，所以不会混在一起：网易云是一个「我喜欢的音乐」，哔哩哔哩是一堆收藏夹。"),
       points: [
-        { icon: RiHeart3Line, text: t("导航里的「我喜欢的音乐」按首选音源跳转，不用记路径") },
-        { icon: RiSearchLine, text: t("搜索页右上角可以临时切音源，只影响这一次找歌") },
+        { icon: RiHeart3Line, text: t("导航里的「我喜欢的音乐」不会跳到你当前模式看不见的那一家") },
+        { icon: RiSearchLine, text: t("融合模式的搜索页可以临时切音源，只影响这一次找歌") },
         { icon: RiDownloadLine, text: t("下载记录与本地音乐放在通用分组里，跟音源无关") },
       ],
     },

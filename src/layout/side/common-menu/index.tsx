@@ -4,6 +4,7 @@ import { addToast } from "@heroui/react";
 
 import { getCommonMenuList, LIKED_MUSIC_ICONS, resolveLikedMusicHref } from "@/common/constants/menus";
 import { t } from "@/common/i18n";
+import { resolveSourceVisibility } from "@/common/utils/source-mode";
 import MenuGroup from "@/components/menu/menu-group";
 import { useFavoritesStore } from "@/store/favorite";
 import { useNetease } from "@/store/netease";
@@ -24,8 +25,16 @@ interface Props {
  * 下面两个带标题的平台组靠标题自然分界。
  */
 const CommonMenus = ({ isCollapsed }: Props) => {
-  const source = useSettings(state => state.musicSource);
+  const sourceMode = useSettings(state => state.sourceMode ?? "mixed");
+  const preferredSource = useSettings(state => state.musicSource);
   const hiddenMenuKeys = useSettings(state => state.hiddenMenuKeys);
+
+  /*
+   * 「我喜欢的音乐」指向哪一家：
+   * 单选模式下就是那个模式本身（界面里只剩这一家，指向别处会跳到看不见的页面）；
+   * 融合模式才看首选音乐源。换算与侧栏共用同一个纯函数。
+   */
+  const { activeSource: source } = resolveSourceVisibility(sourceMode, preferredSource);
 
   const user = useUser(state => state.user);
   const neteaseLoggedIn = useNetease(state => Boolean(state.account?.loggedIn));

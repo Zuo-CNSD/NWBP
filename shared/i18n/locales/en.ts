@@ -866,8 +866,6 @@ const en: Record<string, string> = {
   通用: "General",
   音乐源与页面: "Sources & pages",
   首选音乐源: "Preferred music source",
-  "决定「我喜欢的音乐」进哪一家、导航里哪个平台排在前面，以及搜索默认走哪一家。两个平台的功能都会保留，只是先后顺序不同。":
-    "It decides which service “My Favorites” opens, which platform comes first in the sidebar, and which one search uses by default. Both platforms stay fully available — only the order changes.",
   "不登录也能听；收藏按收藏夹管理，可以有多个": "Works without signing in; favorites are managed as multiple folders",
   "需要登录；收藏只有一组「我喜欢的音乐」": "Requires signing in; there is a single “My Favorites” list",
   新手引导: "Getting started",
@@ -877,20 +875,12 @@ const en: Record<string, string> = {
   "界面分三块，先认路": "Three areas to get oriented",
   "左边是导航，上方是搜索与窗口按钮，底部始终是播放栏 —— 在哪个页面都能控制播放。":
     "Navigation on the left, search and window controls on top, and the player bar always at the bottom — playback stays in reach on every page.",
-  "导航最上面一组是与音源无关的通用功能，下面两组分别是哔哩哔哩和网易云":
-    "The top group holds source-independent features; the two below are bilibili and NetEase Cloud Music.",
   "播放栏左边的封面点一下，会进入沉浸式背景展示视图":
     "Click the cover on the left of the player bar to enter the immersive background view.",
   选一个首选音乐源: "Pick a preferred source",
-  "它会决定「我喜欢的音乐」进哪一家、导航里哪个平台排在前面，以及搜索默认走哪家。随时可以在设置里改。":
-    "It decides where “My Favorites” opens, which platform leads the sidebar, and which one search uses. You can change it anytime in Settings.",
   收藏是分开存的: "Favorites stay separate",
   "两家的收藏模型不一样，所以不会混在一起：网易云是一个「我喜欢的音乐」，哔哩哔哩是一堆收藏夹。":
     "The two services model favorites differently, so they are never mixed: NetEase has one “My Favorites”, bilibili has a set of folders.",
-  "导航里的「我喜欢的音乐」按首选音源跳转，不用记路径":
-    "“My Favorites” in the sidebar follows the preferred source — no need to remember paths.",
-  "搜索页右上角可以临时切音源，只影响这一次找歌":
-    "You can switch sources temporarily from the search page — it only affects that search.",
   "下载记录与本地音乐放在通用分组里，跟音源无关":
     "Downloads and local music live in the general group — they are source-independent.",
   还有一个背景展示模式: "There is also a background display mode",
@@ -938,6 +928,34 @@ const en: Record<string, string> = {
   "发现新版本 {0}": "New version available: {0}",
   "在「设置 → 关于与更新」里查看更新说明与下载入口":
     "See Settings → About & updates for release notes and download links",
+  界面模式: "Interface mode",
+  "决定侧栏里放哪几家的内容。只用一个音源就选对应的模式，两边都用就选融合；换模式不会动播放队列，也不会丢任何数据。":
+    "Decides which sources appear in the sidebar. Only use one? Pick its mode. Use both? Pick mixed. Switching modes never touches the queue or drops your data.",
+  网易云模式: "NetEase mode",
+  "侧栏只留网易云：我的歌单 / 我的专辑 / 热门歌单。哔哩哔哩的入口全部收起，界面最干净。":
+    "NetEase only: My Playlists / My Albums / Popular Playlists. Every bilibili entry is hidden — the cleanest layout.",
+  哔哩哔哩模式: "Bilibili mode",
+  "侧栏只留哔哩哔哩：推荐音乐 / 关注 / 稍后再看 / 历史记录，收藏夹也跟着在这一组。":
+    "Bilibili only: Recommended / Following / Watch Later / History, with your favorite folders in the same group.",
+  融合模式: "Mixed mode",
+  "两家都放在侧栏里，上下各成一组。谁排在前面由下面的「默认进入」决定，功能一个都不少。":
+    "Both sources sit in the sidebar as separate groups. “Default source” below decides which one comes first; nothing is left out.",
+  融合模式下默认进入: "Default source in mixed mode",
+  "决定两家谁排在前面，也决定「我喜欢的音乐」进哪一家的收藏。":
+    "Decides which source leads the sidebar, and whose favorites “My Favorite Music” opens.",
+  先定界面模式: "Pick an interface mode first",
+  "模式决定侧栏里放哪几家的内容：只用一个音源就选它，两边都用就选融合。随时可以在设置里改，换模式不会动播放队列。":
+    "The mode decides what the sidebar shows: pick one source if that is all you use, mixed if you use both. You can change it in Settings anytime; switching never touches the queue.",
+  侧栏只留网易云: "Only NetEase in the sidebar",
+  侧栏只留哔哩哔哩: "Only bilibili in the sidebar",
+  "两家都在，各成一组": "Both sources, one group each",
+  "导航里的「我喜欢的音乐」不会跳到你当前模式看不见的那一家":
+    "“My Favorite Music” never jumps to a source your current mode hides",
+  "融合模式的搜索页可以临时切音源，只影响这一次找歌":
+    "In mixed mode the search page can switch sources for that one search",
+  "导航最上面一组是与音源无关的通用功能，音源相关的分组按你的界面模式出现":
+    "The top sidebar group is source-agnostic; source groups follow your interface mode",
+  音源与模式: "Sources & modes",
 };
 
 export default en;

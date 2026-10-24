@@ -5,6 +5,7 @@ import { RiArrowLeftDoubleLine, RiArrowRightDoubleLine } from "@remixicon/react"
 import clx from "classnames";
 
 import { t } from "@/common/i18n";
+import { resolveSourceVisibility } from "@/common/utils/source-mode";
 import FavoritesEditModal from "@/components/favorites-edit-modal";
 import ScrollContainer from "@/components/scroll-container";
 import { useSettings } from "@/store/settings";
@@ -19,9 +20,19 @@ const COLLAPSED_WIDTH = 72;
 const MIN_WIDTH = 160;
 const MAX_WIDTH = 480;
 
+/** 分组之间的细分隔线（原来这段 JSX 抄了三份） */
+const Divider = () => <div className="bg-divider/30 mx-2 my-2 h-px" />;
+
 const SideNav = () => {
   const sideMenuCollapsed = useSettings(state => state.sideMenuCollapsed);
+  const sourceMode = useSettings(state => state.sourceMode ?? "mixed");
   const preferredSource = useSettings(state => state.musicSource);
+
+  /*
+   * 显示哪几块 —— 换算全部交给 `resolveSourceVisibility`，
+   * 免得侧栏、通用菜单、搜索页各写一份判断后互相打架。
+   */
+  const { showNetease, showBilibili, neteaseFirst } = resolveSourceVisibility(sourceMode, preferredSource);
   const sideMenuWidth = useSettings(state => state.sideMenuWidth);
   const updateSettings = useSettings(state => state.update);
 
@@ -169,19 +180,25 @@ const SideNav = () => {
               三段式信息架构（Beta 8）：
                 1. 通用 —— 主页 / 搜索 / 我喜欢的音乐 / 播放历史 / 本地音乐 / 下载记录
                 2. 平台专属 —— 「哔哩哔哩（含收藏夹）」与「网易云」各成一整块
-              两个平台块的先后顺序跟「首选音乐源」走，但**两块始终都在** ——
-              隐藏某一组会让只登录了另一家的用户找不到自己的东西。
+
+              Beta 9 起由 `sourceMode` 决定显示几块：
+                - netease  / bilibili：只留对应那一组（"只看这一家"）
+                - mixed：两家都在，顺序跟首选音乐源
               收藏夹必须和 B 站菜单待在同一块里：它属于 B 站的收藏模型，
               被网易云那块隔开的话，"我的收藏"看起来就像跨音源的了。
             */}
             <CommonMenus isCollapsed={isCollapsedVisual} />
 
-            <div className="bg-divider/30 mx-2 my-2 h-px" />
-
-            {preferredSource === "netease" ? (
+            {showNetease && neteaseFirst && (
               <>
+                <Divider />
                 <NeteaseMenus isCollapsed={isCollapsedVisual} />
-                <div className="bg-divider/30 mx-2 my-2 h-px" />
+              </>
+            )}
+
+            {showBilibili && (
+              <>
+                <Divider />
                 <DefaultMenus isCollapsed={isCollapsedVisual} onOpenAddFavorite={handleOpenAddFavorite} />
                 <Collection
                   isCollapsed={isCollapsedVisual}
@@ -189,15 +206,11 @@ const SideNav = () => {
                   onOpenEditFavorite={handleOpenEditFavorite}
                 />
               </>
-            ) : (
+            )}
+
+            {showNetease && !neteaseFirst && (
               <>
-                <DefaultMenus isCollapsed={isCollapsedVisual} onOpenAddFavorite={handleOpenAddFavorite} />
-                <Collection
-                  isCollapsed={isCollapsedVisual}
-                  onOpenAddFavorite={handleOpenAddFavorite}
-                  onOpenEditFavorite={handleOpenEditFavorite}
-                />
-                <div className="bg-divider/30 mx-2 my-2 h-px" />
+                <Divider />
                 <NeteaseMenus isCollapsed={isCollapsedVisual} />
               </>
             )}

@@ -1,7 +1,7 @@
 <h1 align="center">NWBP</h1>
 
 <p align="center">
-  <b>Beta 8</b>
+  <b>Beta 8-hotfix</b>
 </p>
 <p align="center">
   一个基于哔哩哔哩公开接口的跨平台桌面音乐播放器，另集成网易云音乐音源 🎧
@@ -403,9 +403,10 @@ pnpm build
 
 ## 🏷 版本号
 
-`package.json` 的 `version` 必须是合法 semver（Electron Builder 依赖它命名产物），当前为 `0.1.0-beta.8`。
+`package.json` 的 `version` 必须是合法 semver（Electron Builder 依赖它命名产物），当前为 `0.1.0-beta.8-hotfix`。
 
-界面上的「**Beta 8**」由 `src/common/utils/version.ts` 的 `formatAppVersion()` 转换而来 —— 显示的是**预发布序号**，所以发新版时要把 `beta` 后面的数字往上加（`-beta.7` → `-beta.8` …）。
+界面上的「**Beta 8-hotfix**」由 `src/common/utils/version.ts` 的 `formatAppVersion()` 转换而来 —— 显示的是**预发布序号**，所以发新版时要把 `beta` 后面的数字往上加（`-beta.7` → `-beta.8` …）。
+补丁版在序号后面再挂一个限定词即可（`-beta.8-hotfix` → 显示 `Beta 8-hotfix`），`compareVersions` 会把它排在 `-beta.8` 之后、`-beta.9` 之前。
 
 点分的版本核心（`0.1.0`）不带预发布标记，会被 `plugins/electron-build.ts` 写进 macOS 的 `CFBundleVersion` 与 Windows 的 `FileVersion` / `ProductVersion`。
 

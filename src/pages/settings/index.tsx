@@ -40,6 +40,7 @@ const useSystemSettingsForm = () => {
     autoStart,
     audioQuality,
     musicSource,
+    sourceMode,
     hiddenMenuKeys,
     displayMode,
     ffmpegPath,
@@ -69,6 +70,7 @@ const useSystemSettingsForm = () => {
       autoStart: s.autoStart,
       audioQuality: s.audioQuality,
       musicSource: s.musicSource,
+      sourceMode: s.sourceMode ?? "mixed",
       hiddenMenuKeys: s.hiddenMenuKeys,
       displayMode: s.displayMode,
       ffmpegPath: s.ffmpegPath,
@@ -102,6 +104,7 @@ const useSystemSettingsForm = () => {
       autoStart,
       audioQuality,
       musicSource,
+      sourceMode,
       hiddenMenuKeys,
       displayMode,
       ffmpegPath,
@@ -158,7 +161,7 @@ const SettingsPage = () => {
             <Tab key="system" title={t("常规设置")}>
               <SystemSettingsTab {...system} />
             </Tab>
-            <Tab key="source" title={t("音乐源与页面")}>
+            <Tab key="source" title={t("音源与模式")}>
               <MusicSourceSettings control={system.control} />
             </Tab>
             <Tab key="lyrics" title={t("歌词设置")}>

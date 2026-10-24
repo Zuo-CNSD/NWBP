@@ -20,6 +20,18 @@ type ThemeMode = "system" | "light" | "dark";
 type MusicSource = "bilibili" | "netease";
 
 /**
+ * 界面展示模式（Beta 9 起取代「首选音乐源」作为导航的主开关）。
+ *
+ * - `netease`  网易云模式：侧栏只留通用组 + 网易云
+ * - `bilibili` 哔哩哔哩模式：侧栏只留通用组 + 哔哩哔哩（含收藏夹）
+ * - `mixed`    融合模式：两家都在，顺序跟 `musicSource`
+ *
+ * 只影响**导航展示与搜索的默认范围**，不改变任何一家自己的数据与功能；
+ * 切模式也不会动播放队列。
+ */
+type SourceMode = "netease" | "bilibili" | "mixed";
+
+/**
  * app 打开动画（启动时盖住整窗的那层开场画面）。
  * - `none`  关掉，直接进主界面
  * - `fade`  只做一次淡入淡出，不出现图案
@@ -64,15 +76,22 @@ interface AppSettings {
   autoStart: boolean;
   audioQuality: AudioQuality;
   /**
-   * **首选音乐源**（Beta 8 起含义扩大）。
+   * **首选音乐源**（Beta 8 起含义扩大，Beta 9 起退居「融合模式下的默认音源」）。
    *
-   * 原来只决定搜索与播放走哪家，现在还负责：
-   * ① 侧栏两个平台分组的先后顺序；
+   * 负责：
+   * ① 融合模式下两个平台分组的先后顺序；
    * ② 「我喜欢的音乐」进哪一家的收藏页；
-   * ③ 新手引导里选的那一项就是它。
-   * **不影响**侧栏是否显示某个分组 —— 两组始终并存，只调顺序。
+   * ③ 融合模式下搜索默认走哪一家。
+   *
+   * **不再决定侧栏显示哪些分组** —— 那是 `sourceMode` 的事。
+   * 单选模式下这里仍然会被读取（当作"就是那一家的默认"），所以不必强行同步。
    */
   musicSource: MusicSource;
+  /**
+   * 界面展示模式。默认 `mixed`（两家都显示），
+   * 选了单选模式后侧栏只留对应那一组。
+   */
+  sourceMode: SourceMode;
   hiddenMenuKeys: string[];
   displayMode: "card" | "list" | "compact";
   ffmpegPath?: string;

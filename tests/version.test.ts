@@ -16,6 +16,11 @@ describe("formatAppVersion", () => {
     expect(formatAppVersion("2.0.0-RC.1")).toBe("Rc 1");
   });
 
+  test("序号后面挂限定词时原样接在短横线上", () => {
+    expect(formatAppVersion("0.1.0-beta.8-hotfix")).toBe("Beta 8-hotfix");
+    expect(formatAppVersion("0.1.0-beta.8-hotfix.2")).toBe("Beta 8-hotfix.2");
+  });
+
   test("稳定版原样返回", () => {
     expect(formatAppVersion("1.16.0")).toBe("1.16.0");
     expect(formatAppVersion("0.1.0")).toBe("0.1.0");

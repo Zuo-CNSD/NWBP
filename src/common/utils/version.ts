@@ -13,6 +13,7 @@
  * - `0.1.0-beta` → `Beta`（没写序号就不编造一个）
  * - `1.16.0` → `1.16.0`（没有预发布段就原样返回）
  * - `0.2.0-rc.3` → `Rc 3`（只把首字母大写，不硬编码 beta/alpha，免得将来加了新标记漏改）
+ * - `0.1.0-beta.8-hotfix` → `Beta 8-hotfix`（序号后面还能挂一个限定词，原样跟在短横线后）
  *
  * ⚠️ 显示出来的是**预发布序号**，不是点分的版本核心 ——
  * 所以发新一版时**必须把 `beta` 后面那个数字往上加**（`-beta.2` → `-beta.3` → …），
@@ -22,11 +23,12 @@
  * 万一遇到读不出来的形式也原样返回，绝不抛错 —— 版本号是给人看的，不值得为它挂掉一个页面。
  */
 export function formatAppVersion(version: string): string {
-  const matched = /^(\d+\.\d+\.\d+)-([A-Za-z]+)(?:\.(\d+))?$/.exec(version?.trim() ?? "");
+  const matched = /^(\d+\.\d+\.\d+)-([A-Za-z]+)(?:\.(\d+))?(?:-([A-Za-z0-9.]+))?$/.exec(version?.trim() ?? "");
   if (!matched) return version;
 
-  const [, , tag, serial] = matched;
+  const [, , tag, serial, qualifier] = matched;
   const label = `${tag.charAt(0).toUpperCase()}${tag.slice(1).toLowerCase()}`;
+  const base = serial ? `${label} ${serial}` : label;
 
-  return serial ? `${label} ${serial}` : label;
+  return qualifier ? `${base}-${qualifier}` : base;
 }
