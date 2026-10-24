@@ -69,7 +69,28 @@
 3. 确认 `downloads.mirror` 的国内渠道**已经传上新包**（NAS 上的目录要么是「最新」的固定链接，
    要么每版换新链接 —— 换了就必须改这里，否则用户点下去下到的是上一版）；
 4. 官网 `index.html` 的版本号与 `#whats-new` 同步更新；
-5. Release 建好后，把 `publishedAt` 和下载页地址再核一遍。
+5. Release 建好后，把 `publishedAt` 和下载页地址再核一遍；
+6. **推完之后主动清一次 jsDelivr 缓存**：
+
+   ```bash
+   curl -s "https://purge.jsdelivr.net/gh/Zuo-CNSD/NWBP@main/latest.json"
+   ```
+
+   `cdn.jsdelivr.net` 对 `@main` 的缓存默认能留 12 小时。不清的话，
+   第一个取源返回的还是**上一版**清单，客户端拿到就认为「没有更新」，
+   GitHub Raw 那一层根本轮不到 —— 实测发完 Beta 8-hotfix 就是这种情况：
+   Raw 已经是 hotfix，CDN 还在发 beta.8，于是 Beta 8 用户查更新只会被告知「已是最新」。
+   清完可以用下面这条确认两个源读到的是同一个版本：
+
+   ```bash
+   for u in "https://cdn.jsdelivr.net/gh/Zuo-CNSD/NWBP@main/latest.json" \
+            "https://raw.githubusercontent.com/Zuo-CNSD/NWBP/main/latest.json"; do
+     curl -s "$u" | python3 -c "import json,sys;print(json.load(sys.stdin)['release']['version'])"
+   done
+   ```
 
 > 第 3 条最容易漏：应用内的下载按钮指向 `downloads.mirror`，官网的按钮却是写死在 HTML 里的，
 > 两处不是同一个来源，改了一处忘了另一处，用户点到的东西就不一样了。
+>
+> 第 6 条是最阴的：**不清缓存不会有任何报错**，只是更新提示静悄悄地消失，
+> 而 GitHub Raw 的兜底逻辑永远走不到 —— 它只在第一个源请求失败时才用。
