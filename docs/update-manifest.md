@@ -43,7 +43,7 @@
     {
       "id": "beta8-2026-10",       // 必填且要稳定：已读是按 id 记的，改了 id 用户会再看一遍
       "level": "info",             // info | warning | maintenance
-      "title": "Beta 8 已发布",
+      "title": "BETA8 已发布",
       "body": "正文，可省略",
       "date": "2026-10-24",
       "link": "https://..."        // 只接受 https

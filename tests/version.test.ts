@@ -3,22 +3,24 @@ import { describe, expect, test } from "vitest";
 import { formatAppVersion } from "@/common/utils/version";
 
 describe("formatAppVersion", () => {
-  test("预发布段翻成「Beta 2」", () => {
-    expect(formatAppVersion("0.1.0-beta.2")).toBe("Beta 2");
+  test("预发布段翻成「BETA2」，标记全大写、序号紧贴", () => {
+    expect(formatAppVersion("0.1.0-beta.2")).toBe("BETA2");
+    expect(formatAppVersion("0.1.0-beta.9")).toBe("BETA9");
   });
 
   test("没有预发布流水号就只显示标记，不编造数字", () => {
-    expect(formatAppVersion("0.1.0-beta")).toBe("Beta");
+    expect(formatAppVersion("0.1.0-beta")).toBe("BETA");
   });
 
-  test("大写 / 混合大小写归一化，序号照样带上", () => {
-    expect(formatAppVersion("0.1.0-BETA.2")).toBe("Beta 2");
-    expect(formatAppVersion("2.0.0-RC.1")).toBe("Rc 1");
+  test("大写 / 混合大小写归一化后仍是全大写", () => {
+    expect(formatAppVersion("0.1.0-BETA.2")).toBe("BETA2");
+    expect(formatAppVersion("0.1.0-Beta.2")).toBe("BETA2");
+    expect(formatAppVersion("2.0.0-RC.1")).toBe("RC1");
   });
 
   test("序号后面挂限定词时原样接在短横线上", () => {
-    expect(formatAppVersion("0.1.0-beta.8-hotfix")).toBe("Beta 8-hotfix");
-    expect(formatAppVersion("0.1.0-beta.8-hotfix.2")).toBe("Beta 8-hotfix.2");
+    expect(formatAppVersion("0.1.0-beta.8-hotfix")).toBe("BETA8-hotfix");
+    expect(formatAppVersion("0.1.0-beta.8-hotfix.2")).toBe("BETA8-hotfix.2");
   });
 
   test("稳定版原样返回", () => {

@@ -3,17 +3,18 @@
  *
  * `package.json` 里的 version 必须是合法 semver（electron-builder 按它命名产物、
  * 写进 Info.plist / exe 资源），预发布只能写成 `0.1.0-beta.2` 这种。
- * 但界面上这么一串不好看，统一转成「Beta 2」这种读法。
+ * 但界面上这么一串不好看，统一转成「BETA2」这种读法 ——
+ * 标记全大写、序号紧贴着写，是项目一直以来的叫法。
  */
 
 /**
  * 把 semver 的预发布段翻成人话。
  *
- * - `0.1.0-beta.2` → `Beta 2`
- * - `0.1.0-beta` → `Beta`（没写序号就不编造一个）
+ * - `0.1.0-beta.2` → `BETA2`
+ * - `0.1.0-beta` → `BETA`（没写序号就不编造一个）
  * - `1.16.0` → `1.16.0`（没有预发布段就原样返回）
- * - `0.2.0-rc.3` → `Rc 3`（只把首字母大写，不硬编码 beta/alpha，免得将来加了新标记漏改）
- * - `0.1.0-beta.8-hotfix` → `Beta 8-hotfix`（序号后面还能挂一个限定词，原样跟在短横线后）
+ * - `0.2.0-rc.3` → `RC3`（标记整体转大写，不硬编码 beta/alpha，免得将来加了新标记漏改）
+ * - `0.1.0-beta.8-hotfix` → `BETA8-hotfix`（序号后面还能挂一个限定词，原样跟在短横线后）
  *
  * ⚠️ 显示出来的是**预发布序号**，不是点分的版本核心 ——
  * 所以发新一版时**必须把 `beta` 后面那个数字往上加**（`-beta.2` → `-beta.3` → …），
@@ -27,8 +28,8 @@ export function formatAppVersion(version: string): string {
   if (!matched) return version;
 
   const [, , tag, serial, qualifier] = matched;
-  const label = `${tag.charAt(0).toUpperCase()}${tag.slice(1).toLowerCase()}`;
-  const base = serial ? `${label} ${serial}` : label;
+  // 标记一律大写、序号紧贴：`BETA9` / `RC3`，中间不留空格
+  const base = serial ? `${tag.toUpperCase()}${serial}` : tag.toUpperCase();
 
   return qualifier ? `${base}-${qualifier}` : base;
 }
