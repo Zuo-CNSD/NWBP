@@ -18,8 +18,9 @@
 import en from "./locales/en";
 import ja from "./locales/ja";
 import ko from "./locales/ko";
+import zhTW from "./locales/zh-tw";
 
-export const LANGUAGES = ["zh-CN", "en", "ja", "ko"] as const;
+export const LANGUAGES = ["zh-CN", "zh-TW", "en", "ja", "ko"] as const;
 
 export type Language = (typeof LANGUAGES)[number];
 
@@ -28,6 +29,7 @@ export const DEFAULT_LANGUAGE: Language = "zh-CN";
 /** 语言选择器里显示的名字。用各自的语言写，用户扫一眼就能认出自己的母语。 */
 export const LANGUAGE_LABELS: Record<Language, string> = {
   "zh-CN": "简体中文",
+  "zh-TW": "繁體中文",
   en: "English",
   ja: "日本語",
   ko: "한국어",
@@ -38,9 +40,13 @@ type Messages = Record<string, string>;
 /**
  * 中文是**基准语言**，不存词典：查不到就原样返回 key，而 key 本身就是中文。
  * 这样中文包不用维护，也不会出现「改了中文没改词典」的不一致。
+ *
+ * 繁体包是例外：它的 key 也是简体原文，值才是繁体（由 `scripts/i18n-gen-zh-tw.mjs`
+ * 生成）。所以繁体界面缺词条时显示的是简体，不会掉回英文 —— 对读者来说更好读。
  */
 const PACKS: Record<Language, Messages> = {
   "zh-CN": {},
+  "zh-TW": zhTW,
   en,
   ja,
   ko,
@@ -57,7 +63,17 @@ export const normalizeLanguage = (value?: null | string): Language => {
   if ((LANGUAGES as readonly string[]).includes(value)) return value as Language;
 
   const lower = value.toLowerCase();
-  // `zh-Hans-CN` → `zh`、`en-US` → `en`
+
+  /*
+   * 中文得先分清简繁，不能走下面的 base 匹配：
+   * `zh-Hant` / `zh-TW` / `zh-HK` / `zh-MO` 都该是繁体，
+   * 而按 base（`zh`）去 find 会一律命中排在前面的 `zh-CN`。
+   */
+  if (lower.startsWith("zh")) {
+    return /hant|tw|hk|mo/.test(lower) ? "zh-TW" : "zh-CN";
+  }
+
+  // `en-US` → `en`、`ja-JP` → `ja`
   const base = lower.split("-")[0];
   const matched = LANGUAGES.find(l => l.toLowerCase() === lower || l.toLowerCase().split("-")[0] === base);
 

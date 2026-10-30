@@ -14,7 +14,14 @@ export const defaultAppSettings: AppSettings = {
   backgroundImageDim: 0.25,
   windowTransparent: false,
   downloadPath: "",
-  primaryColor: "#1ed760",
+  /*
+   * 主色：留空 = 跟随主题。
+   *
+   * Beta 9 之前默认是一串写死的品牌绿（`#1ed760`），存进配置后就算主题换了也不变，
+   * 想改回黑白还得自己去调色盘里点。留空之后，浅色主题用近黑、深色主题用近白，
+   * 用户真选了颜色才是一串 hex —— 「默认」和「用户改过」从此能区分开。
+   */
+  primaryColor: "",
   backgroundColor: "",
   audioQuality: "auto",
   /*

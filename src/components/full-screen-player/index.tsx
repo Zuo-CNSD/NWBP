@@ -9,7 +9,7 @@ import { useShallow } from "zustand/shallow";
 
 import type { FullScreenBackgroundMode } from "@/store/full-screen-player-settings";
 
-import { Themes } from "@/common/constants/theme";
+import { resolvePrimaryColor, Themes } from "@/common/constants/theme";
 import { t } from "@/common/i18n";
 import { hexToHsl, resolveTheme, isHex } from "@/common/utils/color";
 import { isNeteaseTrack } from "@/common/utils/favorite";
@@ -254,13 +254,14 @@ const FullScreenPlayer = () => {
   const themeVars = useMemo(() => {
     const vars: React.CSSProperties = {
       ...cssVars,
-      ["--heroui-primary" as any]: hexToHsl(primaryColor),
+      // 主色留空表示跟随主题，这里也得过一遍解析 —— 空串直接喂 hexToHsl 会抛
+      ["--heroui-primary" as any]: hexToHsl(resolvePrimaryColor(resolveTheme(themeMode), primaryColor)),
     };
     if (computedForegroundHex) {
       vars["--heroui-foreground" as any] = hexToHsl(computedForegroundHex);
     }
     return vars;
-  }, [cssVars, primaryColor, computedForegroundHex]);
+  }, [cssVars, primaryColor, themeMode, computedForegroundHex]);
 
   const appTheme = useMemo(() => resolveTheme(themeMode), [themeMode]);
 

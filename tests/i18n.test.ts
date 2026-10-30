@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { FALLBACK_GREETING, GREETING_BOUNDS } from "@/common/constants/greeting";
 import { StatusDesc } from "@/pages/download-list/status-desc";
+import { PERMISSION_LABELS, RISK_META, RULE_LABELS, SOURCE_LABELS } from "@/pages/settings/plugin-labels";
 import {
   DEFAULT_LANGUAGE,
   LANGUAGE_LABELS,
@@ -13,6 +14,7 @@ import {
 import en from "@shared/i18n/locales/en";
 import ja from "@shared/i18n/locales/ja";
 import ko from "@shared/i18n/locales/ko";
+import zhTW from "@shared/i18n/locales/zh-tw";
 import { defaultShortcutSettings } from "@shared/settings/shortcut-settings";
 
 // 主进程侧的取词入口。它刻意零 Electron 依赖，所以在这里可以直接 import
@@ -41,10 +43,21 @@ describe("i18n 内核", () => {
 
     it("带地区的标签按主语言收敛（zh-Hans-CN → zh-CN，en-US → en）", () => {
       expect(normalizeLanguage("zh-Hans-CN")).toBe("zh-CN");
-      expect(normalizeLanguage("zh-TW")).toBe("zh-CN");
       expect(normalizeLanguage("en-US")).toBe("en");
       expect(normalizeLanguage("ja-JP")).toBe("ja");
       expect(normalizeLanguage("KO-kr")).toBe("ko");
+    });
+
+    /**
+     * 中文有两套字形，按主语言（`zh`）去匹配会一律落到排在前面的 `zh-CN`，
+     * 所以简繁必须单独判一次。香港 / 澳门系统给的也是繁体，一并收敛到 zh-TW。
+     */
+    it("繁体中文字标签识别成 zh-TW（含港/澳/Hant 写法）", () => {
+      for (const value of ["zh-TW", "zh-tw", "zh-Hant", "zh-Hant-TW", "zh-HK", "zh-MO"]) {
+        expect(normalizeLanguage(value)).toBe("zh-TW");
+      }
+      expect(normalizeLanguage("zh")).toBe("zh-CN");
+      expect(normalizeLanguage("zh-Hans")).toBe("zh-CN");
     });
   });
 
@@ -95,12 +108,22 @@ describe("i18n 内核", () => {
   });
 
   describe("语言包完整性", () => {
+    /** 英文 / 日文 / 韩文是逐条对齐维护的，条数必须一致 */
     const packs = { en, ja, ko } as const;
+    /** 繁体是从简体转出来的，只收「转了才有变化」的条目，条数天然不同 */
+    const allPacks = { ...packs, zhTW } as const;
 
     it("三份词典条数一致", () => {
       const sizes = Object.values(packs).map(pack => Object.keys(pack).length);
       expect(new Set(sizes).size).toBe(1);
       expect(sizes[0]).toBeGreaterThan(600);
+    });
+
+    it("繁体包随简体落地（条目数在同一个量级，不是空壳）", () => {
+      expect(countMessages("zh-TW")).toBeGreaterThan(600);
+      // 少掉的那部分是「简繁同形」的词条（「播放」「下载」）和非中文 key，
+      // 它们本来就该走回落，所以比例不能低太多
+      expect(countMessages("zh-TW") / countMessages("en")).toBeGreaterThan(0.8);
     });
 
     it("countMessages 报的是各自包里的条数", () => {
@@ -112,7 +135,7 @@ describe("i18n 内核", () => {
       const placeholders = (text: string) => (text.match(/\{\d+\}/g) ?? []).sort().join(",");
 
       const mismatched: string[] = [];
-      for (const [language, pack] of Object.entries(packs)) {
+      for (const [language, pack] of Object.entries(allPacks)) {
         for (const [key, value] of Object.entries(pack)) {
           if (placeholders(key) !== placeholders(value)) {
             mismatched.push(`${language}  ${key}  →  ${value}`);
@@ -125,7 +148,7 @@ describe("i18n 内核", () => {
 
     it("没有空译文（空的会渲染成一片空白，比显示中文还糟）", () => {
       const empty: string[] = [];
-      for (const [language, pack] of Object.entries(packs)) {
+      for (const [language, pack] of Object.entries(allPacks)) {
         for (const [key, value] of Object.entries(pack)) {
           if (!value.trim()) empty.push(`${language}  ${key}`);
         }
@@ -142,9 +165,41 @@ describe("i18n 内核", () => {
       }
 
       expect(LANGUAGE_LABELS["zh-CN"]).toBe("简体中文");
+      expect(LANGUAGE_LABELS["zh-TW"]).toBe("繁體中文");
       expect(LANGUAGE_LABELS.en).toBe("English");
       expect(LANGUAGE_LABELS.ja).toBe("日本語");
       expect(LANGUAGE_LABELS.ko).toBe("한국어");
+    });
+
+    it("语言选择器里五种语言按「中文在前」排", () => {
+      expect([...LANGUAGES]).toEqual(["zh-CN", "zh-TW", "en", "ja", "ko"]);
+    });
+  });
+
+  /**
+   * 繁体包是**从简体转换来的**，不是人工翻译，所以要钉住的是「转换真的发生了」。
+   * 只验「有条目」不够 —— 转换规则整个失效也会留下几千条一模一样的条目。
+   */
+  describe("繁体中文包", () => {
+    it("繁体包用的是台湾用语，不是只换字形", () => {
+      expect(translate("zh-TW", "设置")).toBe("設定");
+      expect(translate("zh-TW", "网络")).toBe("網路");
+    });
+
+    it("转换后与原文相同的条目不收录，查不到时回落成简体原文", () => {
+      // 「播放」简繁同形，不会进词典
+      expect(zhTW["播放"]).toBeUndefined();
+      expect(translate("zh-TW", "播放")).toBe("播放");
+    });
+
+    it("繁体界面的缺词条回落成简体，而不是英文", () => {
+      const missing = "一条故意不存在的词条";
+      expect(translate("zh-TW", missing)).toBe(missing);
+    });
+
+    it("占位符原样保留（转换不能动 {0}）", () => {
+      expect(translate("zh-TW", "共 {0} 首", 12)).toContain("12");
+      expect(translate("zh-TW", "共 {0} 首", 12)).not.toContain("{0}");
     });
   });
 
@@ -181,6 +236,20 @@ describe("i18n 内核", () => {
     it("快捷键名称的每一个都有翻译", () => {
       const names = [...defaultShortcutSettings.shortcuts, ...defaultShortcutSettings.globalShortcuts].map(s => s.name);
       assertCovered("快捷键名称", [...new Set(names)]);
+    });
+
+    /**
+     * 插件页的四张表都是 `t(表[x])` 渲染的：权限、风险级别、安装来源、扫描规则。
+     * 之前这四条一路漏翻 —— 英文界面下插件卡片上「界面 / 网络 / 存储」还是中文。
+     */
+    it("插件页的权限 / 风险 / 来源 / 规则标签都有翻译", () => {
+      assertCovered("插件权限", Object.values(PERMISSION_LABELS));
+      assertCovered(
+        "插件风险级别",
+        Object.values(RISK_META).map(meta => meta.label),
+      );
+      assertCovered("插件安装来源", Object.values(SOURCE_LABELS));
+      assertCovered("插件扫描规则", Object.values(RULE_LABELS));
     });
   });
 

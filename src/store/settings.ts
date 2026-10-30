@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { normalizeLanguage } from "@shared/i18n";
 import { defaultAppSettings } from "@shared/settings/app-settings";
 import { StoreNameMap } from "@shared/store";
 
@@ -46,19 +47,41 @@ export const useSettings = create<AppSettings & SettingsActions>()(
         getItem: async () => {
           const store = await window.electron.getStore(StoreNameMap.AppSettings);
 
+          /*
+           * 首次启动（磁盘上还没有设置）就跟随系统语言。
+           *
+           * 否则繁体 / 英文系统的用户第一次打开看到的是一屏简体，
+           * 得自己翻到设置里改用哪种语言 —— 这不是「支持了某种语言」该有的样子。
+           * 只要存过设置就一律尊重存档，不做任何「自动」覆盖：选过就是选过了。
+           */
+          if (!store?.appSettings) {
+            // 只给 language，其余字段由 persist 用 defaultAppSettings 补齐；
+            // 类型上要求整份 AppSettings，所以这里断言一下
+            return { state: { language: normalizeLanguage(navigator.language) } as AppSettings };
+          }
+
           // 兼容之前的错误默认值
-          if (store?.appSettings?.fontFamily === "system-default") {
+          if (store.appSettings.fontFamily === "system-default") {
             store.appSettings.fontFamily = "system-ui";
           }
 
           // 旧版本默认圆角为 8px（偏方），新版本提升到 14px，让整体更圆润。
           // 仅迁移「仍是旧默认值」的配置，用户手动调过的值保持不动。
-          if (store?.appSettings?.borderRadius === 8) {
+          if (store.appSettings.borderRadius === 8) {
             store.appSettings.borderRadius = defaultAppSettings.borderRadius;
           }
 
+          /*
+           * 旧版本把品牌绿写进了默认值，于是每个升级上来的用户配置里都躺着
+           * `#1ed760` —— 不迁移的话，主题改成黑白也照样满屏发绿。
+           * 只动「还是那串绿」的配置：自己挑过颜色的用户不受影响。
+           */
+          if (store.appSettings.primaryColor === "#1ed760") {
+            store.appSettings.primaryColor = "";
+          }
+
           return {
-            state: store?.appSettings,
+            state: store.appSettings,
           };
         },
 

@@ -36,7 +36,8 @@ const PlayBarAudioBar = () => {
 
     let rafId = 0;
     let bars: number[] = [];
-    let color = "#1ed760";
+    // 兜底色只在读到 CSS 变量之前用一帧，取中性灰，别让频谱先闪一下彩色
+    let color = "#52525b";
     let colorCheckedAt = 0;
     /** 已经画过「落到底」的那一帧没有 —— 画过一次就不用再重绘了 */
     let paintedFlat = false;

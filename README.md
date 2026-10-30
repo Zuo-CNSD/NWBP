@@ -1,7 +1,7 @@
 <h1 align="center">NWBP</h1>
 
 <p align="center">
-  <b>Beta 8-hotfix</b>
+  <b>Beta 9</b>
 </p>
 <p align="center">
   一个基于哔哩哔哩公开接口的跨平台桌面音乐播放器，另集成网易云音乐音源 🎧
@@ -43,7 +43,7 @@
     </td>
     <td width="50%" align="center">
       <img src="./screenshots/nwbp-settings.png" alt="NWBP 设置" width="100%">
-      <sub>设置：液态玻璃外观、主题与开发者信息</sub>
+      <sub>设置：左侧竖排导航，七组设置一目了然</sub>
     </td>
   </tr>
 </table>
@@ -152,7 +152,9 @@ NWBP 采用低填充、低模糊的玻璃化视觉设计。
 支持：
 
 * 浅色 / 深色主题
+* 黑白主色（默认无色相，不再有品牌绿）
 * 自定义主色
+* 四团漂浮光团底衬，颜色由主色推导
 * 自定义背景图片
 * 背景模糊
 * 背景压暗
@@ -163,6 +165,18 @@ NWBP 采用低填充、低模糊的玻璃化视觉设计。
 * 系统托盘
 
 设计目标不是简单地将界面处理成高模糊的“毛玻璃”，而是在透明度、背景、内容和层次之间保持清晰的视觉关系。
+
+### 🌐 多语言
+
+界面文案支持五种语言，切换即时生效：
+
+* 简体中文
+* 繁體中文（按台湾用语转换，不只是换字形）
+* English
+* 日本語
+* 한국어
+
+首次启动会跟随系统语言；繁体按 `zh-TW` / `zh-Hant` / `zh-HK` / `zh-MO` 识别。
 
 ### 🎬 启动动画
 
@@ -203,9 +217,11 @@ NWBP 不只是简单修改主题，而是在上游项目的基础上进行了较
 * 品牌名称改为 NWBP
 * 侧栏采用纯文字品牌设计
 * 应用主体改为一整块浮起的圆角玻璃面板
-* 重构液态玻璃视觉效果
+* 重构液态玻璃视觉效果：静态色雾改为四团各自漂浮的光团
+* 主题改为黑白主色，去掉品牌绿
 * 增加浅色 / 深色主题
 * 增加自定义背景系统
+* 增加五语言界面（简 / 繁 / 英 / 日 / 韩）
 
 ### 📝 桌面歌词重构
 
@@ -273,6 +289,8 @@ NWBP 不只是简单修改主题，而是在上游项目的基础上进行了较
 * 移除 electron-updater（因此**本版没有自动更新**）
 * 修复液态玻璃模式下部分文字与滑块对比度不足的问题
 * 页面切换增加短暂加载反馈
+* 设置页改为左侧竖排导航
+* 「音源与模式」并入「音源与账号」，「代理设置」收进常规设置的网络折叠区
 * 设置页增加开发者署名
 
 ⸻
@@ -403,10 +421,10 @@ pnpm build
 
 ## 🏷 版本号
 
-`package.json` 的 `version` 必须是合法 semver（Electron Builder 依赖它命名产物），当前为 `0.1.0-beta.8-hotfix`。
+`package.json` 的 `version` 必须是合法 semver（Electron Builder 依赖它命名产物），当前为 `0.1.0-beta.9`。
 
-界面上的「**Beta 8-hotfix**」由 `src/common/utils/version.ts` 的 `formatAppVersion()` 转换而来 —— 显示的是**预发布序号**，所以发新版时要把 `beta` 后面的数字往上加（`-beta.7` → `-beta.8` …）。
-补丁版在序号后面再挂一个限定词即可（`-beta.8-hotfix` → 显示 `Beta 8-hotfix`），`compareVersions` 会把它排在 `-beta.8` 之后、`-beta.9` 之前。
+界面上的「**Beta 9**」由 `src/common/utils/version.ts` 的 `formatAppVersion()` 转换而来 —— 显示的是**预发布序号**，所以发新版时要把 `beta` 后面的数字往上加（`-beta.8` → `-beta.9` …）。
+补丁版在序号后面再挂一个限定词即可（`-beta.9-hotfix` → 显示 `Beta 9-hotfix`），`compareVersions` 会把它排在 `-beta.9` 之后、`-beta.10` 之前。
 
 点分的版本核心（`0.1.0`）不带预发布标记，会被 `plugins/electron-build.ts` 写进 macOS 的 `CFBundleVersion` 与 Windows 的 `FileVersion` / `ProductVersion`。
 

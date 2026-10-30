@@ -29,6 +29,7 @@ import { LANGUAGE_LABELS, LANGUAGES, normalizeLanguage } from "@shared/i18n";
 import BackgroundSettings from "./background-settings";
 import ColorSettings from "./color-settings";
 import ImportExport from "./export-import";
+import ProxySettings from "./proxy-settings";
 
 /**
  * 从 `onSelectionChange` 的入参里取出语言。
@@ -560,6 +561,22 @@ export const SystemSettingsTab = ({ appVersion, audioQuality, control, setValue 
           />
         </div>
       </div>
+
+      <Divider />
+      <h2>{t("网络")}</h2>
+      {/*
+        代理设置原本是独立的 Tab，Beta 9 撤掉了 —— 一年改不了一次的东西
+        不该占一个一级入口。收进折叠区，需要的人一样找得到。
+      */}
+      <details className="w-full">
+        <summary className="text-medium cursor-pointer font-medium">{t("代理设置")}</summary>
+        <p className="text-default-500 mt-1 text-sm leading-relaxed">
+          {t("搜索、播放和下载都会走这里配置的代理。不填就是不使用代理。")}
+        </p>
+        <div className="mt-3">
+          <ProxySettings control={control} />
+        </div>
+      </details>
 
       <Divider />
       <h2>{t("关于应用")}</h2>

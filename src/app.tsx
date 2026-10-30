@@ -30,6 +30,7 @@ import { useUpdateStore } from "./store/update";
 import "moment/locale/ja";
 import "moment/locale/ko";
 import "moment/locale/zh-cn";
+import "moment/locale/zh-tw";
 
 import "overlayscrollbars/overlayscrollbars.css";
 import "./app.css";
@@ -37,6 +38,7 @@ import "./app.css";
 /** 语言码 → moment 的 locale 名（moment 用 `zh-cn` 这种小写全拼） */
 const MOMENT_LOCALES: Record<Language, string> = {
   "zh-CN": "zh-cn",
+  "zh-TW": "zh-tw",
   en: "en",
   ja: "ja",
   ko: "ko",
@@ -45,6 +47,7 @@ const MOMENT_LOCALES: Record<Language, string> = {
 /** 语言码 → BCP 47（给 HeroUI / 日期选择器用，它们只认标准标签） */
 const BCP47: Record<Language, string> = {
   "zh-CN": "zh-CN",
+  "zh-TW": "zh-TW",
   en: "en-US",
   ja: "ja-JP",
   ko: "ko-KR",

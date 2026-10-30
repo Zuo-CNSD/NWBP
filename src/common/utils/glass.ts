@@ -127,6 +127,11 @@ export const GLASS_VARIABLES = [
   "--glass-tint-a",
   "--glass-tint-b",
   "--glass-tint-c",
+  "--glass-blob-a",
+  "--glass-blob-1",
+  "--glass-blob-2",
+  "--glass-blob-3",
+  "--glass-blob-4",
   "--glass-alpha-1",
   "--glass-alpha-2",
   "--glass-alpha-3",
@@ -206,15 +211,16 @@ const safePrimary = (primaryColor: string) => {
   try {
     return hexToHsl(primaryColor);
   } catch {
-    return "142 69% 58%";
+    // 主色解析不出来时用中性灰兜底（原来兜的是品牌绿，切了黑白主题后会突然冒绿）
+    return "240 5% 34%";
   }
 };
 
 export interface GlassResult {
   /** 是否真正启用了玻璃外观 */
   active: boolean;
-  /** 壁纸用到的三个色带，供需要时在 JS 侧复用 */
-  tints: string[];
+  /** 底衬光团的颜色（HSL 三段式），供需要时在 JS 侧复用 */
+  blobs: string[];
 }
 
 /**
@@ -233,7 +239,7 @@ export const applyGlassTheme = (style: CSSStyleDeclaration, options: GlassOption
 
   if (!active) {
     GLASS_VARIABLES.forEach(key => style.removeProperty(key));
-    return { active: false, tints: [] };
+    return { active: false, blobs: [] };
   }
 
   /*
@@ -291,32 +297,45 @@ export const applyGlassTheme = (style: CSSStyleDeclaration, options: GlassOption
   style.setProperty("--glass-veil-ambient-a", String(edge.veilAmbient));
   style.setProperty("--glass-sweep-a", String(edge.sweep));
 
-  // 壁纸色带：主色 + 左右各偏移，形成流动的彩色雾
+  /*
+   * 从主色里取色相 / 饱和度。明度不取 —— 主色可能是纯黑或纯白，
+   * 直接拿来当光团颜色，压在同样的底色上不是污渍就是看不见。
+   */
   const [huePart, satPart] = safePrimary(primaryColor).split(" ");
   const baseHue = Number.parseFloat(huePart);
   const baseSat = Number.parseFloat(satPart);
-  const safeHue = Number.isFinite(baseHue) ? baseHue : 142;
-  const safeSat = Number.isFinite(baseSat) ? baseSat : 69;
+  const safeHue = Number.isFinite(baseHue) ? baseHue : 240;
+  const safeSat = Number.isFinite(baseSat) ? baseSat : 5;
 
   /*
-   * 浅色模式下面板本身是白的，如果底衬也发白，玻璃就完全看不出来。
-   * 所以浅色模式用更浓、更暗一点的色（提高饱和度、压低明度），
-   * 深色模式则用更亮的色，避免整体发闷。
+   * 彩色主色才需要这一脚加饱和：主色本身几乎无彩时（Beta 9 起默认就是黑 / 白，
+   * 饱和度 5% 左右），再 +26 会把一层肉眼可见的蓝紫析出来，贴着磨砂玻璃格外明显 ——
+   * 黑白主题想要的是灰雾，不是"淡紫雾"。所以低饱和主色原样用。
    */
-  const sat = isDark ? Math.min(96, safeSat + 8) : Math.min(100, safeSat + 26);
-  const lightnessA = isDark ? 47 : 50;
-  const lightnessB = isDark ? 51 : 54;
-  const lightnessC = isDark ? 49 : 52;
+  const saturationBoost = isDark ? 8 : 26;
+  const sat = safeSat < 12 ? safeSat : Math.min(isDark ? 96 : 100, safeSat + saturationBoost);
 
-  const tints = [
-    `${safeHue} ${sat}% ${lightnessA}%`,
-    `${(safeHue + 46) % 360} ${sat}% ${lightnessB}%`,
-    `${(safeHue + 312) % 360} ${sat}% ${lightnessC}%`,
-  ];
+  /*
+   * 底衬光团（.glass-blobs 里的四个 <i>）。
+   *
+   * 从主色取色相和饱和度，但**明度由主题决定**，而不是跟着主色走：
+   * 主色可能是纯黑（浅色主题），照搬过来就是黑团，压在白底上等于一块污渍。
+   *
+   * 黑白主题（饱和度 < 12%）走中性灰：
+   *   浅色 → 80~92% 的浅灰，压在白底上是"云"，不抢文字；
+   *   深色 → 25~34% 的深灰，在黑底上还能看出起伏。
+   * 彩色主色则沿主色相拉开明度，四个团不能同色同亮 —— 叠在一起模糊之后
+   * 又会被磨成一片，看不出"里面在流动"。
+   */
+  const monochrome = safeSat < 12;
+  const blobLightness = isDark ? (monochrome ? [34, 28, 31, 25] : [40, 34, 44, 30]) : [92, 84, 88, 80];
+  const blobHues = [safeHue, (safeHue + 46) % 360, (safeHue + 312) % 360, (safeHue + 180) % 360];
 
-  style.setProperty("--glass-tint-a", tints[0]);
-  style.setProperty("--glass-tint-b", tints[1]);
-  style.setProperty("--glass-tint-c", tints[2]);
+  const blobs = blobHues.map((hue, index) => `${hue} ${sat}% ${blobLightness[index]}%`);
 
-  return { active: true, tints };
+  // 浅色下的团压在白底上，太实会把空状态的小灰字吃掉，所以整体比深色更淡
+  style.setProperty("--glass-blob-a", isDark ? "0.55" : "0.7");
+  blobs.forEach((value, index) => style.setProperty(`--glass-blob-${index + 1}`, value));
+
+  return { active: true, blobs };
 };

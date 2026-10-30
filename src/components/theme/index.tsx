@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { readableColor } from "color2k";
 import { useShallow } from "zustand/react/shallow";
 
-import { Themes } from "@/common/constants/theme";
+import { resolvePrimaryColor, Themes } from "@/common/constants/theme";
 import { hexToHsl, resolveTheme, isHex } from "@/common/utils/color";
 import { applyGlassTheme, DEFAULT_GLASS_OPACITY } from "@/common/utils/glass";
 import { applyRadiusScale } from "@/common/utils/radius";
@@ -89,13 +89,20 @@ const Theme = ({ children }: Props) => {
     root.style.colorScheme = themeName;
 
     const rootStyle = root.style;
-    const _primaryColor = isHex(primaryColor) ? primaryColor : (Themes[themeName].colors?.primary as string);
+    const _primaryColor = resolvePrimaryColor(themeName, primaryColor);
     const _backgroundColor = isHex(backgroundColor)
       ? backgroundColor
       : (Themes[themeName].colors?.background as string);
 
     if (_primaryColor) {
       rootStyle.setProperty("--heroui-primary", hexToHsl(_primaryColor));
+      /*
+       * 主色上的文字跟着主色亮度走。
+       *
+       * HeroUI 默认把 primary-foreground 写死成白色 —— 深色主题下主色是近白，
+       * 白字压在白底上等于没字。这里按对比度重新算一遍，用户自己挑主色也不会糊。
+       */
+      rootStyle.setProperty("--heroui-primary-foreground", hexToHsl(readableColor(_primaryColor)));
     }
     if (_backgroundColor) {
       rootStyle.setProperty("--heroui-background", hexToHsl(_backgroundColor));
@@ -212,8 +219,15 @@ const Theme = ({ children }: Props) => {
 
   return (
     <main className="app-shell relative isolate h-screen w-screen overflow-hidden">
-      {/* 液态玻璃的彩色流动底衬，玻璃面板靠它产生折射感 */}
-      {showGradientBackdrop && <div aria-hidden className="glass-wallpaper" />}
+      {/* 液态玻璃的浮动光团底衬，玻璃面板靠它产生"背后有东西在动"的折射感 */}
+      {showGradientBackdrop && (
+        <div aria-hidden className="glass-blobs">
+          <i />
+          <i />
+          <i />
+          <i />
+        </div>
+      )}
       {showImageBackdrop && (
         <div
           aria-hidden

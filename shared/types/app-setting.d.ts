@@ -3,8 +3,11 @@
  *
  * `zh-CN` 是**基准语言**：源码里写的中文原文就是 key，词典查不到就回落成它。
  * 所以新增语言时不必给中文建词典，只要保证翻译包覆盖到即可。
+ *
+ * `zh-TW` 同样是中文，它的词典 key 也是简体原文（值转成繁体），
+ * 所以繁体界面里没翻到的条目会显示简体，而不是英文。
  */
-type Language = "zh-CN" | "en" | "ja" | "ko";
+type Language = "zh-CN" | "zh-TW" | "en" | "ja" | "ko";
 
 type AudioQuality = "auto" | "lossless" | "high" | "medium" | "low";
 type ThemeMode = "system" | "light" | "dark";

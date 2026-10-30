@@ -1,7 +1,7 @@
 import React from "react";
 import { Controller, type Control } from "react-hook-form";
 
-import { Form, Input, Select, SelectItem } from "@heroui/react";
+import { Input, Select, SelectItem } from "@heroui/react";
 
 import { t } from "@/common/i18n";
 
@@ -16,9 +16,16 @@ const getProxyTypeOptions = (): { key: ProxyType; label: string }[] => [
   { key: "socks5", label: t("SOCKS5 代理") },
 ];
 
+/**
+ * 代理设置。
+ *
+ * Beta 9 起不再是一个独立的设置 Tab，而是嵌在「常规设置 → 网络」的折叠区里，
+ * 所以**外面不能再用 `<Form>`** —— 那样会嵌进「常规设置」的 Form 里，
+ * 变成非法的 form 套 form。Controller 靠显式传入的 control 工作，不需要 Form 上下文。
+ */
 const ProxySettings: React.FC<ProxySettingsProps> = ({ control }) => {
   return (
-    <Form className="space-y-6">
+    <div className="space-y-6">
       <Controller
         control={control}
         name="proxySettings"
@@ -113,7 +120,7 @@ const ProxySettings: React.FC<ProxySettingsProps> = ({ control }) => {
           );
         }}
       />
-    </Form>
+    </div>
   );
 };
 
