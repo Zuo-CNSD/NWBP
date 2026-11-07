@@ -63,7 +63,14 @@ const TogetherModal = ({ isOpen, onOpenChange }: Props) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="md" radius="lg" isDismissable>
+    <Modal
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      size="lg"
+      radius="lg"
+      isDismissable
+      classNames={{ base: "together-modal", backdrop: "together-backdrop" }}
+    >
       <ModalContent>
         {onClose => (
           <>
@@ -83,6 +90,7 @@ const TogetherModal = ({ isOpen, onOpenChange }: Props) => {
 
                   <Button
                     color="primary"
+                    className="together-primary-button"
                     startContent={<RiHeadphoneLine size={18} />}
                     isLoading={busy}
                     onPress={() => void createRoom()}
@@ -97,6 +105,7 @@ const TogetherModal = ({ isOpen, onOpenChange }: Props) => {
                   </div>
 
                   <Input
+                    className="together-code-field"
                     label={t("邀请码")}
                     labelPlacement="outside"
                     placeholder={t("房间号|发起人ID")}
@@ -108,6 +117,7 @@ const TogetherModal = ({ isOpen, onOpenChange }: Props) => {
 
                   <Button
                     variant="flat"
+                    className="together-secondary-button"
                     isDisabled={!code.trim()}
                     isLoading={busy}
                     onPress={async () => {
@@ -154,6 +164,7 @@ const TogetherModal = ({ isOpen, onOpenChange }: Props) => {
 
                   <Button
                     variant="flat"
+                    className="together-secondary-button"
                     startContent={<RiPlayListAddLine size={18} />}
                     isDisabled={!neteaseCount}
                     onPress={() => void pushPlaylist()}

@@ -18,6 +18,11 @@ vi.mock("@/common/utils/audio", () => ({
   isUrlValid: vi.fn(url => typeof url === "string" && url.length > 0),
 }));
 
+vi.mock("@/common/utils/netease-audio-url", () => ({
+  fetchNeteaseUrl: vi.fn(async () => ({ url: "https://audio.test/netease.mp3", level: "exhigh" })),
+  prefetchNeteaseUrl: vi.fn(),
+}));
+
 vi.mock("@/service/audio-song-info", () => ({
   getAudioSongInfo: vi.fn(async ({ sid }) => ({
     data: {
@@ -124,6 +129,25 @@ describe("play-list store", () => {
     expect(secondId).not.toBe(firstId);
     await s.prev();
     expect(usePlayList.getState().playId).toBe(firstId);
+  });
+
+  test("playing a song from a collection keeps the full queue in order", async () => {
+    const s = usePlayList.getState();
+    await s.init();
+    usePlayList.setState({ nextId: "stale-next" });
+    await s.playList(
+      [
+        { type: "audio", source: "netease", neteaseId: 1, title: "first" },
+        { type: "audio", source: "netease", neteaseId: 2, title: "selected" },
+        { type: "audio", source: "netease", neteaseId: 3, title: "last" },
+      ],
+      1,
+    );
+
+    const state = usePlayList.getState();
+    expect(state.list.map(item => item.neteaseId)).toEqual([1, 2, 3]);
+    expect(state.list.find(item => item.id === state.playId)?.neteaseId).toBe(2);
+    expect(state.nextId).toBeUndefined();
   });
 
   test("random mode keeps pages order", async () => {

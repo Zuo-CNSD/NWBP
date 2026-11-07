@@ -160,7 +160,7 @@ const SideNav = () => {
         className={clx(
           // 侧栏不再是自己一块浮起面板：它现在是外层大面板的左侧一栏，
           // 所以不带圆角/边距，只靠右侧分隔线和内容区分开
-          "border-divider/20 relative flex h-full flex-none flex-col border-r-1",
+          "app-sidebar border-divider/20 relative flex h-full flex-none flex-col border-r-1",
           {
             "transition-[width] duration-200": !isDragging,
             "transition-none": isDragging,
@@ -222,7 +222,7 @@ const SideNav = () => {
               radius="md"
               onPress={onToggleCollapsed}
               aria-label={isCollapsedVisual ? t("展开侧边栏") : t("收起侧边栏")}
-              className="bg-default/40 hover:bg-primary/20 hover:text-primary h-7 w-full min-w-0 transition-colors"
+              className="sidebar-collapse bg-default/40 hover:bg-primary/20 hover:text-primary h-8 w-full min-w-0 transition-colors"
             >
               {isCollapsedVisual ? <RiArrowRightDoubleLine size={16} /> : <RiArrowLeftDoubleLine size={16} />}
             </Button>

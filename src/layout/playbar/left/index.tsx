@@ -100,7 +100,7 @@ const LeftControl = () => {
       <div className="flex items-center">
         {Boolean(playItem?.hasMultiPart) && <PageListDrawer />}
         {canFavorite && <MusicFavButton />}
-        {Boolean(user?.isLogin) && isClickable && <MusicThumb />}
+        {Boolean(user?.isLogin && playItem?.bvid) && <MusicThumb />}
       </div>
     </div>
   );

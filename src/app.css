@@ -1,9 +1,9 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@plugin './hero.ts';
+@plugin "./hero.ts";
 @plugin "@tailwindcss/typography";
 
-@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@source "../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -89,16 +89,16 @@ body {
  * overflow-y-hidden），本身就具备裁剪能力 —— 补上圆角后，
  * 贴窗口边缘的抽屉面板（如播放列表 Drawer）也不会盖住窗口圆角。
  */
-[data-slot='backdrop'],
-[data-slot='wrapper'] {
+[data-slot="backdrop"],
+[data-slot="wrapper"] {
   border-radius: var(--window-radius);
 }
 
 /* 最大化时保留圆角（与 macOS 原生窗口一致），全屏时收掉，否则四角会露出桌面 */
 html.window-fullscreen body,
 html.window-fullscreen .app-shell,
-html.window-fullscreen [data-slot='backdrop'],
-html.window-fullscreen [data-slot='wrapper'] {
+html.window-fullscreen [data-slot="backdrop"],
+html.window-fullscreen [data-slot="wrapper"] {
   border-radius: 0;
 }
 
@@ -160,7 +160,9 @@ html.window-transparent .glass-blobs {
   display: none;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   overflow: hidden;
 }
@@ -174,9 +176,10 @@ html, body, #root {
   display: none;
 }
 
-.suggest_high_light,.keyword {
+.suggest_high_light,
+.keyword {
   font-style: normal;
-  color: #F54180;
+  color: #f54180;
 }
 
 .os-scrollbar {
@@ -200,7 +203,7 @@ html, body, #root {
 
 /* 让所有可交互元素的圆角变化更顺滑一些 */
 .os-scrollbar-handle,
-[data-slot='cursor'] {
+[data-slot="cursor"] {
   transition:
     background-color 150ms ease,
     border-radius 200ms ease;
@@ -305,8 +308,8 @@ html, body, #root {
     brightness(var(--glass-brightness));
   --glass-backdrop: url("#glass-refraction") blur(var(--glass-blur)) saturate(var(--glass-saturate))
     brightness(var(--glass-brightness)) contrast(var(--glass-contrast));
-  --glass-backdrop-strong: url("#glass-refraction") blur(calc(var(--glass-blur) * 1.7))
-    saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast));
+  --glass-backdrop-strong: url("#glass-refraction") blur(calc(var(--glass-blur) * 1.7)) saturate(var(--glass-saturate))
+    brightness(var(--glass-brightness)) contrast(var(--glass-contrast));
 }
 
 /*
@@ -353,7 +356,7 @@ html, body, #root {
 }
 
 .liquid-glass .glass-blobs i::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -508,7 +511,7 @@ html, body, #root {
 
 /* 压暗遮罩，保证前景文字可读 */
 .glass-image::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: hsl(0deg 0% 0% / var(--background-dim, 0.25));
@@ -534,17 +537,18 @@ html.dark.liquid-glass .glass-image::after {
  * 改成「亮芯 + 暗边」：亮芯在深色背景上跳出来，暗边在浅色背景上兜底，
  * 不影响正常实心模式下已经够用的观感（那种情况下亮芯一样看得见）。
  */
-html.liquid-glass [data-slot='track'] {
+html.liquid-glass [data-slot="track"] {
   background-color: hsl(var(--heroui-foreground) / 45%);
   box-shadow: 0 0 0 1px hsl(var(--heroui-background) / 50%);
 }
 
 /* 滑块（圆点）本身是主色，落在浅色背景上容易糊，补一圈暗边 */
-html.liquid-glass [data-slot='thumb'] {
+html.liquid-glass [data-slot="thumb"] {
   box-shadow: 0 0 0 1.5px hsl(var(--heroui-background) / 55%);
 }
 
-/* ---- 核心：给 HeroUI 面板换上半透明背板 + 毛玻璃 + 玻璃厚度感 ---- */.liquid-glass .bg-content1 {
+/* ---- 核心：给 HeroUI 面板换上半透明背板 + 毛玻璃 + 玻璃厚度感 ---- */
+.liquid-glass .bg-content1 {
   background-color: hsl(var(--heroui-content1) / var(--glass-alpha-1));
 }
 
@@ -616,7 +620,7 @@ html.liquid-glass [data-slot='thumb'] {
  * .glass-panel 自带 position: relative，两个伪元素都不会改变任何布局。
  */
 .liquid-glass .glass-panel::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -627,11 +631,7 @@ html.liquid-glass [data-slot='thumb'] {
     linear-gradient(0deg, hsl(0deg 0% 100% / var(--glass-veil-bottom-a)) 0, hsl(0deg 0% 100% / 0%) 48px),
     /* 左上角一团很弱的环境反射，用来撑"厚度"。参考里这一项的强度是 0.045 级别，
        原来这里是 0.34 —— 相当于在玻璃中间刷了一层白，中央就不透光了。 */
-    radial-gradient(
-      120% 100% at 10% -8%,
-      hsl(0deg 0% 100% / var(--glass-veil-ambient-a)),
-      hsl(0deg 0% 100% / 0%) 52%
-    );
+    radial-gradient(120% 100% at 10% -8%, hsl(0deg 0% 100% / var(--glass-veil-ambient-a)), hsl(0deg 0% 100% / 0%) 52%);
 }
 
 /*
@@ -653,7 +653,7 @@ html.liquid-glass [data-slot='thumb'] {
  */
 @supports ((mask-composite: exclude) or (-webkit-mask-composite: xor)) {
   .liquid-glass .glass-panel::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -697,23 +697,21 @@ html.liquid-glass [data-slot='thumb'] {
     inset 1px 0 0 0 hsl(var(--glass-edge-side) / var(--glass-edge-side-a)),
     inset -1px 0 0 0 hsl(var(--glass-edge-warm) / var(--glass-edge-warm-a)),
     inset 0 -1px 0 0 hsl(var(--glass-edge-dark) / var(--glass-edge-dark-a)),
-    /* 焦散带：透镜把光聚在边缘内侧，紧贴上缘的一条细亮带（参考里是距边 3px 那圈） */
-    inset 0 2px 3px -2px hsl(0deg 0% 100% / var(--glass-caustic-a)),
-    /* 宽而很弱的环境反射，撑厚度；强度必须小，否则中间就不透光了 */
-    inset 0 18px 34px -30px hsl(0deg 0% 100% / var(--glass-ambient-a)),
-    /* 外圈再补一条极细的暗描边：纯白边在浅色背景上是看不见的 */
-    0 0 0 0.5px hsl(var(--glass-hairline) / var(--glass-hairline-a)),
-    /* 分层投影：近→远三段，比单条大阴影更像真的悬空 */
-    0 1px 2px -1px hsl(var(--glass-shadow) / 50%),
+    /* 焦散带：透镜把光聚在边缘内侧，紧贴上缘的一条细亮带（参考里是距边 3px 那圈） */ inset 0 2px 3px -2px
+      hsl(0deg 0% 100% / var(--glass-caustic-a)),
+    /* 宽而很弱的环境反射，撑厚度；强度必须小，否则中间就不透光了 */ inset 0 18px 34px -30px
+      hsl(0deg 0% 100% / var(--glass-ambient-a)),
+    /* 外圈再补一条极细的暗描边：纯白边在浅色背景上是看不见的 */ 0 0 0 0.5px
+      hsl(var(--glass-hairline) / var(--glass-hairline-a)),
+    /* 分层投影：近→远三段，比单条大阴影更像真的悬空 */ 0 1px 2px -1px hsl(var(--glass-shadow) / 50%),
     0 10px 22px -14px hsl(var(--glass-shadow) / 60%),
     0 24px 52px -30px hsl(var(--glass-shadow) / 80%);
 }
 
 /* 弹层用更厚的玻璃 */
-.liquid-glass [role='dialog'],
-.liquid-glass [role='menu'],
-.liquid-glass [role='tooltip'],
-.liquid-glass [role='listbox'] {
+.liquid-glass [role="dialog"],
+.liquid-glass [role="tooltip"],
+.liquid-glass [role="listbox"] {
   -webkit-backdrop-filter: var(--glass-backdrop-strong);
   backdrop-filter: var(--glass-backdrop-strong);
 }
@@ -725,12 +723,12 @@ html.liquid-glass [data-slot='thumb'] {
  * 漏出一块方形的磨砂 —— 看起来就是「圆角没生效」。
  * 所以外壳只负责定位，磨砂交给里面真正有底色的面板层。
  */
-.liquid-glass [role='dialog'].bg-transparent {
+.liquid-glass [role="dialog"].bg-transparent {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
 
-.liquid-glass [role='dialog'].bg-transparent [data-slot='content'] {
+.liquid-glass [role="dialog"].bg-transparent [data-slot="content"] {
   -webkit-backdrop-filter: var(--glass-backdrop-strong);
   backdrop-filter: var(--glass-backdrop-strong);
 }
@@ -841,7 +839,6 @@ html.is-scrolling .glass-blobs i {
   --os-handle-bg-active: hsl(0deg 0% 100% / 46%);
 }
 
-
 /* ------------------------------------------------------------ 统一的交互过渡 */
 
 /*
@@ -856,7 +853,7 @@ html.is-scrolling .glass-blobs i {
 button,
 a,
 summary,
-[role='button'] {
+[role="button"] {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, filter;
   transition-duration: 160ms;
   transition-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
@@ -866,7 +863,7 @@ summary,
   button,
   a,
   summary,
-  [role='button'] {
+  [role="button"] {
     transition-duration: 0ms;
   }
 }
@@ -1160,6 +1157,662 @@ summary,
 
 @media (prefers-reduced-motion: reduce) {
   .home-reveal {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ Aurora glass redesign */
+
+:root {
+  --aurora-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --aurora-blue: 210 100% 68%;
+  --aurora-violet: 270 85% 74%;
+  --aurora-pink: 335 92% 72%;
+}
+
+/* A quieter, deeper canvas lets the surfaces read as glass instead of cards. */
+.liquid-glass .glass-blobs {
+  inset: -18%;
+  background:
+    radial-gradient(ellipse 60% 45% at 18% 8%, hsl(var(--aurora-blue) / 20%), transparent 74%),
+    radial-gradient(ellipse 50% 55% at 88% 92%, hsl(var(--aurora-violet) / 19%), transparent 72%),
+    hsl(var(--heroui-background) / 48%);
+}
+
+.liquid-glass .glass-blobs i {
+  filter: blur(72px);
+  opacity: calc(var(--glass-blob-a) * 0.78);
+}
+
+.liquid-glass .glass-blobs i:nth-child(1) {
+  animation-duration: 42s;
+}
+
+.liquid-glass .glass-blobs i:nth-child(2) {
+  animation-duration: 34s;
+}
+
+.app-stage {
+  position: relative;
+}
+
+.app-stage::before {
+  position: absolute;
+  inset: 3% 8% 0;
+  z-index: -1;
+  content: "";
+  border-radius: 50%;
+  background: radial-gradient(ellipse, hsl(var(--aurora-blue) / 22%), transparent 68%);
+  filter: blur(48px);
+  opacity: 0.75;
+}
+
+.liquid-glass .app-canvas {
+  background: linear-gradient(
+    145deg,
+    hsl(0deg 0% 100% / 16%),
+    hsl(var(--heroui-content1) / var(--glass-alpha-2)) 34%,
+    hsl(var(--heroui-content1) / 22%)
+  );
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 72%),
+    inset 0 -1px 0 hsl(225deg 40% 10% / 11%),
+    0 3px 5px hsl(224deg 40% 15% / 10%),
+    0 28px 70px hsl(223deg 58% 14% / 24%);
+}
+
+.app-canvas::after {
+  background:
+    linear-gradient(180deg, hsl(0deg 0% 100% / 17%), transparent 72px),
+    radial-gradient(circle at 85% 0%, hsl(var(--aurora-blue) / 10%), transparent 29%);
+}
+
+.app-sidebar {
+  background: linear-gradient(90deg, hsl(var(--heroui-content1) / 18%), hsl(var(--heroui-content1) / 4%));
+  border-right-color: hsl(0deg 0% 100% / 15%);
+}
+
+.app-navbar {
+  border-bottom: 1px solid hsl(0deg 0% 100% / 12%);
+  background: linear-gradient(180deg, hsl(0deg 0% 100% / 11%), transparent);
+}
+
+.app-player {
+  border-top-color: hsl(0deg 0% 100% / 17%);
+  background: linear-gradient(180deg, hsl(var(--heroui-content1) / 9%), hsl(var(--heroui-content1) / 25%));
+  -webkit-backdrop-filter: blur(16px) saturate(1.18);
+  backdrop-filter: blur(16px) saturate(1.18);
+}
+
+.sidebar-collapse {
+  border: 1px solid hsl(0deg 0% 100% / 14%);
+  box-shadow: inset 0 1px hsl(0deg 0% 100% / 17%);
+}
+
+/* Shared tactile responses. The transform is deliberately limited to elements that do not own a layout animation. */
+.liquid-glass button:not([data-slot="trigger"]),
+.liquid-glass [role="button"] {
+  transition:
+    transform 220ms var(--aurora-ease),
+    background-color 180ms ease,
+    box-shadow 220ms var(--aurora-ease),
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.liquid-glass button:not(:disabled):active,
+.liquid-glass [role="button"]:active {
+  transform: scale(0.97);
+}
+
+.liquid-glass .bg-content1,
+.liquid-glass .bg-content2,
+.liquid-glass .bg-content3 {
+  transition:
+    transform 260ms var(--aurora-ease),
+    box-shadow 260ms var(--aurora-ease),
+    background-color 260ms ease;
+}
+
+.liquid-glass .bg-content1:hover,
+.liquid-glass .bg-content2:hover,
+.liquid-glass .bg-content3:hover {
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 72%),
+    inset 0 -1px 0 hsl(225deg 40% 10% / 8%),
+    0 12px 28px hsl(222deg 52% 19% / 13%);
+}
+
+/* Page changes are a fast optical sweep, not a full-screen dimmer. */
+.page-switch {
+  overflow: hidden;
+  background: linear-gradient(110deg, transparent 0%, hsl(0deg 0% 100% / 8%) 45%, transparent 70%);
+  -webkit-backdrop-filter: blur(1px);
+  backdrop-filter: blur(1px);
+  animation: page-switch-veil 460ms var(--aurora-ease) forwards;
+}
+
+.page-switch-orb {
+  position: absolute;
+  top: -30%;
+  left: -20%;
+  width: 40%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: radial-gradient(circle, hsl(var(--heroui-primary) / 20%), transparent 67%);
+  filter: blur(16px);
+  animation: page-switch-orb 500ms var(--aurora-ease) both;
+}
+
+.page-switch-line {
+  top: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(0deg 0% 100% / 76%) 28%,
+    hsl(var(--heroui-primary) / 85%) 54%,
+    transparent
+  );
+  box-shadow: 0 1px 12px hsl(var(--heroui-primary) / 52%);
+  animation: page-switch-line 520ms var(--aurora-ease) forwards;
+}
+
+@keyframes page-switch-veil {
+  0% {
+    opacity: 0;
+  }
+
+  22% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes page-switch-orb {
+  0% {
+    transform: translate3d(-25%, -20%, 0) scale(0.55);
+    opacity: 0;
+  }
+
+  45% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate3d(290%, 195%, 0) scale(1.7);
+    opacity: 0;
+  }
+}
+
+@keyframes page-switch-line {
+  0% {
+    transform: scaleX(0.04);
+    opacity: 0;
+  }
+
+  28% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+/* The startup animation is full-bleed; an extra glass card would obscure a custom video. */
+.app-launch-overlay {
+  background:
+    radial-gradient(circle at 24% 18%, hsl(var(--aurora-blue) / 32%), transparent 31%),
+    radial-gradient(circle at 76% 78%, hsl(var(--aurora-violet) / 28%), transparent 35%), hsl(var(--heroui-background));
+}
+
+.app-launch-mark,
+.app-launch-ring,
+.app-launch-hint {
+  z-index: 1;
+}
+
+.app-launch-mark {
+  color: hsl(0deg 0% 100% / 91%);
+  filter: drop-shadow(0 10px 25px hsl(225deg 66% 24% / 28%));
+}
+
+.app-launch-mark--logo {
+  animation: app-launch-mark-in 860ms var(--aurora-ease) both;
+}
+
+.app-launch-mark--pulse {
+  animation: app-launch-mark-pulse 1200ms var(--aurora-ease) both;
+}
+
+@keyframes app-launch-mark-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.82);
+    filter: blur(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-switch,
+  .page-switch-orb,
+  .page-switch-line {
+    animation: none;
+  }
+
+  .page-switch {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ Liquid material system */
+
+/*
+ * A liquid surface needs a moving, coloured scene behind it. The former shell
+ * kept an opaque application background, so its blur could only sample one
+ * flat colour. These layers are intentionally visible through every pane.
+ */
+html.liquid-glass .app-shell {
+  background:
+    radial-gradient(130% 100% at 4% 0%, hsl(var(--heroui-primary) / 36%), transparent 53%),
+    radial-gradient(90% 100% at 100% 100%, hsl(282deg 82% 68% / 28%), transparent 56%),
+    linear-gradient(135deg, hsl(216deg 54% 12%), hsl(242deg 42% 18%) 46%, hsl(290deg 38% 17%));
+}
+
+html.light.liquid-glass .app-shell {
+  background:
+    radial-gradient(100% 90% at 5% 0%, hsl(var(--heroui-primary) / 38%), transparent 54%),
+    radial-gradient(80% 90% at 98% 96%, hsl(298deg 72% 75% / 33%), transparent 57%),
+    linear-gradient(135deg, hsl(208deg 72% 91%), hsl(232deg 56% 94%) 48%, hsl(307deg 55% 93%));
+}
+
+.liquid-glass .glass-blobs {
+  inset: -12%;
+  z-index: 0;
+  display: block;
+  overflow: hidden;
+  background: transparent;
+}
+
+.liquid-glass .glass-blobs i {
+  opacity: 0.92;
+  filter: blur(28px);
+}
+
+.liquid-glass .glass-blobs i:nth-child(1) {
+  width: 54vmax;
+  height: 54vmax;
+  color: hsl(var(--heroui-primary) / 82%);
+  animation: liquid-orbit-one 24s var(--aurora-ease) infinite alternate;
+}
+
+.liquid-glass .glass-blobs i:nth-child(2) {
+  width: 48vmax;
+  height: 48vmax;
+  color: hsl(285deg 82% 70% / 76%);
+  animation: liquid-orbit-two 28s var(--aurora-ease) infinite alternate;
+}
+
+.liquid-glass .glass-blobs i:nth-child(3) {
+  width: 34vmax;
+  height: 34vmax;
+  color: hsl(185deg 88% 62% / 63%);
+  animation: liquid-orbit-three 22s var(--aurora-ease) infinite alternate;
+}
+
+.liquid-glass .glass-blobs i:nth-child(4) {
+  width: 30vmax;
+  height: 30vmax;
+  color: hsl(336deg 91% 70% / 60%);
+  animation: liquid-orbit-four 31s var(--aurora-ease) infinite alternate;
+}
+
+.liquid-glass .glass-blobs i:nth-child(5) {
+  width: 24vmax;
+  height: 24vmax;
+  top: 48%;
+  left: 7%;
+  color: hsl(45deg 100% 74% / 40%);
+  animation: liquid-orbit-five 18s var(--aurora-ease) infinite alternate;
+}
+
+.liquid-glass .glass-blobs i:nth-child(6) {
+  width: 20vmax;
+  height: 20vmax;
+  top: 4%;
+  right: 6%;
+  color: hsl(190deg 90% 72% / 48%);
+  animation: liquid-orbit-six 26s var(--aurora-ease) infinite alternate;
+}
+
+.glass-stream {
+  position: absolute;
+  width: 115vmax;
+  height: 15vmax;
+  border: 1px solid hsl(0deg 0% 100% / 20%);
+  border-radius: 50%;
+  opacity: 0.4;
+  filter: blur(6px);
+  transform: rotate(-24deg);
+}
+
+.glass-stream--one {
+  top: 14%;
+  left: -22%;
+  box-shadow:
+    0 0 40px hsl(198deg 100% 80% / 40%),
+    inset 0 0 48px hsl(0deg 0% 100% / 18%);
+  animation: liquid-stream-one 20s ease-in-out infinite alternate;
+}
+
+.glass-stream--two {
+  right: -38%;
+  bottom: 0;
+  box-shadow:
+    0 0 50px hsl(306deg 95% 82% / 32%),
+    inset 0 0 48px hsl(0deg 0% 100% / 16%);
+  animation: liquid-stream-two 25s ease-in-out infinite alternate;
+}
+
+.glass-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+}
+
+.app-canvas {
+  isolation: isolate;
+}
+
+.liquid-glass .app-canvas {
+  background: hsl(220deg 30% 22% / 14%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 82%),
+    inset 0 -1px 0 hsl(236deg 60% 10% / 26%),
+    0 1px 0 hsl(0deg 0% 100% / 30%),
+    0 30px 90px hsl(236deg 65% 8% / 40%);
+}
+
+html.light.liquid-glass .app-canvas {
+  background: hsl(0deg 0% 100% / 24%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 94%),
+    inset 0 -1px 0 hsl(220deg 50% 35% / 18%),
+    0 30px 90px hsl(229deg 64% 42% / 22%);
+}
+
+.liquid-glass .glass-fill {
+  overflow: hidden;
+  background:
+    linear-gradient(
+      118deg,
+      hsl(0deg 0% 100% / 18%),
+      transparent 28%,
+      hsl(0deg 0% 100% / 5%) 58%,
+      hsl(0deg 0% 100% / 13%)
+    ),
+    hsl(225deg 42% 24% / 22%);
+  -webkit-backdrop-filter: blur(38px) saturate(1.55) brightness(1.12);
+  backdrop-filter: blur(38px) saturate(1.55) brightness(1.12);
+}
+
+html.light.liquid-glass .glass-fill {
+  background:
+    linear-gradient(118deg, hsl(0deg 0% 100% / 52%), hsl(0deg 0% 100% / 12%) 36%, hsl(0deg 0% 100% / 34%)),
+    hsl(216deg 75% 94% / 20%);
+}
+
+.glass-fill::after {
+  position: absolute;
+  inset: -45% -18%;
+  content: "";
+  background: linear-gradient(106deg, transparent 35%, hsl(0deg 0% 100% / 14%) 48%, transparent 61%);
+  transform: translateX(-36%) rotate(10deg);
+  animation: liquid-sheen 12s ease-in-out infinite;
+}
+
+.app-sidebar {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(115deg, hsl(0deg 0% 100% / 13%), hsl(226deg 55% 30% / 10%) 80%);
+  border-right: 1px solid hsl(0deg 0% 100% / 20%);
+  box-shadow: 12px 0 30px hsl(230deg 75% 10% / 8%);
+}
+
+.app-sidebar::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  content: "";
+  background: linear-gradient(transparent, hsl(0deg 0% 100% / 62%), transparent);
+  opacity: 0.62;
+}
+
+.app-navbar,
+.app-player {
+  background: hsl(0deg 0% 100% / 7%);
+  -webkit-backdrop-filter: blur(20px) saturate(1.35);
+  backdrop-filter: blur(20px) saturate(1.35);
+}
+
+.app-navbar {
+  border-bottom-color: hsl(0deg 0% 100% / 18%);
+}
+
+.app-player {
+  border-top-color: hsl(0deg 0% 100% / 24%);
+  box-shadow: 0 -10px 32px hsl(227deg 62% 12% / 8%);
+}
+
+/* Rebuild every reusable HeroUI surface as a lens, rather than a solid panel. */
+.liquid-glass .bg-content1,
+.liquid-glass .bg-content2,
+.liquid-glass .bg-content3,
+.liquid-glass [data-slot="input-wrapper"],
+.liquid-glass [data-slot="base"].bg-default-100 {
+  border: 1px solid hsl(0deg 0% 100% / 18%);
+  background:
+    linear-gradient(145deg, hsl(0deg 0% 100% / 19%), hsl(0deg 0% 100% / 6%) 36%, hsl(230deg 80% 70% / 8%)),
+    hsl(228deg 40% 24% / 27%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 54%),
+    inset 0 -1px 0 hsl(230deg 60% 10% / 18%),
+    0 8px 24px hsl(232deg 68% 9% / 14%);
+  -webkit-backdrop-filter: blur(22px) saturate(1.38);
+  backdrop-filter: blur(22px) saturate(1.38);
+}
+
+html.light.liquid-glass .bg-content1,
+html.light.liquid-glass .bg-content2,
+html.light.liquid-glass .bg-content3,
+html.light.liquid-glass [data-slot="input-wrapper"],
+html.light.liquid-glass [data-slot="base"].bg-default-100 {
+  background:
+    linear-gradient(145deg, hsl(0deg 0% 100% / 62%), hsl(0deg 0% 100% / 18%) 40%, hsl(222deg 100% 94% / 24%)),
+    hsl(215deg 54% 90% / 25%);
+  border-color: hsl(0deg 0% 100% / 56%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 92%),
+    inset 0 -1px 0 hsl(218deg 58% 40% / 14%),
+    0 12px 30px hsl(226deg 54% 48% / 16%);
+}
+
+.liquid-glass [role="dialog"] [data-slot="content"],
+.liquid-glass [role="listbox"] {
+  border: 1px solid hsl(0deg 0% 100% / 30%);
+  background: linear-gradient(140deg, hsl(0deg 0% 100% / 26%), hsl(0deg 0% 100% / 8%)), hsl(228deg 38% 20% / 68%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 72%),
+    0 24px 70px hsl(232deg 70% 7% / 38%);
+  -webkit-backdrop-filter: blur(44px) saturate(1.55);
+  backdrop-filter: blur(44px) saturate(1.55);
+}
+
+.liquid-glass [data-slot="input-wrapper"] {
+  background: hsl(0deg 0% 100% / 10%);
+  box-shadow:
+    inset 0 1px 2px hsl(230deg 60% 10% / 18%),
+    inset 0 1px 0 hsl(0deg 0% 100% / 36%);
+}
+
+.liquid-glass [data-slot="input-wrapper"]:focus-within {
+  border-color: hsl(var(--heroui-primary) / 68%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 44%),
+    0 0 0 3px hsl(var(--heroui-primary) / 18%),
+    0 8px 20px hsl(var(--heroui-primary) / 14%);
+}
+
+.liquid-glass [data-slot="base"][data-hover="true"],
+.liquid-glass .bg-content1:hover,
+.liquid-glass .bg-content2:hover,
+.liquid-glass .bg-content3:hover {
+  border-color: hsl(0deg 0% 100% / 42%);
+  background-color: hsl(0deg 0% 100% / 16%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 78%),
+    0 14px 34px hsl(231deg 74% 10% / 22%);
+  transform: translateY(-2px);
+}
+
+.liquid-glass [data-slot="base"][data-pressed="true"] {
+  transform: translateY(0) scale(0.985);
+}
+
+.liquid-glass [data-slot="tab"][data-selected="true"],
+.liquid-glass [data-slot="menuitem"][data-selected="true"] {
+  background: linear-gradient(135deg, hsl(var(--heroui-primary) / 48%), hsl(0deg 0% 100% / 14%));
+  box-shadow:
+    inset 0 1px hsl(0deg 0% 100% / 54%),
+    0 7px 17px hsl(var(--heroui-primary) / 19%);
+}
+
+.liquid-glass img.rounded-medium,
+.liquid-glass img.rounded-large {
+  box-shadow:
+    0 8px 20px hsl(232deg 55% 10% / 23%),
+    inset 0 1px hsl(0deg 0% 100% / 48%);
+}
+
+@keyframes liquid-orbit-one {
+  from {
+    transform: translate3d(-3%, -8%, 0) scale(0.95);
+  }
+
+  to {
+    transform: translate3d(18%, 17%, 0) scale(1.13);
+  }
+}
+
+@keyframes liquid-orbit-two {
+  from {
+    transform: translate3d(8%, -4%, 0) scale(1.08);
+  }
+
+  to {
+    transform: translate3d(-19%, -18%, 0) scale(0.88);
+  }
+}
+
+@keyframes liquid-orbit-three {
+  from {
+    transform: translate3d(-50%, -50%, 0) scale(0.8);
+  }
+
+  to {
+    transform: translate3d(-25%, -66%, 0) scale(1.25);
+  }
+}
+
+@keyframes liquid-orbit-four {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.9);
+  }
+
+  to {
+    transform: translate3d(-42%, 20%, 0) scale(1.22);
+  }
+}
+
+@keyframes liquid-orbit-five {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.8);
+  }
+
+  to {
+    transform: translate3d(80%, -80%, 0) scale(1.42);
+  }
+}
+
+@keyframes liquid-orbit-six {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.8);
+  }
+
+  to {
+    transform: translate3d(-120%, 130%, 0) scale(1.35);
+  }
+}
+
+@keyframes liquid-stream-one {
+  from {
+    transform: translate3d(-4%, -8%, 0) rotate(-24deg) scaleX(0.9);
+  }
+
+  to {
+    transform: translate3d(16%, 24%, 0) rotate(-18deg) scaleX(1.13);
+  }
+}
+
+@keyframes liquid-stream-two {
+  from {
+    transform: translate3d(8%, 8%, 0) rotate(-24deg) scaleX(0.9);
+  }
+
+  to {
+    transform: translate3d(-20%, -22%, 0) rotate(-28deg) scaleX(1.12);
+  }
+}
+
+@keyframes liquid-sheen {
+  0%,
+  18% {
+    transform: translateX(-48%) rotate(10deg);
+    opacity: 0;
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  58%,
+  100% {
+    transform: translateX(48%) rotate(10deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-glass .glass-blobs i,
+  .glass-stream,
+  .glass-fill::after {
     animation: none;
   }
 }

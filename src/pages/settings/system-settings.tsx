@@ -261,7 +261,7 @@ export const SystemSettingsTab = ({ appVersion, audioQuality, control, setValue 
         <div className="mr-6 space-y-1">
           <div className="text-medium font-medium">{t("液态玻璃")}</div>
           <div className="text-default-500 text-sm">
-            {t("面板改为半透明毛玻璃 + 流动彩色底衬（自定义背景色时自动失效）")}
+            {t("面板采用黑白玻璃质感，深色与浅色配色相反（自定义背景色时自动失效）")}
           </div>
         </div>
         <Controller

@@ -39,7 +39,7 @@ const NeteaseLiked = () => {
   }, [uid]);
 
   // 曲目分页：首屏 100 首，滚到底继续要
-  const { name, trackCount, tracks, loading, loadingMore, hasMore, error, found, reload, loadMore } =
+  const { name, trackCount, tracks, loading, loadingMore, hasMore, error, found, reload, loadMore, getAllTracks } =
     useNeteasePlaylistTracks(resolveId, uid);
 
   return (
@@ -68,6 +68,8 @@ const NeteaseLiked = () => {
           hasMore={hasMore}
           loading={loadingMore}
           onLoadMore={() => void loadMore()}
+          getAllTracks={getAllTracks}
+          playAsCollection
           summary={t("网易云 · 共 {0} 首", trackCount)}
         />
       )}

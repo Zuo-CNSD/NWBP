@@ -5,7 +5,6 @@ import { Chip, Input, Listbox, ListboxItem } from "@heroui/react";
 import { RiSearchLine } from "@remixicon/react";
 import { useRequest, useClickAway } from "ahooks";
 import classNames from "classnames";
-import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 
 import { t } from "@/common/i18n";
 import { getSearchSuggestMain } from "@/service/main-suggest";
@@ -71,7 +70,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFocusChange }) => {
   };
 
   return (
-    <div ref={containerRef} className="relative w-[280px]">
+    <div ref={containerRef} className="search-field relative w-[280px]">
       <Input
         ref={inputRef}
         value={value}
@@ -101,90 +100,82 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFocusChange }) => {
       />
       <div
         className={classNames(
-          "bg-content2 rounded-medium absolute top-full left-0 z-100 mt-1 h-auto max-h-[80dvh] w-[360px] overflow-hidden shadow-2xl",
+          "search-suggestions bg-content2 rounded-medium absolute top-full left-0 z-100 mt-1 h-auto max-h-[80dvh] w-[360px] overflow-hidden shadow-2xl",
           {
             hidden: !open,
             "flex flex-col": open,
           },
         )}
       >
-        <OverlayScrollbarsComponent className="h-full flex-1 p-2" options={{ scrollbars: { autoHide: "leave" } }}>
-          <Listbox
-            aria-label={t("搜索建议")}
-            selectionMode="none"
-            items={
-              suggestionsData?.map(item => ({
-                key: item.value,
-                value: item.value,
-                name: item.name,
-              })) || []
-            }
-            emptyContent={<div className="flex items-center justify-center py-6">{t("暂无搜索建议")}</div>}
-            topContent={
-              showSearchHistory &&
-              searchHistoryItems.length > 0 && (
-                <>
-                  <div className="mb-1 flex items-center justify-between px-1">
-                    <span className="text-sm">{t("搜索历史")}</span>
-                    <span
-                      className="text-foreground-400 hover:text-foreground-600 cursor-pointer text-xs"
-                      onMouseDown={e => e.preventDefault()}
-                      onClick={e => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        clearSearchHistory();
-                        inputRef.current?.focus();
-                      }}
-                    >
-                      {t("清除全部")}
-                    </span>
-                  </div>
-                  <div className="mb-1 flex flex-wrap gap-2">
-                    {searchHistoryItems.slice(0, 10).map(item => (
-                      <Chip
-                        key={item.time}
-                        isCloseable
-                        size="sm"
-                        radius="md"
-                        onClose={() => {
-                          deleteSearchHistory(item);
-                          inputRef.current?.focus();
-                        }}
-                        onMouseDown={e => e.preventDefault()}
-                        onClick={() => {
-                          setOpen(false);
-                          setValue(item.value);
-                          submitSearch(item.value);
-                          inputRef.current?.blur();
-                        }}
-                        className="min-w-0 cursor-pointer"
-                        classNames={{
-                          content: "truncate",
-                        }}
-                      >
-                        {item.value}
-                      </Chip>
-                    ))}
-                  </div>
-                </>
-              )
-            }
-          >
-            {item => (
-              <ListboxItem
-                key={item.key}
-                onPress={() => {
-                  setOpen(false);
-                  setValue(item.value);
-                  submitSearch(item.value);
-                }}
-                className="rounded-medium"
-              >
-                <span dangerouslySetInnerHTML={{ __html: item.name }} />
-              </ListboxItem>
-            )}
-          </Listbox>
-        </OverlayScrollbarsComponent>
+        <div className="max-h-[80dvh] overflow-y-auto p-3">
+          {showSearchHistory && searchHistoryItems.length > 0 && (
+            <div className="mb-3">
+              <div className="mb-2 flex items-center justify-between px-1">
+                <span className="text-sm">{t("搜索历史")}</span>
+                <button
+                  type="button"
+                  className="text-foreground-400 hover:text-foreground-600 text-xs"
+                  onMouseDown={e => e.preventDefault()}
+                  onClick={e => {
+                    e.stopPropagation();
+                    clearSearchHistory();
+                    inputRef.current?.focus();
+                  }}
+                >
+                  {t("清除全部")}
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {searchHistoryItems.slice(0, 10).map(item => (
+                  <Chip
+                    key={item.time}
+                    isCloseable
+                    size="sm"
+                    radius="full"
+                    onClose={() => {
+                      deleteSearchHistory(item);
+                      inputRef.current?.focus();
+                    }}
+                    onMouseDown={e => e.preventDefault()}
+                    onClick={() => {
+                      setOpen(false);
+                      setValue(item.value);
+                      submitSearch(item.value);
+                      inputRef.current?.blur();
+                    }}
+                    className="search-history-chip max-w-full flex-none cursor-pointer"
+                    classNames={{ content: "truncate" }}
+                  >
+                    {item.value}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+          )}
+          {suggestionsData?.length ? (
+            <Listbox
+              aria-label={t("搜索建议")}
+              selectionMode="none"
+              items={suggestionsData.map(item => ({ key: item.value, value: item.value, name: item.name }))}
+            >
+              {item => (
+                <ListboxItem
+                  key={item.key}
+                  onPress={() => {
+                    setOpen(false);
+                    setValue(item.value);
+                    submitSearch(item.value);
+                  }}
+                  className="rounded-medium"
+                >
+                  <span dangerouslySetInnerHTML={{ __html: item.name }} />
+                </ListboxItem>
+              )}
+            </Listbox>
+          ) : (
+            <div className="search-empty py-5 text-center text-sm">{t("暂无搜索建议")}</div>
+          )}
+        </div>
       </div>
     </div>
   );

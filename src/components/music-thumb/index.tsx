@@ -150,7 +150,13 @@ const MusicThumb = () => {
       onTouchEndCapture={handleTouchEnd}
       onTouchCancelCapture={handleTouchEnd}
     >
-      <IconButton aria-label={t("点赞")} radius="full" onPress={handleToggleThumb}>
+      <IconButton
+        className="player-action-button"
+        aria-label={t("点赞")}
+        aria-pressed={isThumb}
+        radius="full"
+        onPress={handleToggleThumb}
+      >
         {isThumb ? <RiThumbUpFill size={18} className="text-primary" /> : <RiThumbUpLine size={18} />}
       </IconButton>
       {isProgressing && !isThumb && <div className="music-thumb-progress" />}

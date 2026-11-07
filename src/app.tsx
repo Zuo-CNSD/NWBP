@@ -34,6 +34,7 @@ import "moment/locale/zh-tw";
 
 import "overlayscrollbars/overlayscrollbars.css";
 import "./app.css";
+import "./liquid-redesign.css";
 
 /** 语言码 → moment 的 locale 名（moment 用 `zh-cn` 这种小写全拼） */
 const MOMENT_LOCALES: Record<Language, string> = {

@@ -102,30 +102,30 @@ const Home = () => {
   const dynamicCover = dynamicModule?.major?.archive?.cover ?? "";
 
   return (
-    <div className="flex h-full w-full flex-col items-center overflow-y-auto px-8 pt-[9vh] pb-10">
+    <div className="home-page flex h-full w-full flex-col items-center overflow-y-auto px-8 pt-[7vh] pb-10">
       {/* 问候语 + 当前时间：三行分别延迟一点出现，形成"逐块浮现" */}
-      <div className="home-reveal flex flex-col items-center" style={{ animationDelay: "60ms" }}>
-        <div className="home-outlined text-base font-medium" style={{ opacity: 0.92 }}>
+      <div className="home-hero home-reveal flex flex-col items-center" style={{ animationDelay: "60ms" }}>
+        <div className="home-ink text-base font-medium" style={{ opacity: 0.92 }}>
           {greetingOf(now.getHours())}
         </div>
-        <div className="home-outlined mt-2 text-6xl leading-none font-bold tracking-tight tabular-nums">
+        <div className="home-ink mt-2 text-6xl leading-none font-bold tracking-tight tabular-nums">
           {pad(now.getHours())}:{pad(now.getMinutes())}
           <span className="text-3xl opacity-60">:{pad(now.getSeconds())}</span>
         </div>
-        <div className="home-outlined-sm mt-3 text-sm">{moment(now).format(t("YYYY年M月D日 dddd"))}</div>
+        <div className="home-ink-muted mt-3 text-sm">{moment(now).format(t("YYYY年M月D日 dddd"))}</div>
       </div>
 
       <div
-        className="home-reveal mt-32 flex w-full max-w-5xl flex-wrap items-start justify-center gap-6"
+        className="home-shelf home-reveal mt-[10vh] flex w-full max-w-5xl flex-wrap items-start justify-center gap-6"
         style={{ animationDelay: "280ms" }}
       >
         {/* 最近播放（最多两首） */}
-        <section className="flex min-w-[320px] flex-1 flex-col gap-2.5">
+        <section className="home-section flex min-w-[320px] flex-1 flex-col gap-2.5">
           <header className="flex items-center justify-between">
-            <span className="home-outlined text-sm">{t("最近播放")}</span>
+            <span className="home-ink text-sm font-semibold">{t("最近播放")}</span>
             <button
               type="button"
-              className="home-outlined-sm flex items-center gap-0.5 text-xs transition-opacity hover:opacity-70"
+              className="home-action home-ink-muted flex items-center gap-0.5 text-xs transition-opacity hover:opacity-70"
               onClick={() => void navigate("/play-history")}
             >
               {t("全部")}
@@ -134,7 +134,7 @@ const Home = () => {
           </header>
 
           {recent.length === 0 ? (
-            <div className="home-outlined-sm rounded-large border-default-200/40 flex h-[64px] items-center justify-center border border-dashed text-sm">
+            <div className="home-surface home-ink-muted rounded-large flex h-[64px] items-center justify-center text-sm">
               {t("还没有播放记录")}
             </div>
           ) : (
@@ -143,7 +143,7 @@ const Home = () => {
                 key={item.key}
                 type="button"
                 onClick={() => playHistory(item)}
-                className="group bg-content1/60 hover:bg-content2/70 rounded-large flex items-center gap-3 p-2 text-left transition-colors"
+                className="home-surface group rounded-large flex items-center gap-3 p-2 text-left transition-colors"
               >
                 <Image
                   removeWrapper
@@ -152,27 +152,24 @@ const Home = () => {
                   className="rounded-medium h-[48px] w-[48px] flex-none object-cover"
                 />
                 <div className="min-w-0 flex-1">
-                  <div className="home-outlined truncate text-sm font-medium">{item.title}</div>
+                  <div className="home-ink truncate text-sm font-medium">{item.title}</div>
                   {item.ownerName ? (
-                    <div className="home-outlined-sm mt-0.5 truncate text-xs">{item.ownerName}</div>
+                    <div className="home-ink-muted mt-0.5 truncate text-xs">{item.ownerName}</div>
                   ) : null}
                 </div>
-                <RiPlayFill
-                  size={18}
-                  className="mr-1 flex-none text-white opacity-0 transition-opacity group-hover:opacity-100"
-                />
+                <RiPlayFill size={18} className="mr-1 flex-none opacity-0 transition-opacity group-hover:opacity-100" />
               </button>
             ))
           )}
         </section>
 
         {/* 最新动态（最多一条） */}
-        <section className="flex w-full max-w-[380px] min-w-[320px] flex-col gap-2.5">
+        <section className="home-section flex w-full max-w-[380px] min-w-[320px] flex-col gap-2.5">
           <header className="flex items-center justify-between">
-            <span className="home-outlined text-sm">{t("最新动态")}</span>
+            <span className="home-ink text-sm font-semibold">{t("最新动态")}</span>
             <button
               type="button"
-              className="home-outlined-sm flex items-center gap-0.5 text-xs transition-opacity hover:opacity-70"
+              className="home-action home-ink-muted flex items-center gap-0.5 text-xs transition-opacity hover:opacity-70"
               onClick={() => void navigate("/dynamic-feed")}
             >
               {t("全部")}
@@ -183,14 +180,14 @@ const Home = () => {
           {dynamicItem === undefined ? (
             <Skeleton className="rounded-large h-[132px]" />
           ) : !dynamicItem ? (
-            <div className="home-outlined-sm rounded-large border-default-200/40 flex h-[132px] items-center justify-center border border-dashed text-sm">
+            <div className="home-surface home-ink-muted rounded-large flex h-[132px] items-center justify-center text-sm">
               {isLogin ? t("暂时没有新动态") : t("登录后显示最新动态")}
             </div>
           ) : (
             <button
               type="button"
               onClick={() => void navigate("/dynamic-feed")}
-              className="group bg-content1/60 hover:bg-content2/70 rounded-large flex flex-col gap-2 p-3 text-left transition-colors"
+              className="home-surface group rounded-large flex flex-col gap-2 p-3 text-left transition-colors"
             >
               <div className="flex items-center gap-2">
                 <Image
@@ -199,13 +196,13 @@ const Home = () => {
                   params={THUMB_PARAMS}
                   className="h-6 w-6 flex-none rounded-full object-cover"
                 />
-                <span className="home-outlined min-w-0 flex-1 truncate text-xs font-medium">{author?.name ?? ""}</span>
-                <span className="home-outlined-sm flex-none text-[11px]">{author?.pub_time ?? ""}</span>
+                <span className="home-ink min-w-0 flex-1 truncate text-xs font-medium">{author?.name ?? ""}</span>
+                <span className="home-ink-muted flex-none text-[11px]">{author?.pub_time ?? ""}</span>
               </div>
 
               <div
                 className={clsx(
-                  "home-outlined-sm text-xs leading-relaxed",
+                  "home-ink-muted text-xs leading-relaxed",
                   dynamicCover ? "line-clamp-3" : "line-clamp-5",
                 )}
               >

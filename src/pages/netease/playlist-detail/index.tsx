@@ -24,7 +24,7 @@ const NeteasePlaylistDetail = () => {
   );
 
   // 曲目是分页的：首屏 100 首，滚到底再往下要（千首歌单就靠这个）
-  const { name, trackCount, tracks, loading, loadingMore, hasMore, error, found, reload, loadMore } =
+  const { name, trackCount, tracks, loading, loadingMore, hasMore, error, found, reload, loadMore, getAllTracks } =
     useNeteasePlaylistTracks(resolveId);
 
   return (
@@ -65,6 +65,8 @@ const NeteasePlaylistDetail = () => {
           hasMore={hasMore}
           loading={loadingMore}
           onLoadMore={() => void loadMore()}
+          getAllTracks={getAllTracks}
+          playAsCollection
           summary={t("网易云 · 共 {0} 首", trackCount)}
         />
       )}

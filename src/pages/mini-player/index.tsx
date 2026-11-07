@@ -121,7 +121,7 @@ const MiniPlayer = () => {
   const maxDuration = duration && Number.isFinite(duration) && duration > 0 ? duration : 100;
 
   return (
-    <div className="window-drag flex h-screen w-screen flex-col overflow-hidden rounded-[var(--window-radius)] select-none">
+    <div className="mini-player window-drag flex h-screen w-screen flex-col overflow-hidden rounded-[var(--window-radius)] select-none">
       <div className="flex h-full items-center">
         <CoverView />
         <div className="flex min-w-0 flex-1 flex-col space-y-1 px-2">

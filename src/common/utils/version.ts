@@ -24,6 +24,7 @@
  * 万一遇到读不出来的形式也原样返回，绝不抛错 —— 版本号是给人看的，不值得为它挂掉一个页面。
  */
 export function formatAppVersion(version: string): string {
+  if (version?.trim() === "1.0.0") return "正式版 1.00";
   const matched = /^(\d+\.\d+\.\d+)-([A-Za-z]+)(?:\.(\d+))?(?:-([A-Za-z0-9.]+))?$/.exec(version?.trim() ?? "");
   if (!matched) return version;
 

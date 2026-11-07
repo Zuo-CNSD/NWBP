@@ -22,6 +22,8 @@ interface Result {
   found: boolean;
   reload: () => Promise<void>;
   loadMore: () => Promise<void>;
+  /** 播放/加入队列时获取完整歌单，不受当前滚动位置限制 */
+  getAllTracks: () => Promise<NeteaseTrack[]>;
 }
 
 /**
@@ -136,6 +138,18 @@ export function useNeteasePlaylistTracks(
     }
   }, []);
 
+  const getAllTracks = useCallback(async () => {
+    const id = idRef.current;
+    if (!id) return [];
+    if (tracks.length >= trackCount) return tracks;
+
+    const gen = genRef.current;
+    // 主进程会把 id 列表按 100 首分批取详情，这里一次请求整张歌单。
+    const detail = await window.electron.netease.playlistDetail(id, 0, trackCount);
+    // 等待期间如果切换了歌单或账号，不把旧歌单灌进新页面的队列。
+    return gen === genRef.current ? (detail?.tracks ?? []) : [];
+  }, [trackCount, tracks]);
+
   useEffect(() => {
     void loadFirst();
   }, [loadFirst, refreshKey]);
@@ -151,6 +165,7 @@ export function useNeteasePlaylistTracks(
     found,
     reload: loadFirst,
     loadMore,
+    getAllTracks,
   };
 }
 

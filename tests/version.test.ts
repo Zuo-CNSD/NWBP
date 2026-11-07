@@ -28,6 +28,10 @@ describe("formatAppVersion", () => {
     expect(formatAppVersion("0.1.0")).toBe("0.1.0");
   });
 
+  test("正式版 1.00 用产品名称显示", () => {
+    expect(formatAppVersion("1.0.0")).toBe("正式版 1.00");
+  });
+
   test("读不出来的形式原样返回，不抛错", () => {
     expect(formatAppVersion("")).toBe("");
     expect(formatAppVersion("v1.2")).toBe("v1.2");

@@ -79,14 +79,20 @@ const MenuItem: React.FC<MenuItemProps> = ({
         <Button
           as={href ? HeroLink : "button"}
           href={href}
+          data-active={isActive ? "true" : undefined}
           fullWidth
           variant={isActive ? "flat" : "light"}
           color={isActive ? "primary" : "default"}
           onPress={onPress}
-          className={clx("rounded-medium w-full min-w-0 justify-center px-0 py-1", className, dndClassName, {
-            "h-auto": collapsed,
-            "text-primary": isActive,
-          })}
+          className={clx(
+            "app-menu-item rounded-medium w-full min-w-0 justify-center px-0 py-1",
+            className,
+            dndClassName,
+            {
+              "h-auto": collapsed,
+              "text-primary": isActive,
+            },
+          )}
           {...(dndRest as any)}
         >
           {iconContent}
@@ -99,13 +105,14 @@ const MenuItem: React.FC<MenuItemProps> = ({
     <Button
       as={href ? HeroLink : "button"}
       href={href}
+      data-active={isActive ? "true" : undefined}
       fullWidth
       disableRipple
       variant={isActive ? "flat" : "light"}
       color={isActive ? "primary" : "default"}
       onPress={onPress}
       startContent={iconContent}
-      className={twMerge("rounded-medium justify-start px-2 text-inherit", className, dndClassName)}
+      className={twMerge("app-menu-item rounded-medium justify-start px-2 text-inherit", className, dndClassName)}
       {...(dndRest as any)}
     >
       <span className="pointer-events-none truncate">{title}</span>

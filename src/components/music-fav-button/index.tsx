@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router";
 
 import { RiStarFill, RiStarLine } from "@remixicon/react";
 
+import { t } from "@/common/i18n";
 import { favoriteTrack, isNeteaseTrack } from "@/common/utils/favorite";
 import IconButton from "@/components/icon-button";
 import { useMusicFavStore } from "@/store/music-fav";
@@ -73,7 +74,14 @@ const MusicFavButton = () => {
   };
 
   return (
-    <IconButton onPress={handleOpen} disabled={!playItem}>
+    <IconButton
+      className="player-action-button"
+      radius="full"
+      aria-label={t("收藏")}
+      aria-pressed={isFav}
+      onPress={handleOpen}
+      isDisabled={!playItem}
+    >
       {isFav ? <RiStarFill size={18} className="text-primary" /> : <RiStarLine size={18} />}
     </IconButton>
   );

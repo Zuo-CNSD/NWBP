@@ -125,7 +125,7 @@ interface Action {
   init: VoidFunction;
   play: (params: PlayItem) => Promise<void>;
   playListItem: (id: string) => Promise<void>;
-  playList: (items: PlayItem[]) => Promise<void>;
+  playList: (items: PlayItem[], startIndex?: number) => Promise<void>;
   addToNext: (item: PlayItem) => void;
   addList: (items: PlayItem[]) => void;
   delPage: (id: string) => void;
@@ -730,7 +730,7 @@ export const usePlayList = create<State & Action>()(
             }
           });
         },
-        playList: async items => {
+        playList: async (items, startIndex = 0) => {
           const newList = items.map(item => ({
             ...item,
             title: sanitizeTitle(item.title),
@@ -739,7 +739,8 @@ export const usePlayList = create<State & Action>()(
 
           set(state => {
             state.list = newList;
-            state.playId = newList[0].id;
+            state.playId = newList[startIndex]?.id ?? newList[0]?.id;
+            state.nextId = undefined;
           });
         },
         next: async () => {

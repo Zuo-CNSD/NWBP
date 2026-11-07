@@ -6,8 +6,22 @@ import { ELECTRON_OUT_DIRNAME, ELECTRON_ICON_BASE_PATH } from "../shared/path";
 import { resolveBuildPlatforms, toElectronBuilderTargets } from "./build-target";
 
 export async function buildElectron() {
+  const linuxTargets: Array<{ target: "AppImage" | "deb" | "rpm"; arch: Array<"x64" | "arm64"> }> = [
+    { target: "AppImage", arch: ["x64", "arm64"] },
+    { target: "deb", arch: ["x64", "arm64"] },
+  ];
+  if (process.env.NWBP_LINUX_DEB_APPIMAGE_ONLY !== "1") {
+    linuxTargets.push({ target: "rpm", arch: ["x64", "arm64"] });
+  }
+  const macTargets: Array<{ target: "dmg" | "zip"; arch: Array<"x64" | "arm64"> }> =
+    process.env.NWBP_MAC_ZIP_ONLY === "1"
+      ? [{ target: "zip", arch: ["x64", "arm64"] }]
+      : [
+          { target: "dmg", arch: ["x64", "arm64"] },
+          { target: "zip", arch: ["x64", "arm64"] },
+        ];
   await electronBuild({
-    publish: "onTag",
+    publish: process.env.NWBP_DISABLE_PUBLISH === "1" ? "never" : "onTag",
     targets: toElectronBuilderTargets(resolveBuildPlatforms()),
     config: {
       appId: "com.nwbp.player",
@@ -25,7 +39,7 @@ export async function buildElectron() {
       buildVersion: pkg.version.split("-")[0],
       asar: true,
       electronCompile: false,
-      compression: "maximum",
+      compression: process.env.NWBP_FAST_PACKAGE === "1" ? "normal" : "maximum",
       removePackageScripts: true,
       removePackageKeywords: true,
       npmRebuild: false,
@@ -66,12 +80,10 @@ export async function buildElectron() {
         artifactName: "${productName}-${version}-win-portable-${arch}.${ext}",
       },
       mac: {
-        target: [
-          { target: "dmg", arch: ["x64", "arm64"] },
-          { target: "zip", arch: ["x64", "arm64"] },
-        ],
+        target: macTargets,
         category: "public.app-category.music",
-        icon: `${ELECTRON_ICON_BASE_PATH}/nwbp.icon`,
+        // 使用传统 .icns，避免在没有 Xcode 26 `actool` 的机器上无法打包。
+        icon: `${ELECTRON_ICON_BASE_PATH}/nwbp.icns`,
         hardenedRuntime: true,
         gatekeeperAssess: false,
         darkModeSupport: true,
@@ -82,11 +94,7 @@ export async function buildElectron() {
         extraResources: [{ from: "electron/ffmpeg/ffmpeg-mac-${arch}", to: "electron/ffmpeg/ffmpeg-mac-${arch}" }],
       },
       linux: {
-        target: [
-          { target: "AppImage", arch: ["x64", "arm64"] },
-          { target: "deb", arch: ["x64", "arm64"] },
-          { target: "rpm", arch: ["x64", "arm64"] },
-        ],
+        target: linuxTargets,
         icon: `${ELECTRON_ICON_BASE_PATH}/logo.png`,
         category: "AudioVideo",
         synopsis: "NWBP - a desktop music player for bilibili and NetEase Cloud Music",
@@ -113,5 +121,6 @@ export async function buildElectron() {
     })
     .catch(error => {
       logger.error(error);
+      throw error;
     });
 }

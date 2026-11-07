@@ -2,25 +2,26 @@ import React from "react";
 
 import { Divider } from "@heroui/react";
 
+import chatgptAvatar from "@/assets/images/developers/chatgpt.png";
 import deepseekAvatar from "@/assets/images/developers/deepseek.png";
-import kayokoAvatar from "@/assets/images/developers/kayoko.png";
 // 「?url」是必须的：项目里的 svgr 把 *.svg 转成了 React 组件（只导出 ReactComponent），
 // 直接 default import 拿到的是 undefined，构建期报 ESModulesLinkingError。
 import qicwkenAvatar from "@/assets/images/developers/qicwken.jpg?url";
+import shirokuroreiAvatar from "@/assets/images/developers/shirokurorei.png";
 import wumiuAvatar from "@/assets/images/developers/wumiu.png";
 import { t } from "@/common/i18n";
 
 /**
  * 开发者署名。
  *
- * 头像是构建期静态资源（都在 10KB 以内，会被 rsbuild 内联成 data URI），
- * 所以不依赖网络，也不受代理设置影响。
+ * 头像是构建期静态资源，不依赖网络，也不受代理设置影响。
  */
 const DEVELOPERS: { name: string; avatar: string; role?: string }[] = [
-  { name: "会点技术的佳代子", avatar: kayokoAvatar },
+  { name: "ShirokuroRei", avatar: shirokuroreiAvatar },
   { name: "无谬Wumiu", avatar: wumiuAvatar },
   { name: "qicwken", avatar: qicwkenAvatar, role: "国内下载渠道" },
   { name: "DeepSeek", avatar: deepseekAvatar },
+  { name: "ChatGPT", avatar: chatgptAvatar },
 ];
 
 /**

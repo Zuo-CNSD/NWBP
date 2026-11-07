@@ -66,13 +66,13 @@ const Layout = () => {
         彼此之间用分隔线而不是间隙 —— 只要有间隙，两个圆角之间就会漏出一条
         背景色，看着像没做完。圆角只在最外圈出现。
       */}
-      <div className="h-full w-full p-2">
-        <div className="glass-panel rounded-large relative flex h-full min-h-0 w-full flex-col overflow-hidden shadow-2xl">
+      <div className="app-stage h-full w-full p-3">
+        <div className="glass-panel app-canvas rounded-large relative flex h-full min-h-0 w-full flex-col overflow-hidden">
           <div aria-hidden className="glass-fill" />
           <div className="glass-content flex min-h-0 w-full flex-1">
             <SideNav />
             <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-              <div className="h-16 flex-none">
+              <div className="app-navbar h-[68px] flex-none">
                 <Navbar />
               </div>
               {/*
@@ -93,7 +93,7 @@ const Layout = () => {
             <PageTransition />
           </div>
           {/* 播放栏：靠上边框和内容区分开，不再留缝 */}
-          <div className="border-divider/20 relative z-50 flex-none border-t">
+          <div className="app-player border-divider/20 relative z-50 flex-none border-t">
             {/*
               动态音频条：跟在播放栏正上方，属于播放栏这一块（边框留在它上面）。
               可以关掉 —— 设置 → 常规设置 → 播放栏音频条。
@@ -103,7 +103,7 @@ const Layout = () => {
                 <PlayBarAudioBar />
               </div>
             ) : null}
-            <div className="h-[88px]">
+            <div className="h-[92px]">
               <PlayBar />
             </div>
           </div>

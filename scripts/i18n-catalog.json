@@ -1462,7 +1462,7 @@
     "where": ["src/layout/navbar/login/password-login.tsx:70"]
   },
   {
-    "key": "面板改为半透明毛玻璃 + 流动彩色底衬（自定义背景色时自动失效）",
+    "key": "面板采用黑白玻璃质感，深色与浅色配色相反（自定义背景色时自动失效）",
     "where": ["src/pages/settings/system-settings.tsx:264"]
   },
   {

@@ -1,0 +1,1009 @@
+/* The final material layer is kept separate from the legacy theme rules. */
+html.liquid-glass {
+  --liquid-window-radius: max(var(--window-radius), 28px);
+}
+
+html.liquid-glass body,
+html.liquid-glass .app-shell,
+html.liquid-glass [data-slot="backdrop"],
+html.liquid-glass [data-slot="wrapper"] {
+  border-radius: var(--liquid-window-radius);
+}
+
+html.window-fullscreen.liquid-glass body,
+html.window-fullscreen.liquid-glass .app-shell,
+html.window-fullscreen.liquid-glass .app-canvas,
+html.window-fullscreen.liquid-glass [data-slot="backdrop"],
+html.window-fullscreen.liquid-glass [data-slot="wrapper"] {
+  border-radius: 0;
+}
+
+html.liquid-glass .app-shell {
+  background:
+    radial-gradient(70% 80% at 13% 9%, hsl(195deg 100% 65% / 32%), transparent 70%),
+    radial-gradient(72% 83% at 89% 83%, hsl(303deg 91% 65% / 28%), transparent 72%),
+    linear-gradient(134deg, #101c42, #243463 46%, #49295f);
+}
+
+html.light.liquid-glass .app-shell {
+  background: #fff;
+}
+
+html.liquid-glass .glass-blobs i {
+  opacity: 1;
+  filter: blur(17px);
+}
+
+html.light.liquid-glass .glass-blobs,
+html.light.liquid-glass .glass-stream,
+html.light.liquid-glass .glass-grain {
+  display: none;
+}
+
+/* Dark mode uses the same composition as light mode with its values reversed. */
+html.dark.liquid-glass .app-shell {
+  background: #0b0b0b;
+}
+
+html.dark.liquid-glass .glass-blobs,
+html.dark.liquid-glass .glass-stream,
+html.dark.liquid-glass .glass-grain {
+  display: none;
+}
+
+html.liquid-glass .glass-blobs i::after {
+  background: radial-gradient(circle at 48% 47%, currentcolor 0%, transparent 66%);
+}
+
+html.liquid-glass .app-stage {
+  padding: 0;
+}
+
+html.liquid-glass .app-canvas {
+  border-radius: var(--liquid-window-radius);
+  border: 1px solid hsl(0deg 0% 100% / 42%);
+  background: hsl(220deg 45% 26% / 17%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 73%),
+    inset 0 -2px 0 hsl(227deg 55% 5% / 24%),
+    0 0 0 1px hsl(0deg 0% 100% / 18%),
+    0 32px 86px hsl(225deg 65% 8% / 38%);
+}
+
+html.light.liquid-glass .app-canvas {
+  background: #fff;
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 85%),
+    inset 0 -2px 0 hsl(216deg 51% 32% / 16%),
+    0 0 0 1px hsl(0deg 0% 100% / 27%),
+    0 34px 84px hsl(225deg 62% 41% / 24%);
+}
+
+html.dark.liquid-glass .app-canvas {
+  border-color: hsl(0deg 0% 100% / 14%);
+  background: #0b0b0b;
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 14%),
+    inset 0 -1px 0 hsl(0deg 0% 100% / 7%),
+    0 0 0 1px hsl(0deg 0% 100% / 6%),
+    0 34px 84px hsl(0deg 0% 0% / 40%);
+}
+
+html.liquid-glass .glass-fill {
+  background:
+    linear-gradient(128deg, hsl(0deg 0% 100% / 18%), transparent 31%, hsl(0deg 0% 100% / 8%) 66%),
+    hsl(220deg 55% 29% / 16%);
+  -webkit-backdrop-filter: blur(17px) saturate(1.45);
+  backdrop-filter: blur(17px) saturate(1.45);
+}
+
+html.light.liquid-glass .glass-fill {
+  background:
+    linear-gradient(130deg, hsl(0deg 0% 100% / 48%), transparent 38%, hsl(0deg 0% 100% / 20%)), hsl(0deg 0% 100% / 22%);
+}
+
+html.dark.liquid-glass .glass-fill {
+  background:
+    linear-gradient(130deg, hsl(0deg 0% 100% / 10%), transparent 38%, hsl(0deg 0% 100% / 3%)), hsl(0deg 0% 100% / 5%);
+  -webkit-backdrop-filter: blur(17px) saturate(1);
+  backdrop-filter: blur(17px) saturate(1);
+}
+
+html.liquid-glass .app-sidebar {
+  background: linear-gradient(110deg, hsl(0deg 0% 100% / 20%), hsl(0deg 0% 100% / 7%) 85%);
+  border-right-color: hsl(0deg 0% 100% / 32%);
+  box-shadow: 11px 0 30px hsl(215deg 76% 20% / 12%);
+}
+
+html.liquid-glass .app-navbar,
+html.liquid-glass .app-player {
+  background: linear-gradient(135deg, hsl(0deg 0% 100% / 20%), hsl(0deg 0% 100% / 6%));
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+}
+
+html.dark.liquid-glass .app-sidebar,
+html.dark.liquid-glass .app-navbar,
+html.dark.liquid-glass .app-player {
+  background: linear-gradient(135deg, hsl(0deg 0% 100% / 8%), hsl(0deg 0% 100% / 3%));
+  box-shadow: none;
+}
+
+html.dark.liquid-glass .app-sidebar {
+  border-right-color: hsl(0deg 0% 100% / 14%);
+}
+
+html.dark.liquid-glass .app-navbar {
+  border-bottom-color: hsl(0deg 0% 100% / 14%);
+}
+
+html.dark.liquid-glass .app-player {
+  border-top-color: hsl(0deg 0% 100% / 18%);
+  box-shadow: inset 0 1px hsl(0deg 0% 100% / 6%);
+}
+
+html.liquid-glass .app-navbar {
+  position: relative;
+  z-index: 40;
+}
+
+html.liquid-glass .search-field,
+html.liquid-glass .search-field [data-slot="base"],
+html.liquid-glass .search-field [data-slot="input-wrapper"] {
+  border-radius: 999px;
+  outline: none;
+}
+
+html.liquid-glass .search-suggestions {
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+html.liquid-glass .search-suggestions [role="listbox"] {
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html.liquid-glass .search-history-chip {
+  border: 1px solid hsl(0deg 0% 100% / 54%);
+  border-radius: 999px;
+  background: hsl(0deg 0% 100% / 25%);
+  box-shadow: inset 0 1px 0 hsl(0deg 0% 100% / 60%);
+}
+
+html.liquid-glass .app-player {
+  border-top-color: hsl(0deg 0% 100% / 47%);
+  box-shadow:
+    inset 0 1px hsl(0deg 0% 100% / 46%),
+    0 -16px 36px hsl(225deg 58% 21% / 8%);
+}
+
+/* The player Card is only a layout grid; the material belongs to its parent. */
+html.liquid-glass .app-player .bg-content1 {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html.liquid-glass .app-player .bg-content1:hover {
+  transform: none;
+}
+
+html.liquid-glass .app-menu-item {
+  position: relative;
+  min-height: 39px;
+  border: 1px solid transparent;
+  transition:
+    background-color 240ms var(--aurora-ease),
+    border-color 240ms var(--aurora-ease),
+    box-shadow 240ms var(--aurora-ease),
+    transform 240ms var(--aurora-ease);
+}
+
+html.liquid-glass .app-menu-item:hover {
+  border-color: hsl(0deg 0% 100% / 40%);
+  background: hsl(0deg 0% 100% / 17%);
+  box-shadow:
+    inset 0 1px hsl(0deg 0% 100% / 51%),
+    0 5px 13px hsl(227deg 55% 23% / 14%);
+  transform: translateX(2px);
+}
+
+html.liquid-glass .app-menu-item[data-active="true"] {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html.liquid-glass .app-menu-item[data-active="true"]:hover {
+  border-color: #242424;
+  background: #242424;
+  box-shadow: none;
+  transform: none;
+}
+
+html.liquid-glass .app-menu-item[data-active="true"] svg,
+html.liquid-glass .app-menu-item[data-active="true"] span {
+  color: #fff;
+}
+
+html.dark.liquid-glass .app-menu-item:hover {
+  border-color: hsl(0deg 0% 100% / 18%);
+  background: hsl(0deg 0% 100% / 10%);
+  box-shadow: none;
+}
+
+html.dark.liquid-glass .app-menu-item[data-active="true"],
+html.dark.liquid-glass .app-menu-item[data-active="true"]:hover {
+  border-color: #f2f2f2;
+  background: #f2f2f2;
+  color: #101010;
+  box-shadow: none;
+}
+
+html.dark.liquid-glass .app-menu-item[data-active="true"] :is(svg, span) {
+  color: #101010;
+}
+
+/* Common cards, menus, fields and dialogs form one consistent material scale. */
+html.liquid-glass .bg-content1,
+html.liquid-glass .bg-content2,
+html.liquid-glass .bg-content3,
+html.liquid-glass [data-slot="input-wrapper"] {
+  border-color: hsl(0deg 0% 100% / 42%);
+  background: linear-gradient(137deg, hsl(0deg 0% 100% / 32%), hsl(0deg 0% 100% / 7%) 52%), hsl(0deg 0% 100% / 14%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 72%),
+    inset 0 -1px 0 hsl(224deg 50% 17% / 13%),
+    0 9px 25px hsl(221deg 58% 18% / 15%);
+  -webkit-backdrop-filter: blur(16px) saturate(1.45);
+  backdrop-filter: blur(16px) saturate(1.45);
+}
+
+html.liquid-glass [role="listbox"],
+html.liquid-glass [role="dialog"] [data-slot="content"] {
+  border-color: hsl(0deg 0% 100% / 51%);
+  background: linear-gradient(130deg, hsl(0deg 0% 100% / 40%), hsl(0deg 0% 100% / 16%)), hsl(227deg 33% 52% / 36%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 80%),
+    inset 0 -1px 0 hsl(222deg 55% 22% / 13%),
+    0 22px 60px hsl(225deg 56% 18% / 29%);
+  -webkit-backdrop-filter: blur(32px) saturate(1.5);
+  backdrop-filter: blur(32px) saturate(1.5);
+}
+
+html.dark.liquid-glass .bg-content1,
+html.dark.liquid-glass .bg-content2,
+html.dark.liquid-glass .bg-content3,
+html.dark.liquid-glass [data-slot="input-wrapper"] {
+  border-color: hsl(0deg 0% 100% / 16%);
+  background: linear-gradient(137deg, hsl(0deg 0% 100% / 10%), hsl(0deg 0% 100% / 4%) 55%), #181818;
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 10%),
+    0 9px 25px hsl(0deg 0% 0% / 19%);
+  -webkit-backdrop-filter: blur(16px) saturate(1);
+  backdrop-filter: blur(16px) saturate(1);
+}
+
+html.dark.liquid-glass [role="listbox"],
+html.dark.liquid-glass [role="dialog"] [data-slot="content"] {
+  border-color: hsl(0deg 0% 100% / 19%);
+  background: linear-gradient(130deg, hsl(0deg 0% 100% / 11%), hsl(0deg 0% 100% / 4%)), #171717;
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 15%),
+    0 22px 60px hsl(0deg 0% 0% / 42%);
+  -webkit-backdrop-filter: blur(32px) saturate(1);
+  backdrop-filter: blur(32px) saturate(1);
+}
+
+/* Dropdowns already have a rounded glass shell; the inner menu is only a layout list. */
+html.liquid-glass [data-slot="content"]:has([role="menu"]) {
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+/* The account menu uses the same neutral palette as the main window. */
+html.light.liquid-glass .user-dropdown-content,
+html.light:not(.liquid-glass) .user-dropdown-content {
+  border: 1px solid #d8d8d8;
+  background: hsl(0deg 0% 100% / 94%);
+  color: #171717;
+  box-shadow: 0 16px 40px hsl(0deg 0% 0% / 14%);
+  -webkit-backdrop-filter: blur(22px) saturate(1);
+  backdrop-filter: blur(22px) saturate(1);
+}
+
+html.dark.liquid-glass .user-dropdown-content,
+html.dark:not(.liquid-glass) .user-dropdown-content {
+  border: 1px solid #494949;
+  background: hsl(0deg 0% 9% / 94%);
+  color: #f5f5f5;
+  box-shadow: 0 16px 40px hsl(0deg 0% 0% / 42%);
+  -webkit-backdrop-filter: blur(22px) saturate(1);
+  backdrop-filter: blur(22px) saturate(1);
+}
+
+html.light .user-dropdown-content [role="menuitem"]:hover {
+  background: #ececec;
+}
+
+html.dark .user-dropdown-content [role="menuitem"]:hover {
+  background: #303030;
+}
+
+html.liquid-glass [data-slot="content"] [role="menu"],
+html.liquid-glass [data-slot="content"] [role="listbox"] {
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html.liquid-glass .home-page {
+  position: relative;
+  isolation: isolate;
+}
+
+html.liquid-glass .home-hero {
+  position: relative;
+  width: min(100%, 650px);
+  min-height: 218px;
+  justify-content: center;
+  padding: 30px 48px;
+  border: 1px solid hsl(0deg 0% 100% / 56%);
+  border-radius: 34px;
+  background:
+    radial-gradient(ellipse at 19% 0%, hsl(0deg 0% 100% / 54%), transparent 55%),
+    linear-gradient(130deg, hsl(0deg 0% 100% / 43%), hsl(0deg 0% 100% / 9%) 63%), hsl(0deg 0% 100% / 11%);
+  box-shadow:
+    inset 0 2px 1px hsl(0deg 0% 100% / 79%),
+    inset 0 -2px 0 hsl(223deg 52% 32% / 16%),
+    0 20px 55px hsl(225deg 55% 32% / 18%),
+    0 1px 0 hsl(0deg 0% 100% / 44%);
+  -webkit-backdrop-filter: blur(14px) saturate(1.5);
+  backdrop-filter: blur(14px) saturate(1.5);
+}
+
+html.liquid-glass .home-hero::before,
+html.liquid-glass .home-surface::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  content: "";
+  background: linear-gradient(
+    135deg,
+    hsl(0deg 0% 100% / 51%),
+    transparent 22%,
+    transparent 71%,
+    hsl(0deg 0% 100% / 18%)
+  );
+  opacity: 0.48;
+}
+
+html.liquid-glass .home-ink {
+  color: hsl(var(--heroui-foreground));
+  text-shadow: 0 1px 0 hsl(0deg 0% 100% / 33%);
+}
+
+html.liquid-glass .home-ink-muted {
+  color: hsl(var(--heroui-foreground) / 72%);
+  text-shadow: 0 1px 0 hsl(0deg 0% 100% / 22%);
+}
+
+html.liquid-glass .home-section {
+  padding: 18px;
+  border: 1px solid hsl(0deg 0% 100% / 39%);
+  border-radius: 26px;
+  background: linear-gradient(140deg, hsl(0deg 0% 100% / 20%), hsl(0deg 0% 100% / 5%));
+  box-shadow:
+    inset 0 1px hsl(0deg 0% 100% / 56%),
+    0 13px 34px hsl(226deg 60% 35% / 11%);
+  -webkit-backdrop-filter: blur(12px) saturate(1.35);
+  backdrop-filter: blur(12px) saturate(1.35);
+}
+
+html.liquid-glass .home-surface {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid hsl(0deg 0% 100% / 56%);
+  background: linear-gradient(120deg, hsl(0deg 0% 100% / 44%), hsl(0deg 0% 100% / 15%));
+  box-shadow:
+    inset 0 1px hsl(0deg 0% 100% / 75%),
+    0 8px 18px hsl(223deg 57% 33% / 12%);
+  -webkit-backdrop-filter: blur(17px) saturate(1.4);
+  backdrop-filter: blur(17px) saturate(1.4);
+  transition:
+    transform 260ms var(--aurora-ease),
+    box-shadow 260ms var(--aurora-ease);
+}
+
+html.liquid-glass button.home-surface:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow:
+    inset 0 1px hsl(0deg 0% 100% / 87%),
+    0 15px 30px hsl(224deg 57% 32% / 20%);
+}
+
+html.dark.liquid-glass .home-hero,
+html.dark.liquid-glass .home-section,
+html.dark.liquid-glass .home-surface {
+  border-color: hsl(0deg 0% 100% / 18%);
+  background: linear-gradient(130deg, hsl(0deg 0% 100% / 12%), hsl(0deg 0% 100% / 4%) 64%), #161616;
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 13%),
+    0 13px 34px hsl(0deg 0% 0% / 24%);
+  -webkit-backdrop-filter: blur(16px) saturate(1);
+  backdrop-filter: blur(16px) saturate(1);
+}
+
+html.dark.liquid-glass .home-hero::before,
+html.dark.liquid-glass .home-surface::before {
+  opacity: 0.16;
+}
+
+html.dark.liquid-glass .home-ink,
+html.dark.liquid-glass .home-ink-muted {
+  text-shadow: none;
+}
+
+html.dark.liquid-glass button.home-surface:hover {
+  background: linear-gradient(130deg, hsl(0deg 0% 100% / 15%), hsl(0deg 0% 100% / 7%) 64%), #1c1c1c;
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 19%),
+    0 15px 30px hsl(0deg 0% 0% / 30%);
+}
+
+html.liquid-glass .settings-nav,
+html.liquid-glass .settings-panel {
+  border: 1px solid hsl(0deg 0% 100% / 39%);
+  border-radius: 24px;
+  background: linear-gradient(135deg, hsl(0deg 0% 100% / 29%), hsl(0deg 0% 100% / 7%));
+  box-shadow:
+    inset 0 1px hsl(0deg 0% 100% / 67%),
+    0 15px 34px hsl(224deg 56% 33% / 13%);
+  -webkit-backdrop-filter: blur(19px) saturate(1.35);
+  backdrop-filter: blur(19px) saturate(1.35);
+}
+
+html.light.liquid-glass .settings-nav,
+html.light.liquid-glass .settings-panel {
+  border-color: #e7e7e7;
+  background: linear-gradient(145deg, #fff, #f5f5f5 75%), #fff;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 16px 36px hsl(0deg 0% 0% / 10%);
+  -webkit-backdrop-filter: blur(26px) saturate(1);
+  backdrop-filter: blur(26px) saturate(1);
+}
+
+html.light.liquid-glass .settings-panel .text-default-500,
+html.light.liquid-glass .settings-nav .text-default-500 {
+  color: #666;
+}
+
+html.light.liquid-glass .settings-panel :is(h1, h2, h3),
+html.light.liquid-glass .settings-panel .font-medium {
+  color: #171717;
+}
+
+html.light.liquid-glass .settings-nav [role="tab"],
+html.light.liquid-glass .settings-panel [role="tab"] {
+  border: 1px solid transparent;
+  border-radius: 14px;
+  color: #555;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+html.light.liquid-glass .settings-nav [role="tab"]:not([data-selected="true"]) :is(svg, span),
+html.light.liquid-glass .settings-panel [role="tab"]:not([data-selected="true"]) :is(svg, span) {
+  color: #555;
+}
+
+html.light.liquid-glass .settings-nav [role="tab"]:hover,
+html.light.liquid-glass .settings-panel [role="tab"]:hover {
+  border-color: #dedede;
+  background-color: #f2f2f2;
+  color: #111;
+  transform: translateY(-1px);
+}
+
+html.light.liquid-glass .settings-nav [role="tab"][data-selected="true"],
+html.light.liquid-glass .settings-panel [role="tab"][data-selected="true"] {
+  border-color: transparent;
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+html.light.liquid-glass .settings-nav [role="tab"][data-selected="true"] :is(svg, span),
+html.light.liquid-glass .settings-panel [role="tab"][data-selected="true"] :is(svg, span) {
+  color: #fff;
+}
+
+html.light.liquid-glass .settings-nav [data-slot="cursor"],
+html.light.liquid-glass .settings-panel [data-slot="cursor"] {
+  border: 1px solid #111;
+  border-radius: 14px;
+  background: #111;
+  box-shadow: none;
+}
+
+html.light.liquid-glass .settings-panel [role="tablist"] {
+  border: 1px solid #dedede;
+  border-radius: 18px;
+  background: #f2f2f2;
+  box-shadow: inset 0 1px 3px hsl(0deg 0% 0% / 7%);
+}
+
+html.light.liquid-glass .settings-panel [data-slot="trigger"] {
+  border: 1px solid #dedede;
+  border-radius: 17px;
+  background: linear-gradient(140deg, #fff, #f4f4f4);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 4px 12px hsl(0deg 0% 0% / 9%);
+}
+
+html.light.liquid-glass .settings-panel [data-slot="trigger"]:hover {
+  background: linear-gradient(140deg, #fff, #ededed);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 6px 16px hsl(0deg 0% 0% / 13%);
+}
+
+html.dark.liquid-glass .settings-nav,
+html.dark.liquid-glass .settings-panel {
+  border-color: hsl(0deg 0% 100% / 18%);
+  background: linear-gradient(145deg, hsl(0deg 0% 100% / 10%), hsl(0deg 0% 100% / 3%)), #161616;
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 12%),
+    0 16px 36px hsl(0deg 0% 0% / 26%);
+  -webkit-backdrop-filter: blur(26px) saturate(1);
+  backdrop-filter: blur(26px) saturate(1);
+}
+
+html.dark.liquid-glass .settings-panel .text-default-500,
+html.dark.liquid-glass .settings-nav .text-default-500 {
+  color: #aaa;
+}
+
+html.dark.liquid-glass .settings-nav [role="tab"],
+html.dark.liquid-glass .settings-panel [role="tab"] {
+  border: 1px solid transparent;
+  border-radius: 14px;
+  color: #bbb;
+}
+
+html.dark.liquid-glass .settings-nav [role="tab"]:not([data-selected="true"]) :is(svg, span),
+html.dark.liquid-glass .settings-panel [role="tab"]:not([data-selected="true"]) :is(svg, span) {
+  color: #bbb;
+}
+
+html.dark.liquid-glass .settings-nav [role="tab"]:hover,
+html.dark.liquid-glass .settings-panel [role="tab"]:hover {
+  border-color: hsl(0deg 0% 100% / 18%);
+  background: hsl(0deg 0% 100% / 9%);
+  color: #fff;
+}
+
+html.dark.liquid-glass .settings-nav [role="tab"][data-selected="true"],
+html.dark.liquid-glass .settings-panel [role="tab"][data-selected="true"] {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+html.dark.liquid-glass .settings-nav [role="tab"][data-selected="true"],
+html.dark.liquid-glass .settings-panel [role="tab"][data-selected="true"],
+html.dark.liquid-glass .settings-nav [role="tab"][data-selected="true"] :is(svg, span),
+html.dark.liquid-glass .settings-panel [role="tab"][data-selected="true"] :is(svg, span) {
+  color: #111;
+}
+
+html.dark.liquid-glass .settings-nav [data-slot="cursor"],
+html.dark.liquid-glass .settings-panel [data-slot="cursor"] {
+  border: 1px solid #f2f2f2;
+  border-radius: 14px;
+  background: #f2f2f2;
+  box-shadow: none;
+}
+
+html.dark.liquid-glass .settings-panel [role="tablist"] {
+  border: 1px solid hsl(0deg 0% 100% / 14%);
+  border-radius: 18px;
+  background: hsl(0deg 0% 100% / 6%);
+}
+
+html.dark.liquid-glass .settings-panel [data-slot="trigger"] {
+  border: 1px solid hsl(0deg 0% 100% / 17%);
+  border-radius: 17px;
+  background: #242424;
+  box-shadow: inset 0 1px 0 hsl(0deg 0% 100% / 10%);
+}
+
+html.dark.liquid-glass .settings-panel [data-slot="trigger"]:hover {
+  background: #303030;
+}
+
+html.liquid-glass .glass-list-surface {
+  border: 1px solid hsl(0deg 0% 100% / 48%);
+  border-radius: 26px;
+  background: linear-gradient(145deg, hsl(0deg 0% 100% / 25%), hsl(0deg 0% 100% / 7%) 67%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 70%),
+    0 18px 38px hsl(224deg 49% 26% / 12%);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+  backdrop-filter: blur(22px) saturate(1.35);
+}
+
+html.dark.liquid-glass .glass-list-surface {
+  border-color: hsl(0deg 0% 100% / 18%);
+  background: linear-gradient(135deg, hsl(0deg 0% 100% / 10%), hsl(0deg 0% 100% / 3%)), #171717;
+  box-shadow:
+    inset 0 1px hsl(0deg 0% 100% / 12%),
+    0 18px 35px hsl(0deg 0% 0% / 27%);
+}
+
+html.liquid-glass .settings-panel {
+  min-height: 500px;
+}
+
+html.liquid-glass .mini-player {
+  border: 1px solid hsl(0deg 0% 100% / 47%);
+  background: linear-gradient(135deg, hsl(0deg 0% 100% / 26%), hsl(0deg 0% 100% / 8%));
+  box-shadow:
+    inset 0 1px hsl(0deg 0% 100% / 70%),
+    0 18px 35px hsl(224deg 56% 25% / 22%);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+}
+
+html.dark.liquid-glass .mini-player {
+  border-color: hsl(0deg 0% 100% / 18%);
+  background: linear-gradient(135deg, hsl(0deg 0% 100% / 10%), hsl(0deg 0% 100% / 3%)), #171717;
+  box-shadow:
+    inset 0 1px hsl(0deg 0% 100% / 12%),
+    0 18px 35px hsl(0deg 0% 0% / 27%);
+}
+
+/* Together uses the same rounded, high-contrast material as the home cards. */
+html.liquid-glass .together-backdrop {
+  background: hsl(0deg 0% 0% / 45%);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+html.liquid-glass .together-modal {
+  overflow: hidden;
+  border-radius: 28px;
+}
+
+html.light.liquid-glass .together-modal {
+  border: 1px solid hsl(0deg 0% 100% / 95%);
+  background: linear-gradient(145deg, #fff, #f3f3f3 75%);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 25px 80px hsl(0deg 0% 0% / 25%);
+}
+
+html.dark.liquid-glass .together-modal {
+  border: 1px solid hsl(0deg 0% 100% / 22%);
+  background: linear-gradient(145deg, #252525, #151515 75%);
+  box-shadow:
+    inset 0 1px 0 hsl(0deg 0% 100% / 13%),
+    0 25px 80px hsl(0deg 0% 0% / 55%);
+}
+
+html.liquid-glass .together-modal [data-slot="content"] {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html.liquid-glass .together-modal [data-slot="header"] {
+  padding-top: 28px;
+  padding-bottom: 12px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+html.liquid-glass .together-modal [data-slot="body"] {
+  padding-bottom: 24px;
+}
+
+html.light.liquid-glass .together-modal .text-foreground-500,
+html.light.liquid-glass .together-modal .text-foreground-400 {
+  color: #555;
+}
+
+html.dark.liquid-glass .together-modal .text-foreground-500,
+html.dark.liquid-glass .together-modal .text-foreground-400 {
+  color: #bdbdbd;
+}
+
+html.liquid-glass .together-modal .together-primary-button,
+html.liquid-glass .together-modal .together-secondary-button {
+  min-height: 48px;
+  border-radius: 15px;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+html.light.liquid-glass .together-modal .together-primary-button {
+  background: #111;
+  color: #fff;
+}
+
+html.dark.liquid-glass .together-modal .together-primary-button {
+  background: #f2f2f2;
+  color: #111;
+}
+
+html.light.liquid-glass .together-modal .together-secondary-button {
+  border: 1px solid #d4d4d4;
+  background: #ededed;
+  color: #171717;
+}
+
+html.dark.liquid-glass .together-modal .together-secondary-button {
+  border: 1px solid #444;
+  background: #303030;
+  color: #f5f5f5;
+}
+
+html.liquid-glass .together-modal .together-secondary-button[data-disabled="true"] {
+  opacity: 0.48;
+}
+
+html.liquid-glass .together-modal .together-code-field [data-slot="input-wrapper"] {
+  min-height: 48px;
+  border-radius: 15px;
+  box-shadow: none;
+}
+
+html.light.liquid-glass .together-modal .together-code-field [data-slot="input-wrapper"] {
+  border-color: #d4d4d4;
+  background: #fff;
+}
+
+html.dark.liquid-glass .together-modal .together-code-field [data-slot="input-wrapper"] {
+  border-color: #474747;
+  background: #222;
+}
+
+/* Auxiliary windows and the user's transparent-background choice stay transparent. */
+html.desktop-lyrics-window.liquid-glass .app-shell,
+html.window-transparent.liquid-glass .app-shell {
+  background: transparent;
+}
+
+/* The canvas was still opaque, which hid the desktop when transparency was enabled. */
+html.window-transparent.liquid-glass .app-canvas {
+  background: transparent;
+}
+
+html.window-transparent.liquid-glass .glass-fill {
+  background: hsl(0deg 0% 100% / 12%);
+}
+
+html.window-transparent.dark.liquid-glass .glass-fill {
+  background: hsl(0deg 0% 0% / 20%);
+}
+
+html.window-transparent.liquid-glass .app-canvas::after {
+  display: none;
+}
+
+/* Shared playbar controls keep the same shape and contrast. */
+html .player-action-button {
+  min-width: 34px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  box-shadow: none;
+}
+
+html.light .player-action-button {
+  background: #ededed;
+  color: #202020;
+}
+
+html.dark .player-action-button {
+  background: #303030;
+  color: #f4f4f4;
+}
+
+html.light .player-action-button:hover {
+  background: #dedede;
+}
+
+html.dark .player-action-button:hover {
+  background: #404040;
+}
+
+/* Switch tracks remain visible on both the white and charcoal surfaces. */
+html.light [data-selected] > input[role="switch"] + span[aria-hidden="true"] {
+  background: #a7a7a7;
+  box-shadow: inset 0 0 0 1px #858585;
+}
+
+html.light [data-selected="true"] > input[role="switch"] + span[aria-hidden="true"] {
+  background: #111;
+  box-shadow: inset 0 0 0 1px #111;
+}
+
+html.dark [data-selected] > input[role="switch"] + span[aria-hidden="true"] {
+  background: #555;
+  box-shadow: inset 0 0 0 1px #777;
+}
+
+html.dark [data-selected="true"] > input[role="switch"] + span[aria-hidden="true"] {
+  background: #f2f2f2;
+  box-shadow: inset 0 0 0 1px #f2f2f2;
+}
+
+html.light [data-selected] > input[role="switch"] + span[aria-hidden="true"] > span {
+  background: #fff;
+  box-shadow: 0 1px 3px hsl(0deg 0% 0% / 35%);
+}
+
+html.dark [data-selected="true"] > input[role="switch"] + span[aria-hidden="true"] > span {
+  background: #161616;
+}
+
+html.liquid-glass .netease-collection-row:hover {
+  background: hsl(0deg 0% 50% / 12%);
+}
+
+/* The material toggle removes optical effects while retaining the same layout. */
+html:not(.liquid-glass) .app-stage::before,
+html:not(.liquid-glass) .app-canvas::after,
+html:not(.liquid-glass) .app-sidebar::after,
+html:not(.liquid-glass) .glass-fill {
+  display: none;
+}
+
+html:not(.liquid-glass) .app-shell,
+html:not(.liquid-glass) .app-canvas {
+  background: hsl(var(--heroui-background));
+}
+
+html:not(.liquid-glass) .app-canvas {
+  border: 0;
+  box-shadow: none;
+}
+
+html:not(.liquid-glass) .app-stage {
+  padding: 0;
+}
+
+html:not(.liquid-glass) .app-sidebar,
+html:not(.liquid-glass) .app-navbar,
+html:not(.liquid-glass) .app-player {
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html.light:not(.liquid-glass) .app-sidebar {
+  border-right-color: #e3e3e3;
+}
+
+html.dark:not(.liquid-glass) .app-sidebar {
+  border-right-color: #343434;
+}
+
+html.light:not(.liquid-glass) .app-navbar,
+html.light:not(.liquid-glass) .app-player {
+  border-color: #e3e3e3;
+}
+
+html.dark:not(.liquid-glass) .app-navbar,
+html.dark:not(.liquid-glass) .app-player {
+  border-color: #343434;
+}
+
+html:not(.liquid-glass) .home-hero,
+html:not(.liquid-glass) .home-surface,
+html:not(.liquid-glass) .settings-nav,
+html:not(.liquid-glass) .settings-panel,
+html:not(.liquid-glass) .glass-list-surface {
+  border: 1px solid;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html.light:not(.liquid-glass) .home-hero,
+html.light:not(.liquid-glass) .home-surface,
+html.light:not(.liquid-glass) .settings-nav,
+html.light:not(.liquid-glass) .settings-panel,
+html.light:not(.liquid-glass) .glass-list-surface {
+  border-color: #e6e6e6;
+  background: #f8f8f8;
+}
+
+html.dark:not(.liquid-glass) .home-hero,
+html.dark:not(.liquid-glass) .home-surface,
+html.dark:not(.liquid-glass) .settings-nav,
+html.dark:not(.liquid-glass) .settings-panel,
+html.dark:not(.liquid-glass) .glass-list-surface {
+  border-color: #363636;
+  background: #191919;
+}
+
+html:not(.liquid-glass) .home-hero {
+  width: min(100%, 650px);
+  min-height: 218px;
+  justify-content: center;
+  padding: 30px 48px;
+  border-radius: 28px;
+}
+
+html:not(.liquid-glass) button.home-surface:hover,
+html:not(.liquid-glass) .netease-collection-row:hover {
+  background: #ececec;
+}
+
+html.dark:not(.liquid-glass) button.home-surface:hover,
+html.dark:not(.liquid-glass) .netease-collection-row:hover {
+  background: #272727;
+}
+
+html:not(.liquid-glass) .settings-nav,
+html:not(.liquid-glass) .settings-panel,
+html:not(.liquid-glass) .glass-list-surface {
+  border-radius: 18px;
+}
+
+html.window-transparent:not(.liquid-glass) .app-shell,
+html.window-transparent:not(.liquid-glass) .app-canvas {
+  background: transparent;
+}
+
+html.desktop-lyrics-window .glass-grain,
+html.window-transparent .glass-grain {
+  display: none;
+}
+
+@media (width <= 1000px) {
+  html.liquid-glass .home-hero {
+    min-height: 175px;
+  }
+
+  html.liquid-glass .home-shelf {
+    margin-top: 32px;
+  }
+
+  html.liquid-glass .home-section {
+    min-width: min(100%, 310px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.liquid-glass .home-surface,
+  html.liquid-glass .app-menu-item {
+    transition-duration: 0ms;
+  }
+}

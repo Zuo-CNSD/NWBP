@@ -239,7 +239,7 @@ const SettingsPage = () => {
 
   return (
     <ScrollContainer enableBackToTop className="h-full w-full">
-      <div className="m-auto mb-6 max-w-[1040px] px-8 py-4">
+      <div className="settings-stage m-auto mb-6 max-w-[1040px] px-8 py-6">
         <h1 className="mb-6">{t("设置")}</h1>
         <Tabs
           isVertical
@@ -248,9 +248,9 @@ const SettingsPage = () => {
             // base 在纵向模式下是 flex-row：左边导航、右边面板
             base: "gap-8",
             // 导航吸顶：内容很长时（插件页尤其）也能随时换页
-            tabList: "sticky top-0 h-fit w-[184px] flex-none items-stretch gap-1 p-1",
+            tabList: "settings-nav sticky top-0 h-fit w-[184px] flex-none items-stretch gap-1 p-2",
             tab: "h-9 justify-start px-3",
-            panel: "min-w-0 flex-1 px-1 py-0",
+            panel: "settings-panel min-w-0 flex-1 px-6 py-5",
             cursor: "rounded-medium",
           }}
         >

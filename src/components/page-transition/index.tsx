@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router";
 
 /**
- * 切换路由时的一层极短遮蔽 + 顶部扫过的一条主色线。
+ * 切换路由时的一层极短折射光幕 + 顶部扫过的高光。
  *
  * ⚠️ 为什么是「盖一层」而不是「包住 Outlet」：
  * 之前那版页面切换动画（`pageTransition` 设置，UI 已撤掉）是**包住 Outlet** 做过渡的，
@@ -37,6 +37,7 @@ const PageTransition = () => {
   return (
     // key 一换，动画就从第一帧重播
     <div key={tick} aria-hidden className="page-switch">
+      <span className="page-switch-orb" />
       <span className="page-switch-line" />
     </div>
   );

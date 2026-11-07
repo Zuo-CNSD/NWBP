@@ -1,13 +1,15 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import { addToast, Button } from "@heroui/react";
-import { RiPlayFill } from "@remixicon/react";
+import { addToast, Button, Tooltip } from "@heroui/react";
+import { RiPlayFill, RiPlayListAddLine } from "@remixicon/react";
 
 import { t } from "@/common/i18n";
 import { favoriteTrack } from "@/common/utils/favorite";
 import { formatUrlProtocol } from "@/common/utils/url";
+import MusicCard from "@/components/music-card";
 import MusicListItem from "@/components/music-list-item";
 import MusicListHeader from "@/components/music-list-item/header";
+import VirtualGridPageList from "@/components/virtual-grid-page-list";
 import VirtualPageList from "@/components/virtual-page-list";
 import { useNeteaseLike } from "@/store/netease-like";
 import { usePlayList } from "@/store/play-list";
@@ -29,6 +31,10 @@ interface Props {
   toolbar?: React.ReactNode;
   /** 右上是否显示「播放全部」 */
   showPlayAll?: boolean;
+  /** 分页歌单通过此函数获取全部曲目；未提供时使用当前 tracks */
+  getAllTracks?: () => Promise<NeteaseTrack[]>;
+  /** 双击曲目时按整张歌单/专辑建立播放队列 */
+  playAsCollection?: boolean;
   className?: string;
 }
 
@@ -47,10 +53,13 @@ const NeteaseTrackList = ({
   summary,
   toolbar,
   showPlayAll = true,
+  getAllTracks,
+  playAsCollection = false,
   className,
 }: Props) => {
   const displayMode = useSettings(state => state.displayMode);
   const isCompact = displayMode === "compact";
+  const [queueAction, setQueueAction] = useState<"play" | "add" | null>(null);
 
   // 订阅「我喜欢的音乐」集合：收藏后右键菜单里的「喜欢 / 取消喜欢」要跟着变
   const likedIds = useNeteaseLike(state => state.ids);
@@ -60,15 +69,66 @@ const NeteaseTrackList = ({
     void refreshLiked();
   }, [refreshLiked]);
 
-  const handlePress = useCallback((track: NeteaseTrack) => {
-    void usePlayList.getState().play(toNeteasePlayItem(track));
-  }, []);
+  const resolveTracks = useCallback(() => getAllTracks?.() ?? Promise.resolve(tracks), [getAllTracks, tracks]);
 
-  const handlePlayAll = useCallback(() => {
-    if (!tracks.length) return;
-    usePlayList.getState().addList(tracks.map(toNeteasePlayItem));
-    addToast({ title: t("已添加 {0} 首到播放列表", tracks.length), color: "success" });
-  }, [tracks]);
+  const handlePress = useCallback(
+    async (track: NeteaseTrack) => {
+      if (!playAsCollection) {
+        await usePlayList.getState().play(toNeteasePlayItem(track));
+        return;
+      }
+      if (queueAction) return;
+      setQueueAction("play");
+      try {
+        const allTracks = await resolveTracks();
+        const startIndex = allTracks.findIndex(item => item.id === track.id);
+        if (startIndex < 0) return;
+        await usePlayList.getState().playList(allTracks.map(toNeteasePlayItem), startIndex);
+      } catch {
+        addToast({ title: t("获取歌单失败"), color: "danger" });
+      } finally {
+        setQueueAction(null);
+      }
+    },
+    [playAsCollection, queueAction, resolveTracks],
+  );
+
+  const handlePlayAll = useCallback(async () => {
+    if (queueAction) return;
+    setQueueAction("play");
+    try {
+      const allTracks = await resolveTracks();
+      if (!allTracks.length) {
+        addToast({ title: t("暂无可播放内容"), color: "warning" });
+        return;
+      }
+      await usePlayList.getState().playList(allTracks.map(toNeteasePlayItem));
+    } catch {
+      addToast({ title: t("获取歌单失败"), color: "danger" });
+    } finally {
+      setQueueAction(null);
+    }
+  }, [queueAction, resolveTracks]);
+
+  const handleAddAll = useCallback(async () => {
+    if (queueAction) return;
+    setQueueAction("add");
+    try {
+      const allTracks = await resolveTracks();
+      if (!allTracks.length) {
+        addToast({ title: t("暂无可播放内容"), color: "warning" });
+        return;
+      }
+      const before = usePlayList.getState().list.length;
+      await usePlayList.getState().addList(allTracks.map(toNeteasePlayItem));
+      const added = usePlayList.getState().list.length - before;
+      addToast({ title: t("已添加 {0} 首到播放列表", added), color: "success" });
+    } catch {
+      addToast({ title: t("获取歌单失败"), color: "danger" });
+    } finally {
+      setQueueAction(null);
+    }
+  }, [queueAction, resolveTracks]);
 
   const handleMenuAction = useCallback((key: string, track: NeteaseTrack) => {
     switch (key) {
@@ -104,44 +164,86 @@ const NeteaseTrackList = ({
               radius="md"
               color="primary"
               variant="flat"
-              isDisabled={tracks.length === 0}
+              isDisabled={tracks.length === 0 || queueAction !== null}
+              isLoading={queueAction === "play"}
               startContent={<RiPlayFill />}
               onPress={handlePlayAll}
             >
               {t("播放全部")}
             </Button>
           )}
+          {showPlayAll && (
+            <Tooltip closeDelay={0} content={t("添加到播放列表")}>
+              <Button
+                isIconOnly
+                size="sm"
+                radius="md"
+                variant="flat"
+                aria-label={t("添加到播放列表")}
+                isDisabled={tracks.length === 0 || queueAction !== null}
+                isLoading={queueAction === "add"}
+                onPress={handleAddAll}
+              >
+                <RiPlayListAddLine size={18} />
+              </Button>
+            </Tooltip>
+          )}
         </div>
       </div>
 
       {tracks.length > 0 && (
         <>
-          {/* 网易云没有「播放量 / 投稿时间」，那一列拿来放专辑名 */}
-          <MusicListHeader timeTitle={t("专辑")} />
-          <VirtualPageList
-            items={tracks}
-            hasMore={hasMore}
-            loading={loading}
-            onLoadMore={onLoadMore ?? (() => void 0)}
-            getScrollElement={getScrollElement}
-            rowHeight={isCompact ? 36 : 64}
-            renderItem={(track, index) => (
-              <MusicListItem
-                key={track.id}
-                menus={getNeteaseTrackMenus(likedIds.has(track.id))}
-                index={index + 1}
-                title={track.name}
-                type="audio"
-                neteaseId={track.id}
-                cover={formatUrlProtocol(track.cover)}
-                upName={track.artists}
-                duration={toSeconds(track.duration)}
-                pubTime={track.album}
-                onPress={() => handlePress(track)}
-                onMenuAction={key => handleMenuAction(key, track)}
+          {displayMode === "card" ? (
+            <VirtualGridPageList
+              items={tracks}
+              itemKey="id"
+              hasMore={hasMore}
+              loading={loading}
+              onLoadMore={onLoadMore ?? (() => void 0)}
+              getScrollElement={getScrollElement}
+              renderItem={track => (
+                <MusicCard
+                  key={track.id}
+                  title={track.name}
+                  cover={formatUrlProtocol(track.cover) || ""}
+                  duration={toSeconds(track.duration)}
+                  ownerName={track.artists}
+                  menus={getNeteaseTrackMenus(likedIds.has(track.id))}
+                  onPress={() => void handlePress(track)}
+                  onMenuAction={key => handleMenuAction(key, track)}
+                />
+              )}
+            />
+          ) : (
+            <>
+              {/* 网易云没有「播放量 / 投稿时间」，那一列拿来放专辑名 */}
+              <MusicListHeader timeTitle={t("专辑")} />
+              <VirtualPageList
+                items={tracks}
+                hasMore={hasMore}
+                loading={loading}
+                onLoadMore={onLoadMore ?? (() => void 0)}
+                getScrollElement={getScrollElement}
+                rowHeight={isCompact ? 36 : 64}
+                renderItem={(track, index) => (
+                  <MusicListItem
+                    key={track.id}
+                    menus={getNeteaseTrackMenus(likedIds.has(track.id))}
+                    index={index + 1}
+                    title={track.name}
+                    type="audio"
+                    neteaseId={track.id}
+                    cover={formatUrlProtocol(track.cover)}
+                    upName={track.artists}
+                    duration={toSeconds(track.duration)}
+                    pubTime={track.album}
+                    onPress={() => void handlePress(track)}
+                    onMenuAction={key => handleMenuAction(key, track)}
+                  />
+                )}
               />
-            )}
-          />
+            </>
+          )}
         </>
       )}
     </div>

@@ -319,8 +319,8 @@ const en: Record<string, string> = {
   密码: "Password",
   密码登录: "Password login",
   "密码加密失败，请重试": "Failed to encrypt password, please try again",
-  "面板改为半透明毛玻璃 + 流动彩色底衬（自定义背景色时自动失效）":
-    "Turns panels into translucent frosted glass with a flowing colorful backdrop (automatically disabled when a custom background color is set)",
+  "面板采用黑白玻璃质感，深色与浅色配色相反（自定义背景色时自动失效）":
+    "Black and white glass surfaces with inverse light and dark colors (disabled when a custom background color is set)",
   名称: "Name",
   名称为必填项: "Name is required",
   墨绿: "Dark green",

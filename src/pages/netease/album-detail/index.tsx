@@ -66,6 +66,7 @@ const NeteaseAlbumDetail = () => {
       {!loading && !error && data.tracks.length > 0 && (
         <NeteaseTrackList
           tracks={data.tracks}
+          playAsCollection
           getScrollElement={() => scrollerRef.current?.osInstance()?.elements().viewport || null}
           summary={t("网易云 · 共 {0} 首", data.tracks.length)}
         />

@@ -1,18 +1,19 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router";
 
 import { Button } from "@heroui/react";
 import { RiArrowLeftLine, RiDeleteBinLine } from "@remixicon/react";
+import clsx from "classnames";
 import moment from "moment";
 
 import { t } from "@/common/i18n";
 import Empty from "@/components/empty";
 import Image from "@/components/image";
-import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
-import VirtualPageList from "@/components/virtual-page-list";
+import ScrollContainer from "@/components/scroll-container";
 import { useModalStore } from "@/store/modal";
 import { type PlayHistoryItem, toPlayItem, usePlayHistory } from "@/store/play-history";
 import { usePlayList } from "@/store/play-list";
+import { useSettings } from "@/store/settings";
 
 /** 封面缩略图：只有 B 站的图认这套后缀，别的来源 `Image` 会自己跳过 */
 const THUMB_PARAMS = "160w_160h_1c.webp";
@@ -32,10 +33,12 @@ const sourceLabel = (item: PlayHistoryItem) => {
  * 主页「最近播放」的「全部」指向这里。
  */
 const PlayHistory = () => {
-  const scrollerRef = useRef<ScrollRefObject>(null);
   const navigate = useNavigate();
 
   const items = usePlayHistory(state => state.items);
+  const displayMode = useSettings(state => state.displayMode);
+  const isCard = displayMode === "card";
+  const isCompact = displayMode === "compact";
   const remove = usePlayHistory(state => state.remove);
   const clear = usePlayHistory(state => state.clear);
 
@@ -74,7 +77,7 @@ const PlayHistory = () => {
   }, [clear]);
 
   return (
-    <ScrollContainer enableBackToTop ref={scrollerRef} className="h-full w-full">
+    <ScrollContainer enableBackToTop className="h-full w-full">
       <div className="px-4 pt-4">
         <Button
           size="sm"
@@ -109,46 +112,67 @@ const PlayHistory = () => {
       {items.length === 0 ? (
         <Empty className="min-h-[280px]" title={t("还没有播放记录，去搜一首听听")} />
       ) : (
-        <div className="px-4">
-          <VirtualPageList
-            items={items}
-            loading={false}
-            getScrollElement={() => scrollerRef.current?.osInstance()?.elements().viewport || null}
-            rowHeight={64}
-            renderItem={item => (
-              <div className="group hover:bg-content2/70 rounded-large flex items-center gap-3 p-2 transition-colors">
-                <button
-                  type="button"
-                  onClick={() => handlePlay(item)}
-                  className="flex min-w-0 flex-1 items-center gap-3 text-left"
-                >
-                  <Image
-                    removeWrapper
-                    src={item.cover}
-                    params={THUMB_PARAMS}
-                    className="rounded-medium h-[48px] w-[48px] flex-none object-cover"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate text-sm font-medium">{item.title}</div>
-                    <div className="text-default-500 mt-0.5 flex items-center gap-2 truncate text-xs">
-                      <span>{sourceLabel(item)}</span>
-                      {item.ownerName ? <span className="truncate">{item.ownerName}</span> : null}
-                      <span className="flex-none">{moment(item.playedAt).format("MM-DD HH:mm")}</span>
-                    </div>
+        <div
+          className={clsx("glass-list-surface mx-4 p-2", {
+            "grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-3": isCard,
+          })}
+        >
+          {items.map(item => (
+            <div
+              key={item.key}
+              className={clsx("group hover:bg-content2/70 rounded-large relative flex gap-3 transition-colors", {
+                "min-w-0 flex-col items-stretch p-2": isCard,
+                "items-center p-1.5": isCompact,
+                "items-center p-2": !isCard && !isCompact,
+              })}
+            >
+              <button
+                type="button"
+                onClick={() => handlePlay(item)}
+                className={clsx("flex min-w-0 flex-1 gap-3 text-left", {
+                  "flex-col items-stretch": isCard,
+                  "items-center": !isCard,
+                })}
+              >
+                <Image
+                  removeWrapper
+                  src={item.cover}
+                  params={THUMB_PARAMS}
+                  className={clsx("rounded-medium flex-none object-cover", {
+                    "h-[132px] w-full": isCard,
+                    "h-8 w-8": isCompact,
+                    "h-[48px] w-[48px]": !isCard && !isCompact,
+                  })}
+                />
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-sm font-medium">{item.title}</div>
+                  <div
+                    className={clsx("text-default-500 mt-0.5 flex items-center gap-2 truncate text-xs", {
+                      hidden: isCompact,
+                    })}
+                  >
+                    <span>{sourceLabel(item)}</span>
+                    {item.ownerName ? <span className="truncate">{item.ownerName}</span> : null}
+                    <span className="flex-none">{moment(item.playedAt).format("MM-DD HH:mm")}</span>
                   </div>
-                </button>
+                </div>
+              </button>
 
-                <button
-                  type="button"
-                  aria-label={t("移除这条播放记录")}
-                  onClick={() => handleRemove(item)}
-                  className="text-default-500 hover:text-danger flex-none p-1.5 opacity-0 transition-opacity group-hover:opacity-100"
-                >
-                  <RiDeleteBinLine size={16} />
-                </button>
-              </div>
-            )}
-          />
+              <button
+                type="button"
+                aria-label={t("移除这条播放记录")}
+                onClick={() => handleRemove(item)}
+                className={clsx(
+                  "text-default-500 hover:text-danger flex-none p-1.5 opacity-0 transition-opacity group-hover:opacity-100",
+                  {
+                    "bg-content1/90 absolute top-2 right-2 rounded-full": isCard,
+                  },
+                )}
+              >
+                <RiDeleteBinLine size={16} />
+              </button>
+            </div>
+          ))}
         </div>
       )}
     </ScrollContainer>

@@ -9,16 +9,16 @@ import Empty from "@/components/empty";
 import IconButton from "@/components/icon-button";
 import ScrollContainer, { type ScrollRefObject } from "@/components/scroll-container";
 import SearchButton from "@/components/search-button";
+import VirtualGridPageList from "@/components/virtual-grid-page-list";
 import { useModalStore } from "@/store/modal";
 import { usePlayList } from "@/store/play-list";
 import { useSettings } from "@/store/settings";
 
 import LocalMusicItemRow from "./item";
 
-const rowHeight = 42;
-
 const LocalMusicPage = () => {
   const localDirs = useSettings(s => s.localMusicDirs);
+  const displayMode = useSettings(s => s.displayMode);
   const updateSettings = useSettings(s => s.update);
   const { onOpenConfirmModal } = useModalStore();
   const [list, setList] = useState<LocalMusicItem[]>([]);
@@ -29,6 +29,8 @@ const LocalMusicPage = () => {
   const playList = usePlayList(s => s.list);
 
   const playItem = useMemo(() => playList.find(item => item.id === playId), [playId, playList]);
+  const rowHeight = displayMode === "compact" ? 36 : 42;
+  const getScrollElement = () => scrollRef.current?.osInstance()?.elements().viewport as HTMLElement | null;
 
   useEffect(() => {
     const init = async () => {
@@ -58,14 +60,14 @@ const LocalMusicPage = () => {
 
   const rowVirtualizer = useVirtualizer({
     count: filtered.length,
-    getScrollElement: () => scrollRef.current?.osInstance()?.elements().viewport as HTMLElement | null,
+    getScrollElement,
     estimateSize: () => rowHeight,
     overscan: 10,
   });
 
   const playAll = async () => {
     await usePlayList.getState().playList(
-      list.map(i => ({
+      filtered.map(i => ({
         type: "audio" as const,
         source: "local" as const,
         id: i.id,
@@ -182,6 +184,21 @@ const LocalMusicPage = () => {
     });
   };
 
+  const renderSong = (song: LocalMusicItem, index: number) => (
+    <LocalMusicItemRow
+      key={song.id}
+      data={song}
+      isPlaying={playItem?.id === song.id}
+      index={index + 1}
+      displayMode={displayMode}
+      onAddToNext={() => addToNext(song)}
+      onAddToPlayList={() => addToPlayList(song)}
+      onPlay={() => playFile(song)}
+      onOpen={() => openFile(song.path)}
+      onDelete={() => deleteFile(song.path)}
+    />
+  );
+
   return (
     <ScrollContainer ref={scrollRef} enableBackToTop className="h-full w-full px-4">
       <div className="mb-2 flex items-center justify-between">
@@ -194,7 +211,7 @@ const LocalMusicPage = () => {
       </div>
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          {Boolean(list.length) && (
+          {Boolean(filtered.length) && (
             <Button
               color="primary"
               className="dark:text-black"
@@ -257,57 +274,63 @@ const LocalMusicPage = () => {
           </IconButton>
         </div>
       </div>
-      <div className="text-foreground-500 rounded-medium grid w-full grid-cols-[40px_minmax(0,1fr)_100px_100px_100px_100px_40px] items-center gap-4 px-2 py-1 text-xs">
-        <div className="text-center">#</div>
-        <div>{t("标题")}</div>
-        <div className="text-right">{t("大小")}</div>
-        <div className="text-right">{t("格式")}</div>
-        <div className="text-right">{t("时长")}</div>
-        <div className="text-right">{t("创建时间")}</div>
-        <div className="text-right" />
-      </div>
-      {filtered.length === 0 ? (
-        <Empty />
-      ) : (
-        <div className="relative">
+      <div className="glass-list-surface p-2">
+        {displayMode !== "card" && (
           <div
-            style={{
-              height: rowVirtualizer.getTotalSize(),
-              position: "relative",
-              width: "100%",
-            }}
+            className={`text-foreground-500 rounded-medium grid w-full items-center gap-4 px-2 py-1 text-xs ${displayMode === "compact" ? "grid-cols-[40px_minmax(0,1fr)_100px_40px]" : "grid-cols-[40px_minmax(0,1fr)_100px_100px_100px_100px_40px]"}`}
           >
-            {rowVirtualizer.getVirtualItems().map(vItem => {
-              const song = filtered[vItem.index];
-
-              return (
-                <div
-                  key={vItem.key}
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: rowHeight,
-                    transform: `translateY(${vItem.start}px)`,
-                  }}
-                >
-                  <LocalMusicItemRow
-                    data={song}
-                    isPlaying={playItem?.id === song.id}
-                    index={vItem.index + 1}
-                    onAddToNext={() => addToNext(song)}
-                    onAddToPlayList={() => addToPlayList(song)}
-                    onPlay={() => playFile(song)}
-                    onOpen={() => openFile(song.path)}
-                    onDelete={() => deleteFile(song.path)}
-                  />
-                </div>
-              );
-            })}
+            <div className="text-center">#</div>
+            <div>{t("标题")}</div>
+            {displayMode !== "compact" && <div className="text-right">{t("大小")}</div>}
+            {displayMode !== "compact" && <div className="text-right">{t("格式")}</div>}
+            <div className="text-right">{t("时长")}</div>
+            {displayMode !== "compact" && <div className="text-right">{t("创建时间")}</div>}
+            <div className="text-right" />
           </div>
-        </div>
-      )}
+        )}
+        {filtered.length === 0 ? (
+          <Empty />
+        ) : displayMode === "card" ? (
+          <VirtualGridPageList
+            items={filtered}
+            itemKey="id"
+            loading={false}
+            getScrollElement={getScrollElement}
+            rowHeight={220}
+            renderItem={renderSong}
+          />
+        ) : (
+          <div className="relative">
+            <div
+              style={{
+                height: rowVirtualizer.getTotalSize(),
+                position: "relative",
+                width: "100%",
+              }}
+            >
+              {rowVirtualizer.getVirtualItems().map(vItem => {
+                const song = filtered[vItem.index];
+
+                return (
+                  <div
+                    key={vItem.key}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: rowHeight,
+                      transform: `translateY(${vItem.start}px)`,
+                    }}
+                  >
+                    {renderSong(song, vItem.index)}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
     </ScrollContainer>
   );
 };

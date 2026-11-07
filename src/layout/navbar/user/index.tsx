@@ -165,7 +165,7 @@ const UserCard = ({ onDropdownOpenChange }: UserCardProps) => {
         triggerScaleOnOpen={false}
         radius="md"
         classNames={{
-          content: "min-w-[140px]",
+          content: "user-dropdown-content min-w-[180px]",
         }}
         onOpenChange={onDropdownOpenChange}
       >

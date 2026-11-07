@@ -1,7 +1,7 @@
 <h1 align="center">NWBP</h1>
 
 <p align="center">
-  <b>BETA9</b>
+  <b>正式版 1.00</b>
 </p>
 <p align="center">
   一个基于哔哩哔哩公开接口的跨平台桌面音乐播放器，另集成网易云音乐音源 🎧
@@ -24,12 +24,7 @@
 
 ## ⬇️ 下载
 
-两个渠道放的是**同一批文件**，内容完全一致，按网络情况选一个：
-
-| 渠道 | 地址 | 说明 |
-| --- | --- | --- |
-| **国内渠道（推荐）** | https://nas.qicwken.top/@s/nwbp | NAS 网盘，国内网络直连 |
-| GitHub Releases | https://github.com/Zuo-CNSD/NWBP/releases | 海外 / 给拿不到国内网盘的人 |
+在 [GitHub Releases](https://github.com/Zuo-CNSD/NWBP/releases/tag/v1.0.0) 下载正式版 1.00，按系统选择对应的安装包。
 
 > 本版**没有自动更新**：升级方式是下载新安装包覆盖安装（应用数据会保留）。
 
@@ -421,12 +416,12 @@ pnpm build
 
 ## 🏷 版本号
 
-`package.json` 的 `version` 必须是合法 semver（Electron Builder 依赖它命名产物），当前为 `0.1.0-beta.9`。
+`package.json` 的 `version` 必须是合法 semver（Electron Builder 依赖它命名产物），当前为 `1.0.0`，界面显示「正式版 1.00」。
 
-界面上的「**BETA9**」由 `src/common/utils/version.ts` 的 `formatAppVersion()` 转换而来 —— 显示的是**预发布序号**，所以发新版时要把 `beta` 后面的数字往上加（`-beta.8` → `-beta.9` …）。
+预发布版本由 `src/common/utils/version.ts` 的 `formatAppVersion()` 转换为 `BETA9` 这样的显示格式；正式版 `1.0.0` 显示为「正式版 1.00」。
 补丁版在序号后面再挂一个限定词即可（`-beta.9-hotfix` → 显示 `BETA9-hotfix`），`compareVersions` 会把它排在 `-beta.9` 之后、`-beta.10` 之前。
 
-点分的版本核心（`0.1.0`）不带预发布标记，会被 `plugins/electron-build.ts` 写进 macOS 的 `CFBundleVersion` 与 Windows 的 `FileVersion` / `ProductVersion`。
+点分的版本核心（当前为 `1.0.0`）会被 `plugins/electron-build.ts` 写进 macOS 的 `CFBundleVersion` 与 Windows 的 `FileVersion` / `ProductVersion`。
 
 发版时还有一处**必须跟着改**：仓库根目录的 [`latest.json`](latest.json) —— 应用内的「检查更新」和「公告」都读它。
 字段与检查清单见 [`docs/update-manifest.md`](docs/update-manifest.md)。改完源码要一起推上来，否则应用里永远显示「已是最新」。

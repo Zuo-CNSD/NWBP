@@ -226,8 +226,13 @@ const Theme = ({ children }: Props) => {
           <i />
           <i />
           <i />
+          <i />
+          <i />
+          <span className="glass-stream glass-stream--one" />
+          <span className="glass-stream glass-stream--two" />
         </div>
       )}
+      {liquidGlass && !windowTransparent ? <div aria-hidden className="glass-grain" /> : null}
       {showImageBackdrop && (
         <div
           aria-hidden
